@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "BizHawk.FreeEnterprise.Companion": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Users\\Jason\\source\\repos\\FreeEnterpriseCompanion\\BizHawk\\EmuHawk.exe",
+      "workingDirectory": "C:\\Users\\Jason\\source\\repos\\FreeEnterpriseCompanion\\BizHawk\\"
+    }
+  }
+}
