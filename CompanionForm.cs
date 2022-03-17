@@ -174,6 +174,11 @@ namespace BizHawk.FreeEnterprise.Companion
 
             if (Run == null || Game.Hash != Run.Hash)
                 Initialize();
+            else
+            {
+                Memory = new MemoryMapping(APIs.Memory);
+                Run.UpdateApis(APIs, Memory);
+            }
         }
 
         protected override void UpdateAfter()

@@ -7,6 +7,9 @@
 		<AssemblyName>BizHawk.FreeEnterprise.Companion</AssemblyName>
 		<RootNamespace>BizHawk.FreeEnterprise.Companion</RootNamespace>
 	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <OutputPath>BizHawk\ExternalTools\</OutputPath>
+	</PropertyGroup>
 	<ItemGroup>
 	  <Compile Remove="BizHawk\**" />
 	  <EmbeddedResource Remove="BizHawk\**" />

@@ -34,8 +34,8 @@ namespace BizHawk.FreeEnterprise.Companion.State
             CustomSettingsUpdated,
         }
 
-        private readonly ApiContainer _container;
-        private readonly MemoryMapping _memory;
+        private ApiContainer _container;
+        private MemoryMapping _memory;
         private readonly HashSet<EventType> pendingEvents = new HashSet<EventType>();
         private Color backgroundColor;
         private Party party;
@@ -69,6 +69,12 @@ namespace BizHawk.FreeEnterprise.Companion.State
 
             Stopwatch = new Stopwatch();
             Runstate = Runstate.Loading;
+        }
+
+        public void UpdateApis(ApiContainer container, MemoryMapping memory)
+        {
+            _container = container;
+            _memory = memory;
         }
 
         public event EventHandler? LoadComplete;
