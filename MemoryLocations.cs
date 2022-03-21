@@ -19,9 +19,6 @@
 
         public const int ObjectiveCompletionAddress = 0x1520;
         public const int ObjectiveCompletionBytes = 32;
-
-        public const int zeromus_death_animation = 0x02F591;
-        public const int zeromus_flash = 0x02F609;
     }
 
     public static class CARTRAMAddresses
@@ -34,6 +31,11 @@
     {
         public const int Font = 0x057000;
         public const int FontBytes = 4096;
+
+        public const int BattleStatusStickers = 0x0679c0;
+        public const int BattleStatusStickersBytes = 0x600;
+
+        public const int BattleStatusStickersPalette = 0x74b20;
 
         public const int CharacterSpritesAddress = 0x0d0000;
         public const int CharacterSpritesBytes = 0x7000;
@@ -57,5 +59,12 @@
         public const int MetadataLengthAddress = 0x1FF000;
         public const int MetadataLengthBytes = 4;
         public const int MetadataAddress = 0x1FF004;
+    }
+
+    public static class SystemBusAddresses
+    {
+        public const int ZeromusDeathAnimation = 0x03F591;
+        public const int MenuWaitForVBlankLoop = 0x0181A5;
+        public const int MenuSaveNewGame = 0x019914;
     }
 }

@@ -2,44 +2,34 @@
 using BizHawk.Common;
 using BizHawk.FreeEnterprise.Companion.Extensions;
 using BizHawk.FreeEnterprise.Companion.FlagSet;
+using BizHawk.FreeEnterprise.Companion.Sprites;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Windows.Forms;
 
 namespace BizHawk.FreeEnterprise.Companion.State
 {
-    public enum Runstate
+    public enum RunState
     {
         Loading,
         Menu,
         RunStarted,
-        ZeromusWatch,
-        RunFinished
+        RunFinished,
+        Unknown
     }
 
     public class Run : IDisposable
     {
-        private enum EventType
-        {
-            RunStarted,
-            RunEnded,
-            PartyUpdated,
-            KeyItemsUpdated,
-            LocationsUpdated,
-            ObjectivesUpdated,
-            CustomSettingsUpdated,
-        }
-
         private ApiContainer _container;
         private MemoryMapping _memory;
-        private readonly HashSet<EventType> pendingEvents = new HashSet<EventType>();
         private Color backgroundColor;
         private Party party;
-        private KeyItems keyItems;
 
         public Run(ApiContainer container, MemoryMapping memory)
         {
@@ -62,19 +52,24 @@ namespace BizHawk.FreeEnterprise.Companion.State
                 Objectives = new Objectives();
             }
 
-            keyItems = new KeyItems();
+            KeyItems = new KeyItems();
             party = new Party();
             Locations = new Locations(FlagSet);
+            Locations.UpdateKeyItems(KeyItems);
             ReadBackgroundColor();
 
             Stopwatch = new Stopwatch();
-            Runstate = Runstate.Loading;
+            State = RunState.Loading;
+
+            CreateCallbacks();
         }
 
         public void UpdateApis(ApiContainer container, MemoryMapping memory)
         {
+            RemoveCallbacks();
             _container = container;
             _memory = memory;
+            CreateCallbacks();
         }
 
         public event EventHandler? LoadComplete;
@@ -92,23 +87,9 @@ namespace BizHawk.FreeEnterprise.Companion.State
 
         public IFlagSet? FlagSet { get; }
 
-        public Runstate Runstate { get; private set; }
+        public RunState State { get; private set; }
 
-        public KeyItems KeyItems
-        {
-            get => keyItems;
-            private set
-            {
-                if (value.Equals(keyItems))
-                    return;
-
-                keyItems = value;
-                KeyItemsUpdated?.Invoke(this, null);
-
-                if (Locations?.UpdateKeyItems(KeyItems) ?? false)
-                    LocationsUpdated?.Invoke(this, null);
-            }
-        }
+        public KeyItems KeyItems { get; } 
 
         public Party Party
         {
@@ -136,85 +117,58 @@ namespace BizHawk.FreeEnterprise.Companion.State
             }
         }
 
-        public Locations Locations { get; private set; }
+        public Locations Locations { get; }
 
-        public Objectives Objectives { get; private set; }
+        public Objectives Objectives { get; }
 
         public Stopwatch Stopwatch { get; private set; }
 
         private void ReadBackgroundColor()
-        {
-            var color = _memory.Main.ReadBytes(
-                WRAMAddresses.BackgroundColorAddress,
-                WRAMAddresses.BackgroundColorBytes).Read<ushort>(0);
+            => BackgroundColor = ColorProcessor.GetColor(_memory.Main.ReadBytes(WRAMAddresses.BackgroundColorAddress, WRAMAddresses.BackgroundColorBytes).Read<ushort>(0));
 
-            var red = color & 0x1F;
-            var green = color >> 5 & 0x1F;
-            var blue = color >> 10 & 0x1F;
-            BackgroundColor = Color.FromArgb((int)(red / 31.0 * 255), (int)(green / 31.0 * 255), (int)(blue / 31.0 * 255));
+        public void RomLoadComplete(uint address, uint value, uint flags)
+        {
+            RemoveCallbacks();
+            State = RunState.Menu;
+            LoadComplete?.Invoke(this, null);
+            CreateCallbacks();
         }
 
-        public void Flash (uint address, uint value, uint flags)
+        public void StartNewGame(uint address, uint value, uint flags)
         {
-            Runstate = Runstate.RunFinished;
+            RemoveCallbacks();
+            State = RunState.RunStarted;
+            Stopwatch = Stopwatch.StartNew();
+            RunStarted?.Invoke(this, null);
+            CreateCallbacks();
+        }
+
+        public void Flash(uint address, uint value, uint flags)
+        {
+            RemoveCallbacks();
+            State = RunState.RunFinished;
             RunEnded?.Invoke(this, null);
             Stopwatch.Stop();
         }
 
-        private void CheckStarted()
-        {
-            try
-            {
-                if (Runstate == Runstate.RunStarted)
-                    return;
-
-                var PC = _container.Emulation.GetRegister("PC");
-                var X = _container.Emulation.GetRegister("X");
-                var Y = _container.Emulation.GetRegister("Y");
-
-                switch (Runstate)
-                {
-                    case Runstate.Loading:
-                        if (PC >= 0x181AE && PC <= 0x181B5)
-                        {
-                            Runstate = Runstate.Menu;
-                            LoadComplete?.Invoke(this, null);
-                            ObjectivesUpdated?.Invoke(this, null);
-                        }
-                        break;
-                    case Runstate.Menu:
-                        if (X == 0x2e9 && Y == 0x8189)
-                        {
-                            Runstate = Runstate.RunStarted;
-                            Log.Note("FE", "Runstate = Runstate.RunStarted");
-                            Stopwatch = Stopwatch.StartNew();
-                            _container.MemoryEvents.AddExecCallback(Flash, 0x03F591, "System Bus");
-                            RunStarted?.Invoke(this, null);
-                        }
-                        break;
-                }
-            }
-            catch (NullReferenceException)
-            {
-                //early in loading
-            }
-        }
-
         public void NewFrame()
         {
-            CheckStarted();
+            if (State == RunState.Loading)
+                return;
 
             var frameMod = _container.Emulation.FrameCount() % Properties.Settings.Default.RefreshEveryNFrames;
             if (frameMod == 0)
-            { 
-                Party = new Party(_memory.Main.ReadBytes(WRAMAddresses.PartyAddress, WRAMAddresses.PartyBytes)); 
+            {
+                Party = new Party(_memory.Main.ReadBytes(WRAMAddresses.PartyAddress, WRAMAddresses.PartyBytes));
             }
             else if (frameMod == Properties.Settings.Default.RefreshEveryNFrames / 5)
             {
-                KeyItems = new KeyItems(
+                if (KeyItems.Update(
+                    Stopwatch.Elapsed,
                    _memory.Main.Read<KeyItemType>(WRAMAddresses.FoundKeyItems, WRAMAddresses.FoundKeyItemsBytes),
                    _memory.Main.Read<KeyItemType>(WRAMAddresses.UsedKeyItems, WRAMAddresses.UsedKeyItemsBytes),
-                   _memory.CartSaveRam.ReadBytes(CARTRAMAddresses.KeyItemLocations, CARTRAMAddresses.KeyItemLocationsBytes));
+                   _memory.CartSaveRam.ReadBytes(CARTRAMAddresses.KeyItemLocations, CARTRAMAddresses.KeyItemLocationsBytes)))
+                    KeyItemsUpdated?.Invoke(this, null);
             }
             else if (frameMod == Properties.Settings.Default.RefreshEveryNFrames * 2 / 5)
             {
@@ -222,18 +176,84 @@ namespace BizHawk.FreeEnterprise.Companion.State
             }
             else if (frameMod == Properties.Settings.Default.RefreshEveryNFrames * 3 / 5)
             {
-                if (Locations.UpdateCheckedLocations(_memory.Main.ReadBytes(WRAMAddresses.CheckedLocations, WRAMAddresses.CheckedLocationsBytes)))
+                if (Locations.UpdateCheckedLocations(Stopwatch.Elapsed, _memory.Main.ReadBytes(WRAMAddresses.CheckedLocations, WRAMAddresses.CheckedLocationsBytes)))
                     LocationsUpdated?.Invoke(this, null);
             }
             else if (frameMod == Properties.Settings.Default.RefreshEveryNFrames * 4 / 5)
             {
-                if (Objectives?.UpdateCompletions(_memory.Main.ReadBytes(WRAMAddresses.ObjectiveCompletionAddress, WRAMAddresses.ObjectiveCompletionBytes)) == true)
+                if (Objectives?.UpdateCompletions(Stopwatch.Elapsed, _memory.Main.ReadBytes(WRAMAddresses.ObjectiveCompletionAddress, WRAMAddresses.ObjectiveCompletionBytes)) == true)
                     ObjectivesUpdated?.Invoke(this, null);
             }
         }
 
+        private void RemoveCallbacks()
+        {
+            try
+            {
+                switch (State)
+                {
+                    case RunState.RunStarted:
+                        _container.MemoryEvents.RemoveMemoryCallback(Flash);
+                        break;
+                    case RunState.Loading:
+                        _container.MemoryEvents.RemoveMemoryCallback(RomLoadComplete);
+                        break;
+                    case RunState.Menu:
+                        _container.MemoryEvents.RemoveMemoryCallback(StartNewGame);
+                        break;
+                }
+            }
+            catch (KeyNotFoundException) //snes9X core doesn't support exec callbacks
+            {
+            }
+        }
+
+        private void CreateCallbacks()
+        {
+            try
+            {
+                switch (State)
+                {
+                    case RunState.Unknown:
+                        State = RunState.Loading;
+                        _container.MemoryEvents.AddExecCallback(RomLoadComplete, SystemBusAddresses.MenuWaitForVBlankLoop, "System Bus");
+                        break;
+                    case RunState.RunStarted:
+                        _container.MemoryEvents.AddExecCallback(Flash, SystemBusAddresses.ZeromusDeathAnimation, "System Bus");
+                        break;
+                    case RunState.Loading:
+                        _container.MemoryEvents.AddExecCallback(RomLoadComplete, SystemBusAddresses.MenuWaitForVBlankLoop, "System Bus");
+                        break;
+                    case RunState.Menu:
+                        _container.MemoryEvents.AddExecCallback(StartNewGame, SystemBusAddresses.MenuSaveNewGame, "System Bus");
+                        break;
+                }
+            }
+            catch (KeyNotFoundException) //snes9X core doesn't support exec callbacks
+            {
+                if (State == RunState.Loading)
+                {
+                    State = RunState.Unknown;
+                    var t = new Timer
+                    {
+                        Enabled = true,
+                        Interval = 2000,
+                    };
+                    t.Tick += (_, _) =>
+                    {
+                        LoadComplete?.Invoke(this, null);
+                        t.Stop();
+                        t.Dispose();
+                        MessageBox.Show("Automatic timing of runs is not supported on the Snes9x core. Please use the BSNES or BSNESv115+ core to have this feature.", "Timing unavailable");
+                    };
+                }
+            }
+        }
+
+
         public void Dispose()
         {
+            RemoveCallbacks();
         }
     }
 }

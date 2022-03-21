@@ -6,6 +6,9 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
 {
     public partial class Party : TrackerControl<State.Party>
     {
+        int frame = 0;
+        int frameIndex = 0;
+
         public Party()
             :base(()=>Properties.Settings.Default.PartyBorder)
         {
@@ -15,7 +18,25 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
         public override void RefreshSize()
         {
             Height = 68 + (Properties.Settings.Default.PartyBorder ? 32 : 2);
+            frame = 0;
             Invalidate();
+        }
+
+        public override void Update(State.Party data)
+        {
+            base.Update(data);
+            frame = 0;
+        }
+
+        public override void NewFrame()
+        {
+            var oldIndex = frameIndex;
+            if (Properties.Settings.Default.PartyAnimate && RomData != null)
+            {
+                frameIndex = RomData.CharacterSprites.GetFrameIndex(Properties.Settings.Default.PartyPose, ++frame);
+                if (frameIndex != oldIndex)
+                    Invalidate();
+            }
         }
 
         protected override void PaintData(Graphics graphics, Rectangle rect)
@@ -47,7 +68,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
                     continue;
 
                 graphics.DrawImage(
-                    RomData.CharacterSprites.GetCharacterBitmap(c.ID, c.Class, Properties.Settings.Default.PartyPose),
+                    RomData.CharacterSprites.GetCharacterBitmap(c.ID, c.Class, Properties.Settings.Default.PartyPose, frame),
                     sX + offset + (characterIndex *48),
                     sY,
                     48,

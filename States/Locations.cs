@@ -12,24 +12,26 @@ namespace BizHawk.FreeEnterprise.Companion.State
 
         private KeyItems? _keyItems;
 
-        private byte[] _locationData = new byte[16];
-
         public Locations(IFlagSet? flagSet)
         {
             _flagSet = flagSet;
-            CheckedLocations = new HashSet<KeyItemLocationType>();
+            CheckedLocations = new Dictionary<KeyItemLocationType, TimeSpan?>();
         }
 
-        public bool UpdateCheckedLocations(byte[] checkedLocations)
+        public bool UpdateCheckedLocations(TimeSpan now, byte[] checkedLocations)
         {
-            if (_locationData.Skip(4).SequenceEqual(checkedLocations.Skip(4))) //first 4 bytes are character locations
-                return false;
+            var updated = false;
 
-            _locationData = checkedLocations;
-            CheckedLocations = new HashSet<KeyItemLocationType>(
-                Enum.GetValues(typeof(KeyItemLocationType)).Cast<KeyItemLocationType>().Where(location => _locationData.Read<bool>((uint)location)));
+            foreach (var location in Enum.GetValues(typeof(KeyItemLocationType)).Cast<KeyItemLocationType>())
+            {
+                if (checkedLocations.Read<bool>((uint)location) && !CheckedLocations.ContainsKey(location))
+                {
+                    CheckedLocations[location] = now;
+                    updated = true;
+                }
+            }
 
-            return true;
+            return updated;
         }
 
         public bool UpdateKeyItems(KeyItems keyItems)
@@ -41,11 +43,13 @@ namespace BizHawk.FreeEnterprise.Companion.State
             return beforeUpdate.Count > 0;
         }
 
-        public HashSet<KeyItemLocationType> CheckedLocations { get; private set; }
+        public Dictionary<KeyItemLocationType, TimeSpan?> CheckedLocations { get; }
 
         public HashSet<string> GetAvailableLocations()
-            => new HashSet<KeyItemLocationType>(requirementDictionary.Where(kvp => kvp.Value.IsAvailable(_keyItems, _flagSet, CheckedLocations)).Select(kvp => kvp.Key))
-            .Except(CheckedLocations)
+            => new HashSet<KeyItemLocationType>(
+                requirementDictionary
+                .Where(kvp => kvp.Value.IsAvailable(_keyItems, _flagSet, new HashSet<KeyItemLocationType>(CheckedLocations.Keys))).Select(kvp => kvp.Key))
+            .Except(CheckedLocations.Keys)
             .Select(location => DescriptionLookup.GetDescription(location) ?? location.ToString())
             .ToHashSet();
 
@@ -147,7 +151,7 @@ namespace BizHawk.FreeEnterprise.Companion.State
             }
 
             return 
-                (items == null || CheckKeyItems(items)) && 
+                (items != null && CheckKeyItems(items)) && 
                 (flagSet == null || CheckFlags(flagSet)) && 
                 CheckLocations(checkedLocations);
         }

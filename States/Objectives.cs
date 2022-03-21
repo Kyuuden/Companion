@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace BizHawk.FreeEnterprise.Companion.State
@@ -7,29 +8,35 @@ namespace BizHawk.FreeEnterprise.Companion.State
     {
         public IReadOnlyList<string> Descriptions { get; }
 
-        public List<bool> Completions { get; private set; }
+        public List<TimeSpan?> Completions { get; private set; }
 
         public Objectives()
         {
             Descriptions = new List<string>();
-            Completions = new List<bool>();
+            Completions = new List<TimeSpan?>();
         }
 
         public Objectives(IEnumerable<string> objectives)
         {
             Descriptions = objectives.ToList();
-            Completions = Enumerable.Repeat(false, Descriptions.Count).ToList();
+            Completions = Enumerable.Repeat((TimeSpan?)null, Descriptions.Count).ToList();
         }
 
-        public bool UpdateCompletions(byte[] data)
+        public bool UpdateCompletions(TimeSpan now, byte[] data)
         {
+            var updated = false;
             var newCompletion = data.Take(Descriptions.Count).Select(b => b != 0).ToList();
 
-            if (Completions.SequenceEqual(newCompletion))
-                return false;
+            for (var i = 0; i < Math.Min(newCompletion.Count, Completions.Count); i ++)
+            {
+                if (newCompletion[i] && ! Completions[i].HasValue)
+                {
+                    Completions[i] = now;
+                    updated = true;
+                }
+            }
 
-            Completions = newCompletion;
-            return true;
+            return updated;
         }
     }
 }

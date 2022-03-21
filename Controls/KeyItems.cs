@@ -1,4 +1,5 @@
 ﻿using BizHawk.FreeEnterprise.Companion.Sprites;
+using System;
 using System.Drawing;
 using System.Linq;
 
@@ -18,7 +19,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
         {
             Height = Properties.Settings.Default.KeyItemsStyle == KeyItemStyle.Text
                 ? (Properties.Settings.Default.KeyItemsBorder ? 32 : 2) + 90
-                : (Properties.Settings.Default.KeyItemsBorder ? 32 : 2) + 134;
+                : (Properties.Settings.Default.KeyItemsBorder ? 64 : 40) + (int)Math.Ceiling(Enum.GetValues(typeof(KeyItemType)).Length / ((Width- (Properties.Settings.Default.KeyItemsBorder ? 32 : 16)) / 40.0)) * 32;
             Invalidate();
         }
 

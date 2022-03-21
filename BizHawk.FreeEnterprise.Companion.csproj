@@ -22,9 +22,6 @@
 	  <EmbeddedResource Remove="FreeEnterpriseCompanionForm.resx" />
 	</ItemGroup>
 	<ItemGroup>
-	  <None Remove="Resources\Names.json" />
-	</ItemGroup>
-	<ItemGroup>
 		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="all" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<Reference Include="BizHawk.Emulation.Common">
@@ -38,9 +35,6 @@
 		<Reference Include="BizHawk.Client.EmuHawk" HintPath="$(ProjectDir)/BizHawk/EmuHawk.exe" />
 		<Reference Include="BizHawk.Common" HintPath="$(ProjectDir)/BizHawk/dll/BizHawk.Common.dll" />
 		<Reference Include="BizHawk.WinForms.Controls" HintPath="$(ProjectDir)/BizHawk/dll/BizHawk.WinForms.Controls.dll" />
-	</ItemGroup>
-	<ItemGroup>
-	  <EmbeddedResource Include="Resources\Names.json" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Compile Update="Properties\Resources.Designer.cs">

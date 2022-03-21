@@ -1,6 +1,5 @@
 ﻿using BizHawk.Client.Common;
 using BizHawk.Client.EmuHawk;
-using BizHawk.Common;
 using BizHawk.Emulation.Common;
 using BizHawk.FreeEnterprise.Companion.Controls;
 using BizHawk.FreeEnterprise.Companion.State;
@@ -8,8 +7,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
-using System.Reflection;
 using System.Windows.Forms;
 
 namespace BizHawk.FreeEnterprise.Companion
@@ -34,20 +31,13 @@ namespace BizHawk.FreeEnterprise.Companion
         public CompanionForm()
         {
             InitializeComponent();
-            using var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("BizHawk.FreeEnterprise.Companion.Resources.Names.json");
-            if (stream != null)
-                using (var reader = new StreamReader(stream))
-                {
-                    var namesJson = reader.ReadToEnd();
-                    var names = JsonConvert.DeserializeObject<Names>(namesJson);
-                    if (names != null)
-                        DescriptionLookup.Initialize(names);
-                }
+            var namesJson = System.Text.Encoding.UTF8.GetString(Properties.Resources.Names);
+            var names = JsonConvert.DeserializeObject<Names>(namesJson);
+            if (names != null)
+                DescriptionLookup.Initialize(names);
 
             KeyItemsControl.IconLookup = new IconLookup();
             trackerControls = new List<ITrackerControl>(new ITrackerControl[] { KeyItemsControl, PartyControl, ObjectivesControl, LocationsControl });
-            Log.EnableDomain("FE");
-
             Properties.Settings.Default.PropertyChanged += SettingsChanged;
         }
 
@@ -86,6 +76,20 @@ namespace BizHawk.FreeEnterprise.Companion
             trackerControls.ForEach(f => f.RefreshSize());
         }
 
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+
+            if (Properties.Settings.Default.Dock)
+                return;
+
+            trackerControls?.ForEach(f =>
+            {
+                f.RefreshSize();
+                (f as Control)?.Invalidate();
+            });
+        }
+
         protected override void OnClosed(EventArgs e)
         {
             if (MainListenersSet)
@@ -116,11 +120,12 @@ namespace BizHawk.FreeEnterprise.Companion
         {
             if (Run != null)
             {
-                Run.PartyUpdated -= GameState_PartyUpdated;
-                Run.KeyItemsUpdated -= GameState_KeyItemsUpdated;
-                Run.LocationsUpdated -= GameState_LocationsUpdated;
-                Run.ObjectivesUpdated -= GameState_ObjectivesUpdated;
-                Run.CustomSettingsUpdated -= GameState_CustomSettingsUpdated;
+                Run.PartyUpdated -= Run_PartyUpdated;
+                Run.KeyItemsUpdated -= Run_KeyItemsUpdated;
+                Run.LocationsUpdated -= Run_LocationsUpdated;
+                Run.ObjectivesUpdated -= Run_ObjectivesUpdated;
+                Run.CustomSettingsUpdated -= Run_CustomSettingsUpdated;
+                Run.LoadComplete -= Run_LoadComplete;
                 Run.Dispose();
                 Run = null;
             }
@@ -128,11 +133,12 @@ namespace BizHawk.FreeEnterprise.Companion
             Memory = new MemoryMapping(APIs.Memory);
 
             Run = new Run(APIs, Memory);
-            Run.PartyUpdated += GameState_PartyUpdated;
-            Run.KeyItemsUpdated += GameState_KeyItemsUpdated;
-            Run.LocationsUpdated += GameState_LocationsUpdated;
-            Run.ObjectivesUpdated += GameState_ObjectivesUpdated;
-            Run.CustomSettingsUpdated += GameState_CustomSettingsUpdated;
+            Run.PartyUpdated += Run_PartyUpdated;
+            Run.KeyItemsUpdated += Run_KeyItemsUpdated;
+            Run.LocationsUpdated += Run_LocationsUpdated;
+            Run.ObjectivesUpdated += Run_ObjectivesUpdated;
+            Run.CustomSettingsUpdated += Run_CustomSettingsUpdated;
+            Run.LoadComplete += Run_LoadComplete;
 
             RomData = new RomData(Memory.CartRom);
 
@@ -145,25 +151,34 @@ namespace BizHawk.FreeEnterprise.Companion
             SetControlsVisibility();
         }
 
-        private void GameState_CustomSettingsUpdated(object sender, EventArgs e)
+        private void Run_LoadComplete(object sender, EventArgs e)
+        {
+            Run_LocationsUpdated(sender, e);
+            Run_KeyItemsUpdated(sender, e);
+            Run_ObjectivesUpdated(sender, e);
+            Run_PartyUpdated(sender, e);
+            Run_CustomSettingsUpdated(sender, e);
+        }
+
+        private void Run_CustomSettingsUpdated(object sender, EventArgs e)
         {
             if (RomData?.Font?.UpdateBackgroundColor(Run!.BackgroundColor) ?? false)
                 Invalidate();
         }
 
-        private void GameState_ObjectivesUpdated(object sender, EventArgs e)
+        private void Run_ObjectivesUpdated(object sender, EventArgs e)
         {
             ObjectivesControl.Update(Run!.Objectives);
             ObjectivesControl.RefreshSize();
         }
 
-        private void GameState_LocationsUpdated(object sender, EventArgs e)
+        private void Run_LocationsUpdated(object sender, EventArgs e)
             => LocationsControl.Update(Run!.Locations);
 
-        private void GameState_KeyItemsUpdated(object sender, EventArgs e) 
+        private void Run_KeyItemsUpdated(object sender, EventArgs e) 
             => KeyItemsControl.Update(Run!.KeyItems);
 
-        private void GameState_PartyUpdated(object sender, EventArgs e) 
+        private void Run_PartyUpdated(object sender, EventArgs e) 
             => PartyControl.Update(Run!.Party);
 
         public override void Restart()
@@ -192,6 +207,7 @@ namespace BizHawk.FreeEnterprise.Companion
 
             Run?.NewFrame();
             StopWatchLabel.Text = Run?.Stopwatch.Elapsed.ToString("c");
+            trackerControls.ForEach(c => c.NewFrame());
         }
 
         private void displayToolStripMenuItem_Click(object sender, EventArgs e)

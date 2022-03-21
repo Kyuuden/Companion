@@ -17,19 +17,15 @@ namespace BizHawk.FreeEnterprise.Companion.State
 
         public override bool Equals(object? obj)
         {
-            return obj is Character settings
-                && _data.Length == settings._data.Length
-                && _data.Take(2).SequenceEqual(settings._data.Take(2));
+            return obj is Character character
+                && ID == character.ID
+                && Class == character.Class;
         }
 
-        public override int GetHashCode()
-        {
-            return -1945990370 + EqualityComparer<byte[]>.Default.GetHashCode(_data);
-        }
+        public override int GetHashCode() => ID << 8 | (int)Class;
 
         public byte ID => _data.Read<byte>(0, 5);
 
-        public bool IsBackRow => _data.Read<bool>(8 + 7, 1);
         public CharacterType Class => _data.Read<CharacterType>(8, 4);
 
         public override string ToString()

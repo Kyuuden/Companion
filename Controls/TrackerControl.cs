@@ -10,6 +10,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
     {
         void Initialize(RomData romData, IFlagSet? flagset);
         void RefreshSize();
+        void NewFrame();
     }
 
     public abstract class TrackerControl<T> : UserControl, ITrackerControl
@@ -54,6 +55,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
             var cHeight = e.ClipRectangle.Height / 8 - 1;
             var cWidth = e.ClipRectangle.Width / 8 - 2;
 
+
             var sX = 8;
             var sY = 8;
 
@@ -95,5 +97,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
         protected abstract string? HeaderCount { get; }
 
         protected abstract void PaintData(Graphics graphics, Rectangle rect);
+
+        public virtual void NewFrame() { }
     }
 }

@@ -37,6 +37,7 @@ namespace BizHawk.FreeEnterprise.Companion
             this.cbKeyItemDisplay = new System.Windows.Forms.CheckBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.comboPartyPose = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.cbPartyBorder = new System.Windows.Forms.CheckBox();
             this.cbPartyDisplay = new System.Windows.Forms.CheckBox();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -56,7 +57,7 @@ namespace BizHawk.FreeEnterprise.Companion
             this.label3 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
+            this.cbPartyAnimate = new System.Windows.Forms.CheckBox();
             this.tabs.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -91,7 +92,7 @@ namespace BizHawk.FreeEnterprise.Companion
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(326, 147);
+            this.tabPage1.Size = new System.Drawing.Size(326, 113);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Key Items";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -136,6 +137,7 @@ namespace BizHawk.FreeEnterprise.Companion
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.cbPartyAnimate);
             this.tabPage2.Controls.Add(this.comboPartyPose);
             this.tabPage2.Controls.Add(this.label2);
             this.tabPage2.Controls.Add(this.cbPartyBorder);
@@ -156,6 +158,15 @@ namespace BizHawk.FreeEnterprise.Companion
             this.comboPartyPose.Name = "comboPartyPose";
             this.comboPartyPose.Size = new System.Drawing.Size(98, 21);
             this.comboPartyPose.TabIndex = 7;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(8, 51);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(34, 13);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "Pose:";
             // 
             // cbPartyBorder
             // 
@@ -184,7 +195,7 @@ namespace BizHawk.FreeEnterprise.Companion
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(326, 147);
+            this.tabPage3.Size = new System.Drawing.Size(326, 113);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Objectives";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -215,7 +226,7 @@ namespace BizHawk.FreeEnterprise.Companion
             this.tabPage5.Controls.Add(this.cbLocationsDisplay);
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Size = new System.Drawing.Size(326, 147);
+            this.tabPage5.Size = new System.Drawing.Size(326, 113);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Locations";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -357,14 +368,15 @@ namespace BizHawk.FreeEnterprise.Companion
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // label2
+            // cbPartyAnimate
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(8, 51);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(34, 13);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "Pose:";
+            this.cbPartyAnimate.AutoSize = true;
+            this.cbPartyAnimate.Location = new System.Drawing.Point(152, 50);
+            this.cbPartyAnimate.Name = "cbPartyAnimate";
+            this.cbPartyAnimate.Size = new System.Drawing.Size(124, 17);
+            this.cbPartyAnimate.TabIndex = 8;
+            this.cbPartyAnimate.Text = "Animate (If available)";
+            this.cbPartyAnimate.UseVisualStyleBackColor = true;
             // 
             // SettingsDialog
             // 
@@ -424,5 +436,6 @@ namespace BizHawk.FreeEnterprise.Companion
         private System.Windows.Forms.NumericUpDown numericFrameCount;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.CheckBox cbPartyAnimate;
     }
 }

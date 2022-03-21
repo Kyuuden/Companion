@@ -1,4 +1,6 @@
-﻿namespace BizHawk.FreeEnterprise.Companion.State
+﻿using System;
+
+namespace BizHawk.FreeEnterprise.Companion.State
 {
     public class KeyItem
     {
@@ -38,7 +40,7 @@
                 _ => ""
             };
 
-        public bool FoundAt(KeyItemLocationType location)
+        public bool FoundAt(TimeSpan when, KeyItemLocationType location)
         {
             if (Found)
                 return false;
@@ -48,18 +50,25 @@
             return true;
         }
 
-        public bool Use()
+        public bool Use(TimeSpan when)
         {
             if (Used) return false;
             Used = true;
             return true;
         }
 
-        public bool Reset()
+        public bool ResetFound()
         {
-            if (!Found && !Used)
+            if (!Found)
                 return false;
             Found = false;
+            return true;
+        }
+
+        public bool ResetUsed()
+        {
+            if (!Used)
+                return false;
             Used = false;
             return true;
         }
@@ -82,5 +91,8 @@
             hashCode = hashCode * -1521134295 + FoundLocation.GetHashCode();
             return hashCode;
         }
+
+        public override string ToString()
+            => $"{Key}: {(Found ? "found" : "not found")}, {(Used ? "used" : "not used")}";
     }
 }

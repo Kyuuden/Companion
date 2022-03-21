@@ -7,43 +7,48 @@ namespace BizHawk.FreeEnterprise.Companion.State
 {
     public class KeyItems
     {
-        public IReadOnlyDictionary<KeyItemType, KeyItem> Items { get; }
+        private Dictionary<KeyItemType, KeyItem> _items;
+        public IReadOnlyDictionary<KeyItemType, KeyItem> Items => _items;
 
-        public KeyItems(KeyItemType foundKeyItems, KeyItemType usedKeyItems, byte[] itemLocations)
+        public bool Update(TimeSpan now, KeyItemType foundKeyItems, KeyItemType usedKeyItems, byte[] itemLocations)
         {
-            var keyItems = new Dictionary<KeyItemType, KeyItem>();
-            foreach (KeyItemType keyitem in Enum.GetValues(typeof(KeyItemType)))
-                keyItems.Add(keyitem, new KeyItem(keyitem));
+            var currentFound = Items.Values.Where(i => i.Found).Select(i => i.Key).Aggregate((KeyItemType)0, (l, r) => l | r);
+            var currentUsed = Items.Values.Where(i => i.Used).Select(i => i.Key).Aggregate((KeyItemType)0, (l, r) => l | r);
 
-            var parsedFoundItemLocations = itemLocations.ReadMany<KeyItemLocationType>(0, 16, 17).ToArray();
-            if (parsedFoundItemLocations.All(l => Enum.IsDefined(typeof(KeyItemLocationType), l) || (uint)l == 0))
-            {
-                foreach (var found in foundKeyItems.GetFlags())
+            if (currentFound != foundKeyItems || currentUsed != usedKeyItems)
+            {                
+                var parsedFoundItemLocations = itemLocations.ReadMany<KeyItemLocationType>(0, 16, 17).ToArray();
+
+                foreach (var item in Items.Values)
                 {
-                    var location = parsedFoundItemLocations[(uint)MathExt.FloorLog2((ulong)found)];
-                    keyItems[found].FoundAt(location);
+                    if (!currentFound.HasFlag(item.Key) && foundKeyItems.HasFlag(item.Key))
+                    {
+                        var location = parsedFoundItemLocations[(uint)MathExt.FloorLog2((ulong)item.Key)];
+                        item.FoundAt(now, location);
+                    }
+                    else if (currentFound.HasFlag(item.Key) && !foundKeyItems.HasFlag(item.Key))
+                        item.ResetFound();
+
+                    if (!currentUsed.HasFlag(item.Key) && usedKeyItems.HasFlag(item.Key))
+                        item.Use(now);
+                    else if (currentUsed.HasFlag(item.Key) && !usedKeyItems.HasFlag(item.Key))
+                        item.ResetUsed();
                 }
 
-                foreach (var used in usedKeyItems.GetFlags())
-                    keyItems[used].Use();
+                return true;
             }
 
-            Items = keyItems;
+            return false;
         }
     
 
         public KeyItems()
         {
-            Items = new Dictionary<KeyItemType, KeyItem>();
+            _items = new Dictionary<KeyItemType, KeyItem>();
+            foreach (KeyItemType keyitem in Enum.GetValues(typeof(KeyItemType)))
+                _items.Add(keyitem, new KeyItem(keyitem));
         }
 
         public KeyItem this[KeyItemType itemType] => Items[itemType];
-
-        public override bool Equals(object obj) => obj is KeyItems items && Items.Values.SequenceEqual(items.Items.Values);
-
-        public override int GetHashCode()
-        {
-            return -604923257 + EqualityComparer<IReadOnlyDictionary<KeyItemType, KeyItem>>.Default.GetHashCode(Items);
-        }
     }
 }

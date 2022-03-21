@@ -42,7 +42,10 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="RefreshEveryNFrames" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">10</Value>
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+    <Setting Name="PartyAnimate" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -5,7 +5,8 @@ using System.Drawing;
 
 namespace BizHawk.FreeEnterprise.Companion.Sprites
 {
-    class TileProcessor
+
+    public class TileProcessor
     {
         public Bitmap LoadTileFromROM(IMemoryApi memory, uint address, byte bitDepth) 
             => LoadTile(memory.ReadByteRange(address, 8 * bitDepth, "CARTROM").ToArray(), bitDepth);
@@ -45,12 +46,14 @@ namespace BizHawk.FreeEnterprise.Companion.Sprites
             {
                 for (var x = 0u; x < 8; x++)
                 {
-                    byte color = 0;
-
-                    for (var p = 0; p < bitDepth; p++)
+                    byte color = bitDepth switch
                     {
-                        color |= (byte)(data.Read<byte>(y * 16 + (7 - x) + BitPlaneOffset(p), 1) << p);
-                    }
+                        1 => data.Read<byte>(y * 8 + (7 - x), 1),
+                        2 => (byte)(data.Read<byte>(y * 16 + (7 - x), 1) | (data.Read<byte>(y * 16 + (7 - x) + 8, 1) << 1)),
+                        3 => (byte)(data.Read<byte>(y * 16 + (7 - x), 1) | (data.Read<byte>(y * 16 + (7 - x) + 8, 1) << 1) | (data.Read<byte>(128 + y * 8 + (7 - x), 1) << 2)),
+                        4 => (byte)(data.Read<byte>(y * 16 + (7 - x), 1) | (data.Read<byte>(y * 16 + (7 - x) + 8, 1) << 1) | (data.Read<byte>(128 + y * 16 + (7 - x), 1) << 2) | (data.Read<byte>(128 + y * 16 + (7 - x) + 8, 1) << 3)),
+                        _ => 0,
+                    };
 
                     tile[x,y] = color;
                 }
@@ -71,14 +74,6 @@ namespace BizHawk.FreeEnterprise.Companion.Sprites
             7 => 49 * 8,
             _ => 0
         };
-
-        public Color GetColor(uint colordata)
-        {
-            var red = colordata & 0x1F;
-            var green = (colordata >> 5) & 0x1F;
-            var blue = (colordata >> 10) & 0x1F;
-            return Color.FromArgb((int)(red * 255 / 31.0), (int)(green * 255 / 31.0), (int)(blue * 255 / 31.0));
-        }
     }
 }
 

@@ -20,6 +20,7 @@ namespace BizHawk.FreeEnterprise.Companion
             cbPartyDisplay.Checked = Properties.Settings.Default.PartyDisplay;
             cbPartyBorder.Checked = Properties.Settings.Default.PartyBorder;
             comboPartyPose.SelectedItem = Properties.Settings.Default.PartyPose.ToString();
+            cbPartyAnimate.Checked = Properties.Settings.Default.PartyAnimate;
 
             cbObjectiveDisplay.Checked = Properties.Settings.Default.ObjectivesDisplay;
             cbObjectiveBorder.Checked = Properties.Settings.Default.ObjectivesBorder;
@@ -43,6 +44,7 @@ namespace BizHawk.FreeEnterprise.Companion
             Properties.Settings.Default.PartyDisplay = cbPartyDisplay.Checked;
             Properties.Settings.Default.PartyBorder = cbPartyBorder.Checked;
             Properties.Settings.Default.PartyPose = (Pose)Enum.Parse(typeof(Pose), comboPartyPose.SelectedItem.ToString());
+            Properties.Settings.Default.PartyAnimate = cbPartyAnimate.Checked;
 
             Properties.Settings.Default.ObjectivesDisplay = cbObjectiveDisplay.Checked;
             Properties.Settings.Default.ObjectivesBorder = cbObjectiveBorder.Checked;

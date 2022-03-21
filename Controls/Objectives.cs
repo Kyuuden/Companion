@@ -47,7 +47,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
             var objectiveIndex = 0;
             foreach (var item in Data.Descriptions)
             {
-                var mode = Data.Completions[objectiveIndex] ? TextMode.Disabled : TextMode.Normal;
+                var mode = Data.Completions[objectiveIndex].HasValue ? TextMode.Disabled : TextMode.Normal;
                 RomData.Font.RenderText(graphics, sX, sY, $"{objectiveIndex + 1}.", mode);
                 sY += RomData.Font.RenderText(graphics, sX + 24, sY, cWidth - 3, item, mode) + 2;
                 objectiveIndex++;
@@ -69,7 +69,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
                     int x => $"{x,2}"
                 };
 
-                return $"{Data.Completions.Count(o => o),2}/{neededObjectives}";
+                return $"{Data.Completions.Count(o => o.HasValue),2}/{neededObjectives}";
             }
         }
 
@@ -89,7 +89,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
                     int max => max
                 };
 
-                RomData.Font.RenderText(graphics, x + width - 40, y, HeaderCount, Data.Completions.Count(o => o) >= neededObjectives ? TextMode.Highlighted : TextMode.Normal);
+                RomData.Font.RenderText(graphics, x + width - 40, y, HeaderCount, Data.Completions.Count(o => o.HasValue) >= neededObjectives ? TextMode.Highlighted : TextMode.Normal);
             }
         }
     }

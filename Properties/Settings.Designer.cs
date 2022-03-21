@@ -181,13 +181,25 @@ namespace BizHawk.FreeEnterprise.Companion.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
         public int RefreshEveryNFrames {
             get {
                 return ((int)(this["RefreshEveryNFrames"]));
             }
             set {
                 this["RefreshEveryNFrames"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool PartyAnimate {
+            get {
+                return ((bool)(this["PartyAnimate"]));
+            }
+            set {
+                this["PartyAnimate"] = value;
             }
         }
     }
