@@ -22,15 +22,16 @@ namespace BizHawk.FreeEnterprise.Companion.Sprites
 
         public sbyte?[,]? StickerArray { get; }
 
-        public void Render(Bitmap destination, Func<int, byte[,]> tileLookup, List<Color> tilePalette, Func<int, byte[,]> stickerLookup, List<Color> stickerPalette)
+        public Bitmap Render(Func<int, byte[,]> tileLookup, List<Color> tilePalette, Func<int, byte[,]> stickerLookup, List<Color> stickerPalette)
         {
-            for (var y = 0; y < destination.Height; y++)
+            var bitmap = new Bitmap(IndexArray.GetLength(1) * 8, IndexArray.GetLength(0) * 8);
+            for (var y = 0; y < bitmap.Height; y++)
             {
-                for (var x = 0; x < destination.Width; x++)
+                for (var x = 0; x < bitmap.Width; x++)
                 {
                     var tileIndex = IndexArray[y / 8, x / 8];
                     if (tileIndex != 255)
-                        destination.SetPixel(x, y, tilePalette[tileLookup(tileIndex)[x % 8, y % 8]]);
+                        bitmap.SetPixel(x, y, tilePalette[tileLookup(tileIndex)[x % 8, y % 8]]);
 
                     var stickerIndex = StickerArray?[y / 8, x / 8];
                     if (stickerIndex.HasValue)
@@ -42,10 +43,12 @@ namespace BizHawk.FreeEnterprise.Companion.Sprites
                             color = stickerPalette[stickerLookup(Math.Abs(stickerIndex.Value))[7 - x % 8, y % 8]];
 
                         if (color != Color.Transparent)
-                            destination.SetPixel(x, y, color);
+                            bitmap.SetPixel(x, y, color);
                     }
                 }
             }
+
+            return bitmap;
         }
     }
 }

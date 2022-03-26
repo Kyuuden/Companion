@@ -16,16 +16,19 @@ namespace BizHawk.FreeEnterprise.Companion.Sprites
         Casting,
         Special,
         Celebrate,
-        Dead
+        Dead,
+        Portrait
     }
 
     public class Characters : IDisposable
     {
-        private readonly List<byte[,]> _tiles;
+        private readonly List<byte[,]> _combatTiles;
         private readonly List<byte[,]> _stickers;
+        private readonly List<byte[,]> _portraitTiles;
 
-        private readonly List<List<Color>> _colorPalettes;
+        private readonly List<List<Color>> _combatPalettes;
         private readonly List<Color> _stickerPalette;
+        private readonly List<List<Color>> _portraitPalettes;
 
         private Dictionary<Pose, List<Frame>> PoseFrames = new Dictionary<Pose, List<Frame>>();
         private Dictionary<BitmapKey, Bitmap> _frameCache = new Dictionary<BitmapKey, Bitmap>();
@@ -41,13 +44,20 @@ namespace BizHawk.FreeEnterprise.Companion.Sprites
             PoseFrames[Pose.Dead]      = new List<Frame>(new[] { new Frame( 0, new byte[3, 3] { { 255, 255, 255 }, { 42, 43,  44 }, {  45, 46,  47 } }) });
             PoseFrames[Pose.Special]   = new List<Frame>(new[] { new Frame( 0, new byte[3, 3] { {  48,  49,  50 }, { 51, 52,  53 }, { 255, 55,  56 } }) });
             PoseFrames[Pose.Casting]   = new List<Frame>(new[] { new Frame( 8, new byte[3, 3] { {  57,  58, 255 }, { 59, 60, 255 }, {  61, 62, 255 } }), new Frame( 8, new byte[3, 3] { { 57, 58, 255 }, { 63, 60, 255 }, { 61, 62, 255 } }) });
+            PoseFrames[Pose.Portrait]  = new List<Frame>(new[] { new Frame( 0, new byte[4, 4] { { 0, 1, 2, 3 }, { 4, 5, 6, 7 }, { 8, 9, 10, 11 }, { 12, 13, 14, 15 } }) });
 
             var processor = new TileProcessor();
 
-            _tiles = rom
+            _combatTiles = rom
                 .ReadBytes(CARTROMAddresses.CharacterSpritesAddress, CARTROMAddresses.CharacterSpritesBytes)
                 .ReadMany<byte[]>(0, 0x20 * 8, 896)
                 .Select(data => processor.GetTile(data, 4))
+                .ToList();
+
+            _combatPalettes = rom
+                .ReadBytes(CARTROMAddresses.CharacterPalettesAddress, CARTROMAddresses.CharacterPalettesBytes)
+                .ReadMany<byte[]>(0, 32 * 8, 16) //split into palettes
+                .Select(paletteData => paletteData.ReadMany<uint>(0, 16, 16).Select(c => ColorProcessor.GetColor(c)).ToList())
                 .ToList();
 
             _stickers = rom
@@ -56,18 +66,25 @@ namespace BizHawk.FreeEnterprise.Companion.Sprites
                 .Select(data => processor.GetTile(data, 3))
                 .ToList();
 
-            _colorPalettes = rom
-                .ReadBytes(CARTROMAddresses.CharacterPalettesAddress, CARTROMAddresses.CharacterPalettesBytes)
-                .ReadMany<byte[]>(0, 32*8, 16) //split into palettes
-                .Select(paletteData => paletteData.ReadMany<uint>(0, 16, 16).Select(c => ColorProcessor.GetColor(c)).ToList())
-                .ToList();
-
             _stickerPalette = rom
                 .ReadBytes(CARTROMAddresses.BattleStatusStickersPalette, 16)
                 .ReadMany<uint>(0, 16, 8).Select(c => ColorProcessor.GetColor(c))
                 .ToList();
 
-            _colorPalettes.ForEach(p => p[0] = Color.Transparent);
+            _portraitTiles = rom
+                .ReadBytes(CARTROMAddresses.CharacterPortraitsAddress, CARTROMAddresses.CharacterPortraitsBytes)
+                .ReadMany<byte[]>(0, 0x18 * 8, 224)
+                .Select(data => processor.GetTile(data, 3))
+                .ToList();
+
+            _portraitPalettes = rom
+                .ReadBytes(CARTROMAddresses.CharacterPortraitsPalettesAddress, CARTROMAddresses.CharacterPortraitsPalettesBytes)
+                .ReadMany<byte[]>(0, 16 * 8, 14) //split into palettes
+                .Select(paletteData => paletteData.ReadMany<uint>(0, 16, 8).Select(c => ColorProcessor.GetColor(c)).ToList())
+                .ToList();
+
+            _combatPalettes.ForEach(p => p[0] = Color.Transparent);
+            _portraitPalettes.ForEach(p => p[0] = Color.Transparent);
             _stickerPalette[0] = Color.Transparent;
         }
 
@@ -77,10 +94,22 @@ namespace BizHawk.FreeEnterprise.Companion.Sprites
                 b.Dispose();
         }
 
-        private const int SpritesPerCharacter = 64;
+        private const int BattleSpritesPerCharacter = 64;
+        private const int PortraitSpritesPerCharacter = 16;
 
-        private byte[,] GetCharacterTile(CharacterType character, int spriteIndex)
-                => _tiles[(int)character * SpritesPerCharacter + spriteIndex];
+        private byte[,] GetTile(CharacterType character, Pose pose, int spriteIndex)
+            => pose switch
+            {
+                Pose.Portrait => _portraitTiles[(int)character * PortraitSpritesPerCharacter + spriteIndex],
+                _ => _combatTiles[(int)character * BattleSpritesPerCharacter + spriteIndex]
+            };
+
+        private List<Color> GetPalette(CharacterType character, Pose pose)
+            => pose switch
+            {
+                Pose.Portrait => _portraitPalettes[(int)character],
+                _ => _combatPalettes[(int)character]
+            };
 
         public int GetFrameIndex(Pose pose, int frame)
         {
@@ -100,26 +129,21 @@ namespace BizHawk.FreeEnterprise.Companion.Sprites
             return 0;
         }
 
-
         public Bitmap GetCharacterBitmap(byte id, CharacterType type, Pose pose, int frame)
-        {            
+        {
             frame = GetFrameIndex(pose, frame);
             var key = new BitmapKey(id, type, 0, pose, frame);
             if (_frameCache.TryGetValue(key, out var bitmap))
                 return bitmap;
 
-            bitmap = new Bitmap(24, 24);
-
             if (key.ID != 0)
-                PoseFrames[pose][frame].Render(
-                    bitmap, 
-                    tileIndex => GetCharacterTile(type, tileIndex), 
-                    _colorPalettes[(int)type], 
-                    stickerIndex => _stickers[stickerIndex], 
-                    _stickerPalette);            
+                _frameCache[key] = PoseFrames[pose][frame].Render(
+                    tileIndex => GetTile(type, pose, tileIndex),
+                    GetPalette(type, pose),
+                    stickerIndex => _stickers[stickerIndex],
+                    _stickerPalette);
 
-            _frameCache[key] = bitmap;
-            return bitmap;
+            return _frameCache[key];
         }
 
         private class BitmapKey

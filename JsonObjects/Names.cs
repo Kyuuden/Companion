@@ -8,6 +8,12 @@ namespace BizHawk.FreeEnterprise.Companion
         [JsonProperty("keyItemNames")]
         public IList<string>? KeyItemNames { get; set; }
 
+        [JsonProperty("keyItemShortNames")]
+        public IList<string>? KeyItemShortNames { get; set; }
+
+        [JsonProperty("keyItemDescriptions")]
+        public IList<string>? KeyItemDescriptions { get; set; }        
+
         [JsonProperty("locationNames")]
         public IList<string>? LocationNames { get; set; }
     }

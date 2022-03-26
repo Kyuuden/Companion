@@ -11,6 +11,8 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
         void Initialize(RomData romData, IFlagSet? flagset);
         void RefreshSize();
         void NewFrame();
+
+        int RequestedHeight { get; }
     }
 
     public abstract class TrackerControl<T> : UserControl, ITrackerControl
@@ -27,7 +29,9 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
         protected IFlagSet? FlagSet { get; private set; }
         public Func<bool> BorderEnabled { get; }
 
-        public void Initialize(RomData romData, IFlagSet? flagset)
+        public int RequestedHeight { get; protected set; }
+
+        public virtual void Initialize(RomData romData, IFlagSet? flagset)
         {
             if (romData is null)
                 throw new ArgumentNullException(nameof(romData));
@@ -42,6 +46,9 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
             Invalidate();
         }
 
+        protected int MinimiumHeight => BorderEnabled() ? 50 : 18;
+        protected int UseableWidth => (Width/8*8) - (BorderEnabled() ? 32 : 16);
+
         public abstract void RefreshSize();
 
         protected override void OnPaint(PaintEventArgs e)
@@ -52,9 +59,8 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
             BackColor = BorderEnabled() ? Color.Transparent : RomData.Font.GetBackColor();
 
             base.OnPaint(e);
-            var cHeight = e.ClipRectangle.Height / 8 - 1;
+            var cHeight = Math.Min(Height, e.ClipRectangle.Height) / 8 - 3;
             var cWidth = e.ClipRectangle.Width / 8 - 2;
-
 
             var sX = 8;
             var sY = 8;
@@ -62,10 +68,10 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
             if (BorderEnabled())
             {
                 BackColor = Color.Transparent;
-                RomData.Font.RenderBox(e.Graphics, sX, sY, Math.Max(12, Header.Length + 2), 3);
-                if (HeaderCount is not null)
+                RomData.Font.RenderBox(e.Graphics, sX, sY, Math.Min(Math.Max(12, Header.Length + 2), cWidth), 3);
+                if (HeaderCount is not null && cWidth > Math.Max(12, Header.Length + 2) + 6)
                     RomData.Font.RenderBox(e.Graphics, cWidth * 8 - (6 * 8), sY, 7, 3);
-                RomData.Font.RenderBox(e.Graphics, sX, sY + 24, cWidth, cHeight - 3);
+                RomData.Font.RenderBox(e.Graphics, sX, sY + 24, cWidth, cHeight - 1);
                 sX += 8;
                 sY += 8;
                 cWidth -= 2;
@@ -88,13 +94,14 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
                 return;
 
             RomData.Font.RenderText(graphics, x, y, Header, TextMode.Normal);
-
-            if (HeaderCount is not null)
-                RomData.Font.RenderText(graphics, x + width - 40, y, HeaderCount, TextMode.Normal);
+            var cWidth = Width / 8 - 2;
+            if (HeaderCount is not null && cWidth > Math.Max(12, Header.Length + 2) + 6)
+                RomData.Font.RenderText(graphics, x + width - 40, y, HeaderCount, HeaderCountTextMode);
         }
 
         protected abstract string Header { get; }
         protected abstract string? HeaderCount { get; }
+        protected virtual TextMode HeaderCountTextMode => TextMode.Normal;
 
         protected abstract void PaintData(Graphics graphics, Rectangle rect);
 

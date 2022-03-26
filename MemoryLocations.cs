@@ -40,7 +40,7 @@
         public const int CharacterSpritesAddress = 0x0d0000;
         public const int CharacterSpritesBytes = 0x7000;
 
-        public const int CharacterPalettesAddress = 0x0e7d00;
+        public const int CharacterPalettesAddress            = 0x0e7d00;
         public const int CharacterAlternatePalettes01Address = 0x147d00;
         public const int CharacterAlternatePalettes02Address = 0x14fd00;
         public const int CharacterAlternatePalettes03Address = 0x157d00;
@@ -56,6 +56,14 @@
 
         public const int CharacterPalettesBytes = 16 * 16 * 2;
 
+        public const int CharacterPortraitsAddress = 0xed3c0;
+        public const int CharacterPortraitsBytes = 0x1500;
+
+        public const int CharacterPortraitsPalettesAddress = 0x686d0;
+        public const int CharacterPortraitsPalettesBytes = 16 * 16;
+
+        public const int WeaponSprites = 0xE5900;
+
         public const int MetadataLengthAddress = 0x1FF000;
         public const int MetadataLengthBytes = 4;
         public const int MetadataAddress = 0x1FF004;
@@ -64,7 +72,6 @@
     public static class SystemBusAddresses
     {
         public const int ZeromusDeathAnimation = 0x03F591;
-        public const int MenuWaitForVBlankLoop = 0x0181A5;
         public const int MenuSaveNewGame = 0x019914;
     }
 }

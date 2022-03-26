@@ -29,6 +29,11 @@ namespace BizHawk.FreeEnterprise.Companion.State
                     CheckedLocations[location] = now;
                     updated = true;
                 }
+                else if (!checkedLocations.Read<bool>((uint)location) && CheckedLocations.ContainsKey(location))
+                {
+                    CheckedLocations.Remove(location);
+                    updated = true;
+                }
             }
 
             return updated;
@@ -50,7 +55,7 @@ namespace BizHawk.FreeEnterprise.Companion.State
                 requirementDictionary
                 .Where(kvp => kvp.Value.IsAvailable(_keyItems, _flagSet, new HashSet<KeyItemLocationType>(CheckedLocations.Keys))).Select(kvp => kvp.Key))
             .Except(CheckedLocations.Keys)
-            .Select(location => DescriptionLookup.GetDescription(location) ?? location.ToString())
+            .Select(location => TextLookup.GetName(location) ?? location.ToString())
             .ToHashSet();
 
         private static readonly Dictionary<KeyItemLocationType, LocationRequirements> requirementDictionary = new Dictionary<KeyItemLocationType, LocationRequirements>();

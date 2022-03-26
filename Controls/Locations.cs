@@ -36,7 +36,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
                 if (sY + 8 < rect.Height + rect.Y)
                 {
                     RomData.Font.RenderText(graphics, sX, sY, $"•", TextMode.Normal);
-                    sY += RomData.Font.RenderText(graphics, sX + 16, sY, cWidth - 2, item, TextMode.Normal) + 2;
+                    sY += RomData.Font.RenderText(graphics, sX + 16, sY, cWidth - 2, item, TextMode.Normal) + 4;
                 }
             }
         }

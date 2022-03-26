@@ -10,7 +10,8 @@ namespace BizHawk.FreeEnterprise.Companion.Sprites
     {
         Normal,
         Disabled,
-        Highlighted
+        Highlighted,
+        Special
     }
 
     public class Font : IDisposable
@@ -27,7 +28,7 @@ namespace BizHawk.FreeEnterprise.Companion.Sprites
 
             _tiles = fontData.ReadMany<byte[]>(0, 128, 256).Select(bytes => processor.GetTile(bytes, 2)).ToList();
 
-            _palettes = new Color[3, 4];
+            _palettes = new Color[4, 4];
             _palettes[0, 0] = Color.Black;
             _palettes[0, 1] = Color.FromArgb(0, 0, 99);
             _palettes[0, 2] = Color.FromArgb(115, 115, 115);
@@ -43,6 +44,11 @@ namespace BizHawk.FreeEnterprise.Companion.Sprites
             _palettes[2, 2] = Color.FromArgb(0, 165, 0);
             _palettes[2, 3] = Color.FromArgb(255, 222, 0);
 
+            _palettes[3, 0] = Color.Black;
+            _palettes[3, 1] = Color.FromArgb(0, 0, 99);
+            _palettes[3, 2] = Color.FromArgb(255, 58, 132);
+            _palettes[3, 3] = Color.FromArgb(255, 156, 90);
+
             BuildBitmaps();
         }
 
@@ -51,9 +57,9 @@ namespace BizHawk.FreeEnterprise.Companion.Sprites
         {
             if (_palettes[0, 1] != backcolor)
             {
-                _palettes[0, 1] = backcolor;
-                _palettes[1, 1] = backcolor;
-                _palettes[2, 1] = backcolor;
+                for(var p = 0; p < _palettes.GetLength(0); p++)
+                    _palettes[p, 1] = backcolor;
+
                 ClearBitmaps();
                 BuildBitmaps();
                 return true;
@@ -80,7 +86,7 @@ namespace BizHawk.FreeEnterprise.Companion.Sprites
         {
             bitmaps = new List<List<Bitmap>>();
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 4; i++)
             {
                 var list = new List<Bitmap>();
                 bitmaps.Add(list);
@@ -118,14 +124,14 @@ namespace BizHawk.FreeEnterprise.Companion.Sprites
                 yield return line;
         }
 
-        public int RenderText(Graphics gr, int x, int y, int cwidth, string text, TextMode mode)
+        public int RenderText(Graphics gr, int x, int y, int cwidth, string text, TextMode mode, int extraSpacing = 2)
         {
             var height = 0;
             foreach (var line in Breakup(text, cwidth))
             {
                 RenderText(gr, x, y, line, mode);
-                y += 10;
-                height += 10;
+                y += 8+ extraSpacing;
+                height += 8+ extraSpacing;
             }
             return height;
         }

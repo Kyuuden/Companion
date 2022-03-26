@@ -29,6 +29,8 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            this.keyItemsToolTip = new KeyItemToolTip(this.components);
             this.SuspendLayout();
             // 
             // KeyItems
@@ -37,13 +39,13 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Transparent;
             this.DoubleBuffered = true;
-            this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "KeyItems";
-            this.Padding = new System.Windows.Forms.Padding(8);
             this.ResumeLayout(false);
 
         }
 
         #endregion
+
+        private KeyItemToolTip keyItemsToolTip;
     }
 }

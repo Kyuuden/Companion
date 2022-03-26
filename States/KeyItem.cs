@@ -6,39 +6,20 @@ namespace BizHawk.FreeEnterprise.Companion.State
     {
         public KeyItemType Key { get; }
 
-        public string Description { get; }
+        public string Name { get; }
+        public string ShortName { get; }
+        public string Description{ get; }
         public bool Found { get; private set; }
         public bool Used { get; private set; }
         public KeyItemLocationType FoundLocation { get; private set; }
 
         public KeyItem(KeyItemType key)
         {
-            Description = DescriptionLookup.GetDescription(key) ?? key.ToString();
-            this.Key = key;
-        }
-
-        public string ShortDescription
-            => Key switch
-            {
-                KeyItemType.Package => "Package",
-                KeyItemType.SandRuby => "SandRuby",
-                KeyItemType.LegendSword => "|Legend",
-                KeyItemType.BaronKey => "^Baron",
-                KeyItemType.TwinHarp => "$TwinHarp",
-                KeyItemType.EarthCrystal => "*Earth",
-                KeyItemType.MagmaKey => "^Magma",
-                KeyItemType.TowerKey => "^Tower",
-                KeyItemType.Hook => "Hook",
-                KeyItemType.LucaKey => "^Luca",
-                KeyItemType.DarknessCrystal => "*Darkness",
-                KeyItemType.RatTail => "~Rat",
-                KeyItemType.Adamant => "Adamant",
-                KeyItemType.Pan => "Pan",
-                KeyItemType.Spoon => "`Spoon",
-                KeyItemType.PinkTail => "~Pink",
-                KeyItemType.Crystal => "*Crystal",
-                _ => ""
-            };
+            Name = TextLookup.GetName(key) ?? key.ToString();
+            ShortName = TextLookup.GetShortName(key) ?? key.ToString();
+            Description = TextLookup.GetDescription(key) ?? key.ToString();
+            Key = key;
+         }
 
         public bool FoundAt(TimeSpan when, KeyItemLocationType location)
         {

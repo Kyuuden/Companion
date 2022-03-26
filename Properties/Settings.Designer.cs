@@ -202,5 +202,53 @@ namespace BizHawk.FreeEnterprise.Companion.Properties {
                 this["PartyAnimate"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("_16x10")]
+        public global::BizHawk.FreeEnterprise.Companion.AspectRatio AspectRatio {
+            get {
+                return ((global::BizHawk.FreeEnterprise.Companion.AspectRatio)(this["AspectRatio"]));
+            }
+            set {
+                this["AspectRatio"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Original")]
+        public global::BizHawk.FreeEnterprise.Companion.Layout Layout {
+            get {
+                return ((global::BizHawk.FreeEnterprise.Companion.Layout)(this["Layout"]));
+            }
+            set {
+                this["Layout"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool BossesDisplay {
+            get {
+                return ((bool)(this["BossesDisplay"]));
+            }
+            set {
+                this["BossesDisplay"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool BossesBorder {
+            get {
+                return ((bool)(this["BossesBorder"]));
+            }
+            set {
+                this["BossesBorder"] = value;
+            }
+        }
     }
 }

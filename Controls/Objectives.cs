@@ -1,4 +1,5 @@
 ﻿using BizHawk.FreeEnterprise.Companion.Sprites;
+using System;
 using System.Drawing;
 using System.Linq;
 
@@ -21,16 +22,17 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
         public override void RefreshSize()
         {
             if (Data == null || RomData == null)
-                Height = 72 + (Properties.Settings.Default.ObjectivesBorder ? 32 : 2);
+                Height = MinimiumHeight;
             else
             {
-                var cWidth = (Width / 8 - 2) - 3
-                    - (Properties.Settings.Default.ObjectivesBorder ? 2 : 0);
-                Height = Data
-                    .Descriptions
-                    .SelectMany(d => RomData.Font.Breakup(d, cWidth))
-                    .Count() * 12
-                    + (Properties.Settings.Default.ObjectivesBorder ? 48 : 18);
+                var cWidth = UseableWidth / 8;
+
+                RequestedHeight = Data.Descriptions.SelectMany(d => RomData.Font.Breakup(d, cWidth - 3)).Count() * 10 + Data.Descriptions.Count() * 6 - 4 + MinimiumHeight;
+
+                if (Properties.Settings.Default.Layout == Companion.Layout.Alternate)
+                    Height = Math.Max(RequestedHeight, Parent.Height - Location.Y);
+                else
+                    Height = RequestedHeight;
             }
 
             Invalidate();
@@ -45,11 +47,12 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
             var sY = rect.Y;
             var cWidth = rect.Width / 8;
             var objectiveIndex = 0;
+
             foreach (var item in Data.Descriptions)
             {
                 var mode = Data.Completions[objectiveIndex].HasValue ? TextMode.Disabled : TextMode.Normal;
                 RomData.Font.RenderText(graphics, sX, sY, $"{objectiveIndex + 1}.", mode);
-                sY += RomData.Font.RenderText(graphics, sX + 24, sY, cWidth - 3, item, mode) + 2;
+                sY += RomData.Font.RenderText(graphics, sX + 24, sY, cWidth - 3, item, mode) + 6;
                 objectiveIndex++;
             }
         }
@@ -73,23 +76,17 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
             }
         }
 
-        protected override void DrawHeader(Graphics graphics, int x, int y, int width)
+        protected override TextMode HeaderCountTextMode
         {
-            if (RomData == null)
-                return;
-
-            RomData.Font.RenderText(graphics, x, y, Header, TextMode.Normal);
-
-            if (HeaderCount is not null && Data is not null)
+            get
             {
                 var neededObjectives = FlagSet?.RequriedObjectiveCount switch
                 {
                     null => -1,
-                    0 => Data.Completions.Count(),
+                    0 => Data?.Completions.Count(),
                     int max => max
                 };
-
-                RomData.Font.RenderText(graphics, x + width - 40, y, HeaderCount, Data.Completions.Count(o => o.HasValue) >= neededObjectives ? TextMode.Highlighted : TextMode.Normal);
+                return Data?.Completions.Count(o => o.HasValue) >= neededObjectives ? TextMode.Highlighted : TextMode.Normal;
             }
         }
     }

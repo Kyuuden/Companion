@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace BizHawk.FreeEnterprise.Companion
@@ -34,11 +35,15 @@ namespace BizHawk.FreeEnterprise.Companion
             var namesJson = System.Text.Encoding.UTF8.GetString(Properties.Resources.Names);
             var names = JsonConvert.DeserializeObject<Names>(namesJson);
             if (names != null)
-                DescriptionLookup.Initialize(names);
+                TextLookup.Initialize(names);
 
-            KeyItemsControl.IconLookup = new IconLookup();
-            trackerControls = new List<ITrackerControl>(new ITrackerControl[] { KeyItemsControl, PartyControl, ObjectivesControl, LocationsControl });
+            trackerControls = new List<ITrackerControl>(new ITrackerControl[] { KeyItemsControl, PartyControl, ObjectivesControl, BossesControl, LocationsControl });
             Properties.Settings.Default.PropertyChanged += SettingsChanged;
+        }
+
+        private void TrackerControl_Resize(object sender, EventArgs e)
+        {
+            WideLayoutPanel.Height = Math.Max(PartyControl.RequestedHeight, KeyItemsControl.RequestedHeight + ObjectivesControl.RequestedHeight);
         }
 
         private void SettingsChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -58,7 +63,7 @@ namespace BizHawk.FreeEnterprise.Companion
             {
                 FormBorderStyle = FormBorderStyle.FixedSingle;
                 var oldSize = Size;
-                Size = new Size((APIs.EmuClient.ScreenHeight() * 16 / 10) - APIs.EmuClient.ScreenWidth(), main.Height);
+                Size = new Size((APIs.EmuClient.ScreenHeight() * 16 / (Properties.Settings.Default.AspectRatio == AspectRatio._16x10 ? 10 : 9)) - APIs.EmuClient.ScreenWidth(), main.Height);
                 Location = new Point(
                     Properties.Settings.Default.DockSide == DockSide.Right
                         ? main.Location.X + main.Width + Properties.Settings.Default.DockOffset
@@ -72,6 +77,50 @@ namespace BizHawk.FreeEnterprise.Companion
             {
                 FormBorderStyle = FormBorderStyle.Sizable;
             }
+
+            bool layoutUpdated = false;
+
+            switch (Properties.Settings.Default.Layout)
+            {
+                case Companion.Layout.Original:
+                    if (KeyItemsControl.Parent != this)
+                    {
+                        KeyItemsControl.Parent = this;
+                        PartyControl.Parent = this;
+                        ObjectivesControl.Parent = this;
+                        WideLayoutPanel.Visible = false;
+
+                        PartyControl.Dock = DockStyle.Top;
+
+                        ObjectivesControl.SendToBack();
+                        PartyControl.SendToBack();
+                        KeyItemsControl.SendToBack();
+
+                        layoutUpdated = true;
+                    }
+
+                    break;
+                case Companion.Layout.Alternate:
+                    if (KeyItemsControl.Parent != WideLayoutPanel)
+                    {
+                        KeyItemsControl.Parent = WideLayoutPanel;
+                        PartyControl.Parent = WideLayoutPanel;
+                        PartyControl.Dock = DockStyle.Left;
+                        PartyControl.Width = 48 + 32;
+                        ObjectivesControl.Parent = WideLayoutPanel;
+                        WideLayoutPanel.Visible = true;
+
+                        ObjectivesControl.SendToBack();
+                        KeyItemsControl.SendToBack();
+                        PartyControl.SendToBack();
+
+                        layoutUpdated = true;
+                    }
+                    break;
+            }
+
+            if (layoutUpdated)
+                menuStrip1.SendToBack();
 
             trackerControls.ForEach(f => f.RefreshSize());
         }
@@ -142,6 +191,8 @@ namespace BizHawk.FreeEnterprise.Companion
 
             RomData = new RomData(Memory.CartRom);
 
+            BossesControl.Update(new State.Bosses());
+
             trackerControls.ForEach(c =>
             {
                 c.Initialize(RomData, Run.FlagSet);
@@ -158,6 +209,8 @@ namespace BizHawk.FreeEnterprise.Companion
             Run_ObjectivesUpdated(sender, e);
             Run_PartyUpdated(sender, e);
             Run_CustomSettingsUpdated(sender, e);
+
+            trackerControls.ForEach(c =>  c.RefreshSize());
         }
 
         private void Run_CustomSettingsUpdated(object sender, EventArgs e)
@@ -206,12 +259,20 @@ namespace BizHawk.FreeEnterprise.Companion
                 Initialize();
 
             Run?.NewFrame();
-            StopWatchLabel.Text = Run?.Stopwatch.Elapsed.ToString("c");
+            StopWatchLabel.Text = Run?.Stopwatch.Elapsed.ToString("hh':'mm':'ss'.'ff");
             trackerControls.ForEach(c => c.NewFrame());
         }
 
         private void displayToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            var existing = OwnedForms.OfType<SettingsDialog>().FirstOrDefault();
+
+            if (existing is not null)
+            {
+                existing.Focus();
+                return;
+            }
+
             var dialog = new SettingsDialog()
             {
                 Owner = this,
@@ -227,6 +288,7 @@ namespace BizHawk.FreeEnterprise.Companion
             KeyItemsControl.Visible = Properties.Settings.Default.KeyItemsDisplay;
             PartyControl.Visible = Properties.Settings.Default.PartyDisplay;
             ObjectivesControl.Visible = Properties.Settings.Default.ObjectivesDisplay;
+            BossesControl.Visible = Properties.Settings.Default.BossesDisplay;
             LocationsControl.Visible = Properties.Settings.Default.LocationsDisplay;
         }
 

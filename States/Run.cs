@@ -30,6 +30,7 @@ namespace BizHawk.FreeEnterprise.Companion.State
         private MemoryMapping _memory;
         private Color backgroundColor;
         private Party party;
+        private Timer _loadingTimer;
 
         public Run(ApiContainer container, MemoryMapping memory)
         {
@@ -60,7 +61,22 @@ namespace BizHawk.FreeEnterprise.Companion.State
 
             Stopwatch = new Stopwatch();
             State = RunState.Loading;
+            _loadingTimer = new Timer
+            {
+                Enabled = true,
+                Interval = 2000,
+            };
+            _loadingTimer.Tick += _loadingTimer_Tick;
 
+            CreateCallbacks();
+        }
+
+        private void _loadingTimer_Tick(object sender, EventArgs e)
+        {
+            LoadComplete?.Invoke(this, null);
+            _loadingTimer.Stop();
+            _loadingTimer.Dispose();
+            State = RunState.Menu;
             CreateCallbacks();
         }
 
@@ -126,14 +142,6 @@ namespace BizHawk.FreeEnterprise.Companion.State
         private void ReadBackgroundColor()
             => BackgroundColor = ColorProcessor.GetColor(_memory.Main.ReadBytes(WRAMAddresses.BackgroundColorAddress, WRAMAddresses.BackgroundColorBytes).Read<ushort>(0));
 
-        public void RomLoadComplete(uint address, uint value, uint flags)
-        {
-            RemoveCallbacks();
-            State = RunState.Menu;
-            LoadComplete?.Invoke(this, null);
-            CreateCallbacks();
-        }
-
         public void StartNewGame(uint address, uint value, uint flags)
         {
             RemoveCallbacks();
@@ -168,7 +176,11 @@ namespace BizHawk.FreeEnterprise.Companion.State
                    _memory.Main.Read<KeyItemType>(WRAMAddresses.FoundKeyItems, WRAMAddresses.FoundKeyItemsBytes),
                    _memory.Main.Read<KeyItemType>(WRAMAddresses.UsedKeyItems, WRAMAddresses.UsedKeyItemsBytes),
                    _memory.CartSaveRam.ReadBytes(CARTRAMAddresses.KeyItemLocations, CARTRAMAddresses.KeyItemLocationsBytes)))
+                {
                     KeyItemsUpdated?.Invoke(this, null);
+                    if (Locations.UpdateKeyItems(KeyItems))
+                        LocationsUpdated?.Invoke(this, null);
+                }
             }
             else if (frameMod == Properties.Settings.Default.RefreshEveryNFrames * 2 / 5)
             {
@@ -195,9 +207,6 @@ namespace BizHawk.FreeEnterprise.Companion.State
                     case RunState.RunStarted:
                         _container.MemoryEvents.RemoveMemoryCallback(Flash);
                         break;
-                    case RunState.Loading:
-                        _container.MemoryEvents.RemoveMemoryCallback(RomLoadComplete);
-                        break;
                     case RunState.Menu:
                         _container.MemoryEvents.RemoveMemoryCallback(StartNewGame);
                         break;
@@ -214,15 +223,8 @@ namespace BizHawk.FreeEnterprise.Companion.State
             {
                 switch (State)
                 {
-                    case RunState.Unknown:
-                        State = RunState.Loading;
-                        _container.MemoryEvents.AddExecCallback(RomLoadComplete, SystemBusAddresses.MenuWaitForVBlankLoop, "System Bus");
-                        break;
                     case RunState.RunStarted:
                         _container.MemoryEvents.AddExecCallback(Flash, SystemBusAddresses.ZeromusDeathAnimation, "System Bus");
-                        break;
-                    case RunState.Loading:
-                        _container.MemoryEvents.AddExecCallback(RomLoadComplete, SystemBusAddresses.MenuWaitForVBlankLoop, "System Bus");
                         break;
                     case RunState.Menu:
                         _container.MemoryEvents.AddExecCallback(StartNewGame, SystemBusAddresses.MenuSaveNewGame, "System Bus");
@@ -231,21 +233,10 @@ namespace BizHawk.FreeEnterprise.Companion.State
             }
             catch (KeyNotFoundException) //snes9X core doesn't support exec callbacks
             {
-                if (State == RunState.Loading)
+                if (State != RunState.Unknown)
                 {
                     State = RunState.Unknown;
-                    var t = new Timer
-                    {
-                        Enabled = true,
-                        Interval = 2000,
-                    };
-                    t.Tick += (_, _) =>
-                    {
-                        LoadComplete?.Invoke(this, null);
-                        t.Stop();
-                        t.Dispose();
-                        MessageBox.Show("Automatic timing of runs is not supported on the Snes9x core. Please use the BSNES or BSNESv115+ core to have this feature.", "Timing unavailable");
-                    };
+                    MessageBox.Show("Automatic timing of runs is not supported on the Snes9x core. Please use the BSNES or BSNESv115+ core to have this feature.", "Timing unavailable");
                 }
             }
         }

@@ -118,6 +118,222 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="FFIVFE_Bosses_10DKCecil_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-10DKCecil-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_10DKCecil_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-10DKCecil-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_11Guards_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-11Guards-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_11Guards_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-11Guards-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_12Yang_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-12Yang-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_12Yang_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-12Yang-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_13Baigan_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-13Baigan-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_13Baigan_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-13Baigan-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_14Kainazzo_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-14Kainazzo-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_14Kainazzo_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-14Kainazzo-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_15DElf_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-15DElf-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_15DElf_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-15DElf-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_16MagusSis_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-16MagusSis-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_16MagusSis_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-16MagusSis-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_17Valvalis_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-17Valvalis-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_17Valvalis_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-17Valvalis-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_18Calcabrina_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-18Calcabrina-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_18Calcabrina_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-18Calcabrina-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_19Golbez_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-19Golbez-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_19Golbez_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-19Golbez-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_1MistD_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-1MistD-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_1MistD_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-1MistD-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_20Lugae_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-20Lugae-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_20Lugae_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-20Lugae-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_21Eblan_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-21Eblan-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_21Eblan_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-21Eblan-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_22Rubicante_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-22Rubicante-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_22Rubicante_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-22Rubicante-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_23EvilWall_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-23EvilWall-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_23EvilWall_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-23EvilWall-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_24Fiends_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-24Fiends-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_24Fiends_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-24Fiends-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_25CPU_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-25CPU-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_25CPU_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-25CPU-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_26Odin_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-26Odin-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_26Odin_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-26Odin-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_27Asura_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-27Asura-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_27Asura_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-27Asura-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_28Leviath_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-28Leviath-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_28Leviath_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-28Leviath-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_29Bahamut_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-29Bahamut-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_29Bahamut_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-29Bahamut-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_2Soldier_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-2Soldier-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_2Soldier_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-2Soldier-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_30PaleDim_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-30PaleDim-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_30PaleDim_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-30PaleDim-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_31LunarD_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-31LunarD-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_31LunarD_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-31LunarD-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_32Plague_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-32Plague-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_32Plague_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-32Plague-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_33Ogopogo_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-33Ogopogo-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_33Ogopogo_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-33Ogopogo-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_34Wyvern_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-34Wyvern-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_34Wyvern_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-34Wyvern-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_35DarkImps_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-35DarkImps-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_35DarkImps_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-35DarkImps-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_36Zeromus_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-36Zeromus-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_36Zeromus_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-36Zeromus-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_3Octo_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-3Octo-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_3Octo_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-3Octo-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_4Antlion_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-4Antlion-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_4Antlion_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-4Antlion-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_5WHag_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-5WHag-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_5WHag_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-5WHag-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_6Mombomb_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-6Mombomb-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_6Mombomb_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-6Mombomb-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_7Gauntlet_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-7Gauntlet-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_7Gauntlet_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-7Gauntlet-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_8Milon_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-8Milon-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_8Milon_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-8Milon-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_9MilonZ_Color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-9MilonZ-Color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FFIVFE_Bosses_9MilonZ_Gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FFIVFE-Bosses-9MilonZ-Gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="FFIVFE_Icons_10MagmaKey_Check" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\FFIVFE-Icons-10MagmaKey-Check.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

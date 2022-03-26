@@ -47,5 +47,17 @@
     <Setting Name="PartyAnimate" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="AspectRatio" Type="BizHawk.FreeEnterprise.Companion.AspectRatio" Scope="User">
+      <Value Profile="(Default)">_16x10</Value>
+    </Setting>
+    <Setting Name="Layout" Type="BizHawk.FreeEnterprise.Companion.Layout" Scope="User">
+      <Value Profile="(Default)">Original</Value>
+    </Setting>
+    <Setting Name="BossesDisplay" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="BossesBorder" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

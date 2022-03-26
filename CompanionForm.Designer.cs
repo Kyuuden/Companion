@@ -38,10 +38,12 @@ namespace BizHawk.FreeEnterprise.Companion
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.StopwatchPanel = new System.Windows.Forms.Panel();
             this.StopWatchLabel = new System.Windows.Forms.Label();
+            this.WideLayoutPanel = new System.Windows.Forms.Panel();
             this.LocationsControl = new BizHawk.FreeEnterprise.Companion.Controls.Locations();
+            this.BossesControl = new BizHawk.FreeEnterprise.Companion.Controls.Bosses();
             this.ObjectivesControl = new BizHawk.FreeEnterprise.Companion.Controls.Objectives();
             this.PartyControl = new BizHawk.FreeEnterprise.Companion.Controls.Party();
-            this.KeyItemsControl = new BizHawk.FreeEnterprise.Companion.Controls.KeyItems();
+            this.KeyItemsControl = new BizHawk.FreeEnterprise.Companion.Controls.KeyItems();            
             this.menuStrip1.SuspendLayout();
             this.StopwatchPanel.SuspendLayout();
             this.SuspendLayout();
@@ -87,7 +89,7 @@ namespace BizHawk.FreeEnterprise.Companion
             this.StopwatchPanel.Location = new System.Drawing.Point(0, 392);
             this.StopwatchPanel.Name = "StopwatchPanel";
             this.StopwatchPanel.Size = new System.Drawing.Size(800, 58);
-            this.StopwatchPanel.TabIndex = 6;
+            this.StopwatchPanel.TabIndex = 7;
             // 
             // StopWatchLabel
             // 
@@ -104,25 +106,44 @@ namespace BizHawk.FreeEnterprise.Companion
             this.StopWatchLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.StopWatchLabel.DoubleClick += new System.EventHandler(this.StopWatchLabel_DoubleClick);
             // 
+            // WideLayoutPanel
+            // 
+            this.WideLayoutPanel.BackColor = System.Drawing.Color.Transparent;
+            this.WideLayoutPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.WideLayoutPanel.Location = new System.Drawing.Point(0, 24);
+            this.WideLayoutPanel.Name = "WideLayoutPanel";
+            this.WideLayoutPanel.Size = new System.Drawing.Size(800, 0);
+            this.WideLayoutPanel.TabIndex = 8;
+            this.WideLayoutPanel.Visible = false;
+            // 
             // LocationsControl
             // 
-            this.LocationsControl.BackColor = System.Drawing.Color.Transparent;
+            this.LocationsControl.BackColor = System.Drawing.Color.White;
             this.LocationsControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.LocationsControl.Location = new System.Drawing.Point(0, 180);
             this.LocationsControl.Margin = new System.Windows.Forms.Padding(0);
             this.LocationsControl.Name = "LocationsControl";
             this.LocationsControl.Size = new System.Drawing.Size(800, 270);
-            this.LocationsControl.TabIndex = 5;
+            this.LocationsControl.TabIndex = 6;
+            // 
+            // BossesControl
+            // 
+            this.BossesControl.Dock = System.Windows.Forms.DockStyle.Top;
+            this.BossesControl.Location = new System.Drawing.Point(0, 180);
+            this.BossesControl.Name = "BossesControl";
+            this.BossesControl.Size = new System.Drawing.Size(800, 52);
+            this.BossesControl.TabIndex = 5;
             // 
             // ObjectivesControl
             // 
-            this.ObjectivesControl.BackColor = System.Drawing.Color.Transparent;
+            this.ObjectivesControl.BackColor = System.Drawing.Color.DimGray;
             this.ObjectivesControl.Dock = System.Windows.Forms.DockStyle.Top;
             this.ObjectivesControl.Location = new System.Drawing.Point(0, 124);
             this.ObjectivesControl.Margin = new System.Windows.Forms.Padding(0);
             this.ObjectivesControl.Name = "ObjectivesControl";
             this.ObjectivesControl.Size = new System.Drawing.Size(800, 56);
             this.ObjectivesControl.TabIndex = 4;
+            this.ObjectivesControl.Resize += new System.EventHandler(this.TrackerControl_Resize);
             // 
             // PartyControl
             // 
@@ -133,30 +154,34 @@ namespace BizHawk.FreeEnterprise.Companion
             this.PartyControl.Name = "PartyControl";
             this.PartyControl.Size = new System.Drawing.Size(800, 50);
             this.PartyControl.TabIndex = 3;
+            this.PartyControl.Resize += new System.EventHandler(this.TrackerControl_Resize);
             // 
             // KeyItemsControl
             // 
             this.KeyItemsControl.BackColor = System.Drawing.Color.Transparent;
             this.KeyItemsControl.Dock = System.Windows.Forms.DockStyle.Top;
-            this.KeyItemsControl.IconLookup = null;
             this.KeyItemsControl.Location = new System.Drawing.Point(0, 24);
             this.KeyItemsControl.Margin = new System.Windows.Forms.Padding(0);
             this.KeyItemsControl.Name = "KeyItemsControl";
             this.KeyItemsControl.Padding = new System.Windows.Forms.Padding(8);
             this.KeyItemsControl.Size = new System.Drawing.Size(800, 50);
             this.KeyItemsControl.TabIndex = 2;
+            this.KeyItemsControl.Resize += new System.EventHandler(this.TrackerControl_Resize);
+
             // 
             // CompanionForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(800, 450);            
             this.Controls.Add(this.StopwatchPanel);
             this.Controls.Add(this.LocationsControl);
+            this.Controls.Add(this.BossesControl);
             this.Controls.Add(this.ObjectivesControl);
             this.Controls.Add(this.PartyControl);
             this.Controls.Add(this.KeyItemsControl);
+            this.Controls.Add(this.WideLayoutPanel);
             this.Controls.Add(this.menuStrip1);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -178,9 +203,12 @@ namespace BizHawk.FreeEnterprise.Companion
         private Controls.KeyItems KeyItemsControl;
         private Controls.Party PartyControl;
         private Controls.Objectives ObjectivesControl;
+        private Controls.Bosses BossesControl;
         private Controls.Locations LocationsControl;
         private System.Windows.Forms.Panel StopwatchPanel;
         private System.Windows.Forms.Label StopWatchLabel;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.Panel WideLayoutPanel;
+
     }
 }

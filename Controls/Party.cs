@@ -17,7 +17,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
 
         public override void RefreshSize()
         {
-            Height = 68 + (Properties.Settings.Default.PartyBorder ? 32 : 2);
+            Height = RequestedHeight = 48 * 5 <= UseableWidth ? MinimiumHeight + 48 : MinimiumHeight + 52 * 5;
             frame = 0;
             Invalidate();
         }
@@ -44,35 +44,48 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
             if (Data == null || RomData == null)
                 return;
 
-            var sX = rect.X;
-            var sY = rect.Y;
-            var cWidth = rect.Width / 8;
-            var offset = (cWidth * 8 - 48 * 5)/2;
+            float sX = rect.X;
+            float sY = rect.Y;
+            var cWidth = rect.Width / 8;            
+
+            var charactersPerRow = rect.Width / 48.0 >= 5.0 ? 5 : 1;
+            var offset = (cWidth * 8 - 48 * charactersPerRow)/2;
 
             switch (Properties.Settings.Default.PartyPose)
             {
                 case Pose.Dead:
                 case Pose.Special:
+                case Pose.Portrait:
                     break;
                 default:
                     offset +=8;
                     break;
             }
 
-            graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
-            var characterIndex = -1;
+            if (Properties.Settings.Default.PartyPose != Pose.Portrait)
+                graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+
             foreach (var c in Data.Characters)
             {
-                characterIndex++;
-                if (c.ID == 0)
-                    continue;
+                if (c.ID != 0)
+                {
+                    graphics.DrawImage(
+                       RomData.CharacterSprites.GetCharacterBitmap(c.ID, c.Class, Properties.Settings.Default.PartyPose, frame),
+                       sX + offset,
+                       sY,
+                       48,
+                       48);
+                }
 
-                graphics.DrawImage(
-                    RomData.CharacterSprites.GetCharacterBitmap(c.ID, c.Class, Properties.Settings.Default.PartyPose, frame),
-                    sX + offset + (characterIndex *48),
-                    sY,
-                    48,
-                    48);
+                switch (charactersPerRow)
+                {
+                    case 1:
+                        sY += (rect.Height - 48) / 4.0f;
+                        break;
+                    default:
+                        sX += 48;
+                        break;
+                }
             }
 
             graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Default;
@@ -97,18 +110,6 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
             }
         }
 
-        protected override void DrawHeader(Graphics graphics, int x, int y, int width)
-        {
-            if (RomData == null)
-                return;
-
-            RomData.Font.RenderText(graphics, x, y, Header, TextMode.Normal);
-
-            if (HeaderCount is not null && Data is not null)
-            {
-                var maxParty = (FlagSet?.MaxParty ?? 0) == Data.Characters.Count(c => c.ID != 0) ? TextMode.Highlighted : TextMode.Normal;
-                RomData.Font.RenderText(graphics, x + width - 40, y, HeaderCount, maxParty);
-            }
-        }
+        protected override TextMode HeaderCountTextMode => (FlagSet?.MaxParty ?? 0) == Data?.Characters.Count(c => c.ID != 0) ? TextMode.Highlighted : TextMode.Normal;
     }
 }

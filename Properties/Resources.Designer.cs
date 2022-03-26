@@ -63,6 +63,726 @@ namespace BizHawk.FreeEnterprise.Companion.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_10DKCecil_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_10DKCecil_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_10DKCecil_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_10DKCecil_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_11Guards_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_11Guards_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_11Guards_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_11Guards_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_12Yang_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_12Yang_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_12Yang_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_12Yang_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_13Baigan_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_13Baigan_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_13Baigan_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_13Baigan_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_14Kainazzo_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_14Kainazzo_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_14Kainazzo_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_14Kainazzo_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_15DElf_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_15DElf_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_15DElf_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_15DElf_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_16MagusSis_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_16MagusSis_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_16MagusSis_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_16MagusSis_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_17Valvalis_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_17Valvalis_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_17Valvalis_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_17Valvalis_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_18Calcabrina_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_18Calcabrina_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_18Calcabrina_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_18Calcabrina_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_19Golbez_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_19Golbez_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_19Golbez_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_19Golbez_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_1MistD_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_1MistD_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_1MistD_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_1MistD_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_20Lugae_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_20Lugae_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_20Lugae_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_20Lugae_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_21Eblan_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_21Eblan_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_21Eblan_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_21Eblan_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_22Rubicante_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_22Rubicante_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_22Rubicante_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_22Rubicante_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_23EvilWall_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_23EvilWall_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_23EvilWall_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_23EvilWall_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_24Fiends_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_24Fiends_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_24Fiends_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_24Fiends_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_25CPU_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_25CPU_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_25CPU_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_25CPU_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_26Odin_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_26Odin_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_26Odin_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_26Odin_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_27Asura_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_27Asura_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_27Asura_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_27Asura_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_28Leviath_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_28Leviath_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_28Leviath_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_28Leviath_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_29Bahamut_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_29Bahamut_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_29Bahamut_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_29Bahamut_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_2Soldier_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_2Soldier_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_2Soldier_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_2Soldier_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_30PaleDim_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_30PaleDim_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_30PaleDim_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_30PaleDim_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_31LunarD_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_31LunarD_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_31LunarD_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_31LunarD_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_32Plague_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_32Plague_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_32Plague_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_32Plague_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_33Ogopogo_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_33Ogopogo_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_33Ogopogo_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_33Ogopogo_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_34Wyvern_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_34Wyvern_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_34Wyvern_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_34Wyvern_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_35DarkImps_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_35DarkImps_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_35DarkImps_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_35DarkImps_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_36Zeromus_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_36Zeromus_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_36Zeromus_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_36Zeromus_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_3Octo_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_3Octo_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_3Octo_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_3Octo_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_4Antlion_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_4Antlion_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_4Antlion_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_4Antlion_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_5WHag_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_5WHag_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_5WHag_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_5WHag_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_6Mombomb_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_6Mombomb_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_6Mombomb_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_6Mombomb_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_7Gauntlet_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_7Gauntlet_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_7Gauntlet_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_7Gauntlet_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_8Milon_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_8Milon_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_8Milon_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_8Milon_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_9MilonZ_Color {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_9MilonZ_Color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap FFIVFE_Bosses_9MilonZ_Gray {
+            get {
+                object obj = ResourceManager.GetObject("FFIVFE_Bosses_9MilonZ_Gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap FFIVFE_Icons_10MagmaKey_Check {
             get {
                 object obj = ResourceManager.GetObject("FFIVFE_Icons_10MagmaKey_Check", resourceCulture);
