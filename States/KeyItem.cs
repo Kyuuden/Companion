@@ -9,8 +9,12 @@ namespace BizHawk.FreeEnterprise.Companion.State
         public string Name { get; }
         public string ShortName { get; }
         public string Description{ get; }
-        public bool Found { get; private set; }
-        public bool Used { get; private set; }
+        public bool Found => FoundAt.HasValue;
+        public bool Used => UsedAt.HasValue;
+
+
+        public TimeSpan? FoundAt { get; private set; }
+        public TimeSpan? UsedAt { get; private set; }
         public KeyItemLocationType FoundLocation { get; private set; }
 
         public KeyItem(KeyItemType key)
@@ -21,20 +25,20 @@ namespace BizHawk.FreeEnterprise.Companion.State
             Key = key;
          }
 
-        public bool FoundAt(TimeSpan when, KeyItemLocationType location)
+        public bool Find(TimeSpan when, KeyItemLocationType location)
         {
             if (Found)
                 return false;
 
             FoundLocation = location;
-            Found = true;
+            FoundAt = when;
             return true;
         }
 
         public bool Use(TimeSpan when)
         {
             if (Used) return false;
-            Used = true;
+            UsedAt = when;
             return true;
         }
 
@@ -42,7 +46,7 @@ namespace BizHawk.FreeEnterprise.Companion.State
         {
             if (!Found)
                 return false;
-            Found = false;
+            FoundAt = null;
             return true;
         }
 
@@ -50,7 +54,7 @@ namespace BizHawk.FreeEnterprise.Companion.State
         {
             if (!Used)
                 return false;
-            Used = false;
+            UsedAt = null;
             return true;
         }
 

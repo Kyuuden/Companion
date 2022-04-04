@@ -14,8 +14,8 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
         private Dictionary<Rectangle, KeyItemType> _keyItemsByPosition = new Dictionary<Rectangle, KeyItemType>();
         private KeyItemType lastToolTipItem;
 
-        public KeyItems()
-            : base(() => Properties.Settings.Default.KeyItemsBorder)
+        public KeyItems(RenderingSettings renderingSettings)
+            : base(renderingSettings, () => Properties.Settings.Default.KeyItemsBorder)
         {
             InitializeComponent();
             keyItemsToolTip.SetToolTip(this, "Key Items");
@@ -36,7 +36,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
             switch (Properties.Settings.Default.KeyItemsStyle)
             {
                 case KeyItemStyle.Text:
-                    Height = RequestedHeight = MinimiumHeight + 6 * 15-4;
+                    Height = RequestedHeight = MinimiumHeight + RenderingSettings.Scale(6 * 15-4);
                     break;
                 case KeyItemStyle.Icons:
                     var numOfItems = Data?.Items.Count ?? 0;
@@ -55,8 +55,8 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
 
             lastToolTipItem = item.Key;
             keyItemsToolTip.Description = item.Description;
-            keyItemsToolTip.IsFound = item.Found;
-            keyItemsToolTip.IsUsed = item.Used;
+            keyItemsToolTip.FoundAt = item.FoundAt;
+            keyItemsToolTip.UsedAt = item.UsedAt;
             keyItemsToolTip.ReceivedFrom = TextLookup.GetName(item.FoundLocation);
             keyItemsToolTip.Active = true;
         }
@@ -82,8 +82,8 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
 
             var sX = rect.X;
             var sY = rect.Y;
-            var cWidth = rect.Width / 8;
-            var cHeight = rect.Height / 8;
+            var cWidth = rect.Width / RenderingSettings.TileSize;
+            var cHeight = rect.Height / RenderingSettings.TileSize;
 
             //if FFIV text style
             if (Properties.Settings.Default.KeyItemsStyle == KeyItemStyle.Text)
@@ -91,12 +91,18 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
                 var keyIndex = 0;
                 foreach (var item in Data.Items.Values)
                 {
-                    _keyItemsByPosition[new Rectangle(sX + (keyIndex % 3) * (cWidth * 8 / 3), sY + (keyIndex / 3) * 15, item.ShortName.Length * 8, 8)] = item.Key;
+                    var itemRect = new Rectangle(
+                        sX + RenderingSettings.Scale((keyIndex % 3) * (cWidth * 8 / 3)),
+                        sY + RenderingSettings.Scale((keyIndex / 3) * 15),
+                        item.ShortName.Length * RenderingSettings.TileSize,
+                        RenderingSettings.TileSize);
+
+                    _keyItemsByPosition[itemRect] = item.Key;
 
                     RomData.Font.RenderText(
                         graphics,
-                        sX + (keyIndex % 3) * (cWidth * 8 / 3),
-                        sY + (keyIndex / 3) * 15,
+                        itemRect.X,
+                        itemRect.Y,
                         item.ShortName,
                         item.Used ? TextMode.Normal : item.Found ? TextMode.Highlighted : TextMode.Disabled);
                     keyIndex++;
@@ -105,8 +111,8 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
             else
             {
                 var keyIndex = 0;
-                var iconsPerRow = cWidth * 8 / 40;
-                var offset = (cWidth * 8 - iconsPerRow * 40) / 2;
+                var iconsPerRow = cWidth * RenderingSettings.TileSize / 40;
+                var offset = (cWidth * RenderingSettings.TileSize - iconsPerRow * 40) / 2;
                 foreach (var item in Data.Items.Values)
                 {
                     _keyItemsByPosition[new Rectangle(sX + offset + ((keyIndex % iconsPerRow) * 40), sY + ((keyIndex / iconsPerRow) * 40), 32, 32)] = item.Key;

@@ -250,5 +250,29 @@ namespace BizHawk.FreeEnterprise.Companion.Properties {
                 this["BossesBorder"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public int ViewScale {
+            get {
+                return ((int)(this["ViewScale"]));
+            }
+            set {
+                this["ViewScale"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("NearestNeighbor")]
+        public global::System.Drawing.Drawing2D.InterpolationMode InterpolationMode {
+            get {
+                return ((global::System.Drawing.Drawing2D.InterpolationMode)(this["InterpolationMode"]));
+            }
+            set {
+                this["InterpolationMode"] = value;
+            }
+        }
     }
 }

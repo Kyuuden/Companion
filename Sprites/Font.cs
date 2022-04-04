@@ -18,10 +18,10 @@ namespace BizHawk.FreeEnterprise.Companion.Sprites
     {
         private readonly List<byte[,]> _tiles;
         private readonly Color[,] _palettes;
-
+        private readonly RenderingSettings renderingSettings;
         private List<List<Bitmap>>? bitmaps;
 
-        public Font(MemorySpace rom)
+        public Font(MemorySpace rom, RenderingSettings renderingSettings)
         {
             var fontData = rom.ReadBytes(CARTROMAddresses.Font, CARTROMAddresses.FontBytes);
             var processor = new TileProcessor();
@@ -50,6 +50,7 @@ namespace BizHawk.FreeEnterprise.Companion.Sprites
             _palettes[3, 3] = Color.FromArgb(255, 156, 90);
 
             BuildBitmaps();
+            this.renderingSettings = renderingSettings;
         }
 
 
@@ -130,60 +131,70 @@ namespace BizHawk.FreeEnterprise.Companion.Sprites
             foreach (var line in Breakup(text, cwidth))
             {
                 RenderText(gr, x, y, line, mode);
-                y += 8+ extraSpacing;
-                height += 8+ extraSpacing;
+                y += renderingSettings.Scale(8 + extraSpacing);
+                height += renderingSettings.Scale(8 + extraSpacing);
             }
             return height;
         }
 
         public void RenderText(Graphics gr, int x, int y, string text, TextMode mode)
         {
-            var originalX = x;
+            float originalX = x, fx = x;
+            float fy = y;
+            gr.InterpolationMode = Properties.Settings.Default.InterpolationMode;
             foreach (var c in text)
             {
                 if (c == '\n')
                 {
-                    x = originalX;
-                    y += 10;
+                    fx = originalX;
+                    fy += renderingSettings.ScaleF(10);
                     continue;
                 }
 
                 var bitmap = bitmaps![(int)mode][Map(c)];
-                gr.DrawImage(bitmap, new Rectangle(x, y, 8, 8));
-                x += 8;
+
+                gr.DrawImage(bitmap, fx, fy, renderingSettings.TileSizeF, renderingSettings.TileSizeF);
+                fx += renderingSettings.TileSizeF;
             }
         }
 
         public void RenderBox(Graphics gr, int x, int y, int width, int height)
         {
-            for (int iy = 0; iy < height; iy++)
+            if (height <= 0 || width <= 0)
+                return;
+
+            using (var boxBmp = new Bitmap(width * 8, height * 8))
             {
-                var line = "";
-                for (int ix = 0; ix < width; ix++)
-                {
-                    var character = ' ';
+                using (var bmpGraphics = Graphics.FromImage(boxBmp))
+                    for (int iy = 0; iy < height; iy++)
+                    {
+                        for (int ix = 0; ix < width; ix++)
+                        {
+                            var character = ' ';
 
-                    if (ix == 0 && iy == 0)
-                        character = BorderTopLeft;
-                    else if (ix == 0 && iy == height - 1)
-                        character = BorderBottomLeft;
-                    else if (ix == width - 1 && iy == 0)
-                        character = BorderTopRight;
-                    else if (ix == width - 1 && iy == height - 1)
-                        character = BorderBottomRight;
-                    else if (ix == 0)
-                        character = BorderLeft;
-                    else if (ix == width - 1)
-                        character = BorderRight;
-                    else if (iy == 0)
-                        character = BorderTop;
-                    else if (iy == height - 1)
-                        character = BorderBottom;
+                            if (ix == 0 && iy == 0)
+                                character = BorderTopLeft;
+                            else if (ix == 0 && iy == height - 1)
+                                character = BorderBottomLeft;
+                            else if (ix == width - 1 && iy == 0)
+                                character = BorderTopRight;
+                            else if (ix == width - 1 && iy == height - 1)
+                                character = BorderBottomRight;
+                            else if (ix == 0)
+                                character = BorderLeft;
+                            else if (ix == width - 1)
+                                character = BorderRight;
+                            else if (iy == 0)
+                                character = BorderTop;
+                            else if (iy == height - 1)
+                                character = BorderBottom;
 
-                    line += character;
-                }
+                            bmpGraphics.DrawImageUnscaled(bitmaps![(int)TextMode.Normal][Map(character)], ix * 8, iy * 8);
+                        }
+                    }
 
-                RenderText(gr, x, y + 8 * iy, line, TextMode.Normal);
+                gr.InterpolationMode = Properties.Settings.Default.InterpolationMode;
+                gr.DrawImage(boxBmp, x, y, width * renderingSettings.TileSize, height * renderingSettings.TileSize);
             }
         }
 

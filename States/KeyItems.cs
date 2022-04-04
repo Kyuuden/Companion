@@ -24,7 +24,7 @@ namespace BizHawk.FreeEnterprise.Companion.State
                     if (!currentFound.HasFlag(item.Key) && foundKeyItems.HasFlag(item.Key))
                     {
                         var location = parsedFoundItemLocations[(uint)MathExt.FloorLog2((ulong)item.Key)];
-                        item.FoundAt(now, location);
+                        item.Find(now, location);
                     }
                     else if (currentFound.HasFlag(item.Key) && !foundKeyItems.HasFlag(item.Key))
                         item.ResetFound();

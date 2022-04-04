@@ -41,6 +41,8 @@
         public const int CharacterSpritesBytes = 0x7000;
 
         public const int CharacterPalettesAddress            = 0x0e7d00;
+
+        // Alternate palettes not used since i cannot figure out mapping yet.
         public const int CharacterAlternatePalettes01Address = 0x147d00;
         public const int CharacterAlternatePalettes02Address = 0x14fd00;
         public const int CharacterAlternatePalettes03Address = 0x157d00;

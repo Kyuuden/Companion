@@ -8,11 +8,14 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace BizHawk.FreeEnterprise.Companion
 {
-    [ExternalTool("Free Enterprise Companion")]
+    [ExternalTool("Free Enterprise Companion", Description = "An autotracker for Free Enterprise, a Final Fantasy IV randomizer")]
+    [ExternalToolEmbeddedIcon("BizHawk.FreeEnterprise.Companion.Resources.Crystal.png")]
+    
     public partial class CompanionForm : ToolFormBase, IExternalToolForm
     {
         protected override string WindowTitleStatic => "Free Enterprise Companion";
@@ -22,7 +25,8 @@ namespace BizHawk.FreeEnterprise.Companion
         private ApiContainer APIs => _maybeAPIContainer!;
 
         public bool MainListenersSet { get; private set; }
-        
+        public RenderingSettings RenderingSettings { get; private set; }
+
         private MemoryMapping? Memory;
         private RomData? RomData;
         private Run? Run;
@@ -31,7 +35,13 @@ namespace BizHawk.FreeEnterprise.Companion
 
         public CompanionForm()
         {
+            RenderingSettings = new RenderingSettings();
             InitializeComponent();
+
+            var icon = new Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("BizHawk.FreeEnterprise.Companion.Resources.Crystal.png"));
+            var hIcon = icon.GetHicon();
+            Icon = Icon.FromHandle(hIcon);
+
             var namesJson = System.Text.Encoding.UTF8.GetString(Properties.Resources.Names);
             var names = JsonConvert.DeserializeObject<Names>(namesJson);
             if (names != null)
@@ -106,7 +116,6 @@ namespace BizHawk.FreeEnterprise.Companion
                         KeyItemsControl.Parent = WideLayoutPanel;
                         PartyControl.Parent = WideLayoutPanel;
                         PartyControl.Dock = DockStyle.Left;
-                        PartyControl.Width = 48 + 32;
                         ObjectivesControl.Parent = WideLayoutPanel;
                         WideLayoutPanel.Visible = true;
 
@@ -181,23 +190,29 @@ namespace BizHawk.FreeEnterprise.Companion
 
             Memory = new MemoryMapping(APIs.Memory);
 
-            Run = new Run(APIs, Memory);
-            Run.PartyUpdated += Run_PartyUpdated;
-            Run.KeyItemsUpdated += Run_KeyItemsUpdated;
-            Run.LocationsUpdated += Run_LocationsUpdated;
-            Run.ObjectivesUpdated += Run_ObjectivesUpdated;
-            Run.CustomSettingsUpdated += Run_CustomSettingsUpdated;
-            Run.LoadComplete += Run_LoadComplete;
-
-            RomData = new RomData(Memory.CartRom);
-
-            BossesControl.Update(new State.Bosses());
-
-            trackerControls.ForEach(c =>
+            try
             {
-                c.Initialize(RomData, Run.FlagSet);
-                c.RefreshSize();
-            });
+                Run = new Run(APIs, Memory);
+                Run.PartyUpdated += Run_PartyUpdated;
+                Run.KeyItemsUpdated += Run_KeyItemsUpdated;
+                Run.LocationsUpdated += Run_LocationsUpdated;
+                Run.ObjectivesUpdated += Run_ObjectivesUpdated;
+                Run.CustomSettingsUpdated += Run_CustomSettingsUpdated;
+                Run.LoadComplete += Run_LoadComplete;
+                RomData = new RomData(Memory.CartRom, RenderingSettings);
+
+                BossesControl.Update(new State.Bosses());
+
+                trackerControls.ForEach(c =>
+                {
+                    c.Initialize(RomData, Run.FlagSet);
+                    c.RefreshSize();
+                });
+            }
+            catch (Exception e)
+            {
+
+            }
 
             SetControlsVisibility();
         }
@@ -285,11 +300,11 @@ namespace BizHawk.FreeEnterprise.Companion
 
         private void SetControlsVisibility()
         {
-            KeyItemsControl.Visible = Properties.Settings.Default.KeyItemsDisplay;
-            PartyControl.Visible = Properties.Settings.Default.PartyDisplay;
-            ObjectivesControl.Visible = Properties.Settings.Default.ObjectivesDisplay;
-            BossesControl.Visible = Properties.Settings.Default.BossesDisplay;
-            LocationsControl.Visible = Properties.Settings.Default.LocationsDisplay;
+            KeyItemsControl.Visible = Run != null && Properties.Settings.Default.KeyItemsDisplay;
+            PartyControl.Visible = Run != null && Properties.Settings.Default.PartyDisplay;
+            ObjectivesControl.Visible = Run != null && Properties.Settings.Default.ObjectivesDisplay;
+            BossesControl.Visible = Run != null && Properties.Settings.Default.BossesDisplay;
+            LocationsControl.Visible = Run != null && Properties.Settings.Default.LocationsDisplay;
         }
 
         private void StopWatchLabel_DoubleClick(object sender, EventArgs e)

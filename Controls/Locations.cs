@@ -6,8 +6,8 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
 {
     public partial class Locations : TrackerControl<State.Locations>
     {
-        public Locations()
-            : base(() => Properties.Settings.Default.LocationsBorder)
+        public Locations(RenderingSettings renderingSettings)
+            : base(renderingSettings, () => Properties.Settings.Default.LocationsBorder)
         {
             InitializeComponent();
         }
@@ -30,13 +30,13 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
 
             var sX = rect.X;
             var sY = rect.Y;
-            var cWidth = rect.Width / 8;
+            var cWidth = rect.Width / RenderingSettings.TileSize;
             foreach (var item in Data.GetAvailableLocations())
             {
-                if (sY + 8 < rect.Height + rect.Y)
+                if (sY + RenderingSettings.TileSize < rect.Height + rect.Y)
                 {
                     RomData.Font.RenderText(graphics, sX, sY, $"•", TextMode.Normal);
-                    sY += RomData.Font.RenderText(graphics, sX + 16, sY, cWidth - 2, item, TextMode.Normal) + 4;
+                    sY += RomData.Font.RenderText(graphics, sX + RenderingSettings.Scale(16), sY, cWidth - 2, item, TextMode.Normal) + RenderingSettings.Scale(4);
                 }
             }
         }

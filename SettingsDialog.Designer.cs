@@ -31,6 +31,8 @@ namespace BizHawk.FreeEnterprise.Companion
         {
             this.tabs = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.numericViewScale = new System.Windows.Forms.NumericUpDown();
+            this.label9 = new System.Windows.Forms.Label();
             this.comboAspect = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
             this.comboLayout = new System.Windows.Forms.ComboBox();
@@ -57,24 +59,27 @@ namespace BizHawk.FreeEnterprise.Companion
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.cbObjectiveBorder = new System.Windows.Forms.CheckBox();
             this.cbObjectiveDisplay = new System.Windows.Forms.CheckBox();
+            this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.cbBossesBorder = new System.Windows.Forms.CheckBox();
+            this.cbBossesDisplay = new System.Windows.Forms.CheckBox();
             this.tabPage5 = new System.Windows.Forms.TabPage();
             this.cbLocationsBorder = new System.Windows.Forms.CheckBox();
             this.cbLocationsDisplay = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
-            this.tabPage6 = new System.Windows.Forms.TabPage();
-            this.cbBossesBorder = new System.Windows.Forms.CheckBox();
-            this.cbBossesDisplay = new System.Windows.Forms.CheckBox();
+            this.comboInterpolation = new System.Windows.Forms.ComboBox();
+            this.label10 = new System.Windows.Forms.Label();
             this.tabs.SuspendLayout();
             this.tabPage4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericViewScale)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericFrameCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericDockOffset)).BeginInit();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            this.tabPage6.SuspendLayout();
             this.tabPage5.SuspendLayout();
             this.panel1.SuspendLayout();
-            this.tabPage6.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabs
@@ -89,11 +94,15 @@ namespace BizHawk.FreeEnterprise.Companion
             this.tabs.Location = new System.Drawing.Point(0, 0);
             this.tabs.Name = "tabs";
             this.tabs.SelectedIndex = 0;
-            this.tabs.Size = new System.Drawing.Size(334, 193);
+            this.tabs.Size = new System.Drawing.Size(334, 221);
             this.tabs.TabIndex = 0;
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.label10);
+            this.tabPage4.Controls.Add(this.comboInterpolation);
+            this.tabPage4.Controls.Add(this.numericViewScale);
+            this.tabPage4.Controls.Add(this.label9);
             this.tabPage4.Controls.Add(this.comboAspect);
             this.tabPage4.Controls.Add(this.label8);
             this.tabPage4.Controls.Add(this.comboLayout);
@@ -108,16 +117,53 @@ namespace BizHawk.FreeEnterprise.Companion
             this.tabPage4.Controls.Add(this.label3);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(326, 167);
+            this.tabPage4.Size = new System.Drawing.Size(326, 195);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "General";
             this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // numericViewScale
+            // 
+            this.numericViewScale.Increment = new decimal(new int[] {
+            25,
+            0,
+            0,
+            0});
+            this.numericViewScale.Location = new System.Drawing.Point(81, 61);
+            this.numericViewScale.Maximum = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
+            this.numericViewScale.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.numericViewScale.Name = "numericViewScale";
+            this.numericViewScale.ReadOnly = true;
+            this.numericViewScale.Size = new System.Drawing.Size(39, 20);
+            this.numericViewScale.TabIndex = 13;
+            this.numericViewScale.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(7, 63);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(63, 13);
+            this.label9.TabIndex = 12;
+            this.label9.Text = "View Scale:";
             // 
             // comboAspect
             // 
             this.comboAspect.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboAspect.FormattingEnabled = true;
-            this.comboAspect.Location = new System.Drawing.Point(82, 137);
+            this.comboAspect.Location = new System.Drawing.Point(81, 163);
             this.comboAspect.Name = "comboAspect";
             this.comboAspect.Size = new System.Drawing.Size(121, 21);
             this.comboAspect.TabIndex = 11;
@@ -125,7 +171,7 @@ namespace BizHawk.FreeEnterprise.Companion
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(9, 140);
+            this.label8.Location = new System.Drawing.Point(8, 166);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(71, 13);
             this.label8.TabIndex = 10;
@@ -183,7 +229,7 @@ namespace BizHawk.FreeEnterprise.Companion
             // 
             this.comboDockSide.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboDockSide.FormattingEnabled = true;
-            this.comboDockSide.Location = new System.Drawing.Point(81, 110);
+            this.comboDockSide.Location = new System.Drawing.Point(81, 136);
             this.comboDockSide.Name = "comboDockSide";
             this.comboDockSide.Size = new System.Drawing.Size(121, 21);
             this.comboDockSide.TabIndex = 4;
@@ -191,7 +237,7 @@ namespace BizHawk.FreeEnterprise.Companion
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(8, 113);
+            this.label4.Location = new System.Drawing.Point(8, 139);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(60, 13);
             this.label4.TabIndex = 3;
@@ -200,7 +246,7 @@ namespace BizHawk.FreeEnterprise.Companion
             // cbDock
             // 
             this.cbDock.AutoSize = true;
-            this.cbDock.Location = new System.Drawing.Point(11, 61);
+            this.cbDock.Location = new System.Drawing.Point(11, 87);
             this.cbDock.Name = "cbDock";
             this.cbDock.Size = new System.Drawing.Size(109, 17);
             this.cbDock.TabIndex = 2;
@@ -210,20 +256,21 @@ namespace BizHawk.FreeEnterprise.Companion
             // 
             // numericDockOffset
             // 
-            this.numericDockOffset.Location = new System.Drawing.Point(82, 84);
+            this.numericDockOffset.Location = new System.Drawing.Point(82, 110);
             this.numericDockOffset.Minimum = new decimal(new int[] {
             100,
             0,
             0,
             -2147483648});
             this.numericDockOffset.Name = "numericDockOffset";
+            this.numericDockOffset.ReadOnly = true;
             this.numericDockOffset.Size = new System.Drawing.Size(120, 20);
             this.numericDockOffset.TabIndex = 1;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(8, 86);
+            this.label3.Location = new System.Drawing.Point(8, 112);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(67, 13);
             this.label3.TabIndex = 0;
@@ -238,7 +285,7 @@ namespace BizHawk.FreeEnterprise.Companion
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(326, 167);
+            this.tabPage1.Size = new System.Drawing.Size(326, 195);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Key Items";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -291,7 +338,7 @@ namespace BizHawk.FreeEnterprise.Companion
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(326, 167);
+            this.tabPage2.Size = new System.Drawing.Size(326, 195);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Party";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -351,7 +398,7 @@ namespace BizHawk.FreeEnterprise.Companion
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(326, 167);
+            this.tabPage3.Size = new System.Drawing.Size(326, 195);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Objectives";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -376,13 +423,44 @@ namespace BizHawk.FreeEnterprise.Companion
             this.cbObjectiveDisplay.Text = "Display Objectives";
             this.cbObjectiveDisplay.UseVisualStyleBackColor = true;
             // 
+            // tabPage6
+            // 
+            this.tabPage6.Controls.Add(this.cbBossesBorder);
+            this.tabPage6.Controls.Add(this.cbBossesDisplay);
+            this.tabPage6.Location = new System.Drawing.Point(4, 22);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Size = new System.Drawing.Size(326, 195);
+            this.tabPage6.TabIndex = 5;
+            this.tabPage6.Text = "Bosses";
+            this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // cbBossesBorder
+            // 
+            this.cbBossesBorder.AutoSize = true;
+            this.cbBossesBorder.Location = new System.Drawing.Point(8, 29);
+            this.cbBossesBorder.Name = "cbBossesBorder";
+            this.cbBossesBorder.Size = new System.Drawing.Size(138, 17);
+            this.cbBossesBorder.TabIndex = 7;
+            this.cbBossesBorder.Text = "Show FFIV Style Border";
+            this.cbBossesBorder.UseVisualStyleBackColor = true;
+            // 
+            // cbBossesDisplay
+            // 
+            this.cbBossesDisplay.AutoSize = true;
+            this.cbBossesDisplay.Location = new System.Drawing.Point(8, 6);
+            this.cbBossesDisplay.Name = "cbBossesDisplay";
+            this.cbBossesDisplay.Size = new System.Drawing.Size(97, 17);
+            this.cbBossesDisplay.TabIndex = 6;
+            this.cbBossesDisplay.Text = "Display Bosses";
+            this.cbBossesDisplay.UseVisualStyleBackColor = true;
+            // 
             // tabPage5
             // 
             this.tabPage5.Controls.Add(this.cbLocationsBorder);
             this.tabPage5.Controls.Add(this.cbLocationsDisplay);
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
             this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Size = new System.Drawing.Size(326, 167);
+            this.tabPage5.Size = new System.Drawing.Size(326, 195);
             this.tabPage5.TabIndex = 4;
             this.tabPage5.Text = "Locations";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -411,7 +489,7 @@ namespace BizHawk.FreeEnterprise.Companion
             // 
             this.panel1.Controls.Add(this.button1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 193);
+            this.panel1.Location = new System.Drawing.Point(0, 221);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(334, 38);
             this.panel1.TabIndex = 1;
@@ -428,42 +506,29 @@ namespace BizHawk.FreeEnterprise.Companion
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // tabPage6
+            // comboInterpolation
             // 
-            this.tabPage6.Controls.Add(this.cbBossesBorder);
-            this.tabPage6.Controls.Add(this.cbBossesDisplay);
-            this.tabPage6.Location = new System.Drawing.Point(4, 22);
-            this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Size = new System.Drawing.Size(326, 167);
-            this.tabPage6.TabIndex = 5;
-            this.tabPage6.Text = "Bosses";
-            this.tabPage6.UseVisualStyleBackColor = true;
+            this.comboInterpolation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboInterpolation.FormattingEnabled = true;
+            this.comboInterpolation.Location = new System.Drawing.Point(200, 60);
+            this.comboInterpolation.Name = "comboInterpolation";
+            this.comboInterpolation.Size = new System.Drawing.Size(118, 21);
+            this.comboInterpolation.TabIndex = 14;
             // 
-            // cbBossesBorder
+            // label10
             // 
-            this.cbBossesBorder.AutoSize = true;
-            this.cbBossesBorder.Location = new System.Drawing.Point(8, 29);
-            this.cbBossesBorder.Name = "cbBossesBorder";
-            this.cbBossesBorder.Size = new System.Drawing.Size(138, 17);
-            this.cbBossesBorder.TabIndex = 7;
-            this.cbBossesBorder.Text = "Show FFIV Style Border";
-            this.cbBossesBorder.UseVisualStyleBackColor = true;
-            // 
-            // cbBossesDisplay
-            // 
-            this.cbBossesDisplay.AutoSize = true;
-            this.cbBossesDisplay.Location = new System.Drawing.Point(8, 6);
-            this.cbBossesDisplay.Name = "cbBossesDisplay";
-            this.cbBossesDisplay.Size = new System.Drawing.Size(97, 17);
-            this.cbBossesDisplay.TabIndex = 6;
-            this.cbBossesDisplay.Text = "Display Bosses";
-            this.cbBossesDisplay.UseVisualStyleBackColor = true;
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(126, 63);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(68, 13);
+            this.label10.TabIndex = 15;
+            this.label10.Text = "Interpolation:";
             // 
             // SettingsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(334, 231);
+            this.ClientSize = new System.Drawing.Size(334, 259);
             this.Controls.Add(this.tabs);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
@@ -472,6 +537,7 @@ namespace BizHawk.FreeEnterprise.Companion
             this.tabs.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericViewScale)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericFrameCount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericDockOffset)).EndInit();
             this.tabPage1.ResumeLayout(false);
@@ -480,11 +546,11 @@ namespace BizHawk.FreeEnterprise.Companion
             this.tabPage2.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.tabPage3.PerformLayout();
+            this.tabPage6.ResumeLayout(false);
+            this.tabPage6.PerformLayout();
             this.tabPage5.ResumeLayout(false);
             this.tabPage5.PerformLayout();
             this.panel1.ResumeLayout(false);
-            this.tabPage6.ResumeLayout(false);
-            this.tabPage6.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -527,5 +593,9 @@ namespace BizHawk.FreeEnterprise.Companion
         private System.Windows.Forms.TabPage tabPage6;
         private System.Windows.Forms.CheckBox cbBossesBorder;
         private System.Windows.Forms.CheckBox cbBossesDisplay;
+        private System.Windows.Forms.NumericUpDown numericViewScale;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.ComboBox comboInterpolation;
     }
 }

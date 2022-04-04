@@ -30,7 +30,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.keyItemsToolTip = new KeyItemToolTip(this.components);
+            this.keyItemsToolTip = new KeyItemToolTip(RenderingSettings, this.components);
             this.SuspendLayout();
             // 
             // KeyItems

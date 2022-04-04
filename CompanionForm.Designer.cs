@@ -39,11 +39,11 @@ namespace BizHawk.FreeEnterprise.Companion
             this.StopwatchPanel = new System.Windows.Forms.Panel();
             this.StopWatchLabel = new System.Windows.Forms.Label();
             this.WideLayoutPanel = new System.Windows.Forms.Panel();
-            this.LocationsControl = new BizHawk.FreeEnterprise.Companion.Controls.Locations();
-            this.BossesControl = new BizHawk.FreeEnterprise.Companion.Controls.Bosses();
-            this.ObjectivesControl = new BizHawk.FreeEnterprise.Companion.Controls.Objectives();
-            this.PartyControl = new BizHawk.FreeEnterprise.Companion.Controls.Party();
-            this.KeyItemsControl = new BizHawk.FreeEnterprise.Companion.Controls.KeyItems();            
+            this.LocationsControl = new BizHawk.FreeEnterprise.Companion.Controls.Locations(RenderingSettings);
+            this.BossesControl = new BizHawk.FreeEnterprise.Companion.Controls.Bosses(RenderingSettings);
+            this.ObjectivesControl = new BizHawk.FreeEnterprise.Companion.Controls.Objectives(RenderingSettings);
+            this.PartyControl = new BizHawk.FreeEnterprise.Companion.Controls.Party(RenderingSettings);
+            this.KeyItemsControl = new BizHawk.FreeEnterprise.Companion.Controls.KeyItems(RenderingSettings);
             this.menuStrip1.SuspendLayout();
             this.StopwatchPanel.SuspendLayout();
             this.SuspendLayout();
@@ -118,12 +118,12 @@ namespace BizHawk.FreeEnterprise.Companion
             // 
             // LocationsControl
             // 
-            this.LocationsControl.BackColor = System.Drawing.Color.White;
+            this.LocationsControl.BackColor = System.Drawing.Color.Transparent;
             this.LocationsControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.LocationsControl.Location = new System.Drawing.Point(0, 180);
+            this.LocationsControl.Location = new System.Drawing.Point(0, 232);
             this.LocationsControl.Margin = new System.Windows.Forms.Padding(0);
             this.LocationsControl.Name = "LocationsControl";
-            this.LocationsControl.Size = new System.Drawing.Size(800, 270);
+            this.LocationsControl.Size = new System.Drawing.Size(800, 218);
             this.LocationsControl.TabIndex = 6;
             // 
             // BossesControl
@@ -136,7 +136,7 @@ namespace BizHawk.FreeEnterprise.Companion
             // 
             // ObjectivesControl
             // 
-            this.ObjectivesControl.BackColor = System.Drawing.Color.DimGray;
+            this.ObjectivesControl.BackColor = System.Drawing.Color.Transparent;
             this.ObjectivesControl.Dock = System.Windows.Forms.DockStyle.Top;
             this.ObjectivesControl.Location = new System.Drawing.Point(0, 124);
             this.ObjectivesControl.Margin = new System.Windows.Forms.Padding(0);
@@ -167,14 +167,13 @@ namespace BizHawk.FreeEnterprise.Companion
             this.KeyItemsControl.Size = new System.Drawing.Size(800, 50);
             this.KeyItemsControl.TabIndex = 2;
             this.KeyItemsControl.Resize += new System.EventHandler(this.TrackerControl_Resize);
-
             // 
             // CompanionForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(800, 450);            
+            this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.StopwatchPanel);
             this.Controls.Add(this.LocationsControl);
             this.Controls.Add(this.BossesControl);

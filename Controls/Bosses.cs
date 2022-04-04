@@ -14,8 +14,8 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
     {
         private Dictionary<Rectangle, BossType> _bossesByPosition = new Dictionary<Rectangle, BossType>();
 
-        public Bosses()
-            :base(() => Properties.Settings.Default.BossesBorder)
+        public Bosses(RenderingSettings renderingSettings)
+            :base(renderingSettings, () => Properties.Settings.Default.BossesBorder)
         {
             InitializeComponent();
         }

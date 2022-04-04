@@ -1,6 +1,8 @@
 ﻿using BizHawk.FreeEnterprise.Companion.Sprites;
+using System;
 using System.Drawing;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace BizHawk.FreeEnterprise.Companion.Controls
 {
@@ -9,15 +11,19 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
         int frame = 0;
         int frameIndex = 0;
 
-        public Party()
-            :base(()=>Properties.Settings.Default.PartyBorder)
+        public Party(RenderingSettings renderingSettings)
+            : base(renderingSettings, ()=>Properties.Settings.Default.PartyBorder)
         {
             InitializeComponent();
         }
 
         public override void RefreshSize()
         {
-            Height = RequestedHeight = 48 * 5 <= UseableWidth ? MinimiumHeight + 48 : MinimiumHeight + 52 * 5;
+            Height = RequestedHeight = RenderingSettings.Scale(48 * 5) <= UseableWidth ? MinimiumHeight + RenderingSettings.Scale(48) : MinimiumHeight + RenderingSettings.Scale(52 * 5);            
+            if (Properties.Settings.Default.Layout == Companion.Layout.Alternate)
+                Width = RenderingSettings.Scale(48 + 24);
+
+            HasRightMargin = Properties.Settings.Default.Layout != Companion.Layout.Alternate;
             frame = 0;
             Invalidate();
         }
@@ -46,10 +52,10 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
 
             float sX = rect.X;
             float sY = rect.Y;
-            var cWidth = rect.Width / 8;            
+            var cWidth = rect.Width / RenderingSettings.TileSize;            
 
-            var charactersPerRow = rect.Width / 48.0 >= 5.0 ? 5 : 1;
-            var offset = (cWidth * 8 - 48 * charactersPerRow)/2;
+            var charactersPerRow = rect.Width / RenderingSettings.ScaleF(48) >= 5.0 ? 5 : 1;
+            var offset = (cWidth * RenderingSettings.TileSize - RenderingSettings.Scale(48) * charactersPerRow)/2;
 
             switch (Properties.Settings.Default.PartyPose)
             {
@@ -58,13 +64,12 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
                 case Pose.Portrait:
                     break;
                 default:
-                    offset +=8;
+                    offset += RenderingSettings.TileSize;
                     break;
             }
 
-            if (Properties.Settings.Default.PartyPose != Pose.Portrait)
-                graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 
+            graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
             foreach (var c in Data.Characters)
             {
                 if (c.ID != 0)
@@ -73,22 +78,21 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
                        RomData.CharacterSprites.GetCharacterBitmap(c.ID, c.Class, Properties.Settings.Default.PartyPose, frame),
                        sX + offset,
                        sY,
-                       48,
-                       48);
+                       RenderingSettings.Scale(48),
+                       RenderingSettings.Scale(48));
                 }
 
                 switch (charactersPerRow)
                 {
                     case 1:
-                        sY += (rect.Height - 48) / 4.0f;
+                        sY += (rect.Height - RenderingSettings.Scale(48)) / 4.0f;
                         break;
                     default:
-                        sX += 48;
+                        sX += RenderingSettings.Scale(48);
                         break;
                 }
             }
-
-            graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Default;
+            graphics.InterpolationMode = Properties.Settings.Default.InterpolationMode;
         }
 
         protected override string Header => "Party";

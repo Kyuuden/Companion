@@ -5,9 +5,9 @@ namespace BizHawk.FreeEnterprise.Companion
 {
     public class RomData : IDisposable
     {
-        public RomData(MemorySpace rom)
+        public RomData(MemorySpace rom, RenderingSettings renderingSettings)
         {
-            Font = new Font(rom);
+            Font = new Font(rom, renderingSettings);
             CharacterSprites = new Characters(rom);
         }
 

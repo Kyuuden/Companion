@@ -7,8 +7,8 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
 {
     public partial class Objectives : TrackerControl<State.Objectives>
     {
-        public Objectives()
-            : base(()=>Properties.Settings.Default.ObjectivesBorder)
+        public Objectives(RenderingSettings renderingSettings)
+            : base(renderingSettings, () =>Properties.Settings.Default.ObjectivesBorder)
         {
             InitializeComponent();
         }
@@ -25,9 +25,9 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
                 Height = MinimiumHeight;
             else
             {
-                var cWidth = UseableWidth / 8;
+                var cWidth = UseableWidth / RenderingSettings.TileSize;
 
-                RequestedHeight = Data.Descriptions.SelectMany(d => RomData.Font.Breakup(d, cWidth - 3)).Count() * 10 + Data.Descriptions.Count() * 6 - 4 + MinimiumHeight;
+                RequestedHeight = RenderingSettings.Scale(Data.Descriptions.SelectMany(d => RomData.Font.Breakup(d, cWidth - 3)).Count() * 10 + Data.Descriptions.Count() * 6 - 4) + MinimiumHeight;
 
                 if (Properties.Settings.Default.Layout == Companion.Layout.Alternate)
                     Height = Math.Max(RequestedHeight, Parent.Height - Location.Y);
@@ -45,14 +45,14 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
 
             var sX = rect.X;
             var sY = rect.Y;
-            var cWidth = rect.Width / 8;
+            var cWidth = rect.Width / RenderingSettings.TileSize;
             var objectiveIndex = 0;
 
             foreach (var item in Data.Descriptions)
             {
                 var mode = Data.Completions[objectiveIndex].HasValue ? TextMode.Disabled : TextMode.Normal;
                 RomData.Font.RenderText(graphics, sX, sY, $"{objectiveIndex + 1}.", mode);
-                sY += RomData.Font.RenderText(graphics, sX + 24, sY, cWidth - 3, item, mode) + 6;
+                sY += RomData.Font.RenderText(graphics, sX + RenderingSettings.Scale(24), sY, cWidth - 3, item, mode) + RenderingSettings.Scale(6);
                 objectiveIndex++;
             }
         }

@@ -59,5 +59,11 @@
     <Setting Name="BossesBorder" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="ViewScale" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">100</Value>
+    </Setting>
+    <Setting Name="InterpolationMode" Type="System.Drawing.Drawing2D.InterpolationMode" Scope="User">
+      <Value Profile="(Default)">NearestNeighbor</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
