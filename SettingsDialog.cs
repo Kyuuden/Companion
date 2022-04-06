@@ -28,6 +28,8 @@ namespace BizHawk.FreeEnterprise.Companion
 
             cbLocationsDisplay.Checked = Properties.Settings.Default.LocationsDisplay;
             cbLocationsBorder.Checked = Properties.Settings.Default.LocationsBorder;
+            cbLocationsKI.Checked = Properties.Settings.Default.LocationsShowKeyItems;
+            cbLocationsChar.Checked = Properties.Settings.Default.LocationsShowCharacters;
 
             cbDock.Checked = Properties.Settings.Default.Dock;
             numericDockOffset.Value = Properties.Settings.Default.DockOffset;
@@ -60,6 +62,8 @@ namespace BizHawk.FreeEnterprise.Companion
 
             Properties.Settings.Default.LocationsDisplay = cbLocationsDisplay.Checked;
             Properties.Settings.Default.LocationsBorder = cbLocationsBorder.Checked;
+            Properties.Settings.Default.LocationsShowKeyItems = cbLocationsKI.Checked;
+            Properties.Settings.Default.LocationsShowCharacters = cbLocationsChar.Checked;
 
             Properties.Settings.Default.Dock = cbDock.Checked;
             Properties.Settings.Default.DockOffset = (int)numericDockOffset.Value;

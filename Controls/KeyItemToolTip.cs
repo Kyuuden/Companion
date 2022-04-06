@@ -54,7 +54,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
                  if (!UsedAt.HasValue)
                     _data.Font.RenderText(e.Graphics, renderSettings.Scale(168), renderSettings.Scale(32), 28, "(unused)", Sprites.TextMode.Disabled, 0);
                  else if (UsedAt.Value > TimeSpan.Zero)
-                    _data.Font.RenderText(e.Graphics, renderSettings.TileSize, renderSettings.Scale(56), 28, $"Used at {FoundAt.Value.ToString("hh':'mm':'ss")}", Sprites.TextMode.Special, 0);
+                    _data.Font.RenderText(e.Graphics, renderSettings.TileSize, renderSettings.Scale(56), 28, $"Used at {UsedAt.Value.ToString("hh':'mm':'ss")}", Sprites.TextMode.Special, 0);
             }
         }
 

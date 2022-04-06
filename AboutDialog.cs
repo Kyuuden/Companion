@@ -9,10 +9,9 @@ namespace BizHawk.FreeEnterprise.Companion
             InitializeComponent();
         }
 
-        private void linkFE_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) => System.Diagnostics.Process.Start("http://ff4fe.com/");
-
-        private void linkKyuuden_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) => System.Diagnostics.Process.Start("https://www.twitch.tv/kyuuden");
-
-        private void linkScala_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) => System.Diagnostics.Process.Start("https://www.twitch.tv/schalakitty");
+        private void richTextBox1_LinkClicked(object sender, LinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(e.LinkText);
+        }
     }
 }

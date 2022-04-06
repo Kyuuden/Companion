@@ -34,5 +34,11 @@ namespace BizHawk.FreeEnterprise.Companion
             int index = (int)key - (int)KeyItemLocationType.StartingItem;
             return _names != null && _names.LocationNames != null && index >= 0 && index < _names.LocationNames.Count ? _names.LocationNames[index] : null;
         }
+
+        public static string? GetName(CharacterLocationType key)
+        {
+            int index = (int)key - (int)CharacterLocationType.StartingCharacter;
+            return _names != null && _names.CharacterLocationNames != null && index >= 0 && index < _names.CharacterLocationNames.Count ? _names.CharacterLocationNames[index] : null;
+        }
     }
 }

@@ -65,5 +65,23 @@
     <Setting Name="InterpolationMode" Type="System.Drawing.Drawing2D.InterpolationMode" Scope="User">
       <Value Profile="(Default)">NearestNeighbor</Value>
     </Setting>
+    <Setting Name="LocationsShowKeyItems" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="LocationsShowCharacters" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="Minimized" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="Maximized" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="Location" Type="System.Drawing.Point" Scope="User">
+      <Value Profile="(Default)">0, 0</Value>
+    </Setting>
+    <Setting Name="Size" Type="System.Drawing.Size" Scope="User">
+      <Value Profile="(Default)">800, 450</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

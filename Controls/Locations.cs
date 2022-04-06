@@ -31,26 +31,52 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
             var sX = rect.X;
             var sY = rect.Y;
             var cWidth = rect.Width / RenderingSettings.TileSize;
-            foreach (var item in Data.GetAvailableLocations())
+            var kiLocations = Data.GetAvailableKeyItemLocations();
+            var charLocations = Data.GetAvailableCharacterLocations();
+
+            if (kiLocations.Any() && Properties.Settings.Default.LocationsShowKeyItems)
             {
-                if (sY + RenderingSettings.TileSize < rect.Height + rect.Y)
+                if (Properties.Settings.Default.LocationsShowCharacters)
                 {
                     RomData.Font.RenderText(graphics, sX, sY, $"•", TextMode.Normal);
-                    sY += RomData.Font.RenderText(graphics, sX + RenderingSettings.Scale(16), sY, cWidth - 2, item, TextMode.Normal) + RenderingSettings.Scale(4);
+                    sY += RomData.Font.RenderText(graphics, sX + RenderingSettings.Scale(16), sY, cWidth - 2, "Key Item Locations:", TextMode.Normal) + RenderingSettings.Scale(4);
+                    sX += RenderingSettings.Scale(16);
+                }
+
+                foreach (var item in kiLocations)
+                {
+                    if (sY + RenderingSettings.TileSize < rect.Height + rect.Y)
+                    {
+                        RomData.Font.RenderText(graphics, sX, sY, $"•", TextMode.Normal);
+                        sY += RomData.Font.RenderText(graphics, sX + RenderingSettings.Scale(16), sY, cWidth - 2, item, TextMode.Normal) + RenderingSettings.Scale(4);
+                    }
+                }
+
+                if (Properties.Settings.Default.LocationsShowCharacters)
+                    sX -= RenderingSettings.Scale(16);
+            }
+
+            if (charLocations.Any() && Properties.Settings.Default.LocationsShowCharacters)
+            {
+                if (Properties.Settings.Default.LocationsShowKeyItems)
+                {
+                    RomData.Font.RenderText(graphics, sX, sY, $"•", TextMode.Normal);
+                    sY += RomData.Font.RenderText(graphics, sX + RenderingSettings.Scale(16), sY, cWidth - 2, "Character Locations:", TextMode.Normal) + RenderingSettings.Scale(4);
+                    sX += RenderingSettings.Scale(16);
+                }
+
+                foreach (var item in charLocations)
+                {
+                    if (sY + RenderingSettings.TileSize < rect.Height + rect.Y)
+                    {
+                        RomData.Font.RenderText(graphics, sX, sY, $"•", TextMode.Normal);
+                        sY += RomData.Font.RenderText(graphics, sX + RenderingSettings.Scale(16), sY, cWidth - 2, item, TextMode.Normal) + RenderingSettings.Scale(4);
+                    }
                 }
             }
         }
 
         protected override string Header => "Open Locations";
-        protected override string? HeaderCount
-        {
-            get
-            {
-                if (Data == null)
-                    return null;
-
-                return FlagSet is null ? $"{Data.GetAvailableLocations().Count(),4}?" : $"{Data.GetAvailableLocations().Count(),5}";
-            }
-        }
+        protected override string? HeaderCount => null;
     }
 }

@@ -31,6 +31,8 @@ namespace BizHawk.FreeEnterprise.Companion
         {
             this.tabs = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.label10 = new System.Windows.Forms.Label();
+            this.comboInterpolation = new System.Windows.Forms.ComboBox();
             this.numericViewScale = new System.Windows.Forms.NumericUpDown();
             this.label9 = new System.Windows.Forms.Label();
             this.comboAspect = new System.Windows.Forms.ComboBox();
@@ -67,8 +69,8 @@ namespace BizHawk.FreeEnterprise.Companion
             this.cbLocationsDisplay = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
-            this.comboInterpolation = new System.Windows.Forms.ComboBox();
-            this.label10 = new System.Windows.Forms.Label();
+            this.cbLocationsChar = new System.Windows.Forms.CheckBox();
+            this.cbLocationsKI = new System.Windows.Forms.CheckBox();
             this.tabs.SuspendLayout();
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericViewScale)).BeginInit();
@@ -121,6 +123,24 @@ namespace BizHawk.FreeEnterprise.Companion
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "General";
             this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(126, 63);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(68, 13);
+            this.label10.TabIndex = 15;
+            this.label10.Text = "Interpolation:";
+            // 
+            // comboInterpolation
+            // 
+            this.comboInterpolation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboInterpolation.FormattingEnabled = true;
+            this.comboInterpolation.Location = new System.Drawing.Point(200, 60);
+            this.comboInterpolation.Name = "comboInterpolation";
+            this.comboInterpolation.Size = new System.Drawing.Size(118, 21);
+            this.comboInterpolation.TabIndex = 14;
             // 
             // numericViewScale
             // 
@@ -456,6 +476,8 @@ namespace BizHawk.FreeEnterprise.Companion
             // 
             // tabPage5
             // 
+            this.tabPage5.Controls.Add(this.cbLocationsKI);
+            this.tabPage5.Controls.Add(this.cbLocationsChar);
             this.tabPage5.Controls.Add(this.cbLocationsBorder);
             this.tabPage5.Controls.Add(this.cbLocationsDisplay);
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
@@ -506,23 +528,25 @@ namespace BizHawk.FreeEnterprise.Companion
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // comboInterpolation
+            // cbLocationsChar
             // 
-            this.comboInterpolation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboInterpolation.FormattingEnabled = true;
-            this.comboInterpolation.Location = new System.Drawing.Point(200, 60);
-            this.comboInterpolation.Name = "comboInterpolation";
-            this.comboInterpolation.Size = new System.Drawing.Size(118, 21);
-            this.comboInterpolation.TabIndex = 14;
+            this.cbLocationsChar.AutoSize = true;
+            this.cbLocationsChar.Location = new System.Drawing.Point(8, 75);
+            this.cbLocationsChar.Name = "cbLocationsChar";
+            this.cbLocationsChar.Size = new System.Drawing.Size(197, 17);
+            this.cbLocationsChar.TabIndex = 6;
+            this.cbLocationsChar.Text = "Show Available Character Locations";
+            this.cbLocationsChar.UseVisualStyleBackColor = true;
             // 
-            // label10
+            // cbLocationsKI
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(126, 63);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(68, 13);
-            this.label10.TabIndex = 15;
-            this.label10.Text = "Interpolation:";
+            this.cbLocationsKI.AutoSize = true;
+            this.cbLocationsKI.Location = new System.Drawing.Point(8, 52);
+            this.cbLocationsKI.Name = "cbLocationsKI";
+            this.cbLocationsKI.Size = new System.Drawing.Size(192, 17);
+            this.cbLocationsKI.TabIndex = 7;
+            this.cbLocationsKI.Text = "Show Available Key Item Locations";
+            this.cbLocationsKI.UseVisualStyleBackColor = true;
             // 
             // SettingsDialog
             // 
@@ -597,5 +621,7 @@ namespace BizHawk.FreeEnterprise.Companion
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.ComboBox comboInterpolation;
+        private System.Windows.Forms.CheckBox cbLocationsKI;
+        private System.Windows.Forms.CheckBox cbLocationsChar;
     }
 }

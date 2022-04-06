@@ -8,6 +8,7 @@
         bool KTrap { get; }
         bool KFree { get; }
         bool KUnsafe { get; }
+        bool CFree { get; }
         int MaxParty { get; }
         int RequriedObjectiveCount { get; }
         bool OWinGame { get; }
@@ -32,6 +33,7 @@
         public abstract bool KTrap { get; }
         public abstract bool KFree { get; }
         public abstract bool KUnsafe { get; }
+        public abstract bool CFree { get; }
         public abstract int MaxParty { get; }
         public abstract int RequriedObjectiveCount { get; }
         public abstract bool OWinGame { get; }

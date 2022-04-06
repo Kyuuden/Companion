@@ -1,5 +1,6 @@
 ﻿using BizHawk.FreeEnterprise.Companion.Sprites;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -8,6 +9,10 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
 {
     public partial class Party : TrackerControl<State.Party>
     {
+        private Dictionary<Rectangle, int> _charactersByPosition = new Dictionary<Rectangle, int>();
+
+        private Dictionary<int, int> _characterVersions = new Dictionary<int, int>();
+
         int frame = 0;
         int frameIndex = 0;
 
@@ -19,6 +24,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
 
         public override void RefreshSize()
         {
+            _charactersByPosition.Clear();
             Height = RequestedHeight = RenderingSettings.Scale(48 * 5) <= UseableWidth ? MinimiumHeight + RenderingSettings.Scale(48) : MinimiumHeight + RenderingSettings.Scale(52 * 5);            
             if (Properties.Settings.Default.Layout == Companion.Layout.Alternate)
                 Width = RenderingSettings.Scale(48 + 24);
@@ -45,6 +51,20 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
             }
         }
 
+        protected override void OnMouseClick(MouseEventArgs e)
+        {
+            var clickedCharacter = _charactersByPosition.FirstOrDefault(kvp => kvp.Key.Contains(e.X, e.Y));
+            if (clickedCharacter.Key != default && Data != null && RomData != null)
+            {
+                var cId = Data.Characters[clickedCharacter.Value].ID;
+                _characterVersions[cId] = ((_characterVersions.TryGetValue(cId, out var old) ? old : 1) + 1) % RomData.CharacterSprites.PaletteCount;
+                Invalidate();
+            }
+            else
+                base.OnMouseClick(e);
+        }
+
+
         protected override void PaintData(Graphics graphics, Rectangle rect)
         {
             if (Data == null || RomData == null)
@@ -70,12 +90,20 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
 
 
             graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+            int charIndex = 0;
             foreach (var c in Data.Characters)
             {
                 if (c.ID != 0)
                 {
+                    _charactersByPosition[new Rectangle((int)sX, (int)sY, RenderingSettings.Scale(48), RenderingSettings.Scale(48))] = charIndex;
+
                     graphics.DrawImage(
-                       RomData.CharacterSprites.GetCharacterBitmap(c.ID, c.Class, Properties.Settings.Default.PartyPose, frame),
+                       RomData.CharacterSprites.GetCharacterBitmap(
+                           c.ID, 
+                           c.Class,
+                           _characterVersions.TryGetValue(c.ID, out var palette) ? palette : 0,
+                           Properties.Settings.Default.PartyPose, 
+                           frame),
                        sX + offset,
                        sY,
                        RenderingSettings.Scale(48),
@@ -91,6 +119,8 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
                         sX += RenderingSettings.Scale(48);
                         break;
                 }
+
+                charIndex++;
             }
             graphics.InterpolationMode = Properties.Settings.Default.InterpolationMode;
         }

@@ -117,5 +117,27 @@
     "Rydia's Mom",
     "Fallen Golbez",
     "Objective completion"
+  ],
+  "characterLocationNames": [
+    "Starting Character",
+    "Starting Partner",
+    "Kaipo Inn",
+    "Watery Pass",
+    "Damcyan",
+    "Kaipo Infirmary",
+    "Mt. Hobbs",
+    "Mysidia 1",
+    "Mysidia 2",
+    "Mt. Ordeals",
+    "",
+    "",
+    "Baron Inn",
+    "Baron Castle",
+    "Zot 1",
+    "Zot 2",
+    "Dwarf Castle",
+    "Eblan Cave",
+    "Moon Altar",
+    "Giant"
   ]
 }

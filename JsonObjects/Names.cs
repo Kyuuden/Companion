@@ -16,5 +16,8 @@ namespace BizHawk.FreeEnterprise.Companion
 
         [JsonProperty("locationNames")]
         public IList<string>? LocationNames { get; set; }
+
+        [JsonProperty("characterLocationNames")]
+        public IList<string>? CharacterLocationNames { get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace BizHawk.FreeEnterprise.Companion
+﻿using System.Collections.Generic;
+
+namespace BizHawk.FreeEnterprise.Companion
 {
     public static class WRAMAddresses
     {
@@ -37,8 +39,63 @@
 
         public const int BattleStatusStickersPalette = 0x74b20;
 
+        public static IEnumerable<int> CharacterSpritesAddresses 
+        {
+            get
+            {
+                yield return CharacterSpritesAddress;
+                yield return CharacterAlternateSprites01Address;
+                yield return CharacterAlternateSprites02Address;
+                yield return CharacterAlternateSprites03Address;
+                yield return CharacterAlternateSprites04Address;
+                yield return CharacterAlternateSprites05Address;
+                yield return CharacterAlternateSprites06Address;
+                yield return CharacterAlternateSprites07Address;
+                yield return CharacterAlternateSprites08Address;
+                yield return CharacterAlternateSprites09Address;
+                yield return CharacterAlternateSprites10Address;
+                yield return CharacterAlternateSprites11Address;
+                yield return CharacterAlternateSprites12Address;
+            } 
+        }
+
         public const int CharacterSpritesAddress = 0x0d0000;
+
+        public const int CharacterAlternateSprites01Address = 0x140000;
+        public const int CharacterAlternateSprites02Address = 0x148000;
+        public const int CharacterAlternateSprites03Address = 0x150000;
+        public const int CharacterAlternateSprites04Address = 0x158000;
+        public const int CharacterAlternateSprites05Address = 0x160000;
+        public const int CharacterAlternateSprites06Address = 0x168000;
+        public const int CharacterAlternateSprites07Address = 0x170000;
+        public const int CharacterAlternateSprites08Address = 0x178000;
+        public const int CharacterAlternateSprites09Address = 0x180000;
+        public const int CharacterAlternateSprites10Address = 0x188000;
+        public const int CharacterAlternateSprites11Address = 0x190000;
+        public const int CharacterAlternateSprites12Address = 0x198000;
+
         public const int CharacterSpritesBytes = 0x7000;
+
+
+        public static IEnumerable<int> CharacterPalettesAddresses
+        {
+            get
+            {
+                yield return CharacterPalettesAddress;
+                yield return CharacterAlternatePalettes01Address;
+                yield return CharacterAlternatePalettes02Address;
+                yield return CharacterAlternatePalettes03Address;
+                yield return CharacterAlternatePalettes04Address;
+                yield return CharacterAlternatePalettes05Address;
+                yield return CharacterAlternatePalettes06Address;
+                yield return CharacterAlternatePalettes07Address;
+                yield return CharacterAlternatePalettes08Address;
+                yield return CharacterAlternatePalettes09Address;
+                yield return CharacterAlternatePalettes10Address;
+                yield return CharacterAlternatePalettes11Address;
+                yield return CharacterAlternatePalettes12Address;
+            }
+        }
 
         public const int CharacterPalettesAddress            = 0x0e7d00;
 

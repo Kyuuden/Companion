@@ -6,6 +6,7 @@ using BizHawk.FreeEnterprise.Companion.State;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -171,7 +172,57 @@ namespace BizHawk.FreeEnterprise.Companion
                 ((MainForm)MainForm).Move += FreeEnterpriseCompanionForm_Move;
                 ((MainForm)MainForm).Resize += FreeEnterpriseCompanionForm_Resize;
                 MainListenersSet = true;
-            }           
+                if (!Properties.Settings.Default.Dock)
+                {
+                    if (Properties.Settings.Default.Maximized)
+                    {
+                        Location = Properties.Settings.Default.Location;
+                        WindowState = FormWindowState.Maximized;
+                        Size = Properties.Settings.Default.Size;
+                    }
+                    else if (Properties.Settings.Default.Minimized)
+                    {
+                        Location = Properties.Settings.Default.Location;
+                        WindowState = FormWindowState.Minimized;
+                        Size = Properties.Settings.Default.Size;
+                    }
+                    else
+                    {
+                        Location = Properties.Settings.Default.Location;
+                        Size = Properties.Settings.Default.Size;
+                    }
+                }
+            }
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            if (!Properties.Settings.Default.Dock)
+            {
+                if (WindowState == FormWindowState.Maximized)
+                {
+                    Properties.Settings.Default.Location = RestoreBounds.Location;
+                    Properties.Settings.Default.Size = RestoreBounds.Size;
+                    Properties.Settings.Default.Maximized = true;
+                    Properties.Settings.Default.Minimized = false;
+                }
+                else if (WindowState == FormWindowState.Normal)
+                {
+                    Properties.Settings.Default.Location = Location;
+                    Properties.Settings.Default.Size = Size;
+                    Properties.Settings.Default.Maximized = false;
+                    Properties.Settings.Default.Minimized = false;
+                }
+                else
+                {
+                    Properties.Settings.Default.Location = RestoreBounds.Location;
+                    Properties.Settings.Default.Size = RestoreBounds.Size;
+                    Properties.Settings.Default.Maximized = false;
+                    Properties.Settings.Default.Minimized = true;
+                }
+                Properties.Settings.Default.Save();
+            }
+            base.OnClosing(e);
         }
 
         private void Initialize()
@@ -209,7 +260,7 @@ namespace BizHawk.FreeEnterprise.Companion
                     c.RefreshSize();
                 });
             }
-            catch (Exception e)
+            catch (Exception)
             {
 
             }

@@ -128,6 +128,7 @@ namespace BizHawk.FreeEnterprise.Companion.FlagSet._4._5._0
         public override bool KTrap => KeyItems.TrapChests;
         public override bool KFree => !KeyItems.NoFreeItem;
         public override bool KUnsafe => KeyItems.Unsafe;
+        public override bool CFree => !Characters.NoFree;
         public override int MaxParty => Characters.PartySize;
         public override int RequriedObjectiveCount => Objectives.NumRequiredObjectives;
         public override bool OWinGame => Objectives.WinGame;
