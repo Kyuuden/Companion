@@ -14,17 +14,20 @@ namespace BizHawk.FreeEnterprise.Companion
             cbKeyItemDisplay.Checked = Properties.Settings.Default.KeyItemsDisplay;
             cbKeyItemBorder.Checked = Properties.Settings.Default.KeyItemsBorder;
             comboKeyItemsStyle.BindEnumToCombobox(Properties.Settings.Default.KeyItemsStyle);
+            cbKeyItemScaling.Checked = Properties.Settings.Default.KeyItemIconScaling;
 
             cbPartyDisplay.Checked = Properties.Settings.Default.PartyDisplay;
             cbPartyBorder.Checked = Properties.Settings.Default.PartyBorder;
             comboPartyPose.BindEnumToCombobox(Properties.Settings.Default.PartyPose);
             cbPartyAnimate.Checked = Properties.Settings.Default.PartyAnimate;
+            cbShowAnchor.Checked = Properties.Settings.Default.PartyShowAnchor;
 
             cbObjectiveDisplay.Checked = Properties.Settings.Default.ObjectivesDisplay;
             cbObjectiveBorder.Checked = Properties.Settings.Default.ObjectivesBorder;
 
             cbBossesDisplay.Checked = Properties.Settings.Default.BossesDisplay;
             cbBossesBorder.Checked = Properties.Settings.Default.BossesBorder;
+            cbBossesScaling.Checked = Properties.Settings.Default.BossIconScaling;
 
             cbLocationsDisplay.Checked = Properties.Settings.Default.LocationsDisplay;
             cbLocationsBorder.Checked = Properties.Settings.Default.LocationsBorder;
@@ -48,17 +51,20 @@ namespace BizHawk.FreeEnterprise.Companion
             Properties.Settings.Default.KeyItemsDisplay = cbKeyItemDisplay.Checked;
             Properties.Settings.Default.KeyItemsBorder = cbKeyItemBorder.Checked;
             Properties.Settings.Default.KeyItemsStyle = (KeyItemStyle)comboKeyItemsStyle.SelectedValue;
+            Properties.Settings.Default.KeyItemIconScaling = cbKeyItemScaling.Checked;
 
             Properties.Settings.Default.PartyDisplay = cbPartyDisplay.Checked;
             Properties.Settings.Default.PartyBorder = cbPartyBorder.Checked;
             Properties.Settings.Default.PartyPose = (Pose)comboPartyPose.SelectedValue;
             Properties.Settings.Default.PartyAnimate = cbPartyAnimate.Checked;
+            Properties.Settings.Default.PartyShowAnchor = cbShowAnchor.Checked;
 
             Properties.Settings.Default.ObjectivesDisplay = cbObjectiveDisplay.Checked;
             Properties.Settings.Default.ObjectivesBorder = cbObjectiveBorder.Checked;
 
             Properties.Settings.Default.BossesDisplay = cbBossesDisplay.Checked;
             Properties.Settings.Default.BossesBorder = cbBossesBorder.Checked;
+            Properties.Settings.Default.BossIconScaling = cbBossesScaling.Checked;
 
             Properties.Settings.Default.LocationsDisplay = cbLocationsDisplay.Checked;
             Properties.Settings.Default.LocationsBorder = cbLocationsBorder.Checked;
@@ -71,7 +77,7 @@ namespace BizHawk.FreeEnterprise.Companion
             Properties.Settings.Default.AspectRatio = (AspectRatio)comboAspect.SelectedValue;
             Properties.Settings.Default.Layout = (Layout)comboLayout.SelectedValue;
             Properties.Settings.Default.ViewScale = (int)numericViewScale.Value;
-            Properties.Settings.Default.InterpolationMode = (System.Drawing.Drawing2D.InterpolationMode)comboInterpolation.SelectedValue;
+            Properties.Settings.Default.InterpolationMode = (InterpolationMode)comboInterpolation.SelectedValue;
 
             Properties.Settings.Default.RefreshEveryNFrames = (int)numericFrameCount.Value;
 

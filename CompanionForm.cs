@@ -282,7 +282,7 @@ namespace BizHawk.FreeEnterprise.Companion
         private void Run_CustomSettingsUpdated(object sender, EventArgs e)
         {
             if (RomData?.Font?.UpdateBackgroundColor(Run!.BackgroundColor) ?? false)
-                Invalidate();
+                trackerControls.ForEach(c => c.Invalidate());
         }
 
         private void Run_ObjectivesUpdated(object sender, EventArgs e)

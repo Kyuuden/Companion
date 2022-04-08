@@ -8,6 +8,21 @@ namespace BizHawk.FreeEnterprise.Companion.State
     {
         public IReadOnlyList<Character> Characters { get; }
 
+        public IEnumerable<Character> PriorityOrder
+        {
+            get
+            {
+                if (Characters.Count < 5)
+                    yield break;
+
+                yield return Characters[2];
+                yield return Characters[0];
+                yield return Characters[4];
+                yield return Characters[1];
+                yield return Characters[3];
+            }
+        }
+
         public Party(byte[] partyData)
         {
             var temp = partyData.ReadMany<byte[]>(0, 64 * 8, 5).Select(data => new Character(data)).ToList();

@@ -1329,5 +1329,15 @@ namespace BizHawk.FreeEnterprise.Companion.Properties {
                 return ((byte[])(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SMB3_item_Anchor {
+            get {
+                object obj = ResourceManager.GetObject("SMB3_item_Anchor", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

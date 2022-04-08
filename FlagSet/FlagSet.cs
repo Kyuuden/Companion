@@ -14,6 +14,8 @@
         bool OWinGame { get; }
         bool OWinCrystal { get; }
         bool No10KeyItemBonus { get; }
+        bool CHero { get; }
+        bool VanillaAgility { get; }
     }
 
     public abstract class FlagSet : IFlagSet
@@ -39,5 +41,7 @@
         public abstract bool OWinGame { get; }
         public abstract bool OWinCrystal { get; }
         public abstract bool No10KeyItemBonus { get; }
+        public abstract bool CHero { get; }
+        public abstract bool VanillaAgility { get; }
     }
 }

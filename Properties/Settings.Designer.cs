@@ -346,5 +346,41 @@ namespace BizHawk.FreeEnterprise.Companion.Properties {
                 this["Size"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool KeyItemIconScaling {
+            get {
+                return ((bool)(this["KeyItemIconScaling"]));
+            }
+            set {
+                this["KeyItemIconScaling"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool BossIconScaling {
+            get {
+                return ((bool)(this["BossIconScaling"]));
+            }
+            set {
+                this["BossIconScaling"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool PartyShowAnchor {
+            get {
+                return ((bool)(this["PartyShowAnchor"]));
+            }
+            set {
+                this["PartyShowAnchor"] = value;
+            }
+        }
     }
 }

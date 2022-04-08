@@ -30,7 +30,7 @@ namespace BizHawk.FreeEnterprise.Companion
         private void InitializeComponent()
         {
             this.tabs = new System.Windows.Forms.TabControl();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.LayoutPage = new System.Windows.Forms.TabPage();
             this.label10 = new System.Windows.Forms.Label();
             this.comboInterpolation = new System.Windows.Forms.ComboBox();
             this.numericViewScale = new System.Windows.Forms.NumericUpDown();
@@ -39,105 +39,109 @@ namespace BizHawk.FreeEnterprise.Companion
             this.label8 = new System.Windows.Forms.Label();
             this.comboLayout = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.numericFrameCount = new System.Windows.Forms.NumericUpDown();
-            this.label5 = new System.Windows.Forms.Label();
             this.comboDockSide = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.cbDock = new System.Windows.Forms.CheckBox();
             this.numericDockOffset = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.GamePage = new System.Windows.Forms.TabPage();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.numericFrameCount = new System.Windows.Forms.NumericUpDown();
+            this.label5 = new System.Windows.Forms.Label();
+            this.KeyItemPage = new System.Windows.Forms.TabPage();
+            this.cbKeyItemScaling = new System.Windows.Forms.CheckBox();
             this.comboKeyItemsStyle = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.cbKeyItemBorder = new System.Windows.Forms.CheckBox();
             this.cbKeyItemDisplay = new System.Windows.Forms.CheckBox();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.PartyPage = new System.Windows.Forms.TabPage();
             this.cbPartyAnimate = new System.Windows.Forms.CheckBox();
             this.comboPartyPose = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
             this.cbPartyBorder = new System.Windows.Forms.CheckBox();
             this.cbPartyDisplay = new System.Windows.Forms.CheckBox();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.ObjectivesPage = new System.Windows.Forms.TabPage();
             this.cbObjectiveBorder = new System.Windows.Forms.CheckBox();
             this.cbObjectiveDisplay = new System.Windows.Forms.CheckBox();
-            this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.BossesPage = new System.Windows.Forms.TabPage();
+            this.cbBossesScaling = new System.Windows.Forms.CheckBox();
             this.cbBossesBorder = new System.Windows.Forms.CheckBox();
             this.cbBossesDisplay = new System.Windows.Forms.CheckBox();
-            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.LocationsPage = new System.Windows.Forms.TabPage();
+            this.cbLocationsKI = new System.Windows.Forms.CheckBox();
+            this.cbLocationsChar = new System.Windows.Forms.CheckBox();
             this.cbLocationsBorder = new System.Windows.Forms.CheckBox();
             this.cbLocationsDisplay = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
-            this.cbLocationsChar = new System.Windows.Forms.CheckBox();
-            this.cbLocationsKI = new System.Windows.Forms.CheckBox();
+            this.cbShowAnchor = new System.Windows.Forms.CheckBox();
             this.tabs.SuspendLayout();
-            this.tabPage4.SuspendLayout();
+            this.LayoutPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericViewScale)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericFrameCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericDockOffset)).BeginInit();
-            this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
-            this.tabPage3.SuspendLayout();
-            this.tabPage6.SuspendLayout();
-            this.tabPage5.SuspendLayout();
+            this.GamePage.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericFrameCount)).BeginInit();
+            this.KeyItemPage.SuspendLayout();
+            this.PartyPage.SuspendLayout();
+            this.ObjectivesPage.SuspendLayout();
+            this.BossesPage.SuspendLayout();
+            this.LocationsPage.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabs
             // 
-            this.tabs.Controls.Add(this.tabPage4);
-            this.tabs.Controls.Add(this.tabPage1);
-            this.tabs.Controls.Add(this.tabPage2);
-            this.tabs.Controls.Add(this.tabPage3);
-            this.tabs.Controls.Add(this.tabPage6);
-            this.tabs.Controls.Add(this.tabPage5);
+            this.tabs.Controls.Add(this.LayoutPage);
+            this.tabs.Controls.Add(this.GamePage);
+            this.tabs.Controls.Add(this.KeyItemPage);
+            this.tabs.Controls.Add(this.PartyPage);
+            this.tabs.Controls.Add(this.ObjectivesPage);
+            this.tabs.Controls.Add(this.BossesPage);
+            this.tabs.Controls.Add(this.LocationsPage);
             this.tabs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabs.Location = new System.Drawing.Point(0, 0);
             this.tabs.Name = "tabs";
             this.tabs.SelectedIndex = 0;
-            this.tabs.Size = new System.Drawing.Size(334, 221);
+            this.tabs.Size = new System.Drawing.Size(396, 264);
             this.tabs.TabIndex = 0;
             // 
-            // tabPage4
+            // LayoutPage
             // 
-            this.tabPage4.Controls.Add(this.label10);
-            this.tabPage4.Controls.Add(this.comboInterpolation);
-            this.tabPage4.Controls.Add(this.numericViewScale);
-            this.tabPage4.Controls.Add(this.label9);
-            this.tabPage4.Controls.Add(this.comboAspect);
-            this.tabPage4.Controls.Add(this.label8);
-            this.tabPage4.Controls.Add(this.comboLayout);
-            this.tabPage4.Controls.Add(this.label7);
-            this.tabPage4.Controls.Add(this.label6);
-            this.tabPage4.Controls.Add(this.numericFrameCount);
-            this.tabPage4.Controls.Add(this.label5);
-            this.tabPage4.Controls.Add(this.comboDockSide);
-            this.tabPage4.Controls.Add(this.label4);
-            this.tabPage4.Controls.Add(this.cbDock);
-            this.tabPage4.Controls.Add(this.numericDockOffset);
-            this.tabPage4.Controls.Add(this.label3);
-            this.tabPage4.Location = new System.Drawing.Point(4, 22);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(326, 195);
-            this.tabPage4.TabIndex = 3;
-            this.tabPage4.Text = "General";
-            this.tabPage4.UseVisualStyleBackColor = true;
+            this.LayoutPage.Controls.Add(this.label10);
+            this.LayoutPage.Controls.Add(this.comboInterpolation);
+            this.LayoutPage.Controls.Add(this.numericViewScale);
+            this.LayoutPage.Controls.Add(this.label9);
+            this.LayoutPage.Controls.Add(this.comboAspect);
+            this.LayoutPage.Controls.Add(this.label8);
+            this.LayoutPage.Controls.Add(this.comboLayout);
+            this.LayoutPage.Controls.Add(this.label7);
+            this.LayoutPage.Controls.Add(this.comboDockSide);
+            this.LayoutPage.Controls.Add(this.label4);
+            this.LayoutPage.Controls.Add(this.cbDock);
+            this.LayoutPage.Controls.Add(this.numericDockOffset);
+            this.LayoutPage.Controls.Add(this.label3);
+            this.LayoutPage.Location = new System.Drawing.Point(4, 22);
+            this.LayoutPage.Name = "LayoutPage";
+            this.LayoutPage.Size = new System.Drawing.Size(388, 238);
+            this.LayoutPage.TabIndex = 3;
+            this.LayoutPage.Text = "General";
+            this.LayoutPage.UseVisualStyleBackColor = true;
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(126, 63);
+            this.label10.Location = new System.Drawing.Point(8, 81);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(68, 13);
+            this.label10.Size = new System.Drawing.Size(98, 13);
             this.label10.TabIndex = 15;
-            this.label10.Text = "Interpolation:";
+            this.label10.Text = "Interpolation Mode:";
             // 
             // comboInterpolation
             // 
             this.comboInterpolation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboInterpolation.FormattingEnabled = true;
-            this.comboInterpolation.Location = new System.Drawing.Point(200, 60);
+            this.comboInterpolation.Location = new System.Drawing.Point(112, 78);
             this.comboInterpolation.Name = "comboInterpolation";
             this.comboInterpolation.Size = new System.Drawing.Size(118, 21);
             this.comboInterpolation.TabIndex = 14;
@@ -149,7 +153,7 @@ namespace BizHawk.FreeEnterprise.Companion
             0,
             0,
             0});
-            this.numericViewScale.Location = new System.Drawing.Point(81, 61);
+            this.numericViewScale.Location = new System.Drawing.Point(82, 52);
             this.numericViewScale.Maximum = new decimal(new int[] {
             300,
             0,
@@ -173,17 +177,17 @@ namespace BizHawk.FreeEnterprise.Companion
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(7, 63);
+            this.label9.Location = new System.Drawing.Point(8, 54);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(63, 13);
+            this.label9.Size = new System.Drawing.Size(61, 13);
             this.label9.TabIndex = 12;
-            this.label9.Text = "View Scale:";
+            this.label9.Text = "Font Scale:";
             // 
             // comboAspect
             // 
             this.comboAspect.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboAspect.FormattingEnabled = true;
-            this.comboAspect.Location = new System.Drawing.Point(81, 163);
+            this.comboAspect.Location = new System.Drawing.Point(85, 201);
             this.comboAspect.Name = "comboAspect";
             this.comboAspect.Size = new System.Drawing.Size(121, 21);
             this.comboAspect.TabIndex = 11;
@@ -191,7 +195,7 @@ namespace BizHawk.FreeEnterprise.Companion
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(8, 166);
+            this.label8.Location = new System.Drawing.Point(8, 204);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(71, 13);
             this.label8.TabIndex = 10;
@@ -201,7 +205,7 @@ namespace BizHawk.FreeEnterprise.Companion
             // 
             this.comboLayout.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboLayout.FormattingEnabled = true;
-            this.comboLayout.Location = new System.Drawing.Point(81, 34);
+            this.comboLayout.Location = new System.Drawing.Point(82, 13);
             this.comboLayout.Name = "comboLayout";
             this.comboLayout.Size = new System.Drawing.Size(121, 21);
             this.comboLayout.TabIndex = 9;
@@ -209,47 +213,17 @@ namespace BizHawk.FreeEnterprise.Companion
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(8, 37);
+            this.label7.Location = new System.Drawing.Point(8, 16);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(42, 13);
+            this.label7.Size = new System.Drawing.Size(72, 13);
             this.label7.TabIndex = 8;
-            this.label7.Text = "Layout:";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(153, 8);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(38, 13);
-            this.label6.TabIndex = 7;
-            this.label6.Text = "frames";
-            // 
-            // numericFrameCount
-            // 
-            this.numericFrameCount.Location = new System.Drawing.Point(100, 6);
-            this.numericFrameCount.Maximum = new decimal(new int[] {
-            600,
-            0,
-            0,
-            0});
-            this.numericFrameCount.Name = "numericFrameCount";
-            this.numericFrameCount.Size = new System.Drawing.Size(47, 20);
-            this.numericFrameCount.TabIndex = 6;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(8, 8);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(86, 13);
-            this.label5.TabIndex = 5;
-            this.label5.Text = "Read data every";
+            this.label7.Text = "Layout Mode:";
             // 
             // comboDockSide
             // 
             this.comboDockSide.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboDockSide.FormattingEnabled = true;
-            this.comboDockSide.Location = new System.Drawing.Point(81, 136);
+            this.comboDockSide.Location = new System.Drawing.Point(85, 174);
             this.comboDockSide.Name = "comboDockSide";
             this.comboDockSide.Size = new System.Drawing.Size(121, 21);
             this.comboDockSide.TabIndex = 4;
@@ -257,7 +231,7 @@ namespace BizHawk.FreeEnterprise.Companion
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(8, 139);
+            this.label4.Location = new System.Drawing.Point(8, 177);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(60, 13);
             this.label4.TabIndex = 3;
@@ -266,7 +240,7 @@ namespace BizHawk.FreeEnterprise.Companion
             // cbDock
             // 
             this.cbDock.AutoSize = true;
-            this.cbDock.Location = new System.Drawing.Point(11, 87);
+            this.cbDock.Location = new System.Drawing.Point(11, 125);
             this.cbDock.Name = "cbDock";
             this.cbDock.Size = new System.Drawing.Size(109, 17);
             this.cbDock.TabIndex = 2;
@@ -276,7 +250,7 @@ namespace BizHawk.FreeEnterprise.Companion
             // 
             // numericDockOffset
             // 
-            this.numericDockOffset.Location = new System.Drawing.Point(82, 110);
+            this.numericDockOffset.Location = new System.Drawing.Point(85, 148);
             this.numericDockOffset.Minimum = new decimal(new int[] {
             100,
             0,
@@ -284,31 +258,100 @@ namespace BizHawk.FreeEnterprise.Companion
             -2147483648});
             this.numericDockOffset.Name = "numericDockOffset";
             this.numericDockOffset.ReadOnly = true;
-            this.numericDockOffset.Size = new System.Drawing.Size(120, 20);
+            this.numericDockOffset.Size = new System.Drawing.Size(121, 20);
             this.numericDockOffset.TabIndex = 1;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(8, 112);
+            this.label3.Location = new System.Drawing.Point(8, 150);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(67, 13);
             this.label3.TabIndex = 0;
             this.label3.Text = "Dock Offset:";
             // 
-            // tabPage1
+            // GamePage
             // 
-            this.tabPage1.Controls.Add(this.comboKeyItemsStyle);
-            this.tabPage1.Controls.Add(this.label1);
-            this.tabPage1.Controls.Add(this.cbKeyItemBorder);
-            this.tabPage1.Controls.Add(this.cbKeyItemDisplay);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(326, 195);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Key Items";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.GamePage.Controls.Add(this.textBox1);
+            this.GamePage.Controls.Add(this.label6);
+            this.GamePage.Controls.Add(this.numericFrameCount);
+            this.GamePage.Controls.Add(this.label5);
+            this.GamePage.Location = new System.Drawing.Point(4, 22);
+            this.GamePage.Name = "GamePage";
+            this.GamePage.Size = new System.Drawing.Size(388, 238);
+            this.GamePage.TabIndex = 6;
+            this.GamePage.Text = "Game";
+            this.GamePage.UseVisualStyleBackColor = true;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBox1.Enabled = false;
+            this.textBox1.Location = new System.Drawing.Point(8, 44);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(372, 119);
+            this.textBox1.TabIndex = 11;
+            this.textBox1.Text = "The game runs internally at 60 frames per second, so a setting of 60 will refresh" +
+    " all data once a second. If you expierence audio glitches or slowdowns, increase" +
+    " this value.";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(153, 15);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(38, 13);
+            this.label6.TabIndex = 10;
+            this.label6.Text = "frames";
+            // 
+            // numericFrameCount
+            // 
+            this.numericFrameCount.Location = new System.Drawing.Point(100, 13);
+            this.numericFrameCount.Maximum = new decimal(new int[] {
+            600,
+            0,
+            0,
+            0});
+            this.numericFrameCount.Name = "numericFrameCount";
+            this.numericFrameCount.Size = new System.Drawing.Size(47, 20);
+            this.numericFrameCount.TabIndex = 9;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(8, 15);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(86, 13);
+            this.label5.TabIndex = 8;
+            this.label5.Text = "Read data every";
+            // 
+            // KeyItemPage
+            // 
+            this.KeyItemPage.Controls.Add(this.cbKeyItemScaling);
+            this.KeyItemPage.Controls.Add(this.comboKeyItemsStyle);
+            this.KeyItemPage.Controls.Add(this.label1);
+            this.KeyItemPage.Controls.Add(this.cbKeyItemBorder);
+            this.KeyItemPage.Controls.Add(this.cbKeyItemDisplay);
+            this.KeyItemPage.Location = new System.Drawing.Point(4, 22);
+            this.KeyItemPage.Name = "KeyItemPage";
+            this.KeyItemPage.Padding = new System.Windows.Forms.Padding(3);
+            this.KeyItemPage.Size = new System.Drawing.Size(388, 238);
+            this.KeyItemPage.TabIndex = 0;
+            this.KeyItemPage.Text = "Key Items";
+            this.KeyItemPage.UseVisualStyleBackColor = true;
+            // 
+            // cbKeyItemScaling
+            // 
+            this.cbKeyItemScaling.AutoSize = true;
+            this.cbKeyItemScaling.Location = new System.Drawing.Point(8, 76);
+            this.cbKeyItemScaling.Name = "cbKeyItemScaling";
+            this.cbKeyItemScaling.Size = new System.Drawing.Size(128, 17);
+            this.cbKeyItemScaling.TabIndex = 4;
+            this.cbKeyItemScaling.Text = "Scale Icons with Font";
+            this.cbKeyItemScaling.UseVisualStyleBackColor = true;
             // 
             // comboKeyItemsStyle
             // 
@@ -348,20 +391,21 @@ namespace BizHawk.FreeEnterprise.Companion
             this.cbKeyItemDisplay.Text = "Display Key Items";
             this.cbKeyItemDisplay.UseVisualStyleBackColor = true;
             // 
-            // tabPage2
+            // PartyPage
             // 
-            this.tabPage2.Controls.Add(this.cbPartyAnimate);
-            this.tabPage2.Controls.Add(this.comboPartyPose);
-            this.tabPage2.Controls.Add(this.label2);
-            this.tabPage2.Controls.Add(this.cbPartyBorder);
-            this.tabPage2.Controls.Add(this.cbPartyDisplay);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(326, 195);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Party";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.PartyPage.Controls.Add(this.cbShowAnchor);
+            this.PartyPage.Controls.Add(this.cbPartyAnimate);
+            this.PartyPage.Controls.Add(this.comboPartyPose);
+            this.PartyPage.Controls.Add(this.label2);
+            this.PartyPage.Controls.Add(this.cbPartyBorder);
+            this.PartyPage.Controls.Add(this.cbPartyDisplay);
+            this.PartyPage.Location = new System.Drawing.Point(4, 22);
+            this.PartyPage.Name = "PartyPage";
+            this.PartyPage.Padding = new System.Windows.Forms.Padding(3);
+            this.PartyPage.Size = new System.Drawing.Size(388, 238);
+            this.PartyPage.TabIndex = 1;
+            this.PartyPage.Text = "Party";
+            this.PartyPage.UseVisualStyleBackColor = true;
             // 
             // cbPartyAnimate
             // 
@@ -411,17 +455,17 @@ namespace BizHawk.FreeEnterprise.Companion
             this.cbPartyDisplay.Text = "Display Party";
             this.cbPartyDisplay.UseVisualStyleBackColor = true;
             // 
-            // tabPage3
+            // ObjectivesPage
             // 
-            this.tabPage3.Controls.Add(this.cbObjectiveBorder);
-            this.tabPage3.Controls.Add(this.cbObjectiveDisplay);
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(326, 195);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Objectives";
-            this.tabPage3.UseVisualStyleBackColor = true;
+            this.ObjectivesPage.Controls.Add(this.cbObjectiveBorder);
+            this.ObjectivesPage.Controls.Add(this.cbObjectiveDisplay);
+            this.ObjectivesPage.Location = new System.Drawing.Point(4, 22);
+            this.ObjectivesPage.Name = "ObjectivesPage";
+            this.ObjectivesPage.Padding = new System.Windows.Forms.Padding(3);
+            this.ObjectivesPage.Size = new System.Drawing.Size(388, 238);
+            this.ObjectivesPage.TabIndex = 2;
+            this.ObjectivesPage.Text = "Objectives";
+            this.ObjectivesPage.UseVisualStyleBackColor = true;
             // 
             // cbObjectiveBorder
             // 
@@ -443,16 +487,27 @@ namespace BizHawk.FreeEnterprise.Companion
             this.cbObjectiveDisplay.Text = "Display Objectives";
             this.cbObjectiveDisplay.UseVisualStyleBackColor = true;
             // 
-            // tabPage6
+            // BossesPage
             // 
-            this.tabPage6.Controls.Add(this.cbBossesBorder);
-            this.tabPage6.Controls.Add(this.cbBossesDisplay);
-            this.tabPage6.Location = new System.Drawing.Point(4, 22);
-            this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Size = new System.Drawing.Size(326, 195);
-            this.tabPage6.TabIndex = 5;
-            this.tabPage6.Text = "Bosses";
-            this.tabPage6.UseVisualStyleBackColor = true;
+            this.BossesPage.Controls.Add(this.cbBossesScaling);
+            this.BossesPage.Controls.Add(this.cbBossesBorder);
+            this.BossesPage.Controls.Add(this.cbBossesDisplay);
+            this.BossesPage.Location = new System.Drawing.Point(4, 22);
+            this.BossesPage.Name = "BossesPage";
+            this.BossesPage.Size = new System.Drawing.Size(388, 238);
+            this.BossesPage.TabIndex = 5;
+            this.BossesPage.Text = "Bosses";
+            this.BossesPage.UseVisualStyleBackColor = true;
+            // 
+            // cbBossesScaling
+            // 
+            this.cbBossesScaling.AutoSize = true;
+            this.cbBossesScaling.Location = new System.Drawing.Point(8, 52);
+            this.cbBossesScaling.Name = "cbBossesScaling";
+            this.cbBossesScaling.Size = new System.Drawing.Size(128, 17);
+            this.cbBossesScaling.TabIndex = 8;
+            this.cbBossesScaling.Text = "Scale Icons with Font";
+            this.cbBossesScaling.UseVisualStyleBackColor = true;
             // 
             // cbBossesBorder
             // 
@@ -474,18 +529,38 @@ namespace BizHawk.FreeEnterprise.Companion
             this.cbBossesDisplay.Text = "Display Bosses";
             this.cbBossesDisplay.UseVisualStyleBackColor = true;
             // 
-            // tabPage5
+            // LocationsPage
             // 
-            this.tabPage5.Controls.Add(this.cbLocationsKI);
-            this.tabPage5.Controls.Add(this.cbLocationsChar);
-            this.tabPage5.Controls.Add(this.cbLocationsBorder);
-            this.tabPage5.Controls.Add(this.cbLocationsDisplay);
-            this.tabPage5.Location = new System.Drawing.Point(4, 22);
-            this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Size = new System.Drawing.Size(326, 195);
-            this.tabPage5.TabIndex = 4;
-            this.tabPage5.Text = "Locations";
-            this.tabPage5.UseVisualStyleBackColor = true;
+            this.LocationsPage.Controls.Add(this.cbLocationsKI);
+            this.LocationsPage.Controls.Add(this.cbLocationsChar);
+            this.LocationsPage.Controls.Add(this.cbLocationsBorder);
+            this.LocationsPage.Controls.Add(this.cbLocationsDisplay);
+            this.LocationsPage.Location = new System.Drawing.Point(4, 22);
+            this.LocationsPage.Name = "LocationsPage";
+            this.LocationsPage.Size = new System.Drawing.Size(388, 238);
+            this.LocationsPage.TabIndex = 4;
+            this.LocationsPage.Text = "Locations";
+            this.LocationsPage.UseVisualStyleBackColor = true;
+            // 
+            // cbLocationsKI
+            // 
+            this.cbLocationsKI.AutoSize = true;
+            this.cbLocationsKI.Location = new System.Drawing.Point(8, 52);
+            this.cbLocationsKI.Name = "cbLocationsKI";
+            this.cbLocationsKI.Size = new System.Drawing.Size(192, 17);
+            this.cbLocationsKI.TabIndex = 7;
+            this.cbLocationsKI.Text = "Show Available Key Item Locations";
+            this.cbLocationsKI.UseVisualStyleBackColor = true;
+            // 
+            // cbLocationsChar
+            // 
+            this.cbLocationsChar.AutoSize = true;
+            this.cbLocationsChar.Location = new System.Drawing.Point(8, 75);
+            this.cbLocationsChar.Name = "cbLocationsChar";
+            this.cbLocationsChar.Size = new System.Drawing.Size(197, 17);
+            this.cbLocationsChar.TabIndex = 6;
+            this.cbLocationsChar.Text = "Show Available Character Locations";
+            this.cbLocationsChar.UseVisualStyleBackColor = true;
             // 
             // cbLocationsBorder
             // 
@@ -511,16 +586,16 @@ namespace BizHawk.FreeEnterprise.Companion
             // 
             this.panel1.Controls.Add(this.button1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 221);
+            this.panel1.Location = new System.Drawing.Point(0, 264);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(334, 38);
+            this.panel1.Size = new System.Drawing.Size(396, 38);
             this.panel1.TabIndex = 1;
             // 
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button1.Location = new System.Drawing.Point(252, 8);
+            this.button1.Location = new System.Drawing.Point(314, 8);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 0;
@@ -528,52 +603,44 @@ namespace BizHawk.FreeEnterprise.Companion
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // cbLocationsChar
+            // cbShowAnchor
             // 
-            this.cbLocationsChar.AutoSize = true;
-            this.cbLocationsChar.Location = new System.Drawing.Point(8, 75);
-            this.cbLocationsChar.Name = "cbLocationsChar";
-            this.cbLocationsChar.Size = new System.Drawing.Size(197, 17);
-            this.cbLocationsChar.TabIndex = 6;
-            this.cbLocationsChar.Text = "Show Available Character Locations";
-            this.cbLocationsChar.UseVisualStyleBackColor = true;
-            // 
-            // cbLocationsKI
-            // 
-            this.cbLocationsKI.AutoSize = true;
-            this.cbLocationsKI.Location = new System.Drawing.Point(8, 52);
-            this.cbLocationsKI.Name = "cbLocationsKI";
-            this.cbLocationsKI.Size = new System.Drawing.Size(192, 17);
-            this.cbLocationsKI.TabIndex = 7;
-            this.cbLocationsKI.Text = "Show Available Key Item Locations";
-            this.cbLocationsKI.UseVisualStyleBackColor = true;
+            this.cbShowAnchor.AutoSize = true;
+            this.cbShowAnchor.Location = new System.Drawing.Point(8, 75);
+            this.cbShowAnchor.Name = "cbShowAnchor";
+            this.cbShowAnchor.Size = new System.Drawing.Size(249, 17);
+            this.cbShowAnchor.TabIndex = 9;
+            this.cbShowAnchor.Text = "Show Anchor (C:Hero and Vanilla:Agility aware)";
+            this.cbShowAnchor.UseVisualStyleBackColor = true;
             // 
             // SettingsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(334, 259);
+            this.ClientSize = new System.Drawing.Size(396, 302);
             this.Controls.Add(this.tabs);
             this.Controls.Add(this.panel1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.Name = "SettingsDialog";
             this.Text = "Display Settings";
             this.tabs.ResumeLayout(false);
-            this.tabPage4.ResumeLayout(false);
-            this.tabPage4.PerformLayout();
+            this.LayoutPage.ResumeLayout(false);
+            this.LayoutPage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericViewScale)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericFrameCount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericDockOffset)).EndInit();
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
-            this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
-            this.tabPage3.ResumeLayout(false);
-            this.tabPage3.PerformLayout();
-            this.tabPage6.ResumeLayout(false);
-            this.tabPage6.PerformLayout();
-            this.tabPage5.ResumeLayout(false);
-            this.tabPage5.PerformLayout();
+            this.GamePage.ResumeLayout(false);
+            this.GamePage.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericFrameCount)).EndInit();
+            this.KeyItemPage.ResumeLayout(false);
+            this.KeyItemPage.PerformLayout();
+            this.PartyPage.ResumeLayout(false);
+            this.PartyPage.PerformLayout();
+            this.ObjectivesPage.ResumeLayout(false);
+            this.ObjectivesPage.PerformLayout();
+            this.BossesPage.ResumeLayout(false);
+            this.BossesPage.PerformLayout();
+            this.LocationsPage.ResumeLayout(false);
+            this.LocationsPage.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -582,39 +649,36 @@ namespace BizHawk.FreeEnterprise.Companion
         #endregion
 
         private System.Windows.Forms.TabControl tabs;
-        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage KeyItemPage;
         private System.Windows.Forms.ComboBox comboKeyItemsStyle;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox cbKeyItemBorder;
         private System.Windows.Forms.CheckBox cbKeyItemDisplay;
-        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabPage PartyPage;
         private System.Windows.Forms.ComboBox comboPartyPose;
         private System.Windows.Forms.CheckBox cbPartyBorder;
         private System.Windows.Forms.CheckBox cbPartyDisplay;
-        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.TabPage ObjectivesPage;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.CheckBox cbObjectiveBorder;
         private System.Windows.Forms.CheckBox cbObjectiveDisplay;
-        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.TabPage LayoutPage;
         private System.Windows.Forms.NumericUpDown numericDockOffset;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox comboDockSide;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox cbDock;
-        private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.TabPage LocationsPage;
         private System.Windows.Forms.CheckBox cbLocationsBorder;
         private System.Windows.Forms.CheckBox cbLocationsDisplay;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.NumericUpDown numericFrameCount;
-        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.CheckBox cbPartyAnimate;
         private System.Windows.Forms.ComboBox comboLayout;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ComboBox comboAspect;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.TabPage tabPage6;
+        private System.Windows.Forms.TabPage BossesPage;
         private System.Windows.Forms.CheckBox cbBossesBorder;
         private System.Windows.Forms.CheckBox cbBossesDisplay;
         private System.Windows.Forms.NumericUpDown numericViewScale;
@@ -623,5 +687,13 @@ namespace BizHawk.FreeEnterprise.Companion
         private System.Windows.Forms.ComboBox comboInterpolation;
         private System.Windows.Forms.CheckBox cbLocationsKI;
         private System.Windows.Forms.CheckBox cbLocationsChar;
+        private System.Windows.Forms.TabPage GamePage;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.NumericUpDown numericFrameCount;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.CheckBox cbKeyItemScaling;
+        private System.Windows.Forms.CheckBox cbBossesScaling;
+        private System.Windows.Forms.CheckBox cbShowAnchor;
     }
 }

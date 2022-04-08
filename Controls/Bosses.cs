@@ -38,10 +38,13 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
 
         public override void RefreshSize()
         {
+            var iconSize = Properties.Settings.Default.BossIconScaling ? RenderingSettings.Scale(32) : 32;
+            var iconSpacing = Properties.Settings.Default.BossIconScaling ? RenderingSettings.TileSize : 8;
             var numOfItems = Data?.Seen.Count ?? 0;
-            var iconsPerRow = UseableWidth / 40;
+            var iconsPerRow = UseableWidth / (iconSize + iconSpacing);
             var rows = iconsPerRow >= numOfItems ? 1 : (int)Math.Ceiling((double)numOfItems / (double)iconsPerRow);
-            Height = RequestedHeight = MinimiumHeight + (rows * 32) + ((rows - 1) * 8) - 2;
+            Height = RequestedHeight = RenderingSettings.SetToTileInterval(MinimiumHeight + rows * (iconSize + iconSpacing));
+            _bossesByPosition.Clear();
             Invalidate();
         }
 
@@ -52,21 +55,37 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
 
             var sX = rect.X;
             var sY = rect.Y;
-            var cWidth = rect.Width / 8;
 
-            var keyIndex = 0;
-            var iconsPerRow = cWidth * 8 / 40;
-            var offset = (cWidth * 8 - iconsPerRow * 40) / 2;
+            var numOfItems = Data.Seen.Count;
+            var iconSize = Properties.Settings.Default.BossIconScaling ? RenderingSettings.Scale(32) : 32;
+            var iconSpacing = Properties.Settings.Default.BossIconScaling ? RenderingSettings.TileSize : 8;
+            var iconsPerRow = UseableWidth / (iconSize + iconSpacing);
+            var rows = iconsPerRow >= numOfItems ? 1 : (int)Math.Ceiling((double)numOfItems / (double)iconsPerRow);
+            iconsPerRow = numOfItems / rows;
+
+            while (iconsPerRow * rows < numOfItems)
+                iconsPerRow++;
+
+            var offset = (rect.Width - iconsPerRow * (iconSize + iconSpacing)) / 2;
+            var index = 0;
             foreach (var item in Data.Seen)
             {
-                _bossesByPosition[new Rectangle(sX + offset + ((keyIndex % iconsPerRow) * 40), sY + ((keyIndex / iconsPerRow) * 40), 32, 32)] = item.Key;
+                var bossRect = new Rectangle(
+                    sX + offset + ((index % iconsPerRow) * (iconSize + iconSpacing)),
+                    sY + ((index / iconsPerRow) * (iconSize + iconSpacing)),
+                    iconSize,
+                    iconSize);
+
+                _bossesByPosition[bossRect] = item.Key;
 
                 var iconSet = IconLookup.GetIcons(item.Key);
                 graphics.DrawImage(
                     item.Value ? iconSet.Found : iconSet.NotFound,
-                    sX + offset + ((keyIndex % iconsPerRow) * 40),
-                    sY + ((keyIndex / iconsPerRow) * 40), 32, 32);
-                keyIndex++;
+                    bossRect.X,
+                    bossRect.Y,
+                    bossRect.Width,
+                    bossRect.Height);
+                index++;
             }
         }
     }

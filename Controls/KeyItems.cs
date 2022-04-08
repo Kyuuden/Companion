@@ -36,13 +36,15 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
             switch (Properties.Settings.Default.KeyItemsStyle)
             {
                 case KeyItemStyle.Text:
-                    Height = RequestedHeight = MinimiumHeight + RenderingSettings.Scale(6 * 15-4);
+                    Height = RequestedHeight = MinimiumHeight + 9 * RenderingSettings.TileSize; //RenderingSettings.Scale(6 * 15-4);
                     break;
                 case KeyItemStyle.Icons:
+                    var iconSize = Properties.Settings.Default.KeyItemIconScaling ? RenderingSettings.Scale(32) : 32;
+                    var iconSpacing = Properties.Settings.Default.KeyItemIconScaling ? RenderingSettings.TileSize : 8;
                     var numOfItems = Data?.Items.Count ?? 0;
-                    var iconsPerRow = UseableWidth / 40;
+                    var iconsPerRow = UseableWidth / (iconSize + iconSpacing);
                     var rows = iconsPerRow >= numOfItems ? 1 : (int)Math.Ceiling((double)numOfItems / (double)iconsPerRow);
-                    Height = RequestedHeight = MinimiumHeight + (rows * 32) + ((rows - 1) * 8) - (BorderEnabled() ? 2 : 0);
+                    Height = RequestedHeight = RenderingSettings.SetToTileInterval(MinimiumHeight + rows * (iconSize + iconSpacing));
                     break;
             }
             Invalidate();
@@ -92,8 +94,8 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
                 foreach (var item in Data.Items.Values)
                 {
                     var itemRect = new Rectangle(
-                        sX + RenderingSettings.Scale((keyIndex % 3) * (cWidth * 8 / 3)),
-                        sY + RenderingSettings.Scale((keyIndex / 3) * 15),
+                        sX + (keyIndex % 3) * (rect.Width / 3),
+                        sY + RenderingSettings.Scale((keyIndex / 3) * 13),
                         item.ShortName.Length * RenderingSettings.TileSize,
                         RenderingSettings.TileSize);
 
@@ -110,19 +112,37 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
             }
             else
             {
-                var keyIndex = 0;
-                var iconsPerRow = cWidth * RenderingSettings.TileSize / 40;
-                var offset = (cWidth * RenderingSettings.TileSize - iconsPerRow * 40) / 2;
+                var numOfItems = Data.Items.Count;
+                var iconSize = Properties.Settings.Default.KeyItemIconScaling ? RenderingSettings.Scale(32) : 32;
+                var iconSpacing = Properties.Settings.Default.KeyItemIconScaling ? RenderingSettings.TileSize : 8;
+                var iconsPerRow = UseableWidth / (iconSize + iconSpacing);
+                var rows = iconsPerRow >= numOfItems ? 1 : (int)Math.Ceiling((double)numOfItems / (double)iconsPerRow);
+                iconsPerRow = numOfItems / rows;
+
+                while (iconsPerRow * rows < numOfItems)
+                    iconsPerRow++;
+
+                var hiconSpacing = (rect.Width - iconsPerRow * iconSize) / (iconsPerRow);
+                var offset = hiconSpacing / 2;
+                var index = 0;
                 foreach (var item in Data.Items.Values)
                 {
-                    _keyItemsByPosition[new Rectangle(sX + offset + ((keyIndex % iconsPerRow) * 40), sY + ((keyIndex / iconsPerRow) * 40), 32, 32)] = item.Key;
+                    var bossRect = new Rectangle(
+                        sX + offset + ((index % iconsPerRow) * (iconSize + hiconSpacing)),
+                        sY + ((index / iconsPerRow) * (iconSize + iconSpacing)),
+                        iconSize,
+                        iconSize);
+
+                    _keyItemsByPosition[bossRect] = item.Key;
 
                     var iconSet = IconLookup.GetIcons(item.Key);
                     graphics.DrawImage(
                         item.Used ? iconSet.Used : item.Found ? iconSet.Found : iconSet.NotFound,
-                        sX + offset + ((keyIndex % iconsPerRow) * 40),
-                        sY + ((keyIndex / iconsPerRow) * 40), 32, 32);
-                    keyIndex++;
+                        bossRect.X,
+                        bossRect.Y,
+                        bossRect.Width,
+                        bossRect.Height);
+                    index++;
                 }
             }
         }

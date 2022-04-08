@@ -25,9 +25,12 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
         public override void RefreshSize()
         {
             _charactersByPosition.Clear();
-            Height = RequestedHeight = RenderingSettings.Scale(48 * 5) <= UseableWidth ? MinimiumHeight + RenderingSettings.Scale(48) : MinimiumHeight + RenderingSettings.Scale(52 * 5);            
+            Height = RequestedHeight = RenderingSettings.Scale(48 * 5) <= UseableWidth 
+                ? MinimiumHeight + RenderingSettings.Scale(48) 
+                : MinimiumHeight + RenderingSettings.Scale(48) * 5 + RenderingSettings.TileSize * 4;
+            
             if (Properties.Settings.Default.Layout == Companion.Layout.Alternate)
-                Width = RenderingSettings.Scale(48 + 24);
+                Width = RenderingSettings.Scale(64);
 
             HasRightMargin = Properties.Settings.Default.Layout != Companion.Layout.Alternate;
             frame = 0;
@@ -89,6 +92,19 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
             }
 
 
+            State.Character? anchor = null;
+            if (Properties.Settings.Default.PartyShowAnchor && FlagSet != null)
+            {
+                if (FlagSet.VanillaAgility)
+                    anchor = Data.PriorityOrder.FirstOrDefault(c => c.ID != 0 && (c.Class == CharacterType.Cecil || c.Class == CharacterType.DarkKnightCecil));
+
+                if (anchor == null && FlagSet.CHero)
+                    anchor = Data.PriorityOrder.FirstOrDefault(c => c.ID == 1);
+
+                if (anchor == null)
+                    anchor = Data.PriorityOrder.FirstOrDefault(c => c.ID != 0);
+            }
+
             graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
             int charIndex = 0;
             foreach (var c in Data.Characters)
@@ -108,6 +124,9 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
                        sY,
                        RenderingSettings.Scale(48),
                        RenderingSettings.Scale(48));
+
+                    if (c == anchor)
+                       graphics.DrawImage(Properties.Resources.SMB3_item_Anchor, sX + RenderingSettings.Scale(48) - RenderingSettings.TileSize * 2, sY, RenderingSettings.TileSize*2, RenderingSettings.TileSize * 2);
                 }
 
                 switch (charactersPerRow)

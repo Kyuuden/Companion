@@ -27,7 +27,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
             {
                 var cWidth = UseableWidth / RenderingSettings.TileSize;
 
-                RequestedHeight = RenderingSettings.Scale(Data.Descriptions.SelectMany(d => RomData.Font.Breakup(d, cWidth - 3)).Count() * 10 + Data.Descriptions.Count() * 6 - 4) + MinimiumHeight;
+                RequestedHeight = RenderingSettings.SetToTileInterval(RenderingSettings.Scale(Data.Descriptions.SelectMany(d => RomData.Font.Breakup(d, cWidth - 3)).Count() * 10 + Data.Descriptions.Count() * 6 - 4) + MinimiumHeight);
 
                 if (Properties.Settings.Default.Layout == Companion.Layout.Alternate)
                     Height = Math.Max(RequestedHeight, Parent.Height - Location.Y);

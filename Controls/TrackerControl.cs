@@ -12,6 +12,8 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
         void RefreshSize();
         void NewFrame();
 
+        void Invalidate();
+
         int RequestedHeight { get; }
     }
 
@@ -51,8 +53,8 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
             Invalidate();
         }
 
-        protected int MinimiumHeight => RenderingSettings.Scale(BorderEnabled() ? 50 : 18);
-        protected int UseableWidth => (Width / RenderingSettings.TileSize * RenderingSettings.TileSize) - RenderingSettings.Scale(BorderEnabled() ? 32 : 16);
+        protected int MinimiumHeight => BorderEnabled() ? RenderingSettings.TileSize * 5 : RenderingSettings.TileSize * 3;
+        protected int UseableWidth => (Width / RenderingSettings.TileSize * RenderingSettings.TileSize) - RenderingSettings.Scale(16);
 
         public abstract void RefreshSize();
 
@@ -63,29 +65,31 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
 
             BackColor =  BorderEnabled() ? Color.Transparent : RomData.Font.GetBackColor();
 
+            //e.Graphics.DrawRectangle(new Pen(new SolidBrush(Color.Red)), e.ClipRectangle);
 
             base.OnPaint(e);
-            var cHeight = Math.Min(Height, e.ClipRectangle.Height) / RenderingSettings.TileSize - 3;
-            var cWidth = e.ClipRectangle.Width / RenderingSettings.TileSize - (HasRightMargin ? 2 : 1);
+            var cHeight = Math.Min(Height, e.ClipRectangle.Height) / RenderingSettings.TileSize - 2;
+            var cWidth = e.ClipRectangle.Width / RenderingSettings.TileSize;// - (HasRightMargin ? 2 : 1);
 
-            var sX = RenderingSettings.TileSize;
-            var sY = RenderingSettings.TileSize;
+            var sX = BorderEnabled() ? 0 : RenderingSettings.TileSize;
+            var sY = BorderEnabled() ? 0 : RenderingSettings.TileSize;
 
             if (BorderEnabled())
             {
                 BackColor = Color.Transparent;
                 RomData.Font.RenderBox(e.Graphics, sX, sY, Math.Min(Math.Max(12, Header.Length + 2), cWidth), 3);
                 if (HeaderCount is not null && cWidth > Math.Max(12, Header.Length + 2) + 6)
-                    RomData.Font.RenderBox(e.Graphics, cWidth * RenderingSettings.TileSize - RenderingSettings.Scale(6 * 8), sY, 7, 3);
+                    RomData.Font.RenderBox(e.Graphics, cWidth * RenderingSettings.TileSize - RenderingSettings.Scale(7 * 8), sY, 7, 3);
                 RomData.Font.RenderBox(e.Graphics, sX, sY + RenderingSettings.Scale(24), cWidth, cHeight - 1);
                 sX += RenderingSettings.TileSize;
-                sY += RenderingSettings.TileSize;
-                cWidth -= 2;
+                sY += RenderingSettings.TileSize;                
                 cHeight -= 4;
             }
 
+            cWidth -= 2;
+
             DrawHeader(e.Graphics, sX, sY, RenderingSettings.Scale(cWidth * 8));
-            sY += RenderingSettings.Scale(BorderEnabled() ? 24 : 12);
+            sY += RenderingSettings.Scale(BorderEnabled() ? 24 : 16);
 
             if (Data == null)
                 return;
@@ -100,7 +104,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
                 return;
 
             RomData.Font.RenderText(graphics, x, y, Header, TextMode.Normal);
-            var cWidth = Width / RenderingSettings.TileSize - 2;
+            var cWidth = Width / RenderingSettings.TileSize;
             if (HeaderCount is not null && cWidth > Math.Max(12, Header.Length + 2) + 6)
                 RomData.Font.RenderText(graphics, x + width - RenderingSettings.Scale(40), y, HeaderCount, HeaderCountTextMode);
         }

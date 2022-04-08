@@ -20,5 +20,8 @@ namespace BizHawk.FreeEnterprise.Companion
 
         public float ScaleF(float size)
             => (float)(size * ViewScale);
+
+        public int SetToTileInterval(int size)
+            => (int)Math.Ceiling(size / TileSizeF) * TileSize;
     }
 }

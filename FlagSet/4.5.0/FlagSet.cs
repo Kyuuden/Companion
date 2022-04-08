@@ -134,6 +134,9 @@ namespace BizHawk.FreeEnterprise.Companion.FlagSet._4._5._0
         public override bool OWinGame => Objectives.WinGame;
         public override bool OWinCrystal => Objectives.WinCrystal;
         public override bool No10KeyItemBonus => Other.No10KeyItemBonus;
+
+        public override bool CHero => Characters.Hero;
+        public override bool VanillaAgility => Other.VanillaAgility;
     }
 
     public class Objectives
