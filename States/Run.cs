@@ -37,7 +37,11 @@ namespace BizHawk.FreeEnterprise.Companion.State
             _container = container;
             _memory = memory;
 
+#if BIZHAWK_28
             Hash = _container.GameInfo.GetGameInfo()?.Hash;
+#elif BIZHAWK_261
+            Hash = _container.GameInfo.GetRomHash();
+#endif
             var jsonLength = _memory.CartRom.Read<uint>(CARTROMAddresses.MetadataLengthAddress, CARTROMAddresses.MetadataLengthBytes * 8);
             if (jsonLength > 0)
             {

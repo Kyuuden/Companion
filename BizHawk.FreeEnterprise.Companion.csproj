@@ -6,13 +6,30 @@
 		<UseWindowsForms>True</UseWindowsForms>
 		<AssemblyName>BizHawk.FreeEnterprise.Companion</AssemblyName>
 		<RootNamespace>BizHawk.FreeEnterprise.Companion</RootNamespace>
+		<Configurations>BizHawk 2.8 Debug;BizHawk 2.8 Release;BizHawk 2.6.1 Debug;BizHawk 2.6.1 Release</Configurations>
+		<Version>1.2.3</Version>
 	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-	  <OutputPath>BizHawk\ExternalTools\</OutputPath>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='BizHawk 2.8 Release|AnyCPU'">
+	  <DefineConstants>TRACE;BIZHAWK_28</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='BizHawk 2.6.1 Release|AnyCPU'">
+	  <DefineConstants>TRACE;BIZHAWK_261</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='BizHawk 2.8 Debug|AnyCPU'">
+	  <DefineConstants>TRACE;BIZHAWK_28</DefineConstants>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='BizHawk 2.6.1 Debug|AnyCPU'">
+	  <DefineConstants>TRACE;BIZHAWK_261</DefineConstants>
 	</PropertyGroup>
 	<ItemGroup>
+	  <Compile Remove="BizHawk2.6.1\**" />
+	  <Compile Remove="BizHawk2.8\**" />
 	  <Compile Remove="BizHawk\**" />
+	  <EmbeddedResource Remove="BizHawk2.6.1\**" />
+	  <EmbeddedResource Remove="BizHawk2.8\**" />
 	  <EmbeddedResource Remove="BizHawk\**" />
+	  <None Remove="BizHawk2.6.1\**" />
+	  <None Remove="BizHawk2.8\**" />
 	  <None Remove="BizHawk\**" />
 	</ItemGroup>
 	<ItemGroup>
@@ -29,18 +46,24 @@
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="all" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-		<Reference Include="BizHawk.Emulation.Common">
-		  <HintPath>BizHawk\dll\BizHawk.Emulation.Common.dll</HintPath>
-		</Reference>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />		
 		<Reference Include="PresentationCore">
 		  <HintPath>..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\PresentationCore.dll</HintPath>
 		</Reference>
 		<Reference Include="System.Windows.Forms" />
-		<Reference Include="BizHawk.Client.Common" HintPath="$(ProjectDir)/BizHawk/dll/BizHawk.Client.Common.dll" />
-		<Reference Include="BizHawk.Client.EmuHawk" HintPath="$(ProjectDir)/BizHawk/EmuHawk.exe" />
-		<Reference Include="BizHawk.Common" HintPath="$(ProjectDir)/BizHawk/dll/BizHawk.Common.dll" />
-		<Reference Include="BizHawk.WinForms.Controls" HintPath="$(ProjectDir)/BizHawk/dll/BizHawk.WinForms.Controls.dll" />
+		
+		<Reference Include="BizHawk.Emulation.Common" HintPath="$(ProjectDir)/BizHawk2.8/dll/BizHawk.Emulation.Common.dll" Condition="'$(Configuration)|$(Platform)'=='BizHawk 2.8 Debug|AnyCPU' OR '$(Configuration)|$(Platform)'=='BizHawk 2.8 Release|AnyCPU'" />
+		<Reference Include="BizHawk.Client.Common" HintPath="$(ProjectDir)/BizHawk2.8/dll/BizHawk.Client.Common.dll" Condition="'$(Configuration)|$(Platform)'=='BizHawk 2.8 Debug|AnyCPU' OR '$(Configuration)|$(Platform)'=='BizHawk 2.8 Release|AnyCPU'" />
+		<Reference Include="BizHawk.Client.EmuHawk" HintPath="$(ProjectDir)/BizHawk2.8/EmuHawk.exe" Condition="'$(Configuration)|$(Platform)'=='BizHawk 2.8 Debug|AnyCPU' OR '$(Configuration)|$(Platform)'=='BizHawk 2.8 Release|AnyCPU'" />
+		<Reference Include="BizHawk.Common" HintPath="$(ProjectDir)/BizHawk2.8/dll/BizHawk.Common.dll" Condition="'$(Configuration)|$(Platform)'=='BizHawk 2.8 Debug|AnyCPU' OR '$(Configuration)|$(Platform)'=='BizHawk 2.8 Release|AnyCPU'" />
+		<Reference Include="BizHawk.WinForms.Controls" HintPath="$(ProjectDir)/BizHawk2.8/dll/BizHawk.WinForms.Controls.dll" Condition="'$(Configuration)|$(Platform)'=='BizHawk 2.8 Debug|AnyCPU' OR '$(Configuration)|$(Platform)'=='BizHawk 2.8 Release|AnyCPU'" />
+		
+		<Reference Include="BizHawk.Emulation.Common" HintPath="$(ProjectDir)/BizHawk2.6.1/dll/BizHawk.Emulation.Common.dll" Condition="'$(Configuration)|$(Platform)'=='BizHawk 2.6.1 Debug|AnyCPU' OR '$(Configuration)|$(Platform)'=='BizHawk 2.6.1 Release|AnyCPU'" />
+		<Reference Include="BizHawk.Client.Common" HintPath="$(ProjectDir)/BizHawk2.6.1/dll/BizHawk.Client.Common.dll" Condition="'$(Configuration)|$(Platform)'=='BizHawk 2.6.1 Debug|AnyCPU' OR '$(Configuration)|$(Platform)'=='BizHawk 2.6.1 Release|AnyCPU'" />
+		<Reference Include="BizHawk.Client.EmuHawk" HintPath="$(ProjectDir)/BizHawk2.6.1/EmuHawk.exe" Condition="'$(Configuration)|$(Platform)'=='BizHawk 2.6.1 Debug|AnyCPU' OR '$(Configuration)|$(Platform)'=='BizHawk 2.6.1 Release|AnyCPU'" />
+		<Reference Include="BizHawk.Common" HintPath="$(ProjectDir)/BizHawk2.6.1/dll/BizHawk.Common.dll" Condition="'$(Configuration)|$(Platform)'=='BizHawk 2.6.1 Debug|AnyCPU' OR '$(Configuration)|$(Platform)'=='BizHawk 2.6.1 Release|AnyCPU'" />
+		<Reference Include="BizHawk.WinForms.Controls" HintPath="$(ProjectDir)/BizHawk2.6.1/dll/BizHawk.WinForms.Controls.dll" Condition="'$(Configuration)|$(Platform)'=='BizHawk 2.6.1 Debug|AnyCPU' OR '$(Configuration)|$(Platform)'=='BizHawk 2.6.1 Release|AnyCPU'" />
+		
 	</ItemGroup>
 	<ItemGroup>
 	  <Compile Update="Properties\Resources.Designer.cs">
@@ -67,6 +90,7 @@
 	  </None>
 	</ItemGroup>
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Copy SourceFiles="$(OutputPath)$(MSBuildProjectName).dll" DestinationFolder="$(ProjectDir)/BizHawk/ExternalTools" />
+		<Copy SourceFiles="$(OutputPath)$(MSBuildProjectName).dll" DestinationFolder="$(ProjectDir)/BizHawk2.8/ExternalTools" Condition="'$(Configuration)|$(Platform)'=='BizHawk 2.8 Debug|AnyCPU' OR '$(Configuration)|$(Platform)'=='BizHawk 2.8 Debug|AnyCPU'" />
+		<Copy SourceFiles="$(OutputPath)$(MSBuildProjectName).dll" DestinationFolder="$(ProjectDir)/BizHawk2.6.1/ExternalTools" Condition="'$(Configuration)|$(Platform)'=='BizHawk 2.6.1 Debug|AnyCPU' OR '$(Configuration)|$(Platform)'=='BizHawk 2.6.1 Debug|AnyCPU'" />
 	</Target>
 </Project>

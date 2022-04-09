@@ -21,7 +21,7 @@
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="Dock" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
+      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="DockSide" Type="BizHawk.FreeEnterprise.Companion.DockSide" Scope="User">
       <Value Profile="(Default)">Right</Value>
@@ -36,7 +36,7 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="AspectRatio" Type="BizHawk.FreeEnterprise.Companion.AspectRatio" Scope="User">
-      <Value Profile="(Default)">_16x10</Value>
+      <Value Profile="(Default)">_16x9</Value>
     </Setting>
     <Setting Name="Layout" Type="BizHawk.FreeEnterprise.Companion.Layout" Scope="User">
       <Value Profile="(Default)">Original</Value>
@@ -66,7 +66,7 @@
       <Value Profile="(Default)">0, 0</Value>
     </Setting>
     <Setting Name="Size" Type="System.Drawing.Size" Scope="User">
-      <Value Profile="(Default)">800, 450</Value>
+      <Value Profile="(Default)">450, 800</Value>
     </Setting>
     <Setting Name="IconScaling" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>

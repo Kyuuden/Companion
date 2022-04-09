@@ -1,9 +1,14 @@
 {
   "profiles": {
-    "BizHawk.FreeEnterprise.Companion": {
+    "BizHawk 2.8": {
       "commandName": "Executable",
-      "executablePath": "C:\\Users\\Jason\\source\\repos\\Companion\\BizHawk\\EmuHawk.exe",
-      "workingDirectory": "C:\\Users\\Jason\\source\\repos\\Companion\\BizHawk\\"
+      "executablePath": "C:\\Users\\Jason\\source\\repos\\Companion\\BizHawk2.8\\EmuHawk.exe",
+      "workingDirectory": "C:\\Users\\Jason\\source\\repos\\Companion\\BizHawk2.8"
+    },
+    "BizHawk 2.6.1": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Users\\Jason\\source\\repos\\Companion\\BizHawk2.6.1\\EmuHawk.exe",
+      "workingDirectory": "C:\\Users\\Jason\\source\\repos\\Companion\\BizHawk2.6.1\\"
     }
   }
 }

@@ -97,7 +97,7 @@ namespace BizHawk.FreeEnterprise.Companion.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
         public bool Dock {
             get {
                 return ((bool)(this["Dock"]));
@@ -157,7 +157,7 @@ namespace BizHawk.FreeEnterprise.Companion.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("_16x10")]
+        [global::System.Configuration.DefaultSettingValueAttribute("_16x9")]
         public global::BizHawk.FreeEnterprise.Companion.AspectRatio AspectRatio {
             get {
                 return ((global::BizHawk.FreeEnterprise.Companion.AspectRatio)(this["AspectRatio"]));
@@ -277,7 +277,7 @@ namespace BizHawk.FreeEnterprise.Companion.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("800, 450")]
+        [global::System.Configuration.DefaultSettingValueAttribute("450, 800")]
         public global::System.Drawing.Size Size {
             get {
                 return ((global::System.Drawing.Size)(this["Size"]));
