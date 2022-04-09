@@ -19,12 +19,9 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
 
     public abstract class TrackerControl<T> : UserControl, ITrackerControl
     {
-        protected TrackerControl(
-            RenderingSettings renderingSettings,
-            Func<bool> borderEnabled)
+        protected TrackerControl(RenderingSettings renderingSettings)
         {
             RenderingSettings = renderingSettings;
-            BorderEnabled = borderEnabled;
         }
 
         protected RenderingSettings RenderingSettings { get; private set; }
@@ -33,7 +30,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
 
         protected RomData? RomData { get; private set; }
         protected IFlagSet? FlagSet { get; private set; }
-        public Func<bool> BorderEnabled { get; }
+        public bool BorderEnabled => Properties.Settings.Default.BordersEnabled;
         public int RequestedHeight { get; protected set; }
 
         protected bool HasRightMargin { get; set; } = true;
@@ -53,7 +50,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
             Invalidate();
         }
 
-        protected int MinimiumHeight => BorderEnabled() ? RenderingSettings.TileSize * 5 : RenderingSettings.TileSize * 3;
+        protected int MinimiumHeight => BorderEnabled ? RenderingSettings.TileSize * 5 : RenderingSettings.TileSize * 3;
         protected int UseableWidth => (Width / RenderingSettings.TileSize * RenderingSettings.TileSize) - RenderingSettings.Scale(16);
 
         public abstract void RefreshSize();
@@ -63,7 +60,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
             if (RomData == null)
                 return;
 
-            BackColor =  BorderEnabled() ? Color.Transparent : RomData.Font.GetBackColor();
+            BackColor =  BorderEnabled ? Color.Transparent : RomData.Font.GetBackColor();
 
             //e.Graphics.DrawRectangle(new Pen(new SolidBrush(Color.Red)), e.ClipRectangle);
 
@@ -71,10 +68,10 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
             var cHeight = Math.Min(Height, e.ClipRectangle.Height) / RenderingSettings.TileSize - 2;
             var cWidth = e.ClipRectangle.Width / RenderingSettings.TileSize;// - (HasRightMargin ? 2 : 1);
 
-            var sX = BorderEnabled() ? 0 : RenderingSettings.TileSize;
-            var sY = BorderEnabled() ? 0 : RenderingSettings.TileSize;
+            var sX = BorderEnabled ? 0 : RenderingSettings.TileSize;
+            var sY = BorderEnabled ? 0 : RenderingSettings.TileSize;
 
-            if (BorderEnabled())
+            if (BorderEnabled)
             {
                 BackColor = Color.Transparent;
                 RomData.Font.RenderBox(e.Graphics, sX, sY, Math.Min(Math.Max(12, Header.Length + 2), cWidth), 3);
@@ -89,7 +86,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
             cWidth -= 2;
 
             DrawHeader(e.Graphics, sX, sY, RenderingSettings.Scale(cWidth * 8));
-            sY += RenderingSettings.Scale(BorderEnabled() ? 24 : 16);
+            sY += RenderingSettings.Scale(BorderEnabled ? 24 : 16);
 
             if (Data == null)
                 return;

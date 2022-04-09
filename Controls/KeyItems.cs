@@ -15,7 +15,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
         private KeyItemType lastToolTipItem;
 
         public KeyItems(RenderingSettings renderingSettings)
-            : base(renderingSettings, () => Properties.Settings.Default.KeyItemsBorder)
+            : base(renderingSettings)
         {
             InitializeComponent();
             keyItemsToolTip.SetToolTip(this, "Key Items");
@@ -39,8 +39,8 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
                     Height = RequestedHeight = MinimiumHeight + 9 * RenderingSettings.TileSize; //RenderingSettings.Scale(6 * 15-4);
                     break;
                 case KeyItemStyle.Icons:
-                    var iconSize = Properties.Settings.Default.KeyItemIconScaling ? RenderingSettings.Scale(32) : 32;
-                    var iconSpacing = Properties.Settings.Default.KeyItemIconScaling ? RenderingSettings.TileSize : 8;
+                    var iconSize = Properties.Settings.Default.IconScaling ? RenderingSettings.Scale(32) : 32;
+                    var iconSpacing = Properties.Settings.Default.IconScaling ? RenderingSettings.TileSize : 8;
                     var numOfItems = Data?.Items.Count ?? 0;
                     var iconsPerRow = UseableWidth / (iconSize + iconSpacing);
                     var rows = iconsPerRow >= numOfItems ? 1 : (int)Math.Ceiling((double)numOfItems / (double)iconsPerRow);
@@ -113,8 +113,8 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
             else
             {
                 var numOfItems = Data.Items.Count;
-                var iconSize = Properties.Settings.Default.KeyItemIconScaling ? RenderingSettings.Scale(32) : 32;
-                var iconSpacing = Properties.Settings.Default.KeyItemIconScaling ? RenderingSettings.TileSize : 8;
+                var iconSize = Properties.Settings.Default.IconScaling ? RenderingSettings.Scale(32) : 32;
+                var iconSpacing = Properties.Settings.Default.IconScaling ? RenderingSettings.TileSize : 8;
                 var iconsPerRow = UseableWidth / (iconSize + iconSpacing);
                 var rows = iconsPerRow >= numOfItems ? 1 : (int)Math.Ceiling((double)numOfItems / (double)iconsPerRow);
                 iconsPerRow = numOfItems / rows;

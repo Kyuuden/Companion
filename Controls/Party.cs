@@ -17,7 +17,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
         int frameIndex = 0;
 
         public Party(RenderingSettings renderingSettings)
-            : base(renderingSettings, ()=>Properties.Settings.Default.PartyBorder)
+            : base(renderingSettings)
         {
             InitializeComponent();
         }

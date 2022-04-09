@@ -1,7 +1,9 @@
 ﻿using BizHawk.FreeEnterprise.Companion.Extensions;
 using BizHawk.FreeEnterprise.Companion.Sprites;
 using System;
+using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Text;
 using System.Windows.Forms;
 
 namespace BizHawk.FreeEnterprise.Companion
@@ -11,75 +13,58 @@ namespace BizHawk.FreeEnterprise.Companion
         public SettingsDialog()
         {
             InitializeComponent();
-            cbKeyItemDisplay.Checked = Properties.Settings.Default.KeyItemsDisplay;
-            cbKeyItemBorder.Checked = Properties.Settings.Default.KeyItemsBorder;
-            comboKeyItemsStyle.BindEnumToCombobox(Properties.Settings.Default.KeyItemsStyle);
-            cbKeyItemScaling.Checked = Properties.Settings.Default.KeyItemIconScaling;
 
-            cbPartyDisplay.Checked = Properties.Settings.Default.PartyDisplay;
-            cbPartyBorder.Checked = Properties.Settings.Default.PartyBorder;
-            comboPartyPose.BindEnumToCombobox(Properties.Settings.Default.PartyPose);
-            cbPartyAnimate.Checked = Properties.Settings.Default.PartyAnimate;
-            cbShowAnchor.Checked = Properties.Settings.Default.PartyShowAnchor;
+            Icon = null;
 
-            cbObjectiveDisplay.Checked = Properties.Settings.Default.ObjectivesDisplay;
-            cbObjectiveBorder.Checked = Properties.Settings.Default.ObjectivesBorder;
-
-            cbBossesDisplay.Checked = Properties.Settings.Default.BossesDisplay;
-            cbBossesBorder.Checked = Properties.Settings.Default.BossesBorder;
-            cbBossesScaling.Checked = Properties.Settings.Default.BossIconScaling;
-
-            cbLocationsDisplay.Checked = Properties.Settings.Default.LocationsDisplay;
-            cbLocationsBorder.Checked = Properties.Settings.Default.LocationsBorder;
-            cbLocationsKI.Checked = Properties.Settings.Default.LocationsShowKeyItems;
-            cbLocationsChar.Checked = Properties.Settings.Default.LocationsShowCharacters;
+            comboLayout.BindEnumToCombobox(Properties.Settings.Default.Layout);
+            numericViewScale.Value = Properties.Settings.Default.ViewScale;
+            comboInterpolation.BindEnumToCombobox(Properties.Settings.Default.InterpolationMode, InterpolationMode.Invalid, InterpolationMode.HighQualityBicubic, InterpolationMode.HighQualityBilinear);
+            ScaleIconsCheckBox.Checked = Properties.Settings.Default.IconScaling;
+            BordersCheckBox.Checked = Properties.Settings.Default.BordersEnabled;
 
             cbDock.Checked = Properties.Settings.Default.Dock;
             numericDockOffset.Value = Properties.Settings.Default.DockOffset;
             comboDockSide.BindEnumToCombobox(Properties.Settings.Default.DockSide);
-            numericViewScale.Value = Properties.Settings.Default.ViewScale;
-            comboInterpolation.BindEnumToCombobox(Properties.Settings.Default.InterpolationMode, InterpolationMode.Invalid, InterpolationMode.HighQualityBicubic, InterpolationMode.HighQualityBilinear);
+            comboAspect.BindEnumToCombobox(Properties.Settings.Default.AspectRatio);            
 
             numericFrameCount.Value = Properties.Settings.Default.RefreshEveryNFrames;
-
-            comboAspect.BindEnumToCombobox(Properties.Settings.Default.AspectRatio);
-            comboLayout.BindEnumToCombobox(Properties.Settings.Default.Layout);
+            KeyItemsCheckBox.Checked = Properties.Settings.Default.KeyItemsDisplay;
+            KeyItemStyleComboBox.BindEnumToCombobox(Properties.Settings.Default.KeyItemsStyle);
+            PartyCheckBox.Checked = Properties.Settings.Default.PartyDisplay;
+            PartyPoseComboBox.BindEnumToCombobox(Properties.Settings.Default.PartyPose);
+            PartyPoseAnimateCheckBox.Checked = Properties.Settings.Default.PartyAnimate;
+            PartyAnchorCheckBox.Checked = Properties.Settings.Default.PartyShowAnchor;
+            ObjectivesCheckBox.Checked = Properties.Settings.Default.ObjectivesDisplay;
+            BossesCheckBox.Checked = Properties.Settings.Default.BossesDisplay;
+            LocationsCheckBox.Checked = Properties.Settings.Default.LocationsDisplay;
+            LocationsKeyItemsCheckBox.Checked = Properties.Settings.Default.LocationsShowKeyItems;
+            LocationsCharactersCheckBox.Checked = Properties.Settings.Default.LocationsShowCharacters;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default.KeyItemsDisplay = cbKeyItemDisplay.Checked;
-            Properties.Settings.Default.KeyItemsBorder = cbKeyItemBorder.Checked;
-            Properties.Settings.Default.KeyItemsStyle = (KeyItemStyle)comboKeyItemsStyle.SelectedValue;
-            Properties.Settings.Default.KeyItemIconScaling = cbKeyItemScaling.Checked;
-
-            Properties.Settings.Default.PartyDisplay = cbPartyDisplay.Checked;
-            Properties.Settings.Default.PartyBorder = cbPartyBorder.Checked;
-            Properties.Settings.Default.PartyPose = (Pose)comboPartyPose.SelectedValue;
-            Properties.Settings.Default.PartyAnimate = cbPartyAnimate.Checked;
-            Properties.Settings.Default.PartyShowAnchor = cbShowAnchor.Checked;
-
-            Properties.Settings.Default.ObjectivesDisplay = cbObjectiveDisplay.Checked;
-            Properties.Settings.Default.ObjectivesBorder = cbObjectiveBorder.Checked;
-
-            Properties.Settings.Default.BossesDisplay = cbBossesDisplay.Checked;
-            Properties.Settings.Default.BossesBorder = cbBossesBorder.Checked;
-            Properties.Settings.Default.BossIconScaling = cbBossesScaling.Checked;
-
-            Properties.Settings.Default.LocationsDisplay = cbLocationsDisplay.Checked;
-            Properties.Settings.Default.LocationsBorder = cbLocationsBorder.Checked;
-            Properties.Settings.Default.LocationsShowKeyItems = cbLocationsKI.Checked;
-            Properties.Settings.Default.LocationsShowCharacters = cbLocationsChar.Checked;
-
+            Properties.Settings.Default.Layout = (Layout)comboLayout.SelectedValue;
+            Properties.Settings.Default.ViewScale = (int)numericViewScale.Value;
+            Properties.Settings.Default.IconScaling = ScaleIconsCheckBox.Checked;
+            Properties.Settings.Default.InterpolationMode = (InterpolationMode)comboInterpolation.SelectedValue;
+            Properties.Settings.Default.BordersEnabled = BordersCheckBox.Checked;
             Properties.Settings.Default.Dock = cbDock.Checked;
             Properties.Settings.Default.DockOffset = (int)numericDockOffset.Value;
             Properties.Settings.Default.DockSide = (DockSide)comboDockSide.SelectedValue;
             Properties.Settings.Default.AspectRatio = (AspectRatio)comboAspect.SelectedValue;
-            Properties.Settings.Default.Layout = (Layout)comboLayout.SelectedValue;
-            Properties.Settings.Default.ViewScale = (int)numericViewScale.Value;
-            Properties.Settings.Default.InterpolationMode = (InterpolationMode)comboInterpolation.SelectedValue;
 
             Properties.Settings.Default.RefreshEveryNFrames = (int)numericFrameCount.Value;
+            Properties.Settings.Default.KeyItemsDisplay = KeyItemsCheckBox.Checked;
+            Properties.Settings.Default.KeyItemsStyle = (KeyItemStyle)KeyItemStyleComboBox.SelectedValue;
+            Properties.Settings.Default.PartyDisplay = PartyCheckBox.Checked;
+            Properties.Settings.Default.PartyPose = (Pose)PartyPoseComboBox.SelectedValue;
+            Properties.Settings.Default.PartyAnimate = PartyPoseAnimateCheckBox.Checked;
+            Properties.Settings.Default.PartyShowAnchor = PartyAnchorCheckBox.Checked;
+            Properties.Settings.Default.ObjectivesDisplay = ObjectivesCheckBox.Checked;
+            Properties.Settings.Default.BossesDisplay = BossesCheckBox.Checked;
+            Properties.Settings.Default.LocationsDisplay = LocationsCheckBox.Checked;
+            Properties.Settings.Default.LocationsShowKeyItems = LocationsKeyItemsCheckBox.Checked;
+            Properties.Settings.Default.LocationsShowCharacters = LocationsCharactersCheckBox.Checked;
 
             Properties.Settings.Default.Save();
         }

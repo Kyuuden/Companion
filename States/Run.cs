@@ -57,7 +57,7 @@ namespace BizHawk.FreeEnterprise.Companion.State
             party = new Party();
             Locations = new Locations(FlagSet);
             Locations.UpdateKeyItems(KeyItems);
-            ReadBackgroundColor();
+            BackgroundColor = Color.FromArgb(0, 0, 99);
 
             Stopwatch = new Stopwatch();
             State = RunState.Loading;

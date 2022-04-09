@@ -8,7 +8,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
     public partial class Objectives : TrackerControl<State.Objectives>
     {
         public Objectives(RenderingSettings renderingSettings)
-            : base(renderingSettings, () =>Properties.Settings.Default.ObjectivesBorder)
+            : base(renderingSettings)
         {
             InitializeComponent();
         }

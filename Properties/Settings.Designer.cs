@@ -37,18 +37,6 @@ namespace BizHawk.FreeEnterprise.Companion.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool KeyItemsBorder {
-            get {
-                return ((bool)(this["KeyItemsBorder"]));
-            }
-            set {
-                this["KeyItemsBorder"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Text")]
         public global::BizHawk.FreeEnterprise.Companion.KeyItemStyle KeyItemsStyle {
             get {
@@ -73,18 +61,6 @@ namespace BizHawk.FreeEnterprise.Companion.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool PartyBorder {
-            get {
-                return ((bool)(this["PartyBorder"]));
-            }
-            set {
-                this["PartyBorder"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Stand")]
         public global::BizHawk.FreeEnterprise.Companion.Sprites.Pose PartyPose {
             get {
@@ -104,18 +80,6 @@ namespace BizHawk.FreeEnterprise.Companion.Properties {
             }
             set {
                 this["ObjectivesDisplay"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool ObjectivesBorder {
-            get {
-                return ((bool)(this["ObjectivesBorder"]));
-            }
-            set {
-                this["ObjectivesBorder"] = value;
             }
         }
         
@@ -164,18 +128,6 @@ namespace BizHawk.FreeEnterprise.Companion.Properties {
             }
             set {
                 this["LocationsDisplay"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool LocationsBorder {
-            get {
-                return ((bool)(this["LocationsBorder"]));
-            }
-            set {
-                this["LocationsBorder"] = value;
             }
         }
         
@@ -236,18 +188,6 @@ namespace BizHawk.FreeEnterprise.Companion.Properties {
             }
             set {
                 this["BossesDisplay"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool BossesBorder {
-            get {
-                return ((bool)(this["BossesBorder"]));
-            }
-            set {
-                this["BossesBorder"] = value;
             }
         }
         
@@ -350,24 +290,12 @@ namespace BizHawk.FreeEnterprise.Companion.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool KeyItemIconScaling {
+        public bool IconScaling {
             get {
-                return ((bool)(this["KeyItemIconScaling"]));
+                return ((bool)(this["IconScaling"]));
             }
             set {
-                this["KeyItemIconScaling"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool BossIconScaling {
-            get {
-                return ((bool)(this["BossIconScaling"]));
-            }
-            set {
-                this["BossIconScaling"] = value;
+                this["IconScaling"] = value;
             }
         }
         
@@ -380,6 +308,18 @@ namespace BizHawk.FreeEnterprise.Companion.Properties {
             }
             set {
                 this["PartyShowAnchor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool BordersEnabled {
+            get {
+                return ((bool)(this["BordersEnabled"]));
+            }
+            set {
+                this["BordersEnabled"] = value;
             }
         }
     }

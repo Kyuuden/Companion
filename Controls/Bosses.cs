@@ -15,7 +15,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
         private Dictionary<Rectangle, BossType> _bossesByPosition = new Dictionary<Rectangle, BossType>();
 
         public Bosses(RenderingSettings renderingSettings)
-            :base(renderingSettings, () => Properties.Settings.Default.BossesBorder)
+            :base(renderingSettings)
         {
             InitializeComponent();
         }
@@ -38,8 +38,8 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
 
         public override void RefreshSize()
         {
-            var iconSize = Properties.Settings.Default.BossIconScaling ? RenderingSettings.Scale(32) : 32;
-            var iconSpacing = Properties.Settings.Default.BossIconScaling ? RenderingSettings.TileSize : 8;
+            var iconSize = Properties.Settings.Default.IconScaling ? RenderingSettings.Scale(32) : 32;
+            var iconSpacing = Properties.Settings.Default.IconScaling ? RenderingSettings.TileSize : 8;
             var numOfItems = Data?.Seen.Count ?? 0;
             var iconsPerRow = UseableWidth / (iconSize + iconSpacing);
             var rows = iconsPerRow >= numOfItems ? 1 : (int)Math.Ceiling((double)numOfItems / (double)iconsPerRow);
@@ -57,8 +57,8 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
             var sY = rect.Y;
 
             var numOfItems = Data.Seen.Count;
-            var iconSize = Properties.Settings.Default.BossIconScaling ? RenderingSettings.Scale(32) : 32;
-            var iconSpacing = Properties.Settings.Default.BossIconScaling ? RenderingSettings.TileSize : 8;
+            var iconSize = Properties.Settings.Default.IconScaling ? RenderingSettings.Scale(32) : 32;
+            var iconSpacing = Properties.Settings.Default.IconScaling ? RenderingSettings.TileSize : 8;
             var iconsPerRow = UseableWidth / (iconSize + iconSpacing);
             var rows = iconsPerRow >= numOfItems ? 1 : (int)Math.Ceiling((double)numOfItems / (double)iconsPerRow);
             iconsPerRow = numOfItems / rows;

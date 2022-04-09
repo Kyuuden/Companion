@@ -7,7 +7,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
     public partial class Locations : TrackerControl<State.Locations>
     {
         public Locations(RenderingSettings renderingSettings)
-            : base(renderingSettings, () => Properties.Settings.Default.LocationsBorder)
+            : base(renderingSettings)
         {
             InitializeComponent();
         }
@@ -87,7 +87,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
             }
 
             if (more)
-                RomData.Font.RenderText(graphics, (cWidth - 1) * RenderingSettings.TileSize, rect.Y + rect.Height - RenderingSettings.TileSize, $"...", TextMode.Normal);
+                RomData.Font.RenderText(graphics, (cWidth - 3) * RenderingSettings.TileSize, rect.Y + rect.Height - RenderingSettings.TileSize, $"...", TextMode.Normal);
         }
 
         protected override string Header => "Open Locations";
