@@ -240,7 +240,7 @@ namespace BizHawk.FreeEnterprise.Companion.State
                 if (State != RunState.Unknown)
                 {
                     State = RunState.Unknown;
-                    MessageBox.Show("Automatic timing of runs is not supported on the Snes9x core. Please use the BSNES or BSNESv115+ core to have this feature.", "Timing unavailable");
+                    MessageBox.Show("Automatic timing of runs is not supported on the Snes9x core. Please use the BSNES or BSNESv115+ core to have this feature.\nThe Timer can be manually started/stopped by double clicking on it.", "Timing unavailable");
                 }
             }
         }
