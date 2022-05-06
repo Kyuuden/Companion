@@ -37,7 +37,8 @@ namespace BizHawk.FreeEnterprise.Companion
         public const int BattleStatusStickers = 0x0679c0;
         public const int BattleStatusStickersBytes = 0x600;
 
-        public const int BattleStatusStickersPalette = 0x74b20;
+        public const int BattleStatusStickersGreyScalePalette = 0x74b00;
+        public const int BattleStatusStickersColorPalette = 0x74b20;
 
         public static IEnumerable<int> CharacterSpritesAddresses 
         {
@@ -60,7 +61,6 @@ namespace BizHawk.FreeEnterprise.Companion
         }
 
         public const int CharacterSpritesAddress = 0x0d0000;
-
         public const int CharacterAlternateSprites01Address = 0x140000;
         public const int CharacterAlternateSprites02Address = 0x148000;
         public const int CharacterAlternateSprites03Address = 0x150000;
@@ -98,8 +98,6 @@ namespace BizHawk.FreeEnterprise.Companion
         }
 
         public const int CharacterPalettesAddress            = 0x0e7d00;
-
-        // Alternate palettes not used since i cannot figure out mapping yet.
         public const int CharacterAlternatePalettes01Address = 0x147d00;
         public const int CharacterAlternatePalettes02Address = 0x14fd00;
         public const int CharacterAlternatePalettes03Address = 0x157d00;
@@ -131,6 +129,8 @@ namespace BizHawk.FreeEnterprise.Companion
     public static class SystemBusAddresses
     {
         public const int ZeromusDeathAnimation = 0x03F591;
+        public const int Congradulations = 0x10963E;
         public const int MenuSaveNewGame = 0x019914;
+        public const int MenuLoadSaveGame = 0x0198AD;
     }
 }

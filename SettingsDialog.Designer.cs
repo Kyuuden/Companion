@@ -31,6 +31,8 @@ namespace BizHawk.FreeEnterprise.Companion
         {
             this.tabs = new System.Windows.Forms.TabControl();
             this.LayoutPage = new System.Windows.Forms.TabPage();
+            this.BordersCheckBox = new System.Windows.Forms.CheckBox();
+            this.ScaleIconsCheckBox = new System.Windows.Forms.CheckBox();
             this.label10 = new System.Windows.Forms.Label();
             this.comboInterpolation = new System.Windows.Forms.ComboBox();
             this.numericViewScale = new System.Windows.Forms.NumericUpDown();
@@ -45,33 +47,37 @@ namespace BizHawk.FreeEnterprise.Companion
             this.numericDockOffset = new System.Windows.Forms.NumericUpDown();
             this.label3 = new System.Windows.Forms.Label();
             this.TrackingPage = new System.Windows.Forms.TabPage();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.numericFrameCount = new System.Windows.Forms.NumericUpDown();
-            this.label5 = new System.Windows.Forms.Label();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
-            this.ScaleIconsCheckBox = new System.Windows.Forms.CheckBox();
-            this.BordersCheckBox = new System.Windows.Forms.CheckBox();
-            this.KeyItemsCheckBox = new System.Windows.Forms.CheckBox();
-            this.PartyCheckBox = new System.Windows.Forms.CheckBox();
-            this.ObjectivesCheckBox = new System.Windows.Forms.CheckBox();
-            this.BossesCheckBox = new System.Windows.Forms.CheckBox();
-            this.LocationsCheckBox = new System.Windows.Forms.CheckBox();
-            this.KeyItemStyleComboBox = new System.Windows.Forms.ComboBox();
-            this.label11 = new System.Windows.Forms.Label();
+            this.LocationsKeyItemsCheckBox = new System.Windows.Forms.CheckBox();
+            this.LocationsCharactersCheckBox = new System.Windows.Forms.CheckBox();
             this.PartyAnchorCheckBox = new System.Windows.Forms.CheckBox();
             this.PartyPoseAnimateCheckBox = new System.Windows.Forms.CheckBox();
             this.PartyPoseComboBox = new System.Windows.Forms.ComboBox();
             this.label12 = new System.Windows.Forms.Label();
-            this.LocationsKeyItemsCheckBox = new System.Windows.Forms.CheckBox();
-            this.LocationsCharactersCheckBox = new System.Windows.Forms.CheckBox();
+            this.KeyItemStyleComboBox = new System.Windows.Forms.ComboBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.LocationsCheckBox = new System.Windows.Forms.CheckBox();
+            this.BossesCheckBox = new System.Windows.Forms.CheckBox();
+            this.ObjectivesCheckBox = new System.Windows.Forms.CheckBox();
+            this.PartyCheckBox = new System.Windows.Forms.CheckBox();
+            this.KeyItemsCheckBox = new System.Windows.Forms.CheckBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.numericFrameCount = new System.Windows.Forms.NumericUpDown();
+            this.label5 = new System.Windows.Forms.Label();
+            this.ExtrasPage = new System.Windows.Forms.TabPage();
+            this.KeyItemCustomTextBox = new System.Windows.Forms.TextBox();
+            this.KeyItemCustomRadio = new System.Windows.Forms.RadioButton();
+            this.KeyItemBonkDefaultRadio = new System.Windows.Forms.RadioButton();
+            this.KeyItemBonkCheckBox = new System.Windows.Forms.CheckBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
             this.tabs.SuspendLayout();
             this.LayoutPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericViewScale)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericDockOffset)).BeginInit();
             this.TrackingPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericFrameCount)).BeginInit();
+            this.ExtrasPage.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -79,6 +85,7 @@ namespace BizHawk.FreeEnterprise.Companion
             // 
             this.tabs.Controls.Add(this.LayoutPage);
             this.tabs.Controls.Add(this.TrackingPage);
+            this.tabs.Controls.Add(this.ExtrasPage);
             this.tabs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabs.Location = new System.Drawing.Point(0, 0);
             this.tabs.Name = "tabs";
@@ -109,6 +116,26 @@ namespace BizHawk.FreeEnterprise.Companion
             this.LayoutPage.TabIndex = 3;
             this.LayoutPage.Text = "General";
             this.LayoutPage.UseVisualStyleBackColor = true;
+            // 
+            // BordersCheckBox
+            // 
+            this.BordersCheckBox.AutoSize = true;
+            this.BordersCheckBox.Location = new System.Drawing.Point(11, 93);
+            this.BordersCheckBox.Name = "BordersCheckBox";
+            this.BordersCheckBox.Size = new System.Drawing.Size(215, 17);
+            this.BordersCheckBox.TabIndex = 17;
+            this.BordersCheckBox.Text = "Show FFIV Style Border around trackers";
+            this.BordersCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // ScaleIconsCheckBox
+            // 
+            this.ScaleIconsCheckBox.AutoSize = true;
+            this.ScaleIconsCheckBox.Location = new System.Drawing.Point(130, 41);
+            this.ScaleIconsCheckBox.Name = "ScaleIconsCheckBox";
+            this.ScaleIconsCheckBox.Size = new System.Drawing.Size(100, 17);
+            this.ScaleIconsCheckBox.TabIndex = 16;
+            this.ScaleIconsCheckBox.Text = "Scale Icons too";
+            this.ScaleIconsCheckBox.UseVisualStyleBackColor = true;
             // 
             // label10
             // 
@@ -278,6 +305,132 @@ namespace BizHawk.FreeEnterprise.Companion
             this.TrackingPage.Text = "Tracking";
             this.TrackingPage.UseVisualStyleBackColor = true;
             // 
+            // LocationsKeyItemsCheckBox
+            // 
+            this.LocationsKeyItemsCheckBox.AutoSize = true;
+            this.LocationsKeyItemsCheckBox.Location = new System.Drawing.Point(120, 225);
+            this.LocationsKeyItemsCheckBox.Name = "LocationsKeyItemsCheckBox";
+            this.LocationsKeyItemsCheckBox.Size = new System.Drawing.Size(192, 17);
+            this.LocationsKeyItemsCheckBox.TabIndex = 24;
+            this.LocationsKeyItemsCheckBox.Text = "Show Available Key Item Locations";
+            this.LocationsKeyItemsCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // LocationsCharactersCheckBox
+            // 
+            this.LocationsCharactersCheckBox.AutoSize = true;
+            this.LocationsCharactersCheckBox.Location = new System.Drawing.Point(120, 248);
+            this.LocationsCharactersCheckBox.Name = "LocationsCharactersCheckBox";
+            this.LocationsCharactersCheckBox.Size = new System.Drawing.Size(197, 17);
+            this.LocationsCharactersCheckBox.TabIndex = 23;
+            this.LocationsCharactersCheckBox.Text = "Show Available Character Locations";
+            this.LocationsCharactersCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // PartyAnchorCheckBox
+            // 
+            this.PartyAnchorCheckBox.AutoSize = true;
+            this.PartyAnchorCheckBox.Location = new System.Drawing.Point(120, 156);
+            this.PartyAnchorCheckBox.Name = "PartyAnchorCheckBox";
+            this.PartyAnchorCheckBox.Size = new System.Drawing.Size(249, 17);
+            this.PartyAnchorCheckBox.TabIndex = 22;
+            this.PartyAnchorCheckBox.Text = "Show Anchor (C:Hero and Vanilla:Agility aware)";
+            this.PartyAnchorCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // PartyPoseAnimateCheckBox
+            // 
+            this.PartyPoseAnimateCheckBox.AutoSize = true;
+            this.PartyPoseAnimateCheckBox.Location = new System.Drawing.Point(256, 133);
+            this.PartyPoseAnimateCheckBox.Name = "PartyPoseAnimateCheckBox";
+            this.PartyPoseAnimateCheckBox.Size = new System.Drawing.Size(124, 17);
+            this.PartyPoseAnimateCheckBox.TabIndex = 21;
+            this.PartyPoseAnimateCheckBox.Text = "Animate (If available)";
+            this.PartyPoseAnimateCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // PartyPoseComboBox
+            // 
+            this.PartyPoseComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.PartyPoseComboBox.FormattingEnabled = true;
+            this.PartyPoseComboBox.Location = new System.Drawing.Point(156, 131);
+            this.PartyPoseComboBox.Name = "PartyPoseComboBox";
+            this.PartyPoseComboBox.Size = new System.Drawing.Size(94, 21);
+            this.PartyPoseComboBox.TabIndex = 20;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(117, 134);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(34, 13);
+            this.label12.TabIndex = 19;
+            this.label12.Text = "Pose:";
+            // 
+            // KeyItemStyleComboBox
+            // 
+            this.KeyItemStyleComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.KeyItemStyleComboBox.FormattingEnabled = true;
+            this.KeyItemStyleComboBox.Location = new System.Drawing.Point(156, 104);
+            this.KeyItemStyleComboBox.Name = "KeyItemStyleComboBox";
+            this.KeyItemStyleComboBox.Size = new System.Drawing.Size(94, 21);
+            this.KeyItemStyleComboBox.TabIndex = 18;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(117, 107);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(33, 13);
+            this.label11.TabIndex = 17;
+            this.label11.Text = "Style:";
+            // 
+            // LocationsCheckBox
+            // 
+            this.LocationsCheckBox.AutoSize = true;
+            this.LocationsCheckBox.Location = new System.Drawing.Point(11, 225);
+            this.LocationsCheckBox.Name = "LocationsCheckBox";
+            this.LocationsCheckBox.Size = new System.Drawing.Size(103, 17);
+            this.LocationsCheckBox.TabIndex = 16;
+            this.LocationsCheckBox.Text = "Track Locations";
+            this.LocationsCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // BossesCheckBox
+            // 
+            this.BossesCheckBox.AutoSize = true;
+            this.BossesCheckBox.Location = new System.Drawing.Point(11, 202);
+            this.BossesCheckBox.Name = "BossesCheckBox";
+            this.BossesCheckBox.Size = new System.Drawing.Size(142, 17);
+            this.BossesCheckBox.TabIndex = 15;
+            this.BossesCheckBox.Text = "Track Bosses (Manually)";
+            this.BossesCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // ObjectivesCheckBox
+            // 
+            this.ObjectivesCheckBox.AutoSize = true;
+            this.ObjectivesCheckBox.Location = new System.Drawing.Point(11, 179);
+            this.ObjectivesCheckBox.Name = "ObjectivesCheckBox";
+            this.ObjectivesCheckBox.Size = new System.Drawing.Size(107, 17);
+            this.ObjectivesCheckBox.TabIndex = 14;
+            this.ObjectivesCheckBox.Text = "Track Objectives";
+            this.ObjectivesCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // PartyCheckBox
+            // 
+            this.PartyCheckBox.AutoSize = true;
+            this.PartyCheckBox.Location = new System.Drawing.Point(11, 133);
+            this.PartyCheckBox.Name = "PartyCheckBox";
+            this.PartyCheckBox.Size = new System.Drawing.Size(81, 17);
+            this.PartyCheckBox.TabIndex = 13;
+            this.PartyCheckBox.Text = "Track Party";
+            this.PartyCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // KeyItemsCheckBox
+            // 
+            this.KeyItemsCheckBox.AutoSize = true;
+            this.KeyItemsCheckBox.Location = new System.Drawing.Point(11, 106);
+            this.KeyItemsCheckBox.Name = "KeyItemsCheckBox";
+            this.KeyItemsCheckBox.Size = new System.Drawing.Size(103, 17);
+            this.KeyItemsCheckBox.TabIndex = 12;
+            this.KeyItemsCheckBox.Text = "Track Key Items";
+            this.KeyItemsCheckBox.UseVisualStyleBackColor = true;
+            // 
             // textBox1
             // 
             this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -322,6 +475,60 @@ namespace BizHawk.FreeEnterprise.Companion
             this.label5.TabIndex = 8;
             this.label5.Text = "Read tracking data every";
             // 
+            // ExtrasPage
+            // 
+            this.ExtrasPage.Controls.Add(this.KeyItemCustomTextBox);
+            this.ExtrasPage.Controls.Add(this.KeyItemCustomRadio);
+            this.ExtrasPage.Controls.Add(this.KeyItemBonkDefaultRadio);
+            this.ExtrasPage.Controls.Add(this.KeyItemBonkCheckBox);
+            this.ExtrasPage.Location = new System.Drawing.Point(4, 22);
+            this.ExtrasPage.Name = "ExtrasPage";
+            this.ExtrasPage.Size = new System.Drawing.Size(388, 271);
+            this.ExtrasPage.TabIndex = 7;
+            this.ExtrasPage.Text = "Extras";
+            this.ExtrasPage.UseVisualStyleBackColor = true;
+            // 
+            // KeyItemCustomTextBox
+            // 
+            this.KeyItemCustomTextBox.Location = new System.Drawing.Point(94, 61);
+            this.KeyItemCustomTextBox.MaxLength = 13;
+            this.KeyItemCustomTextBox.Name = "KeyItemCustomTextBox";
+            this.KeyItemCustomTextBox.Size = new System.Drawing.Size(100, 20);
+            this.KeyItemCustomTextBox.TabIndex = 16;
+            // 
+            // KeyItemCustomRadio
+            // 
+            this.KeyItemCustomRadio.AutoSize = true;
+            this.KeyItemCustomRadio.Location = new System.Drawing.Point(25, 62);
+            this.KeyItemCustomRadio.Name = "KeyItemCustomRadio";
+            this.KeyItemCustomRadio.Size = new System.Drawing.Size(63, 17);
+            this.KeyItemCustomRadio.TabIndex = 15;
+            this.KeyItemCustomRadio.TabStop = true;
+            this.KeyItemCustomRadio.Text = "Custom:";
+            this.KeyItemCustomRadio.UseVisualStyleBackColor = true;
+            this.KeyItemCustomRadio.CheckedChanged += new System.EventHandler(this.KeyItemCustomRadio_CheckedChanged);
+            // 
+            // KeyItemBonkDefaultRadio
+            // 
+            this.KeyItemBonkDefaultRadio.AutoSize = true;
+            this.KeyItemBonkDefaultRadio.Location = new System.Drawing.Point(25, 39);
+            this.KeyItemBonkDefaultRadio.Name = "KeyItemBonkDefaultRadio";
+            this.KeyItemBonkDefaultRadio.Size = new System.Drawing.Size(87, 17);
+            this.KeyItemBonkDefaultRadio.TabIndex = 14;
+            this.KeyItemBonkDefaultRadio.TabStop = true;
+            this.KeyItemBonkDefaultRadio.Text = "Default Zonk";
+            this.KeyItemBonkDefaultRadio.UseVisualStyleBackColor = true;
+            // 
+            // KeyItemBonkCheckBox
+            // 
+            this.KeyItemBonkCheckBox.AutoSize = true;
+            this.KeyItemBonkCheckBox.Location = new System.Drawing.Point(8, 16);
+            this.KeyItemBonkCheckBox.Name = "KeyItemBonkCheckBox";
+            this.KeyItemBonkCheckBox.Size = new System.Drawing.Size(141, 17);
+            this.KeyItemBonkCheckBox.TabIndex = 13;
+            this.KeyItemBonkCheckBox.Text = "New Key Item Animation";
+            this.KeyItemBonkCheckBox.UseVisualStyleBackColor = true;
+            // 
             // panel1
             // 
             this.panel1.Controls.Add(this.button1);
@@ -343,152 +550,6 @@ namespace BizHawk.FreeEnterprise.Companion
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // ScaleIconsCheckBox
-            // 
-            this.ScaleIconsCheckBox.AutoSize = true;
-            this.ScaleIconsCheckBox.Location = new System.Drawing.Point(130, 41);
-            this.ScaleIconsCheckBox.Name = "ScaleIconsCheckBox";
-            this.ScaleIconsCheckBox.Size = new System.Drawing.Size(100, 17);
-            this.ScaleIconsCheckBox.TabIndex = 16;
-            this.ScaleIconsCheckBox.Text = "Scale Icons too";
-            this.ScaleIconsCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // BordersCheckBox
-            // 
-            this.BordersCheckBox.AutoSize = true;
-            this.BordersCheckBox.Location = new System.Drawing.Point(11, 93);
-            this.BordersCheckBox.Name = "BordersCheckBox";
-            this.BordersCheckBox.Size = new System.Drawing.Size(215, 17);
-            this.BordersCheckBox.TabIndex = 17;
-            this.BordersCheckBox.Text = "Show FFIV Style Border around trackers";
-            this.BordersCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // KeyItemsCheckBox
-            // 
-            this.KeyItemsCheckBox.AutoSize = true;
-            this.KeyItemsCheckBox.Location = new System.Drawing.Point(11, 106);
-            this.KeyItemsCheckBox.Name = "KeyItemsCheckBox";
-            this.KeyItemsCheckBox.Size = new System.Drawing.Size(103, 17);
-            this.KeyItemsCheckBox.TabIndex = 12;
-            this.KeyItemsCheckBox.Text = "Track Key Items";
-            this.KeyItemsCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // PartyCheckBox
-            // 
-            this.PartyCheckBox.AutoSize = true;
-            this.PartyCheckBox.Location = new System.Drawing.Point(11, 133);
-            this.PartyCheckBox.Name = "PartyCheckBox";
-            this.PartyCheckBox.Size = new System.Drawing.Size(81, 17);
-            this.PartyCheckBox.TabIndex = 13;
-            this.PartyCheckBox.Text = "Track Party";
-            this.PartyCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // ObjectivesCheckBox
-            // 
-            this.ObjectivesCheckBox.AutoSize = true;
-            this.ObjectivesCheckBox.Location = new System.Drawing.Point(11, 179);
-            this.ObjectivesCheckBox.Name = "ObjectivesCheckBox";
-            this.ObjectivesCheckBox.Size = new System.Drawing.Size(107, 17);
-            this.ObjectivesCheckBox.TabIndex = 14;
-            this.ObjectivesCheckBox.Text = "Track Objectives";
-            this.ObjectivesCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // BossesCheckBox
-            // 
-            this.BossesCheckBox.AutoSize = true;
-            this.BossesCheckBox.Location = new System.Drawing.Point(11, 202);
-            this.BossesCheckBox.Name = "BossesCheckBox";
-            this.BossesCheckBox.Size = new System.Drawing.Size(142, 17);
-            this.BossesCheckBox.TabIndex = 15;
-            this.BossesCheckBox.Text = "Track Bosses (Manually)";
-            this.BossesCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // LocationsCheckBox
-            // 
-            this.LocationsCheckBox.AutoSize = true;
-            this.LocationsCheckBox.Location = new System.Drawing.Point(11, 225);
-            this.LocationsCheckBox.Name = "LocationsCheckBox";
-            this.LocationsCheckBox.Size = new System.Drawing.Size(103, 17);
-            this.LocationsCheckBox.TabIndex = 16;
-            this.LocationsCheckBox.Text = "Track Locations";
-            this.LocationsCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // KeyItemStyleComboBox
-            // 
-            this.KeyItemStyleComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.KeyItemStyleComboBox.FormattingEnabled = true;
-            this.KeyItemStyleComboBox.Location = new System.Drawing.Point(156, 104);
-            this.KeyItemStyleComboBox.Name = "KeyItemStyleComboBox";
-            this.KeyItemStyleComboBox.Size = new System.Drawing.Size(94, 21);
-            this.KeyItemStyleComboBox.TabIndex = 18;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(117, 107);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(33, 13);
-            this.label11.TabIndex = 17;
-            this.label11.Text = "Style:";
-            // 
-            // PartyAnchorCheckBox
-            // 
-            this.PartyAnchorCheckBox.AutoSize = true;
-            this.PartyAnchorCheckBox.Location = new System.Drawing.Point(120, 156);
-            this.PartyAnchorCheckBox.Name = "PartyAnchorCheckBox";
-            this.PartyAnchorCheckBox.Size = new System.Drawing.Size(249, 17);
-            this.PartyAnchorCheckBox.TabIndex = 22;
-            this.PartyAnchorCheckBox.Text = "Show Anchor (C:Hero and Vanilla:Agility aware)";
-            this.PartyAnchorCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // PartyPoseAnimateCheckBox
-            // 
-            this.PartyPoseAnimateCheckBox.AutoSize = true;
-            this.PartyPoseAnimateCheckBox.Location = new System.Drawing.Point(256, 133);
-            this.PartyPoseAnimateCheckBox.Name = "PartyPoseAnimateCheckBox";
-            this.PartyPoseAnimateCheckBox.Size = new System.Drawing.Size(124, 17);
-            this.PartyPoseAnimateCheckBox.TabIndex = 21;
-            this.PartyPoseAnimateCheckBox.Text = "Animate (If available)";
-            this.PartyPoseAnimateCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // PartyPoseComboBox
-            // 
-            this.PartyPoseComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.PartyPoseComboBox.FormattingEnabled = true;
-            this.PartyPoseComboBox.Location = new System.Drawing.Point(156, 131);
-            this.PartyPoseComboBox.Name = "PartyPoseComboBox";
-            this.PartyPoseComboBox.Size = new System.Drawing.Size(94, 21);
-            this.PartyPoseComboBox.TabIndex = 20;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(117, 134);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(34, 13);
-            this.label12.TabIndex = 19;
-            this.label12.Text = "Pose:";
-            // 
-            // LocationsKeyItemsCheckBox
-            // 
-            this.LocationsKeyItemsCheckBox.AutoSize = true;
-            this.LocationsKeyItemsCheckBox.Location = new System.Drawing.Point(120, 225);
-            this.LocationsKeyItemsCheckBox.Name = "LocationsKeyItemsCheckBox";
-            this.LocationsKeyItemsCheckBox.Size = new System.Drawing.Size(192, 17);
-            this.LocationsKeyItemsCheckBox.TabIndex = 24;
-            this.LocationsKeyItemsCheckBox.Text = "Show Available Key Item Locations";
-            this.LocationsKeyItemsCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // LocationsCharactersCheckBox
-            // 
-            this.LocationsCharactersCheckBox.AutoSize = true;
-            this.LocationsCharactersCheckBox.Location = new System.Drawing.Point(120, 248);
-            this.LocationsCharactersCheckBox.Name = "LocationsCharactersCheckBox";
-            this.LocationsCharactersCheckBox.Size = new System.Drawing.Size(197, 17);
-            this.LocationsCharactersCheckBox.TabIndex = 23;
-            this.LocationsCharactersCheckBox.Text = "Show Available Character Locations";
-            this.LocationsCharactersCheckBox.UseVisualStyleBackColor = true;
-            // 
             // SettingsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -507,6 +568,8 @@ namespace BizHawk.FreeEnterprise.Companion
             this.TrackingPage.ResumeLayout(false);
             this.TrackingPage.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericFrameCount)).EndInit();
+            this.ExtrasPage.ResumeLayout(false);
+            this.ExtrasPage.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -551,5 +614,10 @@ namespace BizHawk.FreeEnterprise.Companion
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.ComboBox KeyItemStyleComboBox;
         private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TabPage ExtrasPage;
+        private System.Windows.Forms.CheckBox KeyItemBonkCheckBox;
+        private System.Windows.Forms.RadioButton KeyItemBonkDefaultRadio;
+        private System.Windows.Forms.RadioButton KeyItemCustomRadio;
+        private System.Windows.Forms.TextBox KeyItemCustomTextBox;
     }
 }

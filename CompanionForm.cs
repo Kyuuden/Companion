@@ -1,13 +1,16 @@
 ﻿using BizHawk.Client.Common;
 using BizHawk.Client.EmuHawk;
 using BizHawk.Emulation.Common;
+using BizHawk.FreeEnterprise.Companion.Configuration;
 using BizHawk.FreeEnterprise.Companion.Controls;
+using BizHawk.FreeEnterprise.Companion.Database;
 using BizHawk.FreeEnterprise.Companion.State;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
@@ -26,20 +29,21 @@ namespace BizHawk.FreeEnterprise.Companion
         private ApiContainer APIs => _maybeAPIContainer!;
 
         public bool MainListenersSet { get; private set; }
-        public RenderingSettings RenderingSettings { get; private set; }
+
+        public PersistentStorage? Storage { get; private set; }
 
         private MemoryMapping? Memory;
         private RomData? RomData;
         private Run? Run;
+        private Settings settings;
 
         private List<ITrackerControl> trackerControls;
 
         public CompanionForm()
         {
-            RenderingSettings = new RenderingSettings();
             InitializeComponent();
 
-            var icon = new Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream("BizHawk.FreeEnterprise.Companion.Resources.Crystal.png"));
+            var icon = new Bitmap(Assembly.GetExecutingAssembly().GetManifestResourceStream(Strings.IconResource));
             var hIcon = icon.GetHicon();
             Icon = Icon.FromHandle(hIcon);
 
@@ -48,20 +52,19 @@ namespace BizHawk.FreeEnterprise.Companion
             if (names != null)
                 TextLookup.Initialize(names);
 
+            settings = new Settings();
+            if (File.Exists(Strings.SettingsPath))
+                settings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(Strings.SettingsPath)) ?? new Settings();
+
             trackerControls = new List<ITrackerControl>(new ITrackerControl[] { KeyItemsControl, PartyControl, ObjectivesControl, BossesControl, LocationsControl });
-            Properties.Settings.Default.PropertyChanged += SettingsChanged;
         }
+
+        private bool ControlsInitialized => trackerControls.All(c => c.IsInitialized);
 
         private void TrackerControl_Resize(object sender, EventArgs e)
         {
-            WideLayoutPanel.Height = Math.Max(PartyControl.RequestedHeight, KeyItemsControl.RequestedHeight + ObjectivesControl.RequestedHeight);
-        }
-
-        private void SettingsChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            SetControlsVisibility();
-            trackerControls.ForEach(c => c.RefreshSize());
-            DockToScreen();
+           // if (ControlsInitialized)
+                WideLayoutPanel.Height = Math.Max(PartyControl.RequestedHeight, KeyItemsControl.RequestedHeight + ObjectivesControl.RequestedHeight);
         }
 
         private void DockToScreen()
@@ -70,15 +73,15 @@ namespace BizHawk.FreeEnterprise.Companion
             if (main == null)
                 return;
 
-            if (Properties.Settings.Default.Dock)
+            if (settings.Dock)
             {
                 FormBorderStyle = FormBorderStyle.FixedSingle;
                 var oldSize = Size;
-                Size = new Size((APIs.EmuClient.ScreenHeight() * 16 / (Properties.Settings.Default.AspectRatio == AspectRatio._16x10 ? 10 : 9)) - APIs.EmuClient.ScreenWidth(), main.Height);
+                Size = new Size((APIs.EmuClient.ScreenHeight() * 16 / (settings.AspectRatio == AspectRatio._16x10 ? 10 : 9)) - APIs.EmuClient.ScreenWidth(), main.Height);
                 Location = new Point(
-                    Properties.Settings.Default.DockSide == DockSide.Right
-                        ? main.Location.X + main.Width + Properties.Settings.Default.DockOffset
-                        : main.Location.X - Width - Properties.Settings.Default.DockOffset,
+                    settings.DockSide == DockSide.Right
+                        ? main.Location.X + main.Width + settings.DockOffset
+                        : main.Location.X - Width - settings.DockOffset,
                     main.Location.Y);
 
                 if (oldSize != Size)
@@ -89,9 +92,12 @@ namespace BizHawk.FreeEnterprise.Companion
                 FormBorderStyle = FormBorderStyle.Sizable;
             }
 
+            if (!ControlsInitialized)
+                return;
+
             bool layoutUpdated = false;
 
-            switch (Properties.Settings.Default.Layout)
+            switch (settings.Layout)
             {
                 case Companion.Layout.Original:
                     if (KeyItemsControl.Parent != this)
@@ -139,7 +145,7 @@ namespace BizHawk.FreeEnterprise.Companion
         {
             base.OnResize(e);
 
-            if (Properties.Settings.Default.Dock)
+            if (settings == null || settings.Dock)
                 return;
 
             trackerControls?.ForEach(f =>
@@ -172,24 +178,24 @@ namespace BizHawk.FreeEnterprise.Companion
                 ((MainForm)MainForm).Move += FreeEnterpriseCompanionForm_Move;
                 ((MainForm)MainForm).Resize += FreeEnterpriseCompanionForm_Resize;
                 MainListenersSet = true;
-                if (!Properties.Settings.Default.Dock)
+                if (!settings.Dock)
                 {
-                    if (Properties.Settings.Default.Maximized)
+                    if (settings.Maximized)
                     {
-                        Location = Properties.Settings.Default.Location;
+                        Location = settings.Location;
                         WindowState = FormWindowState.Maximized;
-                        Size = Properties.Settings.Default.Size;
+                        Size = settings.Size;
                     }
-                    else if (Properties.Settings.Default.Minimized)
+                    else if (settings.Minimized)
                     {
-                        Location = Properties.Settings.Default.Location;
+                        Location = settings.Location;
                         WindowState = FormWindowState.Minimized;
-                        Size = Properties.Settings.Default.Size;
+                        Size = settings.Size;
                     }
                     else
                     {
-                        Location = Properties.Settings.Default.Location;
-                        Size = Properties.Settings.Default.Size;
+                        Location = settings.Location;
+                        Size = settings.Size;
                     }
                 }
             }
@@ -197,30 +203,30 @@ namespace BizHawk.FreeEnterprise.Companion
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            if (!Properties.Settings.Default.Dock)
+            if (!settings.Dock)
             {
                 if (WindowState == FormWindowState.Maximized)
                 {
-                    Properties.Settings.Default.Location = RestoreBounds.Location;
-                    Properties.Settings.Default.Size = RestoreBounds.Size;
-                    Properties.Settings.Default.Maximized = true;
-                    Properties.Settings.Default.Minimized = false;
+                    settings.Location = RestoreBounds.Location;
+                    settings.Size = RestoreBounds.Size;
+                    settings.Maximized = true;
+                    settings.Minimized = false;
                 }
                 else if (WindowState == FormWindowState.Normal)
                 {
-                    Properties.Settings.Default.Location = Location;
-                    Properties.Settings.Default.Size = Size;
-                    Properties.Settings.Default.Maximized = false;
-                    Properties.Settings.Default.Minimized = false;
+                    settings.Location = Location;
+                    settings.Size = Size;
+                    settings.Maximized = false;
+                    settings.Minimized = false;
                 }
                 else
                 {
-                    Properties.Settings.Default.Location = RestoreBounds.Location;
-                    Properties.Settings.Default.Size = RestoreBounds.Size;
-                    Properties.Settings.Default.Maximized = false;
-                    Properties.Settings.Default.Minimized = true;
+                    settings.Location = RestoreBounds.Location;
+                    settings.Size = RestoreBounds.Size;
+                    settings.Maximized = false;
+                    settings.Minimized = true;
                 }
-                Properties.Settings.Default.Save();
+                SaveSettings();
             }
             base.OnClosing(e);
         }
@@ -231,6 +237,7 @@ namespace BizHawk.FreeEnterprise.Companion
             {
                 Run.PartyUpdated -= Run_PartyUpdated;
                 Run.KeyItemsUpdated -= Run_KeyItemsUpdated;
+                Run.NewKeyItemFound -= Run_NewKeyItemFound;
                 Run.LocationsUpdated -= Run_LocationsUpdated;
                 Run.ObjectivesUpdated -= Run_ObjectivesUpdated;
                 Run.CustomSettingsUpdated -= Run_CustomSettingsUpdated;
@@ -240,34 +247,41 @@ namespace BizHawk.FreeEnterprise.Companion
             }
 
             Memory = new MemoryMapping(APIs.Memory);
+            Storage = new PersistentStorage(APIs.SQLite, Game.Hash);
 
             try
             {
-                Run = new Run(APIs, Memory);
+                Run = new Run(Game.Hash, APIs, Memory, Storage, settings);
                 Run.PartyUpdated += Run_PartyUpdated;
                 Run.KeyItemsUpdated += Run_KeyItemsUpdated;
+                Run.NewKeyItemFound += Run_NewKeyItemFound;
                 Run.LocationsUpdated += Run_LocationsUpdated;
                 Run.ObjectivesUpdated += Run_ObjectivesUpdated;
                 Run.CustomSettingsUpdated += Run_CustomSettingsUpdated;
                 Run.LoadComplete += Run_LoadComplete;
-                RomData = new RomData(Memory.CartRom, RenderingSettings);
+                RomData = new RomData(Memory.CartRom, settings);
+                RomData.Overlays.SetCustomMissMessage(settings.KeyItemBonkDefaultText ? null : settings.KeyItemBonkCustomText);
 
                 BossesControl.Update(new State.Bosses());
+                SetControlsVisibility();
 
                 trackerControls.ForEach(c =>
                 {
-                    c.Initialize(RomData, Run.FlagSet);
+                    c.Initialize(RomData, Run.FlagSet, settings);
                     c.RefreshSize();
                 });
+
+                DockToScreen();
             }
             catch (Exception)
             {
 
-            }
-
-            SetControlsVisibility();
+            }            
         }
 
+        private void Run_NewKeyItemFound(KeyItemType? keyitem)
+            => KeyItemsControl.NewItemFound(keyitem);
+        
         private void Run_LoadComplete(object sender, EventArgs e)
         {
             Run_LocationsUpdated(sender, e);
@@ -325,7 +339,7 @@ namespace BizHawk.FreeEnterprise.Companion
                 Initialize();
 
             Run?.NewFrame();
-            StopWatchLabel.Text = Run?.Stopwatch.Elapsed.ToString("hh':'mm':'ss'.'ff");
+            StopWatchLabel.Text = Run?.ElapsedTime.ToString("hh':'mm':'ss'.'ff");
             trackerControls.ForEach(c => c.NewFrame());
         }
 
@@ -339,7 +353,7 @@ namespace BizHawk.FreeEnterprise.Companion
                 return;
             }
 
-            var dialog = new SettingsDialog()
+            var dialog = new SettingsDialog(settings, SaveSettings)
             {
                 Owner = this,
                 StartPosition = FormStartPosition.CenterParent
@@ -349,13 +363,22 @@ namespace BizHawk.FreeEnterprise.Companion
             dialog.Show();
         }
 
+        private void SaveSettings()
+        {
+            File.WriteAllText(Strings.SettingsPath, JsonConvert.SerializeObject(settings));
+            RomData?.Overlays.SetCustomMissMessage(settings.KeyItemBonkDefaultText ? null : settings.KeyItemBonkCustomText);
+            SetControlsVisibility();
+            trackerControls.ForEach(c => c.RefreshSize());
+            DockToScreen();
+        }
+
         private void SetControlsVisibility()
         {
-            KeyItemsControl.Visible = Run != null && Properties.Settings.Default.KeyItemsDisplay;
-            PartyControl.Visible = Run != null && Properties.Settings.Default.PartyDisplay;
-            ObjectivesControl.Visible = Run != null && Properties.Settings.Default.ObjectivesDisplay;
-            BossesControl.Visible = Run != null && Properties.Settings.Default.BossesDisplay;
-            LocationsControl.Visible = Run != null && Properties.Settings.Default.LocationsDisplay;
+            KeyItemsControl.Visible = Run != null && settings.KeyItemsDisplay;
+            PartyControl.Visible = Run != null && settings.PartyDisplay;
+            ObjectivesControl.Visible = Run != null && settings.ObjectivesDisplay;
+            BossesControl.Visible = Run != null && settings.BossesDisplay;
+            LocationsControl.Visible = Run != null && settings.LocationsDisplay;
         }
 
         private void StopWatchLabel_DoubleClick(object sender, EventArgs e)

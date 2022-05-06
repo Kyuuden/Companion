@@ -1,9 +1,11 @@
-﻿using BizHawk.FreeEnterprise.Companion.FlagSet;
+﻿using BizHawk.FreeEnterprise.Companion.Configuration;
+using BizHawk.FreeEnterprise.Companion.FlagSet;
 using BizHawk.FreeEnterprise.Companion.Sprites;
 using BizHawk.FreeEnterprise.Companion.State;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -14,8 +16,12 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
         private Dictionary<Rectangle, KeyItemType> _keyItemsByPosition = new Dictionary<Rectangle, KeyItemType>();
         private KeyItemType lastToolTipItem;
 
-        public KeyItems(RenderingSettings renderingSettings)
-            : base(renderingSettings)
+        private Queue<Size?> _missOffsets = new Queue<Size?>();
+        private Queue<ColorMatrix> _fadeoutParams = new Queue<ColorMatrix>();
+        private KeyItemType? _newItem;
+
+        public KeyItems()
+            : base()
         {
             InitializeComponent();
             keyItemsToolTip.SetToolTip(this, "Key Items");
@@ -24,27 +30,35 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
             keyItemsToolTip.ShowAlways = true;
         }
 
-        public override void Initialize(RomData romData, IFlagSet? flagset)
+        public override void NewFrame()
         {
-            base.Initialize(romData, flagset);
-            keyItemsToolTip.Initialize(romData);
+            if (_missOffsets.Count > 0 || _fadeoutParams.Count > 0)
+                Invalidate();
+        }
+
+        public override void Initialize(RomData romData, IFlagSet? flagset, Settings settings)
+        {
+            base.Initialize(romData, flagset, settings);
+            keyItemsToolTip.Initialize(romData, settings);
         }
 
         public override void RefreshSize()
         {
+            if (Settings == null) return;
+            if (UseableWidth < 0) return;
             _keyItemsByPosition.Clear();
-            switch (Properties.Settings.Default.KeyItemsStyle)
+            switch (Settings.KeyItemsStyle)
             {
                 case KeyItemStyle.Text:
-                    Height = RequestedHeight = MinimiumHeight + 9 * RenderingSettings.TileSize; //RenderingSettings.Scale(6 * 15-4);
+                    Height = RequestedHeight = MinimiumHeight + 9 * Settings.TileSize; //Settings.Scale(6 * 15-4);
                     break;
                 case KeyItemStyle.Icons:
-                    var iconSize = Properties.Settings.Default.IconScaling ? RenderingSettings.Scale(32) : 32;
-                    var iconSpacing = Properties.Settings.Default.IconScaling ? RenderingSettings.TileSize : 8;
+                    var iconSize = Settings.IconScaling ? Settings.Scale(32) : 32;
+                    var iconSpacing = Settings.IconScaling ? Settings.TileSize : 8;
                     var numOfItems = Data?.Items.Count ?? 0;
                     var iconsPerRow = UseableWidth / (iconSize + iconSpacing);
                     var rows = iconsPerRow >= numOfItems ? 1 : (int)Math.Ceiling((double)numOfItems / (double)iconsPerRow);
-                    Height = RequestedHeight = RenderingSettings.SetToTileInterval(MinimiumHeight + rows * (iconSize + iconSpacing));
+                    Height = RequestedHeight = Settings.SetToTileInterval(MinimiumHeight + rows * (iconSize + iconSpacing));
                     break;
             }
             Invalidate();
@@ -57,9 +71,9 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
 
             lastToolTipItem = item.Key;
             keyItemsToolTip.Description = item.Description;
-            keyItemsToolTip.FoundAt = item.FoundAt;
-            keyItemsToolTip.UsedAt = item.UsedAt;
-            keyItemsToolTip.ReceivedFrom = TextLookup.GetName(item.FoundLocation);
+            keyItemsToolTip.FoundAt = item.WhenFound;
+            keyItemsToolTip.UsedAt = item.WhenUsed;
+            keyItemsToolTip.ReceivedFrom = TextLookup.GetName(item.WhereFound);
             keyItemsToolTip.Active = true;
         }
 
@@ -74,30 +88,51 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
                 keyItemsToolTip.Active = false;
             }
             else
-                SetToolTip(Data[mouseOverKey.Value]);
+                SetToolTip(Data.Items[mouseOverKey.Value]);
+        }
+
+        public void NewItemFound(KeyItemType? item)
+        { 
+            if (Settings != null 
+                && Settings.KeyItemEventEnabled 
+                && _missOffsets.Count == 0 
+                && _fadeoutParams.Count == 0
+                && RomData != null)
+            {
+                _newItem = item;
+
+                if (item.HasValue)
+                {
+                    foreach (var p in RomData.Overlays.FadeoutOffsets)
+                        _fadeoutParams.Enqueue(p);
+                }
+                else
+                {
+                    foreach (var s in RomData.Overlays.MissOffsets)
+                        _missOffsets.Enqueue(s);
+                }
+                Invalidate();
+            }
         }
 
         protected override void PaintData(Graphics graphics, Rectangle rect)
         {
-            if (RomData == null || Data == null)
-                return;
+            if (RomData == null || Data == null || Settings == null) return;
 
             var sX = rect.X;
             var sY = rect.Y;
-            var cWidth = rect.Width / RenderingSettings.TileSize;
-            var cHeight = rect.Height / RenderingSettings.TileSize;
 
             //if FFIV text style
-            if (Properties.Settings.Default.KeyItemsStyle == KeyItemStyle.Text)
+            if (Settings.KeyItemsStyle == KeyItemStyle.Text)
             {
                 var keyIndex = 0;
                 foreach (var item in Data.Items.Values)
                 {
                     var itemRect = new Rectangle(
                         sX + (keyIndex % 3) * (rect.Width / 3),
-                        sY + RenderingSettings.Scale((keyIndex / 3) * 13),
-                        item.ShortName.Length * RenderingSettings.TileSize,
-                        RenderingSettings.TileSize);
+                        sY + Settings.Scale((keyIndex / 3) * 13),
+                        item.ShortName.Length * Settings.TileSize,
+                        Settings.TileSize);
 
                     _keyItemsByPosition[itemRect] = item.Key;
 
@@ -113,8 +148,8 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
             else
             {
                 var numOfItems = Data.Items.Count;
-                var iconSize = Properties.Settings.Default.IconScaling ? RenderingSettings.Scale(32) : 32;
-                var iconSpacing = Properties.Settings.Default.IconScaling ? RenderingSettings.TileSize : 8;
+                var iconSize = Settings.IconScaling ? Settings.Scale(32) : 32;
+                var iconSpacing = Settings.IconScaling ? Settings.TileSize : 8;
                 var iconsPerRow = UseableWidth / (iconSize + iconSpacing);
                 var rows = iconsPerRow >= numOfItems ? 1 : (int)Math.Ceiling((double)numOfItems / (double)iconsPerRow);
                 iconsPerRow = numOfItems / rows;
@@ -125,7 +160,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
                 var hiconSpacing = (rect.Width - iconsPerRow * iconSize) / (iconsPerRow);
                 var offset = hiconSpacing / 2;
                 var index = 0;
-                foreach (var item in Data.Items.Values)
+                foreach (var item in Data.Items.Values.OrderBy(v=> v.Key.ToIconOrder()))
                 {
                     var bossRect = new Rectangle(
                         sX + offset + ((index % iconsPerRow) * (iconSize + hiconSpacing)),
@@ -143,6 +178,57 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
                         bossRect.Width,
                         bossRect.Height);
                     index++;
+                }
+            }
+
+
+            if (_missOffsets.Count > 0 && RomData != null)
+            {
+                var currentOffset = _missOffsets.Dequeue();
+                if (currentOffset == null)
+                    return;
+
+                var missScale = (float)Settings.ViewScaleF * 3;
+                var offset = new SizeF(currentOffset.Value.Width * missScale, currentOffset.Value.Height * missScale);
+                var missSize = new SizeF(RomData.Overlays.MissBitmap.Width * missScale, RomData.Overlays.MissBitmap.Height * missScale);
+
+
+                graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                var loc = new PointF(Width / 2 - missSize.Width / 2, Height - (missSize.Height + Settings.TileSize)) + offset;
+                graphics.DrawImage(RomData.Overlays.MissBitmap, loc.X, loc.Y, missSize.Width, missSize.Height);
+            }
+
+            if (_fadeoutParams.Count > 0 && RomData != null && _newItem.HasValue)
+            {
+                var currentParam = _fadeoutParams.Dequeue();
+                var icon = IconLookup.GetIcons(_newItem.Value).Found;
+                var scale = (float)Settings.ViewScaleF * 2;
+                var size = new Size((int)(icon.Width * scale), (int)(icon.Height * scale));
+                var loc = new Point(rect.Width / 2 - size.Width / 2, rect.Height / 2 - size.Height / 2);
+                loc.Offset(rect.Location);
+
+                var kiPos = _keyItemsByPosition.First(p => p.Value == _newItem.Value).Key;
+                if (kiPos.Width > kiPos.Height)
+                    kiPos.Width = kiPos.Height;
+
+                var xdiff = loc.X - kiPos.X;
+                var ydiff = loc.Y - kiPos.Y;
+                var wdiff = size.Width - kiPos.Width;
+                var hdiff = size.Height - kiPos.Height;
+
+
+                using (var attributes = new ImageAttributes())
+                {
+                    attributes.SetColorMatrix(currentParam, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+
+                    graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+                    graphics.DrawImage(icon,
+                        new Rectangle(
+                         (int)(kiPos.X + (xdiff * currentParam.Matrix33)),
+                         (int)(kiPos.Y + (ydiff * currentParam.Matrix33)),
+                         (int)(kiPos.Width + (wdiff * currentParam.Matrix33)),
+                         (int)(kiPos.Height + (hdiff * currentParam.Matrix33))),
+                        0, 0, icon.Width, icon.Height, GraphicsUnit.Pixel, attributes);
                 }
             }
         }

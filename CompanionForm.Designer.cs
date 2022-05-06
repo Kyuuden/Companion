@@ -14,8 +14,6 @@ namespace BizHawk.FreeEnterprise.Companion
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            Properties.Settings.Default.PropertyChanged -= SettingsChanged;
-
             if (disposing && (components != null))
             {
                 components.Dispose();
@@ -39,11 +37,11 @@ namespace BizHawk.FreeEnterprise.Companion
             this.StopwatchPanel = new System.Windows.Forms.Panel();
             this.StopWatchLabel = new System.Windows.Forms.Label();
             this.WideLayoutPanel = new System.Windows.Forms.Panel();
-            this.LocationsControl = new BizHawk.FreeEnterprise.Companion.Controls.Locations(RenderingSettings);
-            this.BossesControl = new BizHawk.FreeEnterprise.Companion.Controls.Bosses(RenderingSettings);
-            this.ObjectivesControl = new BizHawk.FreeEnterprise.Companion.Controls.Objectives(RenderingSettings);
-            this.PartyControl = new BizHawk.FreeEnterprise.Companion.Controls.Party(RenderingSettings);
-            this.KeyItemsControl = new BizHawk.FreeEnterprise.Companion.Controls.KeyItems(RenderingSettings);
+            this.LocationsControl = new BizHawk.FreeEnterprise.Companion.Controls.Locations();
+            this.BossesControl = new BizHawk.FreeEnterprise.Companion.Controls.Bosses();
+            this.ObjectivesControl = new BizHawk.FreeEnterprise.Companion.Controls.Objectives();
+            this.PartyControl = new BizHawk.FreeEnterprise.Companion.Controls.Party();
+            this.KeyItemsControl = new BizHawk.FreeEnterprise.Companion.Controls.KeyItems();
             this.menuStrip1.SuspendLayout();
             this.StopwatchPanel.SuspendLayout();
             this.SuspendLayout();

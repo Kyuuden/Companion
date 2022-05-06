@@ -7,8 +7,8 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
 {
     public partial class Objectives : TrackerControl<State.Objectives>
     {
-        public Objectives(RenderingSettings renderingSettings)
-            : base(renderingSettings)
+        public Objectives()
+            : base()
         {
             InitializeComponent();
         }
@@ -21,15 +21,22 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
 
         public override void RefreshSize()
         {
-            if (Data == null || RomData == null)
+            if (Data == null || RomData == null || Settings == null)
                 Height = MinimiumHeight;
             else
             {
-                var cWidth = UseableWidth / RenderingSettings.TileSize;
+                if (UseableWidth < 0) return;
 
-                RequestedHeight = RenderingSettings.SetToTileInterval(RenderingSettings.Scale(Data.Descriptions.SelectMany(d => RomData.Font.Breakup(d, cWidth - 3)).Count() * 10 + Data.Descriptions.Count() * 6 - 4) + MinimiumHeight);
+                var cWidth = UseableWidth / Settings.TileSize;
 
-                if (Properties.Settings.Default.Layout == Companion.Layout.Alternate)
+                RequestedHeight = Settings.SetToTileInterval(
+                    Settings.Scale(
+                        Data.Statuses
+                            .Select(s=> s.ToString())
+                            .SelectMany(d => RomData.Font.Breakup(d, cWidth - 3))
+                            .Count() * 10 + Data.Statuses.Count() * 6 - 4) + MinimiumHeight);
+
+                if (Settings.Layout == Companion.Layout.Alternate)
                     Height = Math.Max(RequestedHeight, Parent.Height - Location.Y);
                 else
                     Height = RequestedHeight;
@@ -40,19 +47,18 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
 
         protected override void PaintData(Graphics graphics, Rectangle rect)
         {
-            if (Data == null || RomData == null)
-                return;
+            if (RomData == null || Data == null || Settings == null) return;
 
             var sX = rect.X;
             var sY = rect.Y;
-            var cWidth = rect.Width / RenderingSettings.TileSize;
+            var cWidth = rect.Width / Settings.TileSize;
             var objectiveIndex = 0;
 
-            foreach (var item in Data.Descriptions)
+            foreach (var item in Data.Statuses)
             {
-                var mode = Data.Completions[objectiveIndex].HasValue ? TextMode.Disabled : TextMode.Normal;
+                var mode = item.IsComplete ? TextMode.Disabled : TextMode.Normal;
                 RomData.Font.RenderText(graphics, sX, sY, $"{objectiveIndex + 1}.", mode);
-                sY += RomData.Font.RenderText(graphics, sX + RenderingSettings.Scale(24), sY, cWidth - 3, item, mode) + RenderingSettings.Scale(6);
+                sY += RomData.Font.RenderText(graphics, sX + Settings.Scale(24), sY, cWidth - 3, item.ToString(), mode) + Settings.Scale(6);
                 objectiveIndex++;
             }
         }
@@ -68,11 +74,11 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
                 var neededObjectives = FlagSet?.RequriedObjectiveCount switch
                 {
                     null => "??",
-                    0 => $"{Data.Completions.Count(),2}",
+                    0 => $"{Data.Statuses.Count(),2}",
                     int x => $"{x,2}"
                 };
 
-                return $"{Data.Completions.Count(o => o.HasValue),2}/{neededObjectives}";
+                return $"{Data.Statuses.Count(o => o.IsComplete),2}/{neededObjectives}";
             }
         }
 
@@ -83,10 +89,10 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
                 var neededObjectives = FlagSet?.RequriedObjectiveCount switch
                 {
                     null => -1,
-                    0 => Data?.Completions.Count(),
+                    0 => Data?.Statuses.Count(),
                     int max => max
                 };
-                return Data?.Completions.Count(o => o.HasValue) >= neededObjectives ? TextMode.Highlighted : TextMode.Normal;
+                return Data?.Statuses.Count(o => o.IsComplete) >= neededObjectives ? TextMode.Highlighted : TextMode.Normal;
             }
         }
     }

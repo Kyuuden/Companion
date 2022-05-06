@@ -1,83 +1,32 @@
-﻿using System;
+﻿using BizHawk.FreeEnterprise.Companion.Database;
+using BizHawk.FreeEnterprise.Companion.Extensions;
+using System;
 
 namespace BizHawk.FreeEnterprise.Companion.State
 {
     public class KeyItem
     {
         public KeyItemType Key { get; }
-
         public string Name { get; }
         public string ShortName { get; }
-        public string Description{ get; }
-        public bool Found => FoundAt.HasValue;
-        public bool Used => UsedAt.HasValue;
+        public string Description { get; }
+        public bool Found { get; }
+        public TimeSpan? WhenFound { get; }
+        public bool Used { get; }
+        public TimeSpan? WhenUsed { get; }
+        public KeyItemLocationType WhereFound { get; }
 
-
-        public TimeSpan? FoundAt { get; private set; }
-        public TimeSpan? UsedAt { get; private set; }
-        public KeyItemLocationType FoundLocation { get; private set; }
-
-        public KeyItem(KeyItemType key)
+        public KeyItem(KeyItemType key, bool isFound, bool isUsed, PersistentStorage storage, KeyItemLocationType[] parsedFoundItemLocations)
         {
+            Key = key;
             Name = TextLookup.GetName(key) ?? key.ToString();
             ShortName = TextLookup.GetShortName(key) ?? key.ToString();
             Description = TextLookup.GetDescription(key) ?? key.ToString();
-            Key = key;
-         }
-
-        public bool Find(TimeSpan when, KeyItemLocationType location)
-        {
-            if (Found)
-                return false;
-
-            FoundLocation = location;
-            FoundAt = when;
-            return true;
+            Found = isFound;
+            WhenFound = storage.KeyItemFoundTimes[key];
+            Used = isUsed;
+            WhenUsed = storage.KeyItemUsedTimes[key];
+            WhereFound = parsedFoundItemLocations[key.ToIndex()];
         }
-
-        public bool Use(TimeSpan when)
-        {
-            if (Used) return false;
-            UsedAt = when;
-            return true;
-        }
-
-        public bool ResetFound()
-        {
-            if (!Found)
-                return false;
-            FoundAt = null;
-            return true;
-        }
-
-        public bool ResetUsed()
-        {
-            if (!Used)
-                return false;
-            UsedAt = null;
-            return true;
-        }
-
-        public override bool Equals(object? obj)
-        {
-            return obj is KeyItem item &&
-                   Key == item.Key &&
-                   Found == item.Found &&
-                   Used == item.Used &&
-                   FoundLocation == item.FoundLocation;
-        }
-
-        public override int GetHashCode()
-        {
-            int hashCode = -1847489661;
-            hashCode = hashCode * -1521134295 + Key.GetHashCode();
-            hashCode = hashCode * -1521134295 + Found.GetHashCode();
-            hashCode = hashCode * -1521134295 + Used.GetHashCode();
-            hashCode = hashCode * -1521134295 + FoundLocation.GetHashCode();
-            return hashCode;
-        }
-
-        public override string ToString()
-            => $"{Key}: {(Found ? "found" : "not found")}, {(Used ? "used" : "not used")}";
     }
 }

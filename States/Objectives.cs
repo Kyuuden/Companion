@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BizHawk.FreeEnterprise.Companion.Database;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,37 +7,62 @@ namespace BizHawk.FreeEnterprise.Companion.State
 {
     public class Objectives
     {
-        public IReadOnlyList<string> Descriptions { get; }
+        private readonly PersistentStorage.TimeStorage<int> objectiveTimeStorage;
+        private readonly List<string> objectives;
+        private byte[] completionData;
 
-        public List<TimeSpan?> Completions { get; private set; }
-
-        public Objectives()
+        public Objectives(PersistentStorage.TimeStorage<int> objectiveTimeStorage)
+            : this(new List<string>(), objectiveTimeStorage)
         {
-            Descriptions = new List<string>();
-            Completions = new List<TimeSpan?>();
         }
 
-        public Objectives(IEnumerable<string> objectives)
+        public Objectives(IEnumerable<string> objectives, PersistentStorage.TimeStorage<int> objectiveTimeStorage)
         {
-            Descriptions = objectives.ToList();
-            Completions = Enumerable.Repeat((TimeSpan?)null, Descriptions.Count).ToList();
+            this.objectives = objectives.ToList();
+            completionData = new byte[this.objectives.Count];
+            this.objectiveTimeStorage = objectiveTimeStorage;
         }
 
-        public bool UpdateCompletions(TimeSpan now, byte[] data)
+        public bool Update(TimeSpan now, byte[] data)
         {
-            var updated = false;
-            var newCompletion = data.Take(Descriptions.Count).Select(b => b != 0).ToList();
-
-            for (var i = 0; i < Math.Min(newCompletion.Count, Completions.Count); i ++)
+            var newCompletion = data.Take(objectives.Count).ToList();
+            if (!completionData.SequenceEqual(newCompletion))
             {
-                if (newCompletion[i] && ! Completions[i].HasValue)
-                {
-                    Completions[i] = now;
-                    updated = true;
-                }
+                newCompletion.CopyTo(completionData);
+                for (int i = 0; i < completionData.Length; i++)
+                    if (completionData[i] != 0)
+                        objectiveTimeStorage[i] = now;
+
+                return true;
             }
 
-            return updated;
+            return false;
         }
+
+        public IEnumerable<ObjectiveStatus> Statuses
+        {
+            get
+            {
+                for (int i = 0; i < objectives.Count; i++)
+                    yield return new (objectives[i], completionData[i] != 0, objectiveTimeStorage[i]);
+            }
+        }
+    }
+
+    public class ObjectiveStatus
+    {
+        public ObjectiveStatus(string description, bool isComplete, TimeSpan? completeTime)
+        {
+            Description = description;
+            IsComplete = isComplete;
+            CompleteTime = completeTime;
+        }
+
+        public string Description { get; }
+        public bool IsComplete { get; }
+        public TimeSpan? CompleteTime { get; }
+
+        public override string ToString()
+            => $"{Description}{(IsComplete && CompleteTime.HasValue ? $" - {CompleteTime.Value:c}" : string.Empty)}";
     }
 }

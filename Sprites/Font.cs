@@ -1,4 +1,5 @@
-﻿using BizHawk.FreeEnterprise.Companion.Extensions;
+﻿using BizHawk.FreeEnterprise.Companion.Configuration;
+using BizHawk.FreeEnterprise.Companion.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -19,10 +20,10 @@ namespace BizHawk.FreeEnterprise.Companion.Sprites
     {
         private readonly List<byte[,]> _tiles;
         private readonly Color[,] _palettes;
-        private readonly RenderingSettings renderingSettings;
+        private readonly Settings settings;
         private List<List<Bitmap>>? bitmaps;
 
-        public Font(MemorySpace rom, RenderingSettings renderingSettings)
+        public Font(MemorySpace rom, Settings settings)
         {
             var fontData = rom.ReadBytes(CARTROMAddresses.Font, CARTROMAddresses.FontBytes);
             var processor = new TileProcessor();
@@ -56,7 +57,7 @@ namespace BizHawk.FreeEnterprise.Companion.Sprites
             _palettes[4, 3] = Color.FromArgb(255, 156, 90);
 
             BuildBitmaps();
-            this.renderingSettings = renderingSettings;
+            this.settings = settings;
         }
 
 
@@ -146,8 +147,8 @@ namespace BizHawk.FreeEnterprise.Companion.Sprites
             foreach (var line in Breakup(text, cwidth))
             {
                 RenderText(gr, x, y, line, mode);
-                y += renderingSettings.Scale(8 + extraSpacing);
-                height += renderingSettings.Scale(8 + extraSpacing);
+                y += settings.Scale(8 + extraSpacing);
+                height += settings.Scale(8 + extraSpacing);
             }
             return height;
         }
@@ -156,20 +157,41 @@ namespace BizHawk.FreeEnterprise.Companion.Sprites
         {
             float originalX = x, fx = x;
             float fy = y;
-            gr.InterpolationMode = Properties.Settings.Default.InterpolationMode;
+            gr.InterpolationMode = settings.InterpolationMode;
             foreach (var c in text)
             {
                 if (c == '\n')
                 {
                     fx = originalX;
-                    fy += renderingSettings.ScaleF(10);
+                    fy += settings.ScaleF(10);
                     continue;
                 }
 
                 var bitmap = bitmaps![(int)mode][c.ToGame()];
 
-                gr.DrawImage(bitmap, fx, fy, renderingSettings.TileSizeF, renderingSettings.TileSizeF);
-                fx += renderingSettings.TileSizeF;
+                gr.DrawImage(bitmap, fx, fy, settings.TileSizeF, settings.TileSizeF);
+                fx += settings.TileSizeF;
+            }
+        }
+
+        public void RenderTextUnscaled(Graphics gr, int x, int y, string text, TextMode mode)
+        {
+            float originalX = x, fx = x;
+            float fy = y;
+            gr.InterpolationMode = settings.InterpolationMode;
+            foreach (var c in text)
+            {
+                if (c == '\n')
+                {
+                    fx = originalX;
+                    fy += settings.ScaleF(10);
+                    continue;
+                }
+
+                var bitmap = bitmaps![(int)mode][c.ToGame()];
+
+                gr.DrawImage(bitmap, fx, fy, 8, 8);
+                fx += 8;
             }
         }
 
@@ -208,8 +230,8 @@ namespace BizHawk.FreeEnterprise.Companion.Sprites
                         }
                     }
 
-                gr.InterpolationMode = Properties.Settings.Default.InterpolationMode;
-                gr.DrawImage(boxBmp, x, y, width * renderingSettings.TileSize, height * renderingSettings.TileSize);
+                gr.InterpolationMode = settings.InterpolationMode;
+                gr.DrawImage(boxBmp, x, y, width * settings.TileSize, height * settings.TileSize);
             }
         }
     }

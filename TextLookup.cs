@@ -13,19 +13,19 @@ namespace BizHawk.FreeEnterprise.Companion
 
         public static string? GetName(KeyItemType key)
         {
-            int index = MathExt.FloorLog2((int)key);
+            var index = key.ToIndex();
             return _names != null && _names.KeyItemNames != null && index < _names.KeyItemNames.Count ? _names.KeyItemNames[index] : null;
         }
 
         public static string? GetShortName(KeyItemType key)
         {
-            int index = MathExt.FloorLog2((int)key);
+            var index = key.ToIndex();
             return _names != null && _names.KeyItemShortNames != null && index < _names.KeyItemShortNames.Count ? _names.KeyItemShortNames[index] : null;
         }
 
         public static string? GetDescription(KeyItemType key)
         {
-            int index = MathExt.FloorLog2((int)key);
+            var index = key.ToIndex();
             return _names != null && _names.KeyItemDescriptions != null && index < _names.KeyItemDescriptions.Count ? _names.KeyItemDescriptions[index] : null;
         }
 

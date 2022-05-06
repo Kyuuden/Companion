@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 
 namespace BizHawk.FreeEnterprise.Companion.Extensions
 {
@@ -107,6 +109,26 @@ namespace BizHawk.FreeEnterprise.Companion.Extensions
                 lValue |= lFlag;
             }
             return (T)Enum.ToObject(typeof(T), lValue);
+        }
+
+        public static string GetDescription<T>(this T value) where T : struct
+        {
+            if (!typeof(T).IsEnum)
+                throw new ArgumentException(string.Format("Type '{0}' is not an enum", typeof(T).FullName));
+
+            FieldInfo fi = typeof(T).GetField(value.ToString());
+            if (fi != null)
+            {
+                var descAttrib = (DescriptionAttribute)Attribute.GetCustomAttribute(fi, typeof(DescriptionAttribute));
+                if (descAttrib != null)
+                    return descAttrib.Description;
+                else
+                    return value.ToString();
+            }
+            else
+            {
+                return value.ToString();
+            }
         }
         #endregion
     }

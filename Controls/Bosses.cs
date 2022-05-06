@@ -1,4 +1,7 @@
-﻿using System;
+﻿using BizHawk.FreeEnterprise.Companion.Configuration;
+using BizHawk.FreeEnterprise.Companion.Extensions;
+using BizHawk.FreeEnterprise.Companion.FlagSet;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,14 +16,49 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
     public partial class Bosses : TrackerControl<State.Bosses>
     {
         private Dictionary<Rectangle, BossType> _bossesByPosition = new Dictionary<Rectangle, BossType>();
+        private BossType toolTipBossType;
 
-        public Bosses(RenderingSettings renderingSettings)
-            :base(renderingSettings)
+        public Bosses()
+            :base()
         {
             InitializeComponent();
+            bossToolTip.SetToolTip(this, "Key Items");
+            bossToolTip.Description = "This is a test";
+            bossToolTip.Active = true;
+            bossToolTip.ShowAlways = true;
+        }
+
+        public override void Initialize(RomData romData, IFlagSet? flagset, Settings settings)
+        {
+            base.Initialize(romData, flagset, settings);
+            bossToolTip.Initialize(romData, settings);
         }
 
         protected override string Header => "Bosses";
+
+        private void SetToolTip(BossType item)
+        {
+            if (toolTipBossType == item)
+                return;
+
+            toolTipBossType = item;
+            bossToolTip.Description = item.GetDescription();
+            bossToolTip.Active = true;
+        }
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+            var mouseOverKey = _bossesByPosition.FirstOrDefault(kvp => kvp.Key.Contains(e.X, e.Y));
+
+            if (Data == null || mouseOverKey.Value == 0)
+            {
+                toolTipBossType = 0;
+                bossToolTip.Active = false;
+            }
+            else
+                SetToolTip(mouseOverKey.Value);
+        }
 
         protected override void OnMouseClick(MouseEventArgs e)
         {
@@ -38,27 +76,30 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
 
         public override void RefreshSize()
         {
-            var iconSize = Properties.Settings.Default.IconScaling ? RenderingSettings.Scale(32) : 32;
-            var iconSpacing = Properties.Settings.Default.IconScaling ? RenderingSettings.TileSize : 8;
+            if (Data == null || Settings == null) return;
+            if (UseableWidth < 0) return;
+
+            var iconSize = Settings.IconScaling ? Settings.Scale(32) : 32;
+            var iconSpacing = Settings.IconScaling ? Settings.TileSize : 8;
             var numOfItems = Data?.Seen.Count ?? 0;
             var iconsPerRow = UseableWidth / (iconSize + iconSpacing);
             var rows = iconsPerRow >= numOfItems ? 1 : (int)Math.Ceiling((double)numOfItems / (double)iconsPerRow);
-            Height = RequestedHeight = RenderingSettings.SetToTileInterval(MinimiumHeight + rows * (iconSize + iconSpacing));
+            Height = RequestedHeight = Settings.SetToTileInterval(MinimiumHeight + rows * (iconSize + iconSpacing));
             _bossesByPosition.Clear();
             Invalidate();
         }
 
         protected override void PaintData(Graphics graphics, Rectangle rect)
         {
-            if (RomData == null || Data == null)
+            if (RomData == null || Data == null || Settings == null)
                 return;
 
             var sX = rect.X;
             var sY = rect.Y;
 
             var numOfItems = Data.Seen.Count;
-            var iconSize = Properties.Settings.Default.IconScaling ? RenderingSettings.Scale(32) : 32;
-            var iconSpacing = Properties.Settings.Default.IconScaling ? RenderingSettings.TileSize : 8;
+            var iconSize = Settings.IconScaling ? Settings.Scale(32) : 32;
+            var iconSpacing = Settings.IconScaling ? Settings.TileSize : 8;
             var iconsPerRow = UseableWidth / (iconSize + iconSpacing);
             var rows = iconsPerRow >= numOfItems ? 1 : (int)Math.Ceiling((double)numOfItems / (double)iconsPerRow);
             iconsPerRow = numOfItems / rows;

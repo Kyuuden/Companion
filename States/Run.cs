@@ -1,5 +1,7 @@
 ﻿using BizHawk.Client.Common;
 using BizHawk.Common;
+using BizHawk.FreeEnterprise.Companion.Configuration;
+using BizHawk.FreeEnterprise.Companion.Database;
 using BizHawk.FreeEnterprise.Companion.Extensions;
 using BizHawk.FreeEnterprise.Companion.FlagSet;
 using BizHawk.FreeEnterprise.Companion.Sprites;
@@ -31,17 +33,20 @@ namespace BizHawk.FreeEnterprise.Companion.State
         private Color backgroundColor;
         private Party party;
         private Timer _loadingTimer;
+        private PersistentStorage _db;
+        private readonly Settings settings;
+        private TimeSpan _previousElapsed = TimeSpan.Zero;
 
-        public Run(ApiContainer container, MemoryMapping memory)
+        public Run(string hash, ApiContainer container, MemoryMapping memory, PersistentStorage persistentStorage, Settings settings)
         {
             _container = container;
             _memory = memory;
+            _db = persistentStorage;
+            this.settings = settings;
+            Hash = hash;
 
-#if BIZHAWK_28
-            Hash = _container.GameInfo.GetGameInfo()?.Hash;
-#elif BIZHAWK_261
-            Hash = _container.GameInfo.GetRomHash();
-#endif
+            _previousElapsed = _db.ElapsedTime;
+
             var jsonLength = _memory.CartRom.Read<uint>(CARTROMAddresses.MetadataLengthAddress, CARTROMAddresses.MetadataLengthBytes * 8);
             if (jsonLength > 0)
             {
@@ -49,17 +54,17 @@ namespace BizHawk.FreeEnterprise.Companion.State
                 var json = Encoding.UTF8.GetString(jsonBytes);
                 Metadata = JsonConvert.DeserializeObject<SeedMetadata>(json)!;
                 FlagSet = FlagSetParser.Parse(Metadata.binary_flags);
-                Objectives = new Objectives(Metadata.objectives!);
+                Objectives = new Objectives(Metadata.objectives!, _db.ObjectiveCompleteTimes);
             }
             else
             {
                 //TODO Prompt user to input Objectives since cannot read from ROM
-                Objectives = new Objectives();
+                Objectives = new Objectives(_db.ObjectiveCompleteTimes);
             }
 
-            KeyItems = new KeyItems();
+            KeyItems = new KeyItems(_db);
             party = new Party();
-            Locations = new Locations(FlagSet);
+            Locations = new Locations(_db, FlagSet);
             Locations.UpdateKeyItems(KeyItems);
             BackgroundColor = Color.FromArgb(0, 0, 99);
 
@@ -71,7 +76,6 @@ namespace BizHawk.FreeEnterprise.Companion.State
                 Interval = 2000,
             };
             _loadingTimer.Tick += _loadingTimer_Tick;
-
             CreateCallbacks();
         }
 
@@ -96,6 +100,7 @@ namespace BizHawk.FreeEnterprise.Companion.State
         public event EventHandler? RunStarted;
         public event EventHandler? RunEnded;
         public event EventHandler? KeyItemsUpdated;
+        public event Action<KeyItemType?>? NewKeyItemFound;
         public event EventHandler? PartyUpdated;
         public event EventHandler? LocationsUpdated;
         public event EventHandler? ObjectivesUpdated;
@@ -109,7 +114,10 @@ namespace BizHawk.FreeEnterprise.Companion.State
 
         public RunState State { get; private set; }
 
-        public KeyItems KeyItems { get; } 
+        public KeyItems KeyItems { get; }
+
+        public TimeSpan ElapsedTime
+            => _previousElapsed + Stopwatch.Elapsed;
 
         public Party Party
         {
@@ -149,6 +157,20 @@ namespace BizHawk.FreeEnterprise.Companion.State
         public void StartNewGame(uint address, uint value, uint flags)
         {
             RemoveCallbacks();
+            _previousElapsed = TimeSpan.Zero;
+            State = RunState.RunStarted;
+            Stopwatch = Stopwatch.StartNew();
+            RunStarted?.Invoke(this, null);
+            CreateCallbacks();
+        }
+
+        public void LoadSaveGame(uint address, uint value, uint flags)
+        {
+            if (_container.Emulation.GetRegister("A") == 1)
+                return;
+
+            RemoveCallbacks();
+
             State = RunState.RunStarted;
             Stopwatch = Stopwatch.StartNew();
             RunStarted?.Invoke(this, null);
@@ -168,37 +190,43 @@ namespace BizHawk.FreeEnterprise.Companion.State
             if (State == RunState.Loading)
                 return;
 
-            var frameMod = _container.Emulation.FrameCount() % Properties.Settings.Default.RefreshEveryNFrames;
+            var frameMod = _container.Emulation.FrameCount() % settings.RefreshEveryNFrames;
             if (frameMod == 0)
             {
-                Party = new Party(_memory.Main.ReadBytes(WRAMAddresses.PartyAddress, WRAMAddresses.PartyBytes));
-            }
-            else if (frameMod == Properties.Settings.Default.RefreshEveryNFrames / 5)
-            {
-                if (KeyItems.Update(
-                    Stopwatch.Elapsed,
-                   _memory.Main.Read<KeyItemType>(WRAMAddresses.FoundKeyItems, WRAMAddresses.FoundKeyItemsBytes),
-                   _memory.Main.Read<KeyItemType>(WRAMAddresses.UsedKeyItems, WRAMAddresses.UsedKeyItemsBytes),
-                   _memory.CartSaveRam.ReadBytes(CARTRAMAddresses.KeyItemLocations, CARTRAMAddresses.KeyItemLocationsBytes)))
-                {
+                var now = ElapsedTime;
+                if (_db != null) _db.ElapsedTime = now;
+
+                var partyData = _memory.Main.ReadBytes(WRAMAddresses.PartyAddress, WRAMAddresses.PartyBytes);
+                var mainData = _memory.Main.ReadBytes(WRAMAddresses.FoundKeyItems, 64);
+                var foundKeyItems = mainData.Read<KeyItemType>(WRAMAddresses.FoundKeyItems - WRAMAddresses.FoundKeyItems, WRAMAddresses.FoundKeyItemsBytes * 8);
+                var usedKeyItems = mainData.Read<KeyItemType>((WRAMAddresses.UsedKeyItems - WRAMAddresses.FoundKeyItems) * 8, WRAMAddresses.UsedKeyItemsBytes * 8);
+                var keyItemsLocations = _memory.CartSaveRam.ReadBytes(CARTRAMAddresses.KeyItemLocations, CARTRAMAddresses.KeyItemLocationsBytes);
+                var checkedLocations  = mainData.Read<byte[]>((WRAMAddresses.CheckedLocations - WRAMAddresses.FoundKeyItems) * 8, WRAMAddresses.CheckedLocationsBytes * 8);
+                var objectives = mainData.Read<byte[]>((WRAMAddresses.ObjectiveCompletionAddress - WRAMAddresses.FoundKeyItems) * 8, WRAMAddresses.ObjectiveCompletionBytes * 8);
+
+                if (KeyItems.Update(now, foundKeyItems, usedKeyItems, keyItemsLocations))
                     KeyItemsUpdated?.Invoke(this, null);
-                    if (Locations.UpdateKeyItems(KeyItems))
-                        LocationsUpdated?.Invoke(this, null);
+
+                if (Locations.UpdateCheckedLocations(now, checkedLocations, out var newlyChecked) | Locations.UpdateKeyItems(KeyItems))
+                {
+                    LocationsUpdated?.Invoke(this, null);
+                    if (State == RunState.RunStarted
+                        && newlyChecked.Count == 1
+                        && (FlagSet?.CanHaveKeyItem((KeyItemLocationType)newlyChecked[0]) ?? false)
+                        && _db?.LocationCheckedTimes[(int)newlyChecked[0]] == now)
+                    {
+                        NewKeyItemFound?.Invoke(KeyItems.ItemFoundAt((KeyItemLocationType)newlyChecked[0]));
+                    }
                 }
+
+                if (Objectives?.Update(now, objectives) == true)
+                    ObjectivesUpdated?.Invoke(this, null);
+
+                Party = new Party(partyData);
             }
-            else if (frameMod == Properties.Settings.Default.RefreshEveryNFrames * 2 / 5)
+            else if (frameMod == settings.RefreshEveryNFrames * 3 / 5)
             {
                 ReadBackgroundColor();
-            }
-            else if (frameMod == Properties.Settings.Default.RefreshEveryNFrames * 3 / 5)
-            {
-                if (Locations.UpdateCheckedLocations(Stopwatch.Elapsed, _memory.Main.ReadBytes(WRAMAddresses.CheckedLocations, WRAMAddresses.CheckedLocationsBytes)))
-                    LocationsUpdated?.Invoke(this, null);
-            }
-            else if (frameMod == Properties.Settings.Default.RefreshEveryNFrames * 4 / 5)
-            {
-                if (Objectives?.UpdateCompletions(Stopwatch.Elapsed, _memory.Main.ReadBytes(WRAMAddresses.ObjectiveCompletionAddress, WRAMAddresses.ObjectiveCompletionBytes)) == true)
-                    ObjectivesUpdated?.Invoke(this, null);
             }
         }
 
@@ -213,6 +241,8 @@ namespace BizHawk.FreeEnterprise.Companion.State
                         break;
                     case RunState.Menu:
                         _container.MemoryEvents.RemoveMemoryCallback(StartNewGame);
+                        if (_previousElapsed > TimeSpan.Zero)
+                            _container.MemoryEvents.RemoveMemoryCallback(LoadSaveGame);
                         break;
                 }
             }
@@ -228,10 +258,15 @@ namespace BizHawk.FreeEnterprise.Companion.State
                 switch (State)
                 {
                     case RunState.RunStarted:
-                        _container.MemoryEvents.AddExecCallback(Flash, SystemBusAddresses.ZeromusDeathAnimation, "System Bus");
+                        if (FlagSet?.OWinCrystal ?? true)
+                            _container.MemoryEvents.AddExecCallback(Flash, SystemBusAddresses.ZeromusDeathAnimation, "System Bus");
+                        else
+                            _container.MemoryEvents.AddExecCallback(Flash, SystemBusAddresses.Congradulations, "System Bus");
                         break;
                     case RunState.Menu:
                         _container.MemoryEvents.AddExecCallback(StartNewGame, SystemBusAddresses.MenuSaveNewGame, "System Bus");
+                        if (_previousElapsed > TimeSpan.Zero)
+                            _container.MemoryEvents.AddExecCallback(LoadSaveGame, SystemBusAddresses.MenuLoadSaveGame, "System Bus");
                         break;
                 }
             }
@@ -244,7 +279,6 @@ namespace BizHawk.FreeEnterprise.Companion.State
                 }
             }
         }
-
 
         public void Dispose()
         {

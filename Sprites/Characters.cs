@@ -71,7 +71,7 @@ namespace BizHawk.FreeEnterprise.Companion.Sprites
                 .ToList();
 
             _stickerPalette = rom
-                .ReadBytes(CARTROMAddresses.BattleStatusStickersPalette, 16)
+                .ReadBytes(CARTROMAddresses.BattleStatusStickersColorPalette, 16)
                 .ReadMany<uint>(0, 16, 8).Select(c => ColorProcessor.GetColor(c))
                 .ToList();
 

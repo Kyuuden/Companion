@@ -16,8 +16,8 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
         int frame = 0;
         int frameIndex = 0;
 
-        public Party(RenderingSettings renderingSettings)
-            : base(renderingSettings)
+        public Party()
+            : base()
         {
             InitializeComponent();
         }
@@ -25,14 +25,16 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
         public override void RefreshSize()
         {
             _charactersByPosition.Clear();
-            Height = RequestedHeight = RenderingSettings.Scale(48 * 5) <= UseableWidth 
-                ? MinimiumHeight + RenderingSettings.Scale(48) 
-                : MinimiumHeight + RenderingSettings.Scale(48) * 5 + RenderingSettings.TileSize * 4;
-            
-            if (Properties.Settings.Default.Layout == Companion.Layout.Alternate)
-                Width = RenderingSettings.Scale(64);
+            if (RomData == null || Data == null || Settings == null) return;
 
-            HasRightMargin = Properties.Settings.Default.Layout != Companion.Layout.Alternate;
+            Height = RequestedHeight = Settings.Scale(48 * 5) <= UseableWidth 
+                ? MinimiumHeight + Settings.Scale(48) 
+                : MinimiumHeight + Settings.Scale(48) * 5 + Settings.TileSize * 4;
+            
+            if (Settings.Layout == Companion.Layout.Alternate)
+                Width = Settings.Scale(64);
+
+            HasRightMargin = Settings.Layout != Companion.Layout.Alternate;
             frame = 0;
             Invalidate();
         }
@@ -46,9 +48,9 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
         public override void NewFrame()
         {
             var oldIndex = frameIndex;
-            if (Properties.Settings.Default.PartyAnimate && RomData != null)
+            if (Settings != null && Settings.PartyAnimate && RomData != null)
             {
-                frameIndex = RomData.CharacterSprites.GetFrameIndex(Properties.Settings.Default.PartyPose, ++frame);
+                frameIndex = RomData.CharacterSprites.GetFrameIndex(Settings.PartyPose, ++frame);
                 if (frameIndex != oldIndex)
                     Invalidate();
             }
@@ -70,30 +72,29 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
 
         protected override void PaintData(Graphics graphics, Rectangle rect)
         {
-            if (Data == null || RomData == null)
-                return;
+            if (RomData == null || Data == null || Settings == null) return;
 
             float sX = rect.X;
             float sY = rect.Y;
-            var cWidth = rect.Width / RenderingSettings.TileSize;            
+            var cWidth = rect.Width / Settings.TileSize;            
 
-            var charactersPerRow = rect.Width / RenderingSettings.ScaleF(48) >= 5.0 ? 5 : 1;
-            var offset = (cWidth * RenderingSettings.TileSize - RenderingSettings.Scale(48) * charactersPerRow)/2;
+            var charactersPerRow = rect.Width / Settings.ScaleF(48) >= 5.0 ? 5 : 1;
+            var offset = (cWidth * Settings.TileSize - Settings.Scale(48) * charactersPerRow)/2;
 
-            switch (Properties.Settings.Default.PartyPose)
+            switch (Settings.PartyPose)
             {
                 case Pose.Dead:
                 case Pose.Special:
                 case Pose.Portrait:
                     break;
                 default:
-                    offset += RenderingSettings.TileSize;
+                    offset += Settings.TileSize;
                     break;
             }
 
 
             State.Character? anchor = null;
-            if (Properties.Settings.Default.PartyShowAnchor && FlagSet != null)
+            if (Settings.PartyShowAnchor && FlagSet != null)
             {
                 if (FlagSet.VanillaAgility)
                     anchor = Data.PriorityOrder.FirstOrDefault(c => c.ID != 0 && (c.Class == CharacterType.Cecil || c.Class == CharacterType.DarkKnightCecil));
@@ -111,37 +112,37 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
             {
                 if (c.ID != 0)
                 {
-                    _charactersByPosition[new Rectangle((int)sX, (int)sY, RenderingSettings.Scale(48), RenderingSettings.Scale(48))] = charIndex;
+                    _charactersByPosition[new Rectangle((int)sX, (int)sY, Settings.Scale(48), Settings.Scale(48))] = charIndex;
 
                     graphics.DrawImage(
                        RomData.CharacterSprites.GetCharacterBitmap(
                            c.ID, 
                            c.Class,
                            _characterVersions.TryGetValue(c.ID, out var palette) ? palette : 0,
-                           Properties.Settings.Default.PartyPose, 
+                           Settings.PartyPose, 
                            frame),
                        sX + offset,
                        sY,
-                       RenderingSettings.Scale(48),
-                       RenderingSettings.Scale(48));
+                       Settings.Scale(48),
+                       Settings.Scale(48));
 
                     if (c == anchor)
-                       graphics.DrawImage(Properties.Resources.SMB3_item_Anchor, sX + RenderingSettings.Scale(48) - RenderingSettings.TileSize * 2, sY, RenderingSettings.TileSize*2, RenderingSettings.TileSize * 2);
+                       graphics.DrawImage(Properties.Resources.SMB3_item_Anchor, sX + Settings.Scale(48) - Settings.TileSize * 2, sY, Settings.TileSize*2, Settings.TileSize * 2);
                 }
 
                 switch (charactersPerRow)
                 {
                     case 1:
-                        sY += (rect.Height - RenderingSettings.Scale(48)) / 4.0f;
+                        sY += (rect.Height - Settings.Scale(48)) / 4.0f;
                         break;
                     default:
-                        sX += RenderingSettings.Scale(48);
+                        sX += Settings.Scale(48);
                         break;
                 }
 
                 charIndex++;
             }
-            graphics.InterpolationMode = Properties.Settings.Default.InterpolationMode;
+            graphics.InterpolationMode = Settings.InterpolationMode;
         }
 
         protected override string Header => "Party";

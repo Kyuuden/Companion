@@ -11,7 +11,7 @@ namespace BizHawk.FreeEnterprise.Companion
     {
         [Description("D.Mist")]
         DMist = 1,
-        [Description("Troia Guards (Guards + General")]
+        [Description("Troia Guards")]
         TroiaGuards,
         [Description("Octomamm")]
         Octomamm,

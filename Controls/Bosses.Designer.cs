@@ -29,6 +29,8 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            this.bossToolTip = new BossToolTip(this.components);
             this.SuspendLayout();
             // 
             // Bosses
@@ -40,6 +42,8 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
             this.ResumeLayout(false);
 
         }
+
+        private BossToolTip bossToolTip;
 
         #endregion
     }

@@ -121,14 +121,6 @@ namespace BizHawk.FreeEnterprise.Companion.FlagSet._4._5._0
         public Encounters Encounters { get; }
         public Glitches Glitches { get; }
         public Other Other { get; }
-
-        public override bool KMain => KeyItems.MainLocations;
-        public override bool KSummon => KeyItems.SummonLocations;
-        public override bool KMoon => KeyItems.MoonLocations;
-        public override bool KTrap => KeyItems.TrapChests;
-        public override bool KFree => !KeyItems.NoFreeItem;
-        public override bool KUnsafe => KeyItems.Unsafe;
-        public override bool CFree => !Characters.NoFree;
         public override int MaxParty => Characters.PartySize;
         public override int RequriedObjectiveCount => Objectives.NumRequiredObjectives;
         public override bool OWinGame => Objectives.WinGame;
@@ -137,6 +129,101 @@ namespace BizHawk.FreeEnterprise.Companion.FlagSet._4._5._0
 
         public override bool CHero => Characters.Hero;
         public override bool VanillaAgility => Other.VanillaAgility;
+
+        public override bool? CanHaveKeyItem(KeyItemLocationType location)
+        {
+            switch (location)
+            {
+                case KeyItemLocationType.StartingItem: return KeyItems.MainLocations;
+                case KeyItemLocationType.AntlionNest: return KeyItems.MainLocations;
+                case KeyItemLocationType.DefendingFabul: return KeyItems.MainLocations;
+                case KeyItemLocationType.MtOrdeals: return KeyItems.MainLocations;
+                case KeyItemLocationType.BaronInn: return KeyItems.MainLocations;
+                case KeyItemLocationType.BaronCastle: return KeyItems.MainLocations;
+                case KeyItemLocationType.EdwardInToroia: return !KeyItems.NoFreeItem;
+                case KeyItemLocationType.CaveMagnes: return KeyItems.MainLocations;
+                case KeyItemLocationType.TowerOfZot: return KeyItems.MainLocations;
+                case KeyItemLocationType.LowerBabIlBoss: return KeyItems.MainLocations;
+                case KeyItemLocationType.SuperCannon: return KeyItems.MainLocations;
+                case KeyItemLocationType.Luca: return KeyItems.MainLocations;
+                case KeyItemLocationType.SealedCave: return KeyItems.MainLocations;
+                case KeyItemLocationType.FeymarchChest: return KeyItems.MainLocations;
+                case KeyItemLocationType.RatTailTrade: return KeyItems.MainLocations;
+                case KeyItemLocationType.Shelia1: return KeyItems.MainLocations;
+                case KeyItemLocationType.Shelia2: return KeyItems.MainLocations;
+                case KeyItemLocationType.FeymarchQueen: return KeyItems.SummonLocations;
+                case KeyItemLocationType.FeymarchKing: return KeyItems.SummonLocations;
+                case KeyItemLocationType.OdinThrone: return KeyItems.SummonLocations;
+                case KeyItemLocationType.FromTheSylphs: return KeyItems.SummonLocations;
+                case KeyItemLocationType.CaveBahamut: return KeyItems.SummonLocations;
+                case KeyItemLocationType.MurasameAltar: return KeyItems.MoonLocations;
+                case KeyItemLocationType.CrystalSwordAltar: return KeyItems.MoonLocations;
+                case KeyItemLocationType.WhiteSpearAltar: return KeyItems.MoonLocations;
+                case KeyItemLocationType.RibbonChest1: return KeyItems.MoonLocations;
+                case KeyItemLocationType.RibbonChest2: return KeyItems.MoonLocations;
+                case KeyItemLocationType.MasamuneAltar: return KeyItems.MoonLocations;
+                case KeyItemLocationType.TowerOfZotTrappedChest: return KeyItems.TrapChests;
+                case KeyItemLocationType.EblanTrappedChest1: return KeyItems.TrapChests;
+                case KeyItemLocationType.EblanTrappedChest2: return KeyItems.TrapChests;
+                case KeyItemLocationType.EblanTrappedChest3: return KeyItems.TrapChests;
+                case KeyItemLocationType.LowerBabIlTrappedChest1: return KeyItems.TrapChests;
+                case KeyItemLocationType.LowerBabIlTrappedChest2: return KeyItems.TrapChests;
+                case KeyItemLocationType.LowerBabIlTrappedChest3: return KeyItems.TrapChests;
+                case KeyItemLocationType.LowerBabIlTrappedChest4: return KeyItems.TrapChests;
+                case KeyItemLocationType.CaveEblanTrappedChest: return KeyItems.TrapChests;
+                case KeyItemLocationType.UpperBabIlTrappedChest: return KeyItems.TrapChests;
+                case KeyItemLocationType.CaveOfSummonsTrappedChest: return KeyItems.TrapChests;
+                case KeyItemLocationType.SylphCaveTrappedChest1: return KeyItems.TrapChests;
+                case KeyItemLocationType.SylphCaveTrappedChest2: return KeyItems.TrapChests;
+                case KeyItemLocationType.SylphCaveTrappedChest3: return KeyItems.TrapChests;
+                case KeyItemLocationType.SylphCaveTrappedChest4: return KeyItems.TrapChests;
+                case KeyItemLocationType.SylphCaveTrappedChest5: return KeyItems.TrapChests;
+                case KeyItemLocationType.SylphCaveTrappedChest6: return KeyItems.TrapChests;
+                case KeyItemLocationType.SylphCaveTrappedChest7: return KeyItems.TrapChests;
+                case KeyItemLocationType.GiantOfBabIlTrappedChest: return KeyItems.TrapChests;
+                case KeyItemLocationType.LunarPathTrappedChest: return KeyItems.TrapChests && (KeyItems.MoonLocations || KeyItems.Unsafe);
+                case KeyItemLocationType.LunarCoreTrappedChest1: return KeyItems.TrapChests && (KeyItems.MoonLocations || KeyItems.Unsafe);
+                case KeyItemLocationType.LunarCoreTrappedChest2: return KeyItems.TrapChests && (KeyItems.MoonLocations || KeyItems.Unsafe);
+                case KeyItemLocationType.LunarCoreTrappedChest3: return KeyItems.TrapChests && (KeyItems.MoonLocations || KeyItems.Unsafe);
+                case KeyItemLocationType.LunarCoreTrappedChest4: return KeyItems.TrapChests && (KeyItems.MoonLocations || KeyItems.Unsafe);
+                case KeyItemLocationType.LunarCoreTrappedChest5: return KeyItems.TrapChests && (KeyItems.MoonLocations || KeyItems.Unsafe);
+                case KeyItemLocationType.LunarCoreTrappedChest6: return KeyItems.TrapChests && (KeyItems.MoonLocations || KeyItems.Unsafe);
+                case KeyItemLocationType.LunarCoreTrappedChest7: return KeyItems.TrapChests && (KeyItems.MoonLocations || KeyItems.Unsafe);
+                case KeyItemLocationType.LunarCoreTrappedChest8: return KeyItems.TrapChests && (KeyItems.MoonLocations || KeyItems.Unsafe);
+                case KeyItemLocationType.LunarCoreTrappedChest9: return KeyItems.TrapChests && (KeyItems.MoonLocations || KeyItems.Unsafe);
+                case KeyItemLocationType.RydiasMom: return KeyItems.NoFreeItem;
+                case KeyItemLocationType.FallenGolbez:
+                case KeyItemLocationType.ObjectiveCompletion:
+                default:
+                    return false;
+            }
+        }
+
+        public override bool? CanHaveCharacter(CharacterLocationType location)
+        {
+            switch (location)
+            {
+                case CharacterLocationType.StartingPartner: return true;
+                case CharacterLocationType.KaipoInn: return !Characters.NoEarned;
+                case CharacterLocationType.WateryPass: return !Characters.NoFree;
+                case CharacterLocationType.Damcyan: return !Characters.NoFree;
+                case CharacterLocationType.KaipoInfirmary: return !Characters.NoEarned;
+                case CharacterLocationType.MtHobbs: return !Characters.NoEarned;
+                case CharacterLocationType.Mysidia1: return !Characters.NoFree;
+                case CharacterLocationType.Mysidia2: return !Characters.NoFree;
+                case CharacterLocationType.MtOrdeals: return !Characters.NoFree;
+                case CharacterLocationType.BaronInn: return !Characters.NoEarned;
+                case CharacterLocationType.BaronCastle: return !Characters.NoEarned;
+                case CharacterLocationType.Zot1: return !Characters.NoEarned;
+                case CharacterLocationType.Zot2: return !Characters.NoEarned;
+                case CharacterLocationType.DwarfCastle: return !Characters.NoEarned;
+                case CharacterLocationType.EblanCave: return !Characters.NoEarned;
+                case CharacterLocationType.Moon: return !Characters.NoEarned;
+                case CharacterLocationType.Giant: return !Characters.NoEarned && !Objectives.ClassicGiant;
+                default:
+                   return false;
+            }
+        }
     }
 
     public class Objectives

@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using BizHawk.FreeEnterprise.Companion.Configuration;
+using System.Windows.Forms;
 
 namespace BizHawk.FreeEnterprise.Companion
 {

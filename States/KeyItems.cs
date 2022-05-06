@@ -1,4 +1,5 @@
-﻿using BizHawk.FreeEnterprise.Companion.Extensions;
+﻿using BizHawk.FreeEnterprise.Companion.Database;
+using BizHawk.FreeEnterprise.Companion.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,48 +8,61 @@ namespace BizHawk.FreeEnterprise.Companion.State
 {
     public class KeyItems
     {
-        private Dictionary<KeyItemType, KeyItem> _items;
-        public IReadOnlyDictionary<KeyItemType, KeyItem> Items => _items;
+        private KeyItemType found;
+        private KeyItemType used;
+        byte[] foundLocations;
+        private readonly PersistentStorage storage;
 
-        public bool Update(TimeSpan now, KeyItemType foundKeyItems, KeyItemType usedKeyItems, byte[] itemLocations)
+        public bool Update(TimeSpan? now, KeyItemType foundKeyItems, KeyItemType usedKeyItems, byte[] itemLocations)
         {
-            var currentFound = Items.Values.Where(i => i.Found).Select(i => i.Key).Aggregate((KeyItemType)0, (l, r) => l | r);
-            var currentUsed = Items.Values.Where(i => i.Used).Select(i => i.Key).Aggregate((KeyItemType)0, (l, r) => l | r);
+            if (foundKeyItems == found &&
+                usedKeyItems == used &&
+                itemLocations.SequenceEqual(foundLocations))
+                return false;
 
-            if (currentFound != foundKeyItems || currentUsed != usedKeyItems)
-            {                
-                var parsedFoundItemLocations = itemLocations.ReadMany<KeyItemLocationType>(0, 16, 17).ToArray();
+            found = foundKeyItems;
+            used = usedKeyItems;
+            itemLocations.CopyTo(foundLocations, 0);
 
-                foreach (var item in Items.Values)
-                {
-                    if (!currentFound.HasFlag(item.Key) && foundKeyItems.HasFlag(item.Key))
-                    {
-                        var location = parsedFoundItemLocations[(uint)MathExt.FloorLog2((ulong)item.Key)];
-                        item.Find(now, location);
-                    }
-                    else if (currentFound.HasFlag(item.Key) && !foundKeyItems.HasFlag(item.Key))
-                        item.ResetFound();
+            foreach (var item in found.GetFlags())
+                storage.KeyItemFoundTimes[item] = now;
 
-                    if (!currentUsed.HasFlag(item.Key) && usedKeyItems.HasFlag(item.Key))
-                        item.Use(now);
-                    else if (currentUsed.HasFlag(item.Key) && !usedKeyItems.HasFlag(item.Key))
-                        item.ResetUsed();
-                }
+            foreach (var item in used.GetFlags())
+                storage.KeyItemUsedTimes[item] = now;
 
-                return true;
+            return true;
+        }    
+
+        public KeyItems(PersistentStorage storage)
+        {
+            this.storage = storage;
+            foundLocations = new byte[CARTRAMAddresses.KeyItemLocationsBytes];
+        }
+
+        public Dictionary<KeyItemType, KeyItem> Items
+        {
+            get
+            {
+                var parsedFoundItemLocations = foundLocations.ReadMany<KeyItemLocationType>(0, 16, 17).ToArray();
+                return Enum.GetValues(typeof(KeyItemType))
+                    .OfType<KeyItemType>()
+                    .ToDictionary(
+                        key => key,
+                        key => new KeyItem(key, found.HasFlag(key), used.HasFlag(key), storage, parsedFoundItemLocations));
             }
-
-            return false;
         }
-    
 
-        public KeyItems()
+        public bool IsFound(KeyItemType keyItem)
+            => found.HasFlag(keyItem);
+
+        public KeyItemType? ItemFoundAt(KeyItemLocationType location)
+            => Items.Values.FirstOrDefault(item => item.Found && item.WhereFound == location)?.Key;
+
+        public KeyItems Clone()
         {
-            _items = new Dictionary<KeyItemType, KeyItem>();
-            foreach (KeyItemType keyitem in Enum.GetValues(typeof(KeyItemType)))
-                _items.Add(keyitem, new KeyItem(keyitem));
+            var clone = new KeyItems(storage);
+            clone.Update(null, found, used, foundLocations);
+            return clone;
         }
-
-        public KeyItem this[KeyItemType itemType] => Items[itemType];
     }
 }
