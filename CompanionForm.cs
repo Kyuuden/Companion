@@ -262,7 +262,7 @@ namespace BizHawk.FreeEnterprise.Companion
                 RomData = new RomData(Memory.CartRom, settings);
                 RomData.Overlays.SetCustomMissMessage(settings.KeyItemBonkDefaultText ? null : settings.KeyItemBonkCustomText);
 
-                BossesControl.Update(new State.Bosses());
+                BossesControl.Update(new State.Bosses(Storage, () => Run.ElapsedTime));
                 SetControlsVisibility();
 
                 trackerControls.ForEach(c =>

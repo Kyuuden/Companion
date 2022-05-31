@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BizHawk.FreeEnterprise.Companion.Database;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,25 +7,29 @@ namespace BizHawk.FreeEnterprise.Companion.State
 {
     public class Bosses
     {
-        private readonly Dictionary<BossType, bool> _seenBosses = new Dictionary<BossType, bool>();
+        private readonly PersistentStorage storage;
+        private readonly Func<TimeSpan> getNow;
 
-        public IReadOnlyDictionary<BossType, bool> Seen => _seenBosses;
+        public IReadOnlyDictionary<BossType, bool> Seen =>
+            Enum.GetValues(typeof(BossType))
+            .OfType<BossType>()
+            .ToDictionary(b => b, b => storage.BossCheckedTimes[b].HasValue);
 
-        public Bosses()
+
+        public Bosses(PersistentStorage storage, Func<TimeSpan> getNow)
         {
-            foreach (BossType boss in Enum.GetValues(typeof(BossType)))
-            {
-                _seenBosses[boss] = false;
-            }
+            this.storage = storage;
+            this.getNow = getNow;
         }
 
-        public bool this[BossType boss] => _seenBosses[boss];
+        public TimeSpan? this[BossType boss] => storage.BossCheckedTimes[boss];
 
         public void Swap(BossType boss)
         {
-            _seenBosses[boss] = !_seenBosses[boss];
+            var hadTime = storage.BossCheckedTimes[boss].HasValue;
+            storage.BossCheckedTimes[boss] = hadTime ? null : getNow();
         }
 
-        public int SeenCount => _seenBosses.Values.Count(v => v);
+        public int SeenCount => Seen.Values.Count(v => v);
     }
 }

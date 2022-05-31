@@ -68,7 +68,7 @@
     "Tower of Zot",
     "Lower Bab-il boss",
     "Super Cannon",
-    "Luca",
+    "Dwarf Castle",
     "Sealed Cave",
     "Feymarch chest",
     "Rat Tail trade",
@@ -86,9 +86,9 @@
     "D.Lunar/Ribbon chest 2",
     "Ogopogo/Masamune altar",
     "Tower of Zot trapped chest",
-    "Eblan trapped chest 1", //staleman + skeletons
-    "Eblan trapped chest 2", //Black cats + Lamia
-    "Eblan trapped chest 3", // Mad Ogres
+    "Castle Eblan trapped chest 1", //staleman + skeletons
+    "Castle Eblan trapped chest 2", //Black cats + Lamia
+    "Castle Eblan trapped chest 3", // Mad Ogres
     "Lower Bab-il trapped chest 1",
     "Lower Bab-il trapped chest 2",
     "Lower Bab-il trapped chest 3",
@@ -136,7 +136,7 @@
     "Zot 1",
     "Zot 2",
     "Dwarf Castle",
-    "Eblan Cave",
+    "Cave Eblan",
     "Moon Altar",
     "Giant"
   ]

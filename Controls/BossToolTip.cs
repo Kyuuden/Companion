@@ -35,15 +35,18 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
             if (_data == null || _settings == null)
                 return;
 
-            _data.Font.RenderBox(e.Graphics, 0, 0, 24, e.Bounds.Height/ _settings.TileSize);
-            _data.Font.RenderText(e.Graphics, e.Bounds.Width /2 - ((Description ?? string.Empty).Length * _settings.TileSize)/2  , _settings.TileSize*2, 22, Description ?? string.Empty, Sprites.TextMode.Normal,0);
+            _data.Font.RenderBox(e.Graphics, 0, 0, 24, e.Bounds.Height / _settings.TileSize);
+            var lineNum = 2;
+
+            foreach (var line in (Description ?? string.Empty).Split('\n'))
+                _data.Font.RenderText(e.Graphics, e.Bounds.Width / 2 - (line.Length * _settings.TileSize) / 2, _settings.TileSize * lineNum++, 22, line, Sprites.TextMode.Normal, 0);
         }
 
         private void OnPopup(object sender, PopupEventArgs e)
         {
             if (_data == null || _settings == null)
                 return;
-            e.ToolTipSize = new Size(_settings.Scale(192), _settings.Scale(40));
+            e.ToolTipSize = new Size(_settings.Scale(192), _settings.TileSize * (4 + (Description ?? string.Empty).Split('\n').Count()));
         }
 
         public string? Description { get; set; }

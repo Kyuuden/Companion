@@ -22,6 +22,7 @@ namespace BizHawk.FreeEnterprise.Companion.Database
             sql.WriteCommand("CREATE TABLE IF NOT EXISTS KeyItemUsedTimes       (Hash TEXT NOT NULL, KeyItem INT NOT NULL,   Time TEXT NOT NULL, PRIMARY KEY (Hash, KeyItem));");
             sql.WriteCommand("CREATE TABLE IF NOT EXISTS LocationCheckTimes     (Hash TEXT NOT NULL, Location INT NOT NULL,  Time TEXT NOT NULL, PRIMARY KEY (Hash, Location));");
             sql.WriteCommand("CREATE TABLE IF NOT EXISTS ObjectiveCompleteTimes (Hash TEXT NOT NULL, Objective INT NOT NULL, Time TEXT NOT NULL, PRIMARY KEY (Hash, Objective));");
+            sql.WriteCommand("CREATE TABLE IF NOT EXISTS BossCheckedTimes       (Hash TEXT NOT NULL, Boss INT NOT NULL,      Time TEXT NOT NULL, PRIMARY KEY (Hash, Boss));");
 
             Hash = hash;
             if (!TimeSpan.TryParse(ReadSql($"SELECT Runtime FROM RunTimes WHERE Hash = '{Hash}'")?.Values?.FirstOrDefault()?.ToString(), out elapsedTime))
@@ -31,6 +32,7 @@ namespace BizHawk.FreeEnterprise.Companion.Database
             KeyItemUsedTimes = new TimeStorage<KeyItemType>(this, "KeyItemUsedTimes", "KeyItem");
             LocationCheckedTimes = new TimeStorage<int>(this, "LocationCheckTimes", "Location");
             ObjectiveCompleteTimes = new TimeStorage<int>(this, "ObjectiveCompleteTimes", "Objective");
+            BossCheckedTimes = new TimeStorage<BossType>(this, "BossCheckedTimes", "Boss", true);
         }
 
         public TimeSpan ElapsedTime
@@ -56,17 +58,19 @@ namespace BizHawk.FreeEnterprise.Companion.Database
 
         public TimeStorage<int> ObjectiveCompleteTimes { get; }
 
+        public TimeStorage<BossType> BossCheckedTimes { get; }
+
         IDictionary<string, object>? ReadSql(string command)
             => sql.ReadCommand(command) as IDictionary<string, object>;
 
         public class TimeStorage<T> where T: struct
         {
-            public TimeStorage(PersistentStorage parent, string tableName, string keyName)
+            public TimeStorage(PersistentStorage parent, string tableName, string keyName, bool canDelete = false)
             {
                 this.parent = parent;
                 this.tableName = tableName;
                 this.keyName = keyName;
-
+                this.canDelete = canDelete;
                 var dict = parent.ReadSql($"SELECT {keyName}, Time FROM {tableName} WHERE Hash = '{parent.Hash}'");
                 if (dict != null)
                 {
@@ -79,13 +83,20 @@ namespace BizHawk.FreeEnterprise.Companion.Database
             private readonly PersistentStorage parent;
             private readonly string tableName;
             private readonly string keyName;
+            private readonly bool canDelete;
 
             public TimeSpan? this[T key]
             {
                 get => _data.TryGetValue(Convert.ToInt32(key), out var timeSpan) ? timeSpan : null;
                 set
                 {
-                    if (!value.HasValue || _data.TryGetValue(Convert.ToInt32(key), out var timeSpan) && timeSpan < value)
+                    if (!value.HasValue && canDelete)
+                    {
+                        _data.Remove(Convert.ToInt32(key));
+                        parent.sql.WriteCommand($"DELETE FROM {tableName} WHERE Hash = '{parent.Hash}' AND {keyName} = {Convert.ToInt32(key)}");
+                        return;
+                    }
+                    else if (!value.HasValue || _data.TryGetValue(Convert.ToInt32(key), out var timeSpan) && timeSpan < value)
                         return;
 
                     _data[Convert.ToInt32(key)] = value.Value;

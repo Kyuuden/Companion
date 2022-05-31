@@ -1,4 +1,5 @@
 ﻿using BizHawk.FreeEnterprise.Companion.Configuration;
+using BizHawk.FreeEnterprise.Companion.Database;
 using BizHawk.FreeEnterprise.Companion.Extensions;
 using BizHawk.FreeEnterprise.Companion.FlagSet;
 using System;
@@ -38,11 +39,17 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
 
         private void SetToolTip(BossType item)
         {
-            if (toolTipBossType == item)
+            if (toolTipBossType == item || Data == null)
                 return;
+
+            var bossAt = Data[item];
 
             toolTipBossType = item;
             bossToolTip.Description = item.GetDescription();
+
+            if (bossAt.HasValue)
+                bossToolTip.Description += $"\nSaw at {bossAt.Value.ToString("hh':'mm':'ss")}";
+
             bossToolTip.Active = true;
         }
 
