@@ -4,6 +4,7 @@ using BizHawk.Emulation.Common;
 using BizHawk.FreeEnterprise.Companion.Configuration;
 using BizHawk.FreeEnterprise.Companion.Controls;
 using BizHawk.FreeEnterprise.Companion.Database;
+using BizHawk.FreeEnterprise.Companion.Extensions;
 using BizHawk.FreeEnterprise.Companion.State;
 using Newtonsoft.Json;
 using System;
@@ -57,6 +58,13 @@ namespace BizHawk.FreeEnterprise.Companion
                 settings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(Strings.SettingsPath)) ?? new Settings();
 
             trackerControls = new List<ITrackerControl>(new ITrackerControl[] { KeyItemsControl, PartyControl, ObjectivesControl, BossesControl, LocationsControl });
+
+            trackerControls.ForEach(c => c.Clicked += TrackerControlClicked);
+        }
+
+        private void TrackerControlClicked()
+        {
+            ((MainForm)MainForm).Focus();
         }
 
         private bool ControlsInitialized => trackerControls.All(c => c.IsInitialized);
@@ -339,7 +347,7 @@ namespace BizHawk.FreeEnterprise.Companion
                 Initialize();
 
             Run?.NewFrame();
-            StopWatchLabel.Text = Run?.ElapsedTime.ToString("hh':'mm':'ss'.'ff");
+            StopWatchLabel.Text = Run?.ElapsedTime.ToString(settings.TimeFormatString);
             trackerControls.ForEach(c => c.NewFrame());
         }
 
@@ -387,12 +395,19 @@ namespace BizHawk.FreeEnterprise.Companion
                 Run.Stopwatch.Stop();
             else if (Run?.Stopwatch.IsRunning == false)
                 Run.Stopwatch.Start();
+
+            TrackerControlClicked();
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             using var about = new AboutDialog() { Owner = this, StartPosition = FormStartPosition.CenterParent };
             about.ShowDialog();
+        }
+
+        private void StockWatchLabel_Click(object sender, EventArgs e)
+        {
+            TrackerControlClicked();
         }
     }
 }

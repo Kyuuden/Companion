@@ -102,6 +102,7 @@ namespace BizHawk.FreeEnterprise.Companion
             this.StopWatchLabel.Size = new System.Drawing.Size(778, 37);
             this.StopWatchLabel.TabIndex = 0;
             this.StopWatchLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.StopWatchLabel.Click += new System.EventHandler(this.StockWatchLabel_Click);
             this.StopWatchLabel.DoubleClick += new System.EventHandler(this.StopWatchLabel_DoubleClick);
             // 
             // WideLayoutPanel

@@ -65,8 +65,8 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
                 _characterVersions[cId] = ((_characterVersions.TryGetValue(cId, out var old) ? old : 1) + 1) % RomData.CharacterSprites.PaletteCount;
                 Invalidate();
             }
-            else
-                base.OnMouseClick(e);
+
+            base.OnMouseClick(e);
         }
 
 

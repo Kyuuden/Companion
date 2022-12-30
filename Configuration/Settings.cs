@@ -1,4 +1,5 @@
-﻿using BizHawk.FreeEnterprise.Companion.Sprites;
+﻿using BizHawk.FreeEnterprise.Companion.Extensions;
+using BizHawk.FreeEnterprise.Companion.Sprites;
 using Newtonsoft.Json;
 using System;
 using System.Drawing;
@@ -32,6 +33,7 @@ namespace BizHawk.FreeEnterprise.Companion.Configuration
         public bool KeyItemEventEnabled { get; set; }
         public bool KeyItemBonkDefaultText { get; set; }
         public string KeyItemBonkCustomText { get; set; }
+        public TimeFormat TimeFormat { get; set; }
 
         public bool Maximized { get; set; }
         public bool Minimized { get; set; }
@@ -46,6 +48,9 @@ namespace BizHawk.FreeEnterprise.Companion.Configuration
 
         [JsonIgnore]
         public double ViewScaleF => ViewScale / 100.0;
+
+        [JsonIgnore]
+        public string TimeFormatString => TimeFormat.GetDescription().Replace(":", "':'").Replace(".", "'.'");
 
         public int Scale(int size)
             => (int)(size * ViewScaleF);
@@ -85,6 +90,7 @@ namespace BizHawk.FreeEnterprise.Companion.Configuration
             KeyItemEventEnabled = true;
             KeyItemBonkDefaultText = true;
             KeyItemBonkCustomText = string.Empty;
+            TimeFormat = TimeFormat.HHMMSS;
             Location = new System.Drawing.Point(0, 0);
             Size = new System.Drawing.Size(450, 800);
         }

@@ -1,4 +1,6 @@
-﻿using BizHawk.FreeEnterprise.Companion.Database;
+﻿using BizHawk.FreeEnterprise.Companion.Configuration;
+using BizHawk.FreeEnterprise.Companion.Database;
+using BizHawk.FreeEnterprise.Companion.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,31 +9,33 @@ namespace BizHawk.FreeEnterprise.Companion.State
 {
     public class Objectives
     {
-        private readonly PersistentStorage.TimeStorage<int> objectiveTimeStorage;
-        private readonly List<string> objectives;
-        private byte[] completionData;
+        private readonly Settings _settings;
+        private readonly PersistentStorage.TimeStorage<int> _objectiveTimeStorage;
+        private readonly List<string> _objectives;
+        private byte[] _completionData;
 
-        public Objectives(PersistentStorage.TimeStorage<int> objectiveTimeStorage)
-            : this(new List<string>(), objectiveTimeStorage)
+        public Objectives(Settings settings, PersistentStorage.TimeStorage<int> objectiveTimeStorage)
+            : this(settings, new List<string>(), objectiveTimeStorage)
         {
         }
 
-        public Objectives(IEnumerable<string> objectives, PersistentStorage.TimeStorage<int> objectiveTimeStorage)
+        public Objectives(Settings settings, IEnumerable<string> objectives, PersistentStorage.TimeStorage<int> objectiveTimeStorage)
         {
-            this.objectives = objectives.ToList();
-            completionData = new byte[this.objectives.Count];
-            this.objectiveTimeStorage = objectiveTimeStorage;
+            _objectives = objectives.ToList();
+            _completionData = new byte[this._objectives.Count];
+            _settings = settings;
+            _objectiveTimeStorage = objectiveTimeStorage;
         }
 
         public bool Update(TimeSpan now, byte[] data)
         {
-            var newCompletion = data.Take(objectives.Count).ToList();
-            if (!completionData.SequenceEqual(newCompletion))
+            var newCompletion = data.Take(_objectives.Count).ToList();
+            if (!_completionData.SequenceEqual(newCompletion))
             {
-                newCompletion.CopyTo(completionData);
-                for (int i = 0; i < completionData.Length; i++)
-                    if (completionData[i] != 0)
-                        objectiveTimeStorage[i] = now;
+                newCompletion.CopyTo(_completionData);
+                for (int i = 0; i < _completionData.Length; i++)
+                    if (_completionData[i] != 0)
+                        _objectiveTimeStorage[i] = now;
 
                 return true;
             }
@@ -43,16 +47,19 @@ namespace BizHawk.FreeEnterprise.Companion.State
         {
             get
             {
-                for (int i = 0; i < objectives.Count; i++)
-                    yield return new (objectives[i], completionData[i] != 0, objectiveTimeStorage[i]);
+                for (int i = 0; i < _objectives.Count; i++)
+                    yield return new (_settings, _objectives[i], _completionData[i] != 0, _objectiveTimeStorage[i]);
             }
         }
     }
 
     public class ObjectiveStatus
     {
-        public ObjectiveStatus(string description, bool isComplete, TimeSpan? completeTime)
+        private readonly Settings _settings;
+
+        public ObjectiveStatus(Settings settings, string description, bool isComplete, TimeSpan? completeTime)
         {
+            _settings = settings;
             Description = description;
             IsComplete = isComplete;
             CompleteTime = completeTime;
@@ -63,6 +70,6 @@ namespace BizHawk.FreeEnterprise.Companion.State
         public TimeSpan? CompleteTime { get; }
 
         public override string ToString()
-            => $"{Description}{(IsComplete && CompleteTime.HasValue ? $" - {CompleteTime.Value:c}" : string.Empty)}";
+            => $"{Description}{(IsComplete && CompleteTime.HasValue ? $" - {CompleteTime.Value.ToString(_settings.TimeFormatString)}" : string.Empty)}";
     }
 }

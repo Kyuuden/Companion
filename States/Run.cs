@@ -54,12 +54,12 @@ namespace BizHawk.FreeEnterprise.Companion.State
                 var json = Encoding.UTF8.GetString(jsonBytes);
                 Metadata = JsonConvert.DeserializeObject<SeedMetadata>(json)!;
                 FlagSet = FlagSetParser.Parse(Metadata.binary_flags);
-                Objectives = new Objectives(Metadata.objectives!, _db.ObjectiveCompleteTimes);
+                Objectives = new Objectives(settings, Metadata.objectives!, _db.ObjectiveCompleteTimes);
             }
             else
             {
                 //TODO Prompt user to input Objectives since cannot read from ROM
-                Objectives = new Objectives(_db.ObjectiveCompleteTimes);
+                Objectives = new Objectives(settings, _db.ObjectiveCompleteTimes);
             }
 
             KeyItems = new KeyItems(_db);

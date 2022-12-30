@@ -71,6 +71,8 @@ namespace BizHawk.FreeEnterprise.Companion
             this.KeyItemBonkCheckBox = new System.Windows.Forms.CheckBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.comboTimeFormat = new System.Windows.Forms.ComboBox();
             this.tabs.SuspendLayout();
             this.LayoutPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericViewScale)).BeginInit();
@@ -95,6 +97,8 @@ namespace BizHawk.FreeEnterprise.Companion
             // 
             // LayoutPage
             // 
+            this.LayoutPage.Controls.Add(this.label1);
+            this.LayoutPage.Controls.Add(this.comboTimeFormat);
             this.LayoutPage.Controls.Add(this.BordersCheckBox);
             this.LayoutPage.Controls.Add(this.ScaleIconsCheckBox);
             this.LayoutPage.Controls.Add(this.label10);
@@ -196,7 +200,7 @@ namespace BizHawk.FreeEnterprise.Companion
             // 
             this.comboAspect.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboAspect.FormattingEnabled = true;
-            this.comboAspect.Location = new System.Drawing.Point(82, 224);
+            this.comboAspect.Location = new System.Drawing.Point(82, 239);
             this.comboAspect.Name = "comboAspect";
             this.comboAspect.Size = new System.Drawing.Size(148, 21);
             this.comboAspect.TabIndex = 11;
@@ -204,7 +208,7 @@ namespace BizHawk.FreeEnterprise.Companion
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(8, 227);
+            this.label8.Location = new System.Drawing.Point(8, 242);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(71, 13);
             this.label8.TabIndex = 10;
@@ -232,7 +236,7 @@ namespace BizHawk.FreeEnterprise.Companion
             // 
             this.comboDockSide.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboDockSide.FormattingEnabled = true;
-            this.comboDockSide.Location = new System.Drawing.Point(82, 197);
+            this.comboDockSide.Location = new System.Drawing.Point(82, 212);
             this.comboDockSide.Name = "comboDockSide";
             this.comboDockSide.Size = new System.Drawing.Size(148, 21);
             this.comboDockSide.TabIndex = 4;
@@ -240,7 +244,7 @@ namespace BizHawk.FreeEnterprise.Companion
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(8, 200);
+            this.label4.Location = new System.Drawing.Point(8, 215);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(60, 13);
             this.label4.TabIndex = 3;
@@ -249,7 +253,7 @@ namespace BizHawk.FreeEnterprise.Companion
             // cbDock
             // 
             this.cbDock.AutoSize = true;
-            this.cbDock.Location = new System.Drawing.Point(11, 148);
+            this.cbDock.Location = new System.Drawing.Point(11, 163);
             this.cbDock.Name = "cbDock";
             this.cbDock.Size = new System.Drawing.Size(109, 17);
             this.cbDock.TabIndex = 2;
@@ -259,7 +263,7 @@ namespace BizHawk.FreeEnterprise.Companion
             // 
             // numericDockOffset
             // 
-            this.numericDockOffset.Location = new System.Drawing.Point(82, 171);
+            this.numericDockOffset.Location = new System.Drawing.Point(82, 186);
             this.numericDockOffset.Minimum = new decimal(new int[] {
             100,
             0,
@@ -273,7 +277,7 @@ namespace BizHawk.FreeEnterprise.Companion
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(8, 173);
+            this.label3.Location = new System.Drawing.Point(8, 188);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(67, 13);
             this.label3.TabIndex = 0;
@@ -550,6 +554,24 @@ namespace BizHawk.FreeEnterprise.Companion
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(8, 119);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(68, 13);
+            this.label1.TabIndex = 19;
+            this.label1.Text = "Time Format:";
+            // 
+            // comboTimeFormat
+            // 
+            this.comboTimeFormat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboTimeFormat.FormattingEnabled = true;
+            this.comboTimeFormat.Location = new System.Drawing.Point(82, 116);
+            this.comboTimeFormat.Name = "comboTimeFormat";
+            this.comboTimeFormat.Size = new System.Drawing.Size(148, 21);
+            this.comboTimeFormat.TabIndex = 18;
+            // 
             // SettingsDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -619,5 +641,7 @@ namespace BizHawk.FreeEnterprise.Companion
         private System.Windows.Forms.RadioButton KeyItemBonkDefaultRadio;
         private System.Windows.Forms.RadioButton KeyItemCustomRadio;
         private System.Windows.Forms.TextBox KeyItemCustomTextBox;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox comboTimeFormat;
     }
 }

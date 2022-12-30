@@ -1,4 +1,5 @@
 ﻿using BizHawk.FreeEnterprise.Companion.Configuration;
+using BizHawk.FreeEnterprise.Companion.Extensions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -41,7 +42,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
             if (!string.IsNullOrEmpty(ReceivedFrom))
             {
                 if (FoundAt.HasValue && FoundAt.Value > TimeSpan.Zero)
-                    _data.Font.RenderText(e.Graphics, _settings.TileSize, _settings.Scale(40), 28, $"Received at {FoundAt.Value.ToString("hh':'mm':'ss")} from:", Sprites.TextMode.Special, 0);
+                    _data.Font.RenderText(e.Graphics, _settings.TileSize, _settings.Scale(40), 28, $"Received at {FoundAt.Value.ToString(_settings.TimeFormatString)} from:", Sprites.TextMode.Special, 0);
                 else
                     _data.Font.RenderText(e.Graphics, _settings.TileSize, _settings.Scale(40), 28, "Received from:", Sprites.TextMode.Special, 0);
                 _data.Font.RenderText(e.Graphics, _settings.TileSize, _settings.Scale(48), 28, ReceivedFrom ?? string.Empty, Sprites.TextMode.Special, 0);
@@ -56,7 +57,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
                  if (!UsedAt.HasValue)
                     _data.Font.RenderText(e.Graphics, _settings.Scale(168), _settings.Scale(32), 28, "(unused)", Sprites.TextMode.Disabled, 0);
                  else if (UsedAt.Value > TimeSpan.Zero)
-                    _data.Font.RenderText(e.Graphics, _settings.TileSize, _settings.Scale(56), 28, $"Used at {UsedAt.Value.ToString("hh':'mm':'ss")}", Sprites.TextMode.Special, 0);
+                    _data.Font.RenderText(e.Graphics, _settings.TileSize, _settings.Scale(56), 28, $"Used at {UsedAt.Value.ToString(_settings.TimeFormatString)}", Sprites.TextMode.Special, 0);
             }
         }
 

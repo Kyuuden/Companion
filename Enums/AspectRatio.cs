@@ -10,10 +10,4 @@ namespace BizHawk.FreeEnterprise.Companion
         [Description("16x10")]
         _16x10,
     }
-
-    public enum Layout
-    {
-        Original,
-        Alternate
-    }
 }

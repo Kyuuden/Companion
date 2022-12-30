@@ -48,7 +48,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
             bossToolTip.Description = item.GetDescription();
 
             if (bossAt.HasValue)
-                bossToolTip.Description += $"\nSaw at {bossAt.Value.ToString("hh':'mm':'ss")}";
+                bossToolTip.Description += $"\nSaw at {bossAt.Value.ToString(Settings!.TimeFormatString)}";
 
             bossToolTip.Active = true;
         }

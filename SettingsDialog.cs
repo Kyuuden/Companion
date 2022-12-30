@@ -34,6 +34,7 @@ namespace BizHawk.FreeEnterprise.Companion
             comboInterpolation.BindEnumToCombobox(_settings.InterpolationMode, InterpolationMode.Invalid, InterpolationMode.HighQualityBicubic, InterpolationMode.HighQualityBilinear);
             ScaleIconsCheckBox.Checked = _settings.IconScaling;
             BordersCheckBox.Checked = _settings.BordersEnabled;
+            comboTimeFormat.BindEnumToCombobox(_settings.TimeFormat);
 
             cbDock.Checked = _settings.Dock;
             numericDockOffset.Value = _settings.DockOffset;
@@ -67,6 +68,7 @@ namespace BizHawk.FreeEnterprise.Companion
             _settings.IconScaling = ScaleIconsCheckBox.Checked;
             _settings.InterpolationMode = (InterpolationMode)comboInterpolation.SelectedValue;
             _settings.BordersEnabled = BordersCheckBox.Checked;
+            _settings.TimeFormat = (TimeFormat)comboTimeFormat.SelectedValue;
             _settings.Dock = cbDock.Checked;
             _settings.DockOffset = (int)numericDockOffset.Value;
             _settings.DockSide = (DockSide)comboDockSide.SelectedValue;

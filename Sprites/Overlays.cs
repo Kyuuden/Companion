@@ -97,7 +97,7 @@ namespace BizHawk.FreeEnterprise.Companion.Sprites
             if (string.IsNullOrEmpty(missText))
                 return;
 
-            _customMissBitmap = new Bitmap(missText.Length*8, 8);
+            _customMissBitmap = new Bitmap(missText!.Length*8, 8);
             using var gr = Graphics.FromImage(_customMissBitmap);
             _font.RenderTextUnscaled(gr, 0, 0, missText, TextMode.Normal);
         }

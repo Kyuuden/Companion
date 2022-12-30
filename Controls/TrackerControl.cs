@@ -17,6 +17,8 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
         void Invalidate();
 
         int RequestedHeight { get; }
+
+        event Action Clicked;
     }
 
     public abstract class TrackerControl<T> : UserControl, ITrackerControl
@@ -36,6 +38,8 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
         protected Settings? Settings { get; private set; }
 
         public bool IsInitialized => RomData != null && Settings != null;
+
+        public event Action Clicked;
 
         public virtual void Initialize(RomData romData, IFlagSet? flagset, Settings settings)
         {
@@ -59,6 +63,18 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
 
         protected int MinimiumHeight => Settings == null ? 8 : BorderEnabled ? Settings.TileSize * 5 : Settings.TileSize * 3;
         protected int UseableWidth => Settings == null ? 8 : (Width / Settings.TileSize * Settings.TileSize) - Settings.Scale(16);
+
+        protected override void OnMouseClick(MouseEventArgs e)
+        {
+            base.OnMouseClick(e);
+            Clicked?.Invoke();
+        }
+
+        protected override void OnMouseDoubleClick(MouseEventArgs e)
+        {
+            base.OnMouseDoubleClick(e);
+            Clicked?.Invoke();
+        }
 
         public abstract void RefreshSize();
 
