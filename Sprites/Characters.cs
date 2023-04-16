@@ -1,4 +1,5 @@
 ﻿using BizHawk.FreeEnterprise.Companion.Extensions;
+using BizHawk.FreeEnterprise.Companion.RomUtilities;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -33,7 +34,7 @@ namespace BizHawk.FreeEnterprise.Companion.Sprites
         private Dictionary<Pose, List<Frame>> PoseFrames = new Dictionary<Pose, List<Frame>>();
         private Dictionary<BitmapKey, Bitmap> _frameCache = new Dictionary<BitmapKey, Bitmap>();
 
-        public Characters(MemorySpace rom)
+        public Characters(IMemorySpace rom)
         {
             PoseFrames[Pose.Stand] = new List<Frame>(new[] { new Frame(0, new byte[3, 3] { { 0, 1, 255 }, { 2, 3, 255 }, { 4, 5, 255 } }) });
             PoseFrames[Pose.Walk] = new List<Frame>(new[] { new Frame(0, new byte[3, 3] { { 0, 1, 255 }, { 2, 3, 255 }, { 12, 13, 255 } }) });

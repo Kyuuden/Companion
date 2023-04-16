@@ -92,8 +92,7 @@ namespace BizHawk.FreeEnterprise.Companion.Database
                 {
                     if (!value.HasValue && canDelete)
                     {
-                        _data.Remove(Convert.ToInt32(key));
-                        parent.sql.WriteCommand($"DELETE FROM {tableName} WHERE Hash = '{parent.Hash}' AND {keyName} = {Convert.ToInt32(key)}");
+                        Remove(key);
                         return;
                     }
                     else if (!value.HasValue || _data.TryGetValue(Convert.ToInt32(key), out var timeSpan) && timeSpan < value)
@@ -102,6 +101,12 @@ namespace BizHawk.FreeEnterprise.Companion.Database
                     _data[Convert.ToInt32(key)] = value.Value;
                     parent.sql.WriteCommand($"INSERT OR REPLACE INTO {tableName} (Hash, {keyName}, Time) VALUES ('{parent.Hash}', {Convert.ToInt32(key)}, '{value.Value:c}')");
                 }
+            }
+
+            public void Remove(T key)
+            {
+                _data.Remove(Convert.ToInt32(key));
+                parent.sql.WriteCommand($"DELETE FROM {tableName} WHERE Hash = '{parent.Hash}' AND {keyName} = {Convert.ToInt32(key)}");
             }
         }
     }

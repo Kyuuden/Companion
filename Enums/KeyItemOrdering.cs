@@ -22,6 +22,7 @@
                 KeyItemType.Spoon => 14,
                 KeyItemType.RatTail => 15,
                 KeyItemType.PinkTail => 16,
+                KeyItemType.Pass => 17,
                 _ => -1
             };
 
@@ -45,6 +46,7 @@
                 KeyItemType.Spoon => 14,
                 KeyItemType.PinkTail => 15,
                 KeyItemType.Crystal => 16,
+                KeyItemType.Pass => 17,
                 _ => 0
             };
     }

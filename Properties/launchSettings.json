@@ -5,6 +5,11 @@
       "executablePath": "C:\\Users\\kuren\\source\\repos\\Companion\\BizHawk2.8\\EmuHawk.exe",
       "workingDirectory": "C:\\Users\\kuren\\source\\repos\\Companion\\BizHawk2.8"
     },
+	"BizHawk 2.9": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Users\\kuren\\source\\repos\\Companion\\BizHawk2.9\\EmuHawk.exe",
+      "workingDirectory": "C:\\Users\\kuren\\source\\repos\\Companion\\BizHawk2.9"
+    },
     "BizHawk 2.6.1": {
       "commandName": "Executable",
       "executablePath": "C:\\Users\\kuren\\source\\repos\\Companion\\BizHawk2.6.1\\EmuHawk.exe",

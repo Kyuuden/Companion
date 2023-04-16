@@ -22,5 +22,6 @@ namespace BizHawk.FreeEnterprise.Companion
         Spoon = 16384,
         PinkTail = 32768,
         Crystal = 65536,
+        Pass = 131072, 
     }
 }

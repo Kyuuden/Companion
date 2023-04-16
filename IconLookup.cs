@@ -53,6 +53,7 @@ namespace BizHawk.FreeEnterprise.Companion
             _keyItemIcons.Add(KeyItemType.Spoon, new KeyItemIconSet(Properties.Resources.FFIVFE_Icons_16Spoon_Gray, Properties.Resources.FFIVFE_Icons_16Spoon_Color, Properties.Resources.FFIVFE_Icons_16Spoon_Check));
             _keyItemIcons.Add(KeyItemType.TowerKey, new KeyItemIconSet(Properties.Resources.FFIVFE_Icons_11TowerKey_Gray, Properties.Resources.FFIVFE_Icons_11TowerKey_Color, Properties.Resources.FFIVFE_Icons_11TowerKey_Check));
             _keyItemIcons.Add(KeyItemType.TwinHarp, new KeyItemIconSet(Properties.Resources.FFIVFE_Icons_6TwinHarp_Gray, Properties.Resources.FFIVFE_Icons_6TwinHarp_Color, Properties.Resources.FFIVFE_Icons_6TwinHarp_Check));
+            _keyItemIcons.Add(KeyItemType.Pass, new KeyItemIconSet(Properties.Resources.FFIVFE_Icons_2Pass_Gray, Properties.Resources.FFIVFE_Icons_2Pass_Color, Properties.Resources.FFIVFE_Icons_2Pass_Check));
 
 
             _bossIcons.Add(BossType.DMist, new BossIconSet(Properties.Resources.FFIVFE_Bosses_1MistD_Gray, Properties.Resources.FFIVFE_Bosses_1MistD_Color));

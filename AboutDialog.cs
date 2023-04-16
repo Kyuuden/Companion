@@ -1,4 +1,5 @@
 ﻿using BizHawk.FreeEnterprise.Companion.Configuration;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace BizHawk.FreeEnterprise.Companion
@@ -8,6 +9,7 @@ namespace BizHawk.FreeEnterprise.Companion
         public AboutDialog()
         {
             InitializeComponent();
+            Text += $" {Assembly.GetAssembly(this.GetType()).GetName().Version}";
         }
 
         private void richTextBox1_LinkClicked(object sender, LinkClickedEventArgs e)

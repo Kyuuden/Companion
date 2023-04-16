@@ -43,6 +43,8 @@ namespace BizHawk.FreeEnterprise.Companion.State
             return false;
         }
 
+        public int NumCompleted => _completionData.Count(d => d != 0);
+
         public IEnumerable<ObjectiveStatus> Statuses
         {
             get

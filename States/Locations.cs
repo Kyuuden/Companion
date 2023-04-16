@@ -54,7 +54,7 @@ namespace BizHawk.FreeEnterprise.Companion.State
         }
 
         public IList<KeyItemLocationType> CheckedKeyItemLocations
-            => Enum.GetValues(typeof(KeyItemLocationType)).Cast<KeyItemLocationType>().Where(l => _checkedLocations.Read<bool>((uint)l)).ToList();
+            => Enum.GetValues(typeof(KeyItemLocationType)).Cast<KeyItemLocationType>().Except(new[] { KeyItemLocationType.PassLocation }).Where(l => _checkedLocations.Read<bool>((uint)l)).ToList();
 
         public IList<CharacterLocationType> CheckedCharacterLocations
             => Enum.GetValues(typeof(CharacterLocationType)).Cast<CharacterLocationType>().Where(l => _checkedLocations.Read<bool>((uint)l)).ToList();

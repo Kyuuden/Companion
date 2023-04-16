@@ -61,6 +61,7 @@
         LunarCoreTrappedChest9 = 0x0058,
         RydiasMom = 0x0059,
         FallenGolbez = 0x005A,
-        ObjectiveCompletion = 0x005D
+        ObjectiveCompletion = 0x005D,
+        PassLocation = 0x005E,
     }
 }

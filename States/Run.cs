@@ -4,6 +4,7 @@ using BizHawk.FreeEnterprise.Companion.Configuration;
 using BizHawk.FreeEnterprise.Companion.Database;
 using BizHawk.FreeEnterprise.Companion.Extensions;
 using BizHawk.FreeEnterprise.Companion.FlagSet;
+using BizHawk.FreeEnterprise.Companion.RomUtilities;
 using BizHawk.FreeEnterprise.Companion.Sprites;
 using Newtonsoft.Json;
 using System;
@@ -62,7 +63,7 @@ namespace BizHawk.FreeEnterprise.Companion.State
                 Objectives = new Objectives(settings, _db.ObjectiveCompleteTimes);
             }
 
-            KeyItems = new KeyItems(_db);
+            KeyItems = new KeyItems(_db, () => ElapsedTime);
             party = new Party();
             Locations = new Locations(_db, FlagSet);
             Locations.UpdateKeyItems(KeyItems);
@@ -201,7 +202,7 @@ namespace BizHawk.FreeEnterprise.Companion.State
                 var foundKeyItems = mainData.Read<KeyItemType>(WRAMAddresses.FoundKeyItems - WRAMAddresses.FoundKeyItems, WRAMAddresses.FoundKeyItemsBytes * 8);
                 var usedKeyItems = mainData.Read<KeyItemType>((WRAMAddresses.UsedKeyItems - WRAMAddresses.FoundKeyItems) * 8, WRAMAddresses.UsedKeyItemsBytes * 8);
                 var keyItemsLocations = _memory.CartSaveRam.ReadBytes(CARTRAMAddresses.KeyItemLocations, CARTRAMAddresses.KeyItemLocationsBytes);
-                var checkedLocations  = mainData.Read<byte[]>((WRAMAddresses.CheckedLocations - WRAMAddresses.FoundKeyItems) * 8, WRAMAddresses.CheckedLocationsBytes * 8);
+                var checkedLocations = mainData.Read<byte[]>((WRAMAddresses.CheckedLocations - WRAMAddresses.FoundKeyItems) * 8, WRAMAddresses.CheckedLocationsBytes * 8);
                 var objectives = mainData.Read<byte[]>((WRAMAddresses.ObjectiveCompletionAddress - WRAMAddresses.FoundKeyItems) * 8, WRAMAddresses.ObjectiveCompletionBytes * 8);
 
                 if (KeyItems.Update(now, foundKeyItems, usedKeyItems, keyItemsLocations))
@@ -220,7 +221,16 @@ namespace BizHawk.FreeEnterprise.Companion.State
                 }
 
                 if (Objectives?.Update(now, objectives) == true)
+                {
                     ObjectivesUpdated?.Invoke(this, null);
+                    if (State != RunState.RunFinished && (FlagSet?.OWinGame ?? false) && Objectives?.NumCompleted >= FlagSet.RequriedObjectiveCount)
+                    {
+                        RemoveCallbacks();
+                        State = RunState.RunFinished;
+                        RunEnded?.Invoke(this, null);
+                        Stopwatch.Stop();
+                    }
+                }
 
                 Party = new Party(partyData);
             }
@@ -237,12 +247,12 @@ namespace BizHawk.FreeEnterprise.Companion.State
                 switch (State)
                 {
                     case RunState.RunStarted:
-                        _container.MemoryEvents.RemoveMemoryCallback(Flash);
+                        _container.MemoryEvents?.RemoveMemoryCallback(Flash);
                         break;
                     case RunState.Menu:
-                        _container.MemoryEvents.RemoveMemoryCallback(StartNewGame);
+                        _container.MemoryEvents?.RemoveMemoryCallback(StartNewGame);
                         if (_previousElapsed > TimeSpan.Zero)
-                            _container.MemoryEvents.RemoveMemoryCallback(LoadSaveGame);
+                            _container.MemoryEvents?.RemoveMemoryCallback(LoadSaveGame);
                         break;
                 }
             }
@@ -258,15 +268,21 @@ namespace BizHawk.FreeEnterprise.Companion.State
                 switch (State)
                 {
                     case RunState.RunStarted:
+                        if (_container.MemoryEvents == null)
+                            throw new KeyNotFoundException();
+
                         if (FlagSet?.OWinCrystal ?? true)
-                            _container.MemoryEvents.AddExecCallback(Flash, SystemBusAddresses.ZeromusDeathAnimation, "System Bus");
+                            _container.MemoryEvents?.AddExecCallback(Flash, SystemBusAddresses.ZeromusDeathAnimation, "System Bus");
                         else
-                            _container.MemoryEvents.AddExecCallback(Flash, SystemBusAddresses.Congradulations, "System Bus");
+                            _container.MemoryEvents?.AddExecCallback(Flash, SystemBusAddresses.Congradulations, "System Bus");
                         break;
                     case RunState.Menu:
-                        _container.MemoryEvents.AddExecCallback(StartNewGame, SystemBusAddresses.MenuSaveNewGame, "System Bus");
+                        if (_container.MemoryEvents == null)
+                            throw new KeyNotFoundException();
+
+                        _container.MemoryEvents?.AddExecCallback(StartNewGame, SystemBusAddresses.MenuSaveNewGame, "System Bus");
                         if (_previousElapsed > TimeSpan.Zero)
-                            _container.MemoryEvents.AddExecCallback(LoadSaveGame, SystemBusAddresses.MenuLoadSaveGame, "System Bus");
+                            _container.MemoryEvents?.AddExecCallback(LoadSaveGame, SystemBusAddresses.MenuLoadSaveGame, "System Bus");
                         break;
                 }
             }

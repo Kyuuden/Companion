@@ -18,7 +18,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
 
         int RequestedHeight { get; }
 
-        event Action Clicked;
+        event Action? Clicked;
     }
 
     public abstract class TrackerControl<T> : UserControl, ITrackerControl
@@ -39,7 +39,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
 
         public bool IsInitialized => RomData != null && Settings != null;
 
-        public event Action Clicked;
+        public event Action? Clicked;
 
         public virtual void Initialize(RomData romData, IFlagSet? flagset, Settings settings)
         {

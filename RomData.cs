@@ -1,4 +1,5 @@
 ﻿using BizHawk.FreeEnterprise.Companion.Configuration;
+using BizHawk.FreeEnterprise.Companion.RomUtilities;
 using BizHawk.FreeEnterprise.Companion.Sprites;
 using System;
 
@@ -6,7 +7,7 @@ namespace BizHawk.FreeEnterprise.Companion
 {
     public class RomData : IDisposable
     {
-        public RomData(MemorySpace rom, Settings settings)
+        public RomData(IMemorySpace rom, Settings settings)
         {
             Font = new Font(rom, settings);
             CharacterSprites = new Characters(rom);

@@ -1,5 +1,6 @@
 ﻿using BizHawk.FreeEnterprise.Companion.Configuration;
 using BizHawk.FreeEnterprise.Companion.Extensions;
+using BizHawk.FreeEnterprise.Companion.RomUtilities;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -23,7 +24,7 @@ namespace BizHawk.FreeEnterprise.Companion.Sprites
         private readonly Settings settings;
         private List<List<Bitmap>>? bitmaps;
 
-        public Font(MemorySpace rom, Settings settings)
+        public Font(IMemorySpace rom, Settings settings)
         {
             var fontData = rom.ReadBytes(CARTROMAddresses.Font, CARTROMAddresses.FontBytes);
             var processor = new TileProcessor();

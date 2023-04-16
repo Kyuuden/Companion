@@ -16,7 +16,10 @@ namespace BizHawk.FreeEnterprise.Companion
         private readonly Action _applySettings;
 
         public SettingsDialog()
-        { }
+        {
+            _settings = new Settings();
+            _applySettings = () => { };
+        }
 
         public SettingsDialog(Settings settings, Action saveSettings)
         {

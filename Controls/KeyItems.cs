@@ -91,6 +91,18 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
                 SetToolTip(Data.Items[mouseOverKey.Value]);
         }
 
+        protected override void OnMouseClick(MouseEventArgs e)
+        {
+            base.OnMouseClick(e);
+            var mouseKey = _keyItemsByPosition.FirstOrDefault(kvp => kvp.Key.Contains(e.X, e.Y));
+
+            if (Data != null && mouseKey.Value == KeyItemType.Pass)
+            {
+                Data.SwapPass();
+                Invalidate();
+            }
+        }
+
         public void NewItemFound(KeyItemType? item)
         { 
             if (Settings != null 

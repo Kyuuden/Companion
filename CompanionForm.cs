@@ -5,6 +5,7 @@ using BizHawk.FreeEnterprise.Companion.Configuration;
 using BizHawk.FreeEnterprise.Companion.Controls;
 using BizHawk.FreeEnterprise.Companion.Database;
 using BizHawk.FreeEnterprise.Companion.Extensions;
+using BizHawk.FreeEnterprise.Companion.RomUtilities;
 using BizHawk.FreeEnterprise.Companion.State;
 using Newtonsoft.Json;
 using System;
@@ -28,6 +29,9 @@ namespace BizHawk.FreeEnterprise.Companion
         public ApiContainer? _maybeAPIContainer { get; set; }
 
         private ApiContainer APIs => _maybeAPIContainer!;
+
+        [OptionalService]
+        private IMemoryDomains? _memoryDomains { get; set; }
 
         public bool MainListenersSet { get; private set; }
 
@@ -254,7 +258,7 @@ namespace BizHawk.FreeEnterprise.Companion
                 Run = null;
             }
 
-            Memory = new MemoryMapping(APIs.Memory);
+            Memory = new MemoryMapping(_memoryDomains);
             Storage = new PersistentStorage(APIs.SQLite, Game.Hash);
 
             try
@@ -332,7 +336,7 @@ namespace BizHawk.FreeEnterprise.Companion
                 Initialize();
             else
             {
-                Memory = new MemoryMapping(APIs.Memory);
+                Memory = new MemoryMapping(_memoryDomains);
                 Run.UpdateApis(APIs, Memory);
             }
         }

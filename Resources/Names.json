@@ -16,7 +16,8 @@
     "Pan",
     "Spoon",
     "Pink Tail",
-    "Crystal"
+    "Crystal",
+    "Pass"
   ],
   "keyItemShortNames": [
     "Package",
@@ -35,7 +36,8 @@
     "Pan",
     "`Spoon",
     "~Pink",
-    "*Crystal"
+    "*Crystal",
+    "Pass"
   ],
   "keyItemDescriptions": [
     "Bring to village Mist to burn it down, then visit Kaipo",
@@ -54,7 +56,8 @@
     "Use to wake Yang in the Sylph Cave, then return it to Yang's wife in Fabul",
     "\nDart for massive damage.",
     "Bring to the Adamant Grotto to trade for strong gear.",
-    "Combat item. Use on Zeromus to unlock his final form."
+    "Combat item. Use on Zeromus to unlock his final form.",
+    "Opens the Path to Zeromus from the Toroia Cafe."
   ],
   "locationNames": [
     "Starting item",
@@ -116,7 +119,10 @@
     "Lunar Core trapped chest 9",
     "Rydia's Mom",
     "Fallen Golbez",
-    "Objective completion"
+    "",
+    "",
+    "Objective completion",
+    "A shop or a random chest"
   ],
   "characterLocationNames": [
     "Starting Character",

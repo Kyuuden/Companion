@@ -1,4 +1,5 @@
 ﻿using BizHawk.FreeEnterprise.Companion.Extensions;
+using BizHawk.FreeEnterprise.Companion.RomUtilities;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -18,7 +19,7 @@ namespace BizHawk.FreeEnterprise.Companion.Sprites
         public Bitmap MissBitmap => _customMissBitmap ?? _missBitmap;
         public Bitmap FingerBitmap { get; }
 
-        public Overlays(MemorySpace rom, Font font)
+        public Overlays(IMemorySpace rom, Font font)
         {
             var processor = new TileProcessor();
             _stickers = rom
