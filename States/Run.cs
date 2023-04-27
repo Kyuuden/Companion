@@ -55,7 +55,7 @@ namespace BizHawk.FreeEnterprise.Companion.State
                 var json = Encoding.UTF8.GetString(jsonBytes);
                 Metadata = JsonConvert.DeserializeObject<SeedMetadata>(json)!;
                 FlagSet = FlagSetParser.Parse(Metadata.binary_flags);
-                Objectives = new Objectives(settings, Metadata.objectives!, _db.ObjectiveCompleteTimes);
+                Objectives = new Objectives(settings, Metadata.objectives ?? new string[0], _db.ObjectiveCompleteTimes);
             }
             else
             {

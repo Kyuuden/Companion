@@ -68,7 +68,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
         {
             get
             {
-                if (Data == null)
+                if (Data == null || Data.Statuses.Count() == 0)
                     return null;
 
                 var neededObjectives = FlagSet?.RequriedObjectiveCount switch

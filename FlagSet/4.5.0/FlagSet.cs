@@ -1,4 +1,5 @@
 ﻿using BizHawk.FreeEnterprise.Companion.Extensions;
+using System;
 
 namespace BizHawk.FreeEnterprise.Companion.FlagSet._4._5._0
 {
@@ -256,7 +257,7 @@ namespace BizHawk.FreeEnterprise.Companion.FlagSet._4._5._0
         public bool AllowRandomBossHunts => parent.Data.Read<bool>(66);
         public bool AllowRandomCharacterHunts => parent.Data.Read<bool>(67);
         public bool AllRequired => parent.Data.Read<byte>(68, 4) == 1;
-        public byte NumRequiredObjectives => (byte)(parent.Data.Read<byte>(68, 4) - 1);
+        public byte NumRequiredObjectives => (byte)Math.Max(0, parent.Data.Read<byte>(68, 4) - 1);
         public bool WinGame => parent.Data.Read<bool>(72);
         public bool WinCrystal => parent.Data.Read<bool>(73);
     }
