@@ -253,7 +253,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
                 if (Data == null)
                     return null;
 
-                var keyItemCount = Data.Items.Values.Count(k => k.Found);                
+                var keyItemCount = Data.Items.Values.Where(k => k.Key != KeyItemType.Pass).Count(k => k.Found);
                 return $"{keyItemCount,2}/17";
             }
         }
@@ -261,7 +261,7 @@ namespace BizHawk.FreeEnterprise.Companion.Controls
         {
             get
             {
-                var keyItemCount = Data?.Items.Values.Count(k => k.Found);
+                var keyItemCount = Data?.Items.Values.Where(k => k.Key != KeyItemType.Pass).Count(k => k.Found);
                 return keyItemCount >= 10 && !(FlagSet?.No10KeyItemBonus ?? true) ? TextMode.Highlighted : TextMode.Normal;
             }
         }

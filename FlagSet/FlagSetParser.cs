@@ -24,6 +24,8 @@ namespace BizHawk.FreeEnterprise.Companion.FlagSet
             {
                 case "4.5.0":
                     return new _4._5._0.FlagSet(data);
+                case "4.6.0":
+                    return new _4._6._0.FlagSet(data);
                 default:
                     return null;
             }

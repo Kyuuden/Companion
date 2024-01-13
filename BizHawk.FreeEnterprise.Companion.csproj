@@ -7,11 +7,11 @@
 		<AssemblyName>BizHawk.FreeEnterprise.Companion</AssemblyName>
 		<RootNamespace>BizHawk.FreeEnterprise.Companion</RootNamespace>
 		<Configurations>BizHawk 2.8 Debug;BizHawk 2.8 Release;BizHawk 2.6.1 Debug;BizHawk 2.6.1 Release;Debug;Release</Configurations>
-		<Version>1.4.1</Version>
-		<AssemblyVersion>1.4.0.0</AssemblyVersion>
-		<Copyright>2023 Kyuuden</Copyright>
+		<Version>1.4.2</Version>
+		<AssemblyVersion>1.4.2.0</AssemblyVersion>
+		<Copyright>2024 Kyuuden</Copyright>
 		<Description>Auto-Tracker for Free Enterprise, a FFIV randomizer.</Description>
-		<FileVersion>1.4.0.0</FileVersion>
+		<FileVersion>1.4.2.0</FileVersion>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 	  <DefineConstants>TRACE;</DefineConstants>
