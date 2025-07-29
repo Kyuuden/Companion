@@ -1,5 +1,5 @@
 ﻿
-namespace BizHawk.FreeEnterprise.Companion
+namespace FF.Rando.Companion
 {
     partial class AboutDialog
     {
@@ -50,8 +50,8 @@ namespace BizHawk.FreeEnterprise.Companion
             // pictureBox1
             // 
             this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox1.Image = global::BizHawk.FreeEnterprise.Companion.Properties.Resources.FFIVFE_Icons_1THECrystal_Color;
-            this.pictureBox1.InitialImage = global::BizHawk.FreeEnterprise.Companion.Properties.Resources.FFIVFE_Icons_1THECrystal_Color;
+            this.pictureBox1.Image = global::FF.Rando.Companion.FreeEnterprise.FreeEnterprise.FFIVFE_Icons_1THECrystal_Color;
+            this.pictureBox1.InitialImage = global::FF.Rando.Companion.FreeEnterprise.FreeEnterprise.FFIVFE_Icons_1THECrystal_Color;
             this.pictureBox1.Location = new System.Drawing.Point(12, 12);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(64, 64);

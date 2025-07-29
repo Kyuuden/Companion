@@ -1,0 +1,171 @@
+﻿using BizHawk.Common.CollectionExtensions;
+using FF.Rando.Companion.Extensions;
+using FF.Rando.Companion.FreeEnterprise.RomData;
+using FF.Rando.Companion.FreeEnterprise.View;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Windows.Forms;
+
+namespace FF.Rando.Companion.FreeEnterprise._5._0._0;
+internal class Seed : SeedBase
+{
+    private Descriptors _descriptors;
+    
+    private Stopwatch _stopwatch = new Stopwatch();
+
+    private Locations? _locations;
+
+    private readonly Objectives _objectives;
+    private readonly Party _party;
+    private readonly KeyItems _keyItems;
+    private readonly Bosses _bosses;
+
+    private readonly Flags? _flags;
+
+    public Seed(string hash, Metadata metadata, Container container)
+        : base(hash, metadata, container)
+    {
+        _descriptors = new Descriptors(Game.Rom);
+
+        if (Flags.Binary != null)
+        {
+            _flags = new Flags(Flags.Binary);
+            XpRate = 1;
+        }
+
+        var size = Flags.Binary?.Read<byte>(882, 3);
+        MaxPartySize = size == 0 ? 5 : size;
+
+        _objectives = new Objectives(_descriptors, metadata.Objectives.OfType<GroupObjectives>());
+        _party = new Party(
+            container.Settings.Party,
+            Sprites, 
+            _flags?.VanillaAgility, 
+            _flags?.CHero);
+
+        _keyItems = new KeyItems(container.Settings.KeyItems, Font, _descriptors);
+        _bosses = new Bosses(_descriptors);
+    }
+
+    public override IEnumerable<ICharacter> Party => _party.Characters;
+
+    public override IEnumerable<IKeyItem> KeyItems => _keyItems.Items;
+
+    public override IEnumerable<IBoss> Bosses => _bosses.Items;
+
+    public override int? MaxPartySize { get; protected set; }
+    public override IEnumerable<IObjectiveGroup> Objectives { get => _objectives; protected set { } }
+    public override TimeSpan Elapsed { get => _stopwatch.Elapsed; protected set { } }
+    public override IEnumerable<ILocation> CheckedLocations { get => Enumerable.Empty<ILocation>();}
+    public override IEnumerable<ILocation> AvailableLocations { get => Enumerable.Empty<ILocation>() ; }
+
+    public override void Pause()
+    {
+        if (Started && _stopwatch.IsRunning)
+            _stopwatch.Stop();
+    }
+
+    public override void Unpause()
+    {
+        if (Started && !Victory && !_stopwatch.IsRunning)
+            _stopwatch.Start();
+    }
+
+    public override void OnNewFrame()
+    {
+        base.OnNewFrame();
+
+        if (!Started)
+        {
+            Started = Game.Sram.ReadByte(Addresses.SRAM.StartedIndicatorAddress) == 1;
+            if (Started) _stopwatch.Start();
+        }
+        
+        if (!Victory)
+        {
+            Victory = Game.Wram.ReadByte(Addresses.WRAM.VictoryIndicatorAddress) == 1;
+            if (Victory) _stopwatch.Stop();
+        }
+
+        if (Game.Emulation.FrameCount() % Game.RootSettings.TrackingInterval == 0)
+        {
+            var partyData = Game.Wram.ReadBytes(Addresses.WRAM.PartyRegion);
+            ReadOnlySpan<byte> sramData = Game.Sram.ReadBytes(Addresses.SRAM.SramRegion).AsSpan();
+            ReadOnlySpan<byte> wramData = Game.Wram.ReadBytes(Addresses.WRAM.WramRegion).AsSpan();
+
+            var axtorData = sramData.Slice(Addresses.SRAM.AxtorBits);
+            var keyItemLocations = sramData.Slice(Addresses.SRAM.KeyItemLocationBits);
+            var bossLocations = sramData.Slice(Addresses.SRAM.BossLocationBits);
+
+            var keyItemsFound = wramData.Slice(Addresses.WRAM.KeyItemFoundBits);
+            var keyItemUsed = wramData.Slice(Addresses.WRAM.KeyItemUsedBits);
+            var bossDefeated = wramData.Slice(Addresses.WRAM.BossDefeatedBits);
+            var bossLocationsDefeated = wramData.Slice(Addresses.WRAM.BossLocationBits);
+            var axtorFoundBits = wramData.Slice(Addresses.WRAM.AxtorFoundBits);
+            var shopCheckedBits = wramData.Slice(Addresses.WRAM.ShopCheckedBits);
+            var victoryIndicator = wramData.Slice(Addresses.WRAM.VictoryIndicator);
+            var rewardSlotCheckedBits = wramData.Slice(Addresses.WRAM.RewardSlotCheckedBits);
+            var objectiveTaskProgress = wramData.Slice(Addresses.WRAM.ObjectiveTaskProgress);
+            var objectiveGroupProress = wramData.Slice(Addresses.WRAM.ObjectiveGroupProress);
+
+            var teasureCount = Game.Wram.ReadBytes(Shared.Addresses.WRAM.TreasureBits);
+            TreasureCount = teasureCount.CountBits();
+
+            var time = Elapsed;
+
+            _locations = new Locations(rewardSlotCheckedBits, bossLocations, shopCheckedBits);
+
+            if(_keyItems.Update(time, keyItemsFound, keyItemUsed, keyItemLocations))
+                NotifyPropertyChanged(nameof(KeyItems));
+            
+            if (_party.Update(time, partyData, axtorData))
+                NotifyPropertyChanged(nameof(Party));
+
+            if (_objectives.Update(time, objectiveTaskProgress, objectiveGroupProress))
+                NotifyPropertyChanged(nameof(Objectives));
+
+            if (_bosses.Update(time, bossLocations, bossDefeated, bossLocationsDefeated))
+                NotifyPropertyChanged(nameof(Bosses));
+
+            if (_flags != null)
+            {
+                var xpRate = 100m;
+
+                if (_flags.XObjBonus != ObjectiveXpBonus.None)
+                {
+                    xpRate += _objectives.NumCompleted *
+                        _flags.XObjBonus switch
+                        {
+                            ObjectiveXpBonus._2Percent => 2m,
+                            ObjectiveXpBonus._3Percent => 3m,
+                            ObjectiveXpBonus._5Percent => 5m,
+                            ObjectiveXpBonus._8Percent => 8m,
+                            ObjectiveXpBonus._10Percent => 10m,
+                            ObjectiveXpBonus._12Percent => 12m,
+                            ObjectiveXpBonus._14Percent => 14m,
+                            ObjectiveXpBonus._16Percent => 16m,
+                            ObjectiveXpBonus._20Percent => 20m,
+                            ObjectiveXpBonus._25Percent => 25m,
+                            _ => 0m,
+                        };
+                }
+
+                if (!_flags.XNoKeyBonus && _keyItems.NumFound >= 10)
+                    xpRate *= 2;
+
+                XpRate = xpRate / 100.0m;
+            }
+
+            BackgroundColor = Game.Wram.ReadBytes(Shared.Addresses.WRAM.BackgroundColor).Read<ushort>(0).ToColor();
+        }
+    }
+
+    public override Control CreateControls()
+    {
+        var control = new FreeEnterpriseControl();
+        control.InitializeDataSources(this);
+        return control;
+    }
+}

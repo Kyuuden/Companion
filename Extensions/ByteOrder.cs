@@ -1,5 +1,4 @@
-﻿namespace BizHawk.FreeEnterprise.Companion.Extensions
-{
-    public enum ByteOrder { LittleEndian, BigEndian }
-}
+﻿namespace FF.Rando.Companion.Extensions;
+
+public enum ByteOrder { LittleEndian, BigEndian }
 
