@@ -17,6 +17,7 @@ public class FreeEnterpriseSettings : GameSettings
         KeyItems = new KeyItemSettings(SettingsData);
         Objectives = new ObjectivesSettings(SettingsData);
         Party = new PartySettings(SettingsData);
+        Locations = new LocationsSettings(SettingsData);
         Stats = new StatsSettings(SettingsData);
     }
 
@@ -36,6 +37,10 @@ public class FreeEnterpriseSettings : GameSettings
     [TypeConverter(typeof(ExpandableObjectConverter))]
     [Description("Tracking of party members")]
     public PartySettings Party { get; }
+
+    [TypeConverter(typeof(ExpandableObjectConverter))]
+    [Description("Tracking of available locations to check")]
+    public LocationsSettings Locations { get; }
 
     [TypeConverter(typeof(ExpandableObjectConverter))]
     [Description("Tracking of general statistics")]

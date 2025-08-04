@@ -5,7 +5,6 @@ namespace FF.Rando.Companion.FreeEnterprise.Settings;
 
 public class StatsSettings : PanelSettings
 {
-
     protected override float DefaultScaleFactor => 1f;
 
     public StatsSettings(JToken jToken)
@@ -15,4 +14,18 @@ public class StatsSettings : PanelSettings
 
     [DefaultValue(1.0f)]
     public override float ScaleFactor { get => base.ScaleFactor; set => base.ScaleFactor = value; }
+
+    [DefaultValue(5)]
+    public override int Priority
+    {
+        get => GetSetting(5);
+        set => SaveSetting(value);
+    }
+
+    [DefaultValue(false)]
+    public override bool InTopPanel
+    {
+        get => GetSetting(false);
+        set => SaveSetting(value);
+    }
 }

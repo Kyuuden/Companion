@@ -12,10 +12,9 @@ public interface ISeed : IGame
     decimal? XpRate { get; }
     int TreasureCount { get; }
     IEnumerable<IBoss> Bosses { get; }
-    IEnumerable<ILocation> CheckedLocations { get; }
+    int DefeatedEncounters { get; }
     Flags Flags { get; }
     IEnumerable<IKeyItem> KeyItems { get; }
-    int? MaxPartySize { get; }
     Metadata Metadata { get; }
     IEnumerable<IObjectiveGroup> Objectives { get; }
     IEnumerable<ICharacter> Party { get; }
@@ -23,6 +22,7 @@ public interface ISeed : IGame
     FreeEnterpriseSettings Settings { get; }
     RomData.Font Font { get; }
     Sprites Sprites { get; }
+    bool CanTackBosses { get; }
 
     event Action<string>? ButtonPressed;
 

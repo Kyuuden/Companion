@@ -1,6 +1,7 @@
 ﻿using FF.Rando.Companion.FreeEnterprise.Shared;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace FF.Rando.Companion.FreeEnterprise._5._0._0;
@@ -24,7 +25,7 @@ internal class Locations
 
 internal class RewardSlotLocation : ILocation
 {
-    public RewardSlotLocation(RewardSlot slot, Descriptors descriptors, Flags? flags)
+    public RewardSlotLocation(RewardSlot slot, Descriptors descriptors, Flags flags)
     {
         Description = descriptors.GetRewardSlotDescription((int)slot);
         switch (slot)
@@ -36,69 +37,69 @@ internal class RewardSlotLocation : ILocation
                 break;
             case RewardSlot.StartingPartnerCharacter:
                 IsCharacter = true;
-                IsKeyItem = flags?.KChar;
+                IsKeyItem = flags.KChar;
                 break;
             case RewardSlot.MistCharacter:
-                IsCharacter = flags?.CNoEarned == false;
-                IsKeyItem = flags?.KChar;
+                IsCharacter = flags.CNoEarned == false;
+                IsKeyItem = flags.KChar;
                 break;
             case RewardSlot.WateryPassCharacter:
-                IsCharacter = flags?.CNoFree == false;
+                IsCharacter = flags.CNoFree == false;
                 break;
             case RewardSlot.DamcyanCharacter:
-                IsCharacter = flags?.CNoFree == false;
+                IsCharacter = flags.CNoFree == false;
                 break;
             case RewardSlot.KaipoCharacter:
-                IsCharacter = flags?.CNoEarned == false;
-                IsKeyItem = flags?.KChar;
+                IsCharacter = flags.CNoEarned == false;
+                IsKeyItem = flags.KChar;
                 break;
             case RewardSlot.HobsCharacter:
-                IsCharacter = flags?.CNoEarned == false;
-                IsKeyItem = flags?.KChar;
+                IsCharacter = flags.CNoEarned == false;
+                IsKeyItem = flags.KChar;
                 break;
             case RewardSlot.MysidiaCharacter1:
-                IsCharacter = flags?.CNoFree == false;
+                IsCharacter = flags.CNoFree == false;
                 break;
             case RewardSlot.MysidiaCharacter2:
-                IsCharacter = flags?.CNoFree == false;
+                IsCharacter = flags.CNoFree == false;
                 break;
             case RewardSlot.OrdealsCharacter:
-                IsCharacter = flags?.CNoFree == false;
+                IsCharacter = flags.CNoFree == false;
                 break;
             case RewardSlot.BaronInnCharacter:
-                IsCharacter = flags?.CNoEarned == false;
-                IsKeyItem = flags?.KChar;
+                IsCharacter = flags.CNoEarned == false;
+                IsKeyItem = flags.KChar;
                 break;
             case RewardSlot.BaronCastleCharacter:
-                IsCharacter = flags?.CNoEarned == false;
-                IsKeyItem = flags?.KChar;
+                IsCharacter = flags.CNoEarned == false;
+                IsKeyItem = flags.KChar;
                 break;
             case RewardSlot.ZotCharacter1:
-                IsCharacter = flags?.CNoEarned == false;
-                IsKeyItem = flags?.KChar;
+                IsCharacter = flags.CNoEarned == false;
+                IsKeyItem = flags.KChar;
                 break;
             case RewardSlot.ZotCharacter2:
-                IsCharacter = flags?.CNoEarned == false;
-                IsKeyItem = flags?.KChar;
+                IsCharacter = flags.CNoEarned == false;
+                IsKeyItem = flags.KChar;
                 break;
             case RewardSlot.DwarfCastleCharacter:
-                IsCharacter = flags?.CNoEarned == false;
-                IsKeyItem = flags?.KChar;
+                IsCharacter = flags.CNoEarned == false;
+                IsKeyItem = flags.KChar;
                 break;
             case RewardSlot.CaveEblanCharacter:
-                IsCharacter = flags?.CNoEarned == false;
-                IsKeyItem = flags?.KChar;
+                IsCharacter = flags.CNoEarned == false;
+                IsKeyItem = flags.KChar;
                 break;
             case RewardSlot.LunarPalaceCharacter:
-                IsCharacter = flags?.CNoEarned == false;
-                IsKeyItem = flags?.KChar;
+                IsCharacter = flags.CNoEarned == false;
+                IsKeyItem = flags.KChar;
                 break;
             case RewardSlot.GiantCharacter:
-                IsCharacter = (flags?.CNoEarned == false) && (flags?.CNoGiant == false);
+                IsCharacter = (flags.CNoEarned == false) && (flags.CNoGiant == false);
                 break;
             case RewardSlot.StartingItem:
                 IsKeyItem = true;
-                IsKeyItem = flags?.KChar;
+                IsKeyItem = flags.KChar;
                 break;
             case RewardSlot.AntlionItem:
                 break;
@@ -168,37 +169,55 @@ internal class RewardSlotLocation : ILocation
 
     public string Description { get; }
 
-    public bool? IsCharacter { get; }
+    public bool IsCharacter { get; }
 
-    public bool? IsKeyItem { get; }
+    public bool IsKeyItem { get; }
 
     public bool IsBoss => false;
 
     public bool IsShop => false;
+
+    public bool IsAvailable => throw new NotImplementedException();
+
+    public bool IsChecked => throw new NotImplementedException();
+
+    public event PropertyChangedEventHandler PropertyChanged;
 }
 
 internal class BossLocation : ILocation
 { 
     public string Description => throw new NotImplementedException();
 
-    public bool? IsCharacter => false;
+    public bool IsCharacter => false;
 
-    public bool? IsKeyItem => false;
+    public bool IsKeyItem => false;
 
     public bool IsBoss => true;
 
     public bool IsShop => false;
+
+    public bool IsAvailable => throw new NotImplementedException();
+
+    public bool IsChecked => throw new NotImplementedException();
+
+    public event PropertyChangedEventHandler PropertyChanged;
 }
 
 internal class ShopLocation : ILocation
 {
     public string Description => throw new NotImplementedException();
 
-    public bool? IsCharacter => false;
+    public bool IsCharacter => false;
 
-    public bool? IsKeyItem => false;
+    public bool IsKeyItem => false;
 
     public bool IsBoss => false;
 
     public bool IsShop => true;
+
+    public bool IsAvailable => throw new NotImplementedException();
+
+    public bool IsChecked => throw new NotImplementedException();
+
+    public event PropertyChangedEventHandler PropertyChanged;
 }

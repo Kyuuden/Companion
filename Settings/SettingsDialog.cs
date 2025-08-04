@@ -42,6 +42,7 @@ public partial class SettingsDialog : FormBase
             };
 
             gamePropertyGrid.ExpandAllGridItems();
+            gamePropertyGrid.PropertyValueChanged += PropertyValueChanged;
 
             gameTab.Controls.Add(gamePropertyGrid);
 
@@ -51,7 +52,7 @@ public partial class SettingsDialog : FormBase
 
     public IInputApi InputApi { get; }
 
-    private void propertyGrid1_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
+    private void PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
     {
         _settings?.SaveToFile();
     }

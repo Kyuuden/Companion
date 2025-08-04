@@ -20,29 +20,6 @@ public enum CharacterType : uint
     FuSoYa
 }
 
-[Flags]
-public enum KeyItems : uint
-{
-    Package = 1 << 0,
-    SandRuby = 1 << 1,
-    LegendSword = 1 << 2,
-    BaronKey = 1 << 3,
-    TwinHarp = 1 << 4,
-    EarthCrystal = 1 << 5,
-    MagmaKey = 1 << 6,
-    TowerKey = 1 << 7,
-    Hook = 1 << 8,
-    LucaKey = 1 << 9,
-    DarknessCrystal = 1 << 10,
-    RatTail = 1 << 11,
-    Adamant = 1 << 12,
-    Pan = 1 << 13,
-    Spoon = 1 << 14,
-    PinkTail = 1 << 15,
-    Crystal = 1 << 16,
-    Pass = 1 << 17,
-}
-
 public enum KeyItemType : uint
 {
     Package,

@@ -19,6 +19,8 @@ public interface IGame : INotifyPropertyChanged, IDisposable
 
     Control CreateControls();
 
+    bool RequiresMemoryEvents { get; }
+
     void Pause();
     void Unpause();
 }

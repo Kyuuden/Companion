@@ -13,12 +13,12 @@ internal class Boss : IBoss
     private Bitmap? _image;
 
     private Dictionary<BossLocationType, Encounter> _encounters = [];
-    private readonly Descriptors _descriptors;
+    private readonly IBossDescriptor _descriptors;
 
-    public Boss(Descriptors descriptors, BossType type)
+    public Boss(IBossDescriptor descriptors, BossType type)
     {
         Id = (int)type;
-        Name = descriptors.GetBossName(type);
+        Name = descriptors.GetName(type);
         SetImage();
         _descriptors = descriptors;
     }
@@ -45,7 +45,7 @@ internal class Boss : IBoss
     {
         if (!_encounters.ContainsKey(loc))
         {
-            var description = _descriptors.GetBossLocationName(loc) ?? "UNKNOWN LOCATION";
+            var description = _descriptors.GetLocationName(loc) ?? "UNKNOWN LOCATION";
             _encounters.Add(loc, new Encounter(description, when));
             NotifyPropertyChanged(nameof(Encounters));
             SetImage();

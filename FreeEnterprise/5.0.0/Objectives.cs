@@ -1,12 +1,13 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace FF.Rando.Companion.FreeEnterprise._5._0._0;
-internal class Objectives(Descriptors descriptors, IEnumerable<RomData.GroupObjectives> groups) : IEnumerable<IObjectiveGroup>
+internal class Objectives(Descriptors descriptors, IEnumerable<RomData.GroupObjectives> groups)
 {
     private readonly IList<ObjectiveGroup> _groups = groups.Select(g => new ObjectiveGroup(descriptors, g, groups)).ToList();
+
+    public IEnumerable<IObjectiveGroup> Groups => _groups;
 
     public int NumCompleted { get; private set; }
 
@@ -31,15 +32,5 @@ internal class Objectives(Descriptors descriptors, IEnumerable<RomData.GroupObje
             NumCompleted = _groups.Sum(g => g.NumCompleted);
 
         return updated;
-    }
-
-    public IEnumerator<IObjectiveGroup> GetEnumerator()
-    {
-        return _groups.GetEnumerator();
-    }
-
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
     }
 }

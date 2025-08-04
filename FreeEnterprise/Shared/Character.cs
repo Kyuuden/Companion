@@ -1,12 +1,11 @@
 ﻿using FF.Rando.Companion.FreeEnterprise.RomData;
 using FF.Rando.Companion.FreeEnterprise.Settings;
-using FF.Rando.Companion.FreeEnterprise.Shared;
 using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.CompilerServices;
 
-namespace FF.Rando.Companion.FreeEnterprise._5._0._0;
+namespace FF.Rando.Companion.FreeEnterprise.Shared;
 
 internal class Character : ICharacter, IDisposable
 {
@@ -35,7 +34,7 @@ internal class Character : ICharacter, IDisposable
 
     public byte Id
     {
-        get => id; 
+        get => id;
         set
         {
             if (id == value)
@@ -48,7 +47,7 @@ internal class Character : ICharacter, IDisposable
     }
     public byte Slot
     {
-        get => slot; 
+        get => slot;
         set
         {
             if (slot == value)
@@ -60,7 +59,7 @@ internal class Character : ICharacter, IDisposable
     }
     public CharacterType Type
     {
-        get => type; 
+        get => type;
         set
         {
             if (type == value)
@@ -73,7 +72,7 @@ internal class Character : ICharacter, IDisposable
     }
     public byte Fashion
     {
-        get => fashion; 
+        get => fashion;
         set
         {
             if (fashion == value)
@@ -86,7 +85,7 @@ internal class Character : ICharacter, IDisposable
     }
     public bool IsAnchor
     {
-        get => isAnchor; 
+        get => isAnchor;
         set
         {
             if (isAnchor == value)
@@ -102,7 +101,7 @@ internal class Character : ICharacter, IDisposable
         get => _image;
         set
         {
-            if (_image == value) 
+            if (_image == value)
                 return;
 
             _image = value;
@@ -116,8 +115,8 @@ internal class Character : ICharacter, IDisposable
 
     private void SetImage()
     {
-        Image = Id == 0 
-            ? _sprites.GetBlankCharacter() 
+        Image = Id == 0
+            ? _sprites.GetBlankCharacter()
             : _sprites.GetCharacterImage(Type, Fashion, _settings.Pose);
     }
 

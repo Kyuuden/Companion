@@ -1,4 +1,5 @@
-﻿using FF.Rando.Companion.FreeEnterprise._5._0._0;
+﻿using BizHawk.Client.EmuHawk;
+using FF.Rando.Companion.FreeEnterprise._5._0._0;
 using FF.Rando.Companion.FreeEnterprise.Settings;
 using KGySoft.Drawing.Imaging;
 using System;
@@ -12,7 +13,7 @@ public enum SpacingMode
     None, Columns, Rows
 }
 
-public abstract partial class FlowPanelControl<T> : UserControl where T: PanelSettings
+public abstract partial class FlowPanelControl<T> : UserControl, IPanel where T : PanelSettings
 {
     bool _isloaded = false;
 
@@ -34,16 +35,22 @@ public abstract partial class FlowPanelControl<T> : UserControl where T: PanelSe
 
     public bool Icons { get; set; }
 
-    protected ISeed? Seed {  get; private set ; }
+    protected ISeed? Seed { get; private set; }
     protected T? Settings { get; private set; }
 
     public FlowDirection FlowDirection { get => flowLayoutPanel1.FlowDirection; set => flowLayoutPanel1.FlowDirection = value; }
+
+    public abstract DockStyle DefaultDockStyle { get; }
+
+    public abstract bool CanHaveFillDockStyle { get; }
+
+    public virtual int Priority => Settings?.Priority ?? int.MaxValue;
+    public bool InTopPanel => Settings?.InTopPanel ?? false;
 
     public virtual void InitializeDataSources(ISeed seed, T settings)
     {
         Seed = seed ?? throw new ArgumentNullException(nameof(seed));
         Settings = settings ?? throw new ArgumentNullException(nameof(settings));
-        Visible = settings.Enabled;
         Settings.PropertyChanged += Settings_PropertyChanged;
         Seed.PropertyChanged += Settings_PropertyChanged;
         SuspendLayout();
@@ -51,10 +58,10 @@ public abstract partial class FlowPanelControl<T> : UserControl where T: PanelSe
         flowLayoutPanel1.SuspendLayout();
         flowLayoutPanel1.BackColor = seed.BackgroundColor;
         flowLayoutPanel1.Controls.AddRange(GenerateControls(Seed));
+        Visible = flowLayoutPanel1.Controls.Count > 0 && settings.Enabled;
         flowLayoutPanel1.ResumeLayout(false);
         flowLayoutPanel1.PerformLayout();
         ResumeLayout(false);
-
     }
 
     protected abstract Control[] GenerateControls(ISeed seed);
@@ -78,7 +85,7 @@ public abstract partial class FlowPanelControl<T> : UserControl where T: PanelSe
         }
         if (e.PropertyName == nameof(PanelSettings.Enabled))
         {
-            Visible = Settings?.Enabled ?? Visible;
+            Visible = flowLayoutPanel1.Controls.Count > 0 && (Settings?.Enabled ?? Visible);
         }
 
         if (e.PropertyName == nameof(ISeed.BackgroundColor))
@@ -120,14 +127,14 @@ public abstract partial class FlowPanelControl<T> : UserControl where T: PanelSe
 
     protected void Arrange()
     {
-        if (Seed == null || Settings == null)
+        if (Seed == null || Settings == null || flowLayoutPanel1.Controls.Count == 0)
             return;
 
         var unscaledSize = Settings.Unscale(Size);
 
         if (unscaledSize.Height < 8 || unscaledSize.Width < 8)
             return;
-        
+
         switch (SpacingMode)
         {
             case SpacingMode.Rows:
@@ -137,7 +144,7 @@ public abstract partial class FlowPanelControl<T> : UserControl where T: PanelSe
                 var columns = Math.Min(flowLayoutPanel1.Controls.Count, flowLayoutPanel1.Size.Width / elementsize);
                 var extra = (flowLayoutPanel1.Size.Width - (elementsize * columns)) - 8;
                 var divisions = columns > 1 ? (columns - 1) * 2 : 2;
-                var margin =  Math.Max(4, extra / divisions);
+                var margin = Math.Max(4, extra / divisions);
 
                 if (columns <= 0)
                     break;
@@ -147,7 +154,7 @@ public abstract partial class FlowPanelControl<T> : UserControl where T: PanelSe
                 if (extra > (margin * divisions))
                 {
                     var paddingAjustment = (extra - (margin * divisions)) / 2 + 1;
-                    Padding = new Padding(Settings.TileSize+ paddingAjustment, Settings.TileSize, Settings.TileSize+ paddingAjustment, Settings.TileSize);
+                    Padding = new Padding(Settings.TileSize + paddingAjustment, Settings.TileSize, Settings.TileSize + paddingAjustment, Settings.TileSize);
                 }
                 else
                 {
@@ -206,6 +213,7 @@ public abstract partial class FlowPanelControl<T> : UserControl where T: PanelSe
             }
         }
 
+        unscaledSize = Settings.Unscale(Size);
         BackgroundImage = Seed?.Font.RenderBox(unscaledSize.Width / 8, unscaledSize.Height / 8)?.ToBitmap();
     }
 }

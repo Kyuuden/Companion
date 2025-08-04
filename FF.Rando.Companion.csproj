@@ -316,6 +316,9 @@
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>FreeEnterprise.resx</DependentUpon>
 	  </Compile>
+	  <Compile Update="FreeEnterprise\View\LocationsControl.cs">
+	    <SubType>Component</SubType>
+	  </Compile>
 	  <Compile Update="FreeEnterprise\View\XpStatsControl.cs">
 	    <SubType>Component</SubType>
 	  </Compile>

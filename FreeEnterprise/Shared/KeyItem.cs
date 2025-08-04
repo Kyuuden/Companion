@@ -1,13 +1,12 @@
 ﻿using FF.Rando.Companion.FreeEnterprise.RomData;
 using FF.Rando.Companion.FreeEnterprise.Settings;
-using FF.Rando.Companion.FreeEnterprise.Shared;
 using KGySoft.Drawing.Imaging;
 using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.CompilerServices;
 
-namespace FF.Rando.Companion.FreeEnterprise._5._0._0;
+namespace FF.Rando.Companion.FreeEnterprise.Shared;
 
 internal class KeyItem : IKeyItem, IDisposable
 {
@@ -20,15 +19,16 @@ internal class KeyItem : IKeyItem, IDisposable
     private readonly KeyItemSettings _settings;
     private readonly RomData.Font _font;
 
-    public KeyItem(KeyItemSettings settings, RomData.Font font,  Descriptors descriptors, KeyItemType type)
+    public KeyItem(KeyItemSettings settings, RomData.Font font, IKeyItemDescriptor descriptors, KeyItemType type, bool isTrackable = true)
     {
         _settings = settings;
         _font = font;
         Id = (int)type;
-        Name = descriptors.GetKeyItemName(type);
-        Description = descriptors.GetKeyItemDescription(type);
+        Name = descriptors.GetName(type);
+        Description = descriptors.GetDescription(type);
         _settings.PropertyChanged += SettingsChanged;
         SetImage();
+        IsTrackable = isTrackable;
     }
 
     private void SettingsChanged(object sender, PropertyChangedEventArgs e)
@@ -41,9 +41,11 @@ internal class KeyItem : IKeyItem, IDisposable
     public string Name { get; }
     public string Description { get; }
 
+    public bool IsTrackable { get; }
+
     public string WhereFound
     {
-        get => whereFound; 
+        get => whereFound;
         set
         {
             if (whereFound == value)
@@ -56,7 +58,7 @@ internal class KeyItem : IKeyItem, IDisposable
 
     public bool IsFound
     {
-        get => isFound; 
+        get => isFound;
         set
         {
             if (isFound == value)
@@ -70,7 +72,7 @@ internal class KeyItem : IKeyItem, IDisposable
 
     public bool IsUsed
     {
-        get => isUsed; 
+        get => isUsed;
         set
         {
             if (isUsed == value)
@@ -84,7 +86,7 @@ internal class KeyItem : IKeyItem, IDisposable
 
     public TimeSpan? WhenFound
     {
-        get => whenFound; 
+        get => whenFound;
         set
         {
             if (whenFound == value || whenFound.HasValue)
@@ -97,7 +99,7 @@ internal class KeyItem : IKeyItem, IDisposable
 
     public TimeSpan? WhenUsed
     {
-        get => whenUsed; 
+        get => whenUsed;
         set
         {
             if (whenUsed == value || whenUsed.HasValue)

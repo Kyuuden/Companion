@@ -10,7 +10,7 @@ using System.Linq;
 using System.Windows.Forms;
 
 namespace FF.Rando.Companion.FreeEnterprise.View;
-public class ObjectivesControl : PictureBox
+public class ObjectivesControl : PictureBox, IPanel
 {
     private ISeed? _seed;
     private ObjectivesSettings? _settings;
@@ -27,6 +27,13 @@ public class ObjectivesControl : PictureBox
     public ObjectivesControl()
     {
     }
+
+    public DockStyle DefaultDockStyle => DockStyle.Top;
+
+    public bool CanHaveFillDockStyle => true;
+
+    public int Priority => _settings?.Priority ?? int.MaxValue;
+    public bool InTopPanel => _settings?.InTopPanel ?? false;
 
     public virtual void InitializeDataSources(ISeed seed, ObjectivesSettings objectivesSettings)
     {
@@ -53,51 +60,66 @@ public class ObjectivesControl : PictureBox
             _groupBitmapData.Add(GenerateData(group, ++gnum).ToList());
         }
 
-        RenderImage(_groupBitmapData[_groupIndex]);
+        RenderImage();
     }
 
     private void ButtonPressed(string obj)
     {
-        Debug.WriteLine($"Button Pressed: {obj}");
-
         if (_settings == null)
             return;
 
         if (obj.Equals(_settings.NextGroupButton, StringComparison.InvariantCultureIgnoreCase))
         {
+            if (_settings.CombineObjectiveGroups)
+                return;
+
             _groupIndex = (_groupIndex + 1) % _groupBitmapData.Count;
             _scrollOffset = 0;
             _canScrollUp = false;
-            RenderImage(_groupBitmapData[_groupIndex]);
+            RenderImage();
         }
         else if (obj.Equals(_settings.PreviousGroupButton, StringComparison.InvariantCultureIgnoreCase))
         {
+            if (_settings.CombineObjectiveGroups)
+                return;
+
             _groupIndex = _groupIndex == 0 ? _groupBitmapData.Count - 1 : _groupIndex - 1;
             _scrollOffset = 0;
             _canScrollUp = false;
-            RenderImage(_groupBitmapData[_groupIndex]);
+            RenderImage();
         }
         else if (obj.Equals(_settings.ScrollDownButton, StringComparison.InvariantCultureIgnoreCase))
         {
             if (_canScrollDown)
             {
-                _scrollOffset += 1;
+                _scrollOffset += _settings.ScrollLines;
                 _canScrollUp = true;
-                RenderImage(_groupBitmapData[_groupIndex]);
+                RenderImage();
             }
         }
         else if (obj.Equals(_settings.ScrollUpButton, StringComparison.InvariantCultureIgnoreCase))
         {
             if (_canScrollUp)
             {
-                _scrollOffset -= 1;
+                _scrollOffset -= _settings.ScrollLines;
                 _canScrollUp = _scrollOffset > 0;
-                RenderImage(_groupBitmapData[_groupIndex]);
+                RenderImage();
             }
         }
     }
 
-    private void RenderImage(List<IReadableBitmapData> data)
+    private void RenderImage()
+    {
+        if (_settings == null)
+            return;
+
+        if (_settings.CombineObjectiveGroups)
+            RenderImage(_groupBitmapData.SelectMany(d => d));
+        else
+            RenderImage(_groupBitmapData[_groupIndex]);
+    }
+
+    private void RenderImage(IEnumerable<IReadableBitmapData> data)
     {
         if (_seed == null || _settings == null)
             throw new InvalidOperationException();
@@ -147,7 +169,10 @@ public class ObjectivesControl : PictureBox
 
         var unscaledSize = _settings.Unscale(Size);
         var charWidth = (unscaledSize.Width / 8) - 2;
-        yield return _seed.Font.RenderText(group.Name.ToUpper().PadRight(charWidth - 11) + $"Group {groupnum,2}/{_groupCount,2}", RomData.TextMode.Normal);
+        if (_groupCount == 1)
+            yield return _seed.Font.RenderText(group.Name.ToUpper(), RomData.TextMode.Normal);
+        else
+            yield return _seed.Font.RenderText(group.Name.ToUpper().PadRight(charWidth - 11) + $"Group {groupnum,2}/{_groupCount,2}", RomData.TextMode.Normal);
 
         var taskNum = 1;
         var completed = 0;
@@ -156,7 +181,6 @@ public class ObjectivesControl : PictureBox
             if (task.IsCompleted) completed++;
 
             var num = _seed.Font.RenderText($"{taskNum++,2}. ", task.IsCompleted ? RomData.TextMode.Disabled : RomData.TextMode.Normal);
-
 
             var description = task.IsCompleted && task.CompletedAt > TimeSpan.Zero
                 ? $"{task.Description} - {task.CompletedAt.Value.ToString("hh':'mm':'ss'.'ff")}"
@@ -243,6 +267,6 @@ public class ObjectivesControl : PictureBox
         {
             _groupBitmapData.Add(GenerateData(group, ++gnum).ToList());
         }
-        RenderImage(_groupBitmapData[_groupIndex]);
+        RenderImage();
     }
 }

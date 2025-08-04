@@ -13,6 +13,24 @@ public class ObjectivesSettings : PanelSettings
 
     public override string Name => "Objectives";
 
+    [DisplayName("Combine Objective Groups")]
+    [Description("Display all objective groups at once (Will probably require scrolling)")]
+    [DefaultValue(false)]
+    public bool CombineObjectiveGroups
+    {
+        get => GetSetting(false);
+        set => SaveSetting(value);
+    }
+
+    [DisplayName("Lines to scroll")]
+    [Description("How many lines to scroll for each scroll up or down action.")]
+    [DefaultValue(2)]
+    public int ScrollLines
+    {
+        get => GetSetting(2);
+        set => SaveSetting(value);
+    }
+
     [DisplayName("Next Group")]
     [DefaultValue("X1 RightTrigger")]
     [Category("Buttons")]
@@ -55,5 +73,19 @@ public class ObjectivesSettings : PanelSettings
     {
         get => GetStringSetting("X1 RStickUp");
         set => SaveStringSetting(value);
+    }
+
+    [DefaultValue(3)]
+    public override int Priority
+    {
+        get => GetSetting(3);
+        set => SaveSetting(value);
+    }
+
+    [DefaultValue(false)]
+    public override bool InTopPanel
+    {
+        get => GetSetting(false);
+        set => SaveSetting(value);
     }
 }

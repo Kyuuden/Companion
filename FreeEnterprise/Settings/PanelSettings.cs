@@ -41,6 +41,13 @@ public abstract class PanelSettings : INotifyPropertyChanged
         set => SaveSetting(value);
     }
 
+    [Description("Determines the order of the panels in the tracker.")]
+    public abstract int Priority { get; set; }
+
+    [Description("Should this panel be in the top of the tracker, beside the party.")]
+    [DisplayName("Top Panel")]
+    public abstract bool InTopPanel { get; set; }
+
     [Browsable(false)]
     public int TileSize => (int)(8 * ScaleFactor);
     public Size Scale(Size size) => Size.Truncate(Scale((SizeF)size));

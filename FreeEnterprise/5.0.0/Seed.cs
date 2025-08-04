@@ -4,7 +4,6 @@ using FF.Rando.Companion.FreeEnterprise.RomData;
 using FF.Rando.Companion.FreeEnterprise.View;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -12,9 +11,6 @@ namespace FF.Rando.Companion.FreeEnterprise._5._0._0;
 internal class Seed : SeedBase
 {
     private Descriptors _descriptors;
-    
-    private Stopwatch _stopwatch = new Stopwatch();
-
     private Locations? _locations;
 
     private readonly Objectives _objectives;
@@ -35,9 +31,6 @@ internal class Seed : SeedBase
             XpRate = 1;
         }
 
-        var size = Flags.Binary?.Read<byte>(882, 3);
-        MaxPartySize = size == 0 ? 5 : size;
-
         _objectives = new Objectives(_descriptors, metadata.Objectives.OfType<GroupObjectives>());
         _party = new Party(
             container.Settings.Party,
@@ -55,39 +48,22 @@ internal class Seed : SeedBase
 
     public override IEnumerable<IBoss> Bosses => _bosses.Items;
 
-    public override int? MaxPartySize { get; protected set; }
-    public override IEnumerable<IObjectiveGroup> Objectives { get => _objectives; protected set { } }
-    public override TimeSpan Elapsed { get => _stopwatch.Elapsed; protected set { } }
-    public override IEnumerable<ILocation> CheckedLocations { get => Enumerable.Empty<ILocation>();}
+    public override IEnumerable<IObjectiveGroup> Objectives { get => _objectives.Groups; }
     public override IEnumerable<ILocation> AvailableLocations { get => Enumerable.Empty<ILocation>() ; }
 
-    public override void Pause()
-    {
-        if (Started && _stopwatch.IsRunning)
-            _stopwatch.Stop();
-    }
+    public override bool CanTackBosses => true;
 
-    public override void Unpause()
-    {
-        if (Started && !Victory && !_stopwatch.IsRunning)
-            _stopwatch.Start();
-    }
+    public override bool RequiresMemoryEvents => false;
 
     public override void OnNewFrame()
     {
         base.OnNewFrame();
 
         if (!Started)
-        {
             Started = Game.Sram.ReadByte(Addresses.SRAM.StartedIndicatorAddress) == 1;
-            if (Started) _stopwatch.Start();
-        }
         
         if (!Victory)
-        {
             Victory = Game.Wram.ReadByte(Addresses.WRAM.VictoryIndicatorAddress) == 1;
-            if (Victory) _stopwatch.Stop();
-        }
 
         if (Game.Emulation.FrameCount() % Game.RootSettings.TrackingInterval == 0)
         {
@@ -127,7 +103,10 @@ internal class Seed : SeedBase
                 NotifyPropertyChanged(nameof(Objectives));
 
             if (_bosses.Update(time, bossLocations, bossDefeated, bossLocationsDefeated))
+            {
+                DefeatedEncounters = _bosses.Items.SelectMany(b => b.Encounters).Count(e => e.IsDefeated);
                 NotifyPropertyChanged(nameof(Bosses));
+            }
 
             if (_flags != null)
             {
@@ -160,12 +139,5 @@ internal class Seed : SeedBase
 
             BackgroundColor = Game.Wram.ReadBytes(Shared.Addresses.WRAM.BackgroundColor).Read<ushort>(0).ToColor();
         }
-    }
-
-    public override Control CreateControls()
-    {
-        var control = new FreeEnterpriseControl();
-        control.InitializeDataSources(this);
-        return control;
     }
 }

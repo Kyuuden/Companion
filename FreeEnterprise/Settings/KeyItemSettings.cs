@@ -21,4 +21,18 @@ public class KeyItemSettings : PanelSettings
     }
 
     public override string Name => "KeyItems";
+
+    [DefaultValue(1)]
+    public override int Priority
+    {
+        get => GetSetting(1);
+        set => SaveSetting(value);
+    }
+
+    [DefaultValue(true)]
+    public override bool InTopPanel
+    {
+        get => GetSetting(true);
+        set => SaveSetting(value);
+    }
 }

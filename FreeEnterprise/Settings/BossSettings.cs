@@ -10,4 +10,18 @@ public class BossSettings : PanelSettings
 
     [Browsable(false)]
     public override string Name => "Bosses";
+
+    [DefaultValue(2)]
+    public override int Priority
+    {
+        get => GetSetting(2);
+        set => SaveSetting(value);
+    }
+
+    [DefaultValue(true)]
+    public override bool InTopPanel
+    {
+        get => GetSetting(true);
+        set => SaveSetting(value);
+    }
 }

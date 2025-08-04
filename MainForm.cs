@@ -62,6 +62,11 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
                 break;
             case nameof(GameViewModel.Game) when _viewModel.Game != null:
 
+                if (_viewModel.Game.RequiresMemoryEvents && APIs.MemoryEvents == null) 
+                {
+                    MessageBox.Show("Automatic timing of runs is not supported on the Snes9x core. Please use the BSNES or BSNESv115+ core to have this feature.", "Timing unavailable");
+                }
+
                 var icon = _viewModel.Game.Icon;
                 var hIcon = icon.GetHicon();
                 Icon = Icon.FromHandle(hIcon);

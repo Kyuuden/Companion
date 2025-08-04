@@ -16,7 +16,7 @@ internal static class Addresses
 
     internal static class WRAM
     {
-        public static long VictoryIndicatorAddress = 0x151F;
+        public readonly static long VictoryIndicatorAddress = 0x151F;
 
         public readonly static Range<long> PartyRegion = 0x1000L.RangeTo(0x1140);
         public readonly static Range<long> WramRegion = 0x1500L.RangeTo(0x155F);

@@ -10,6 +10,10 @@ public partial class BossesControl : FlowPanelControl<BossSettings>
         SpacingMode = SpacingMode.Columns;
     }
 
+    public override DockStyle DefaultDockStyle => DockStyle.Top;
+
+    public override bool CanHaveFillDockStyle => true;
+
     protected override Control[] GenerateControls(ISeed seed)
      => (Seed?.Bosses ?? []).Select(b => new BossControl(seed, Settings!, b)).ToArray();
 }

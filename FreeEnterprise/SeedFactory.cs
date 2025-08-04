@@ -26,6 +26,10 @@ internal static class SeedFactory
         {
             case "v5.0.0-a.1":
                 return new _5._0._0.Seed(hash, metadata, container);
+            case "v4.6.0":
+                return new _4._6._0.Seed(hash, metadata, container);
+            case "v4.6.1.Gale":
+                return new _4._6._1.Gale.Seed(hash, metadata, container);
             default:
                 throw new NotSupportedException($"Unsupported Free Enterprise version: {version}" );
         }

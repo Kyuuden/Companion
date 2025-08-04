@@ -11,6 +11,10 @@ public partial class KeyItemsControl : FlowPanelControl<KeyItemSettings>
         SpacingMode = SpacingMode.Columns;
     }
 
+    public override DockStyle DefaultDockStyle => DockStyle.Top;
+
+    public override bool CanHaveFillDockStyle => true;
+
     protected override Control[] GenerateControls(ISeed seed) 
         => (Seed?.KeyItems ?? []).Select(ki => new KeyItemControl(seed, Settings!, ki)).ToArray();
 

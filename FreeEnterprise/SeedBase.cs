@@ -8,16 +8,20 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Immutable;
 using FF.Rando.Companion.FreeEnterprise.Settings;
+using System.Diagnostics;
+using FF.Rando.Companion.FreeEnterprise.View;
 
 namespace FF.Rando.Companion.FreeEnterprise;
 
 internal abstract class SeedBase : ISeed
 {
     private Color _backgroundColor = Color.FromArgb(0, 0, 99);
+    private Stopwatch _stopwatch = new Stopwatch();
     private bool _started = false;
     private bool _victory = false;
     private decimal? _xpRate = null;
-    private int _treasureCount = 0;
+    private int _defeatedEncounters = 0;
+    private int? _treasureCount;
 
     public RomData.Font Font { get; }
     public Sprites Sprites { get; }
@@ -33,6 +37,8 @@ internal abstract class SeedBase : ISeed
             {
                 _started = true;
                 NotifyPropertyChanged();
+                if (_started)
+                    _stopwatch.Start();
             }
         }
     }
@@ -46,6 +52,8 @@ internal abstract class SeedBase : ISeed
             {
                 _victory = true;
                 NotifyPropertyChanged();
+                if (_victory)
+                    _stopwatch.Stop();
             }
         }
     }
@@ -56,7 +64,18 @@ internal abstract class SeedBase : ISeed
 
     public abstract IEnumerable<IBoss> Bosses { get; }
 
-    public abstract int? MaxPartySize { get; protected set; }
+    public int DefeatedEncounters
+    {
+        get => _defeatedEncounters;
+        protected set
+        {
+            if (_defeatedEncounters != value)
+            {
+                _defeatedEncounters = value;
+                NotifyPropertyChanged();
+            }
+        }
+    }
 
     public decimal? XpRate
     {
@@ -75,21 +94,31 @@ internal abstract class SeedBase : ISeed
 
     public int TreasureCount
     {
-        get => _treasureCount - (_treasureOffset ?? 0);
+        get => _treasureCount ?? 0 - _treasureOffset ?? 0;
         protected set
         {
             if (_treasureCount != value)
             {
-                if (!_treasureOffset.HasValue && _treasureCount == 0 && value > 10)
-                    _treasureOffset = value;
+                if (_treasureCount.HasValue)
+                {
+                    _treasureCount = value;
+                    NotifyPropertyChanged();
+                }
+                else if (value != 0)
+                {
+                    if (value > 10)
+                        _treasureOffset = value;
+                    else
+                        _treasureOffset = 0;
 
-                _treasureCount = value;
-                NotifyPropertyChanged();
+                    _treasureCount = value;
+                    NotifyPropertyChanged();
+                }
             }
         }
     }
 
-    public abstract IEnumerable<IObjectiveGroup> Objectives { get; protected set; }
+    public abstract IEnumerable<IObjectiveGroup> Objectives { get; }
 
     public Color BackgroundColor
     {
@@ -108,8 +137,7 @@ internal abstract class SeedBase : ISeed
 
     private ImmutableHashSet<string> _lastPressedButtons = [];
 
-    public abstract TimeSpan Elapsed { get; protected set; }
-    public abstract IEnumerable<ILocation> CheckedLocations { get; }
+    public TimeSpan Elapsed { get => _stopwatch.Elapsed; }
     public abstract IEnumerable<ILocation> AvailableLocations { get; }
     public virtual void OnNewFrame()
     {
@@ -186,16 +214,33 @@ internal abstract class SeedBase : ISeed
     public FreeEnterpriseSettings Settings { get; private set; }
 
     public Bitmap Icon { get; }
+    public virtual bool CanTackBosses => false;
+
+    public abstract bool RequiresMemoryEvents { get; }
 
     protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
-    public abstract Control CreateControls();
+    public Control CreateControls()
+    {
+        var control = new FreeEnterpriseControl();
+        control.InitializeDataSources(this);
+        return control;
+    }
 
-    public abstract void Pause();
-    public abstract void Unpause();
+    public void Pause()
+    {
+        if (Started && _stopwatch.IsRunning)
+            _stopwatch.Stop();
+    }
+
+    public void Unpause()
+    {
+        if (Started && !Victory && !_stopwatch.IsRunning)
+            _stopwatch.Start();
+    }
 
     public void Dispose()
     {

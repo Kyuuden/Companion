@@ -9,9 +9,9 @@ namespace FF.Rando.Companion.FreeEnterprise._5._0._0;
 internal class Bosses
 {
     private readonly Dictionary<BossType, Boss> _bosses;
-    private readonly Descriptors _descriptors;
+    private readonly IBossDescriptor _descriptors;
 
-    public Bosses(Descriptors descriptors)
+    public Bosses(IBossDescriptor descriptors)
     {
         _bosses = Enum.GetValues(typeof(BossType))
             .OfType<BossType>()
@@ -35,7 +35,7 @@ internal class Bosses
             if (bossId == 0xFF)
                 continue;
 
-            var location = _descriptors.GetBossLocationName((BossLocationType)i);
+            var location = _descriptors.GetLocationName((BossLocationType)i);
 
             if (_bosses.TryGetValue((BossType)bossId, out var boss))
             {

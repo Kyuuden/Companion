@@ -19,4 +19,6 @@ public interface IKeyItem : IImageTracker
     bool IsFound { get; }
 
     bool IsUsed { get; }
+
+    bool IsTrackable { get; }
 }
