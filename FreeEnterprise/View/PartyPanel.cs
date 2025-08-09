@@ -15,8 +15,6 @@ public class PartyPanel : FlowPanel<PartySettings>
 
     public override DockStyle DefaultDockStyle => DockStyle.Left;
 
-    //public override bool CanHaveFillDockStyle => false;
-
     protected override Control[] GenerateControls(ISeed seed) 
         => (Seed?.Party ?? []).Select(c => new CharacterControl(seed, Settings!, c)).ToArray();
 }

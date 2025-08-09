@@ -12,10 +12,10 @@ public class LocationsSettings : PanelSettings
 
     [DisplayName("Combine Location Types")]
     [Description("Display all location types at once (Will probably require scrolling)")]
-    [DefaultValue(false)]
+    [DefaultValue(true)]
     public bool CombineLocationTypes
     {
-        get => GetSetting(false);
+        get => GetSetting(true);
         set => SaveSetting(value);
     }
 
@@ -59,13 +59,6 @@ public class LocationsSettings : PanelSettings
     public override int Priority
     {
         get => GetSetting(4);
-        set => SaveSetting(value);
-    }
-
-    [DefaultValue(false)]
-    public override bool InTopPanel
-    {
-        get => GetSetting(false);
         set => SaveSetting(value);
     }
 }

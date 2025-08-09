@@ -100,7 +100,6 @@ public partial class FreeEnterpriseControl : UserControl
                 BackColor = _seed.BackgroundColor;
                 break;
             case nameof(PanelSettings.Priority):
-            case nameof(PanelSettings.InTopPanel):
             case nameof(PanelSettings.Enabled):
                 ArrangePanels();
                 break;

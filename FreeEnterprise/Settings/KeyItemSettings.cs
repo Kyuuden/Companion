@@ -28,11 +28,4 @@ public class KeyItemSettings : PanelSettings
         get => GetSetting(1);
         set => SaveSetting(value);
     }
-
-    [DefaultValue(true)]
-    public override bool InTopPanel
-    {
-        get => GetSetting(true);
-        set => SaveSetting(value);
-    }
 }

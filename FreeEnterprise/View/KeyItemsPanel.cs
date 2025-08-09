@@ -13,8 +13,6 @@ public partial class KeyItemsPanel : FlowPanel<KeyItemSettings>
 
     public override DockStyle DefaultDockStyle => DockStyle.Top;
 
-    //public override bool CanHaveFillDockStyle => true;
-
     protected override Control[] GenerateControls(ISeed seed) 
         => (Seed?.KeyItems ?? []).Select(ki => new KeyItemControl(seed, Settings!, ki)).ToArray();
 

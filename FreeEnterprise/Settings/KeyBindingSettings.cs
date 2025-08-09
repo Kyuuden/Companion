@@ -23,13 +23,13 @@ public class KeyBindingSettings : INotifyPropertyChanged
     }
 
     [DisplayName("Next Panel")]
-    [DefaultValue("X1 Select")]
+    [DefaultValue("X1 Back")]
     [Category("Buttons")]
     [Editor(typeof(ButtonAssignmentEditor), typeof(UITypeEditor))]
     [TypeConverter(typeof(ButtonAssignmentConverter))]
     public string NextPanelButton
     {
-        get => GetStringSetting("X1 Select");
+        get => GetStringSetting("X1 Back");
         set => SaveStringSetting(value);
     }
 

@@ -45,9 +45,8 @@ public abstract partial class FlowPanel<T> : UserControl, IPanel where T : Panel
     public bool CanHaveFillDockStyle => false;
 
     public virtual int Priority => Settings?.Priority ?? int.MaxValue;
-    public bool InTopPanel => Settings?.InTopPanel ?? false;
 
-    public virtual bool IsEnabled => Settings?.Enabled ?? false;    
+    public virtual bool IsEnabled => Settings?.Enabled ?? false;
 
     public virtual void InitializeDataSources(ISeed seed, T settings)
     {

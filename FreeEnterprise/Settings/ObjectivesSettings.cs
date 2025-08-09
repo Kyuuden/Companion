@@ -37,11 +37,4 @@ public class ObjectivesSettings : PanelSettings
         get => GetSetting(3);
         set => SaveSetting(value);
     }
-
-    [DefaultValue(false)]
-    public override bool InTopPanel
-    {
-        get => GetSetting(false);
-        set => SaveSetting(value);
-    }
 }

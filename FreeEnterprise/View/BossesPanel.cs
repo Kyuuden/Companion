@@ -12,8 +12,6 @@ public partial class BossesPanel : FlowPanel<BossSettings>
 
     public override DockStyle DefaultDockStyle => DockStyle.Top;
 
-    //public override bool CanHaveFillDockStyle => true;
-
     public override bool IsEnabled => base.IsEnabled && Seed?.CanTackBosses == true;
 
     protected override Control[] GenerateControls(ISeed seed)

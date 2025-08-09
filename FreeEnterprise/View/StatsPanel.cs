@@ -14,8 +14,6 @@ public class StatsPanel : FlowPanel<StatsSettings>
 
     public override DockStyle DefaultDockStyle => DockStyle.Bottom;
 
-    //public override bool CanHaveFillDockStyle => false;
-
     protected override Control[] GenerateControls(ISeed seed) 
         => 
         [

@@ -33,8 +33,6 @@ public abstract class ScrollablePanel<TSettings> : PictureBox, IPanel, IScrollab
 
     public int Priority => Settings?.Priority ?? int.MaxValue;
 
-    public bool InTopPanel => Settings?.InTopPanel ?? false;
-
     public virtual bool IsEnabled => Settings?.Enabled ?? false;
 
     public bool IsEnabledForScrolling
@@ -84,39 +82,47 @@ public abstract class ScrollablePanel<TSettings> : PictureBox, IPanel, IScrollab
         if (Seed == null || Settings == null)
             throw new InvalidOperationException();
 
-        Image?.Dispose();
-        var unscaledSize = Settings.Unscale(Size);
-        unscaledSize = new Size((unscaledSize.Width / 8) * 8, (unscaledSize.Height / 8) * 8);
-        var y = 8;
-
-        if (unscaledSize.Width <= 0 || unscaledSize.Height <= 0)
-            return;
-
-        var baseImage = Seed.Font.RenderBox(unscaledSize.Width / 8, unscaledSize.Height / 8, Seed.Sprites.GreyScaleStickerPalette);
-
-        _canScrollDown = false;
-        foreach (var line in data.Skip(_scrollOffset))
+        try
         {
-            if (line.Height + y > baseImage.Height - 8)
+
+            Image?.Dispose();
+            var unscaledSize = Settings.Unscale(Size);
+            unscaledSize = new Size((unscaledSize.Width / 8) * 8, (unscaledSize.Height / 8) * 8);
+            var y = 8;
+
+            if (unscaledSize.Width <= 0 || unscaledSize.Height <= 0)
+                return;
+
+            var baseImage = Seed.Font.RenderBox(unscaledSize.Width / 8, unscaledSize.Height / 8, Seed.Sprites.GreyScaleStickerPalette);
+
+            _canScrollDown = false;
+            foreach (var line in data.Skip(_scrollOffset))
             {
-                _canScrollDown = true;
-                break;
+                if (line.Height + y > baseImage.Height - 8)
+                {
+                    _canScrollDown = true;
+                    break;
+                }
+
+                line.CopyTo(baseImage, new Point(8, y));
+                y += (line.Height + 8);
             }
 
-            line.CopyTo(baseImage, new Point(8, y));
-            y += (line.Height + 8);
+            if (_canScrollDown && IsEnabledForScrolling)
+                Seed.Sprites.GetArrow(RomData.Arrow.Down).DrawInto(baseImage, new Point(unscaledSize.Width - 16, unscaledSize.Height - 20));
+
+            if (_canScrollUp && IsEnabledForScrolling)
+                Seed.Sprites.GetArrow(RomData.Arrow.Up)?.DrawInto(baseImage, new Point(unscaledSize.Width - 16, 0));
+
+            //_seed.Sprites.GetArrow(RomData.Arrow.Left)?.DrawInto(baseImage, new Point(0, 8));
+            //_seed.Sprites.GetArrow(RomData.Arrow.Right)?.DrawInto(baseImage, new Point(unscaledSize.Width - 16, 8));
+
+            Image = baseImage.ToBitmap();
         }
-
-        if (_canScrollDown && IsEnabledForScrolling)
-            Seed.Sprites.GetArrow(RomData.Arrow.Down).DrawInto(baseImage, new Point(unscaledSize.Width - 16, unscaledSize.Height - 20));
-
-        if (_canScrollUp && IsEnabledForScrolling)
-            Seed.Sprites.GetArrow(RomData.Arrow.Up)?.DrawInto(baseImage, new Point(unscaledSize.Width - 16, 0));
-
-        //_seed.Sprites.GetArrow(RomData.Arrow.Left)?.DrawInto(baseImage, new Point(0, 8));
-        //_seed.Sprites.GetArrow(RomData.Arrow.Right)?.DrawInto(baseImage, new Point(unscaledSize.Width - 16, 8));
-
-        Image = baseImage.ToBitmap();
+        catch (Exception)
+        {
+            //This will throw when zoom level is too high, so lets not crash everything.
+        }
     }
 
     protected virtual void PropertyChanged(object sender, PropertyChangedEventArgs e)

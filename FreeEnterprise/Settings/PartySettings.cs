@@ -10,7 +10,6 @@ public class PartySettings : PanelSettings
         : base(jToken)
     {
         Priority = 0;
-        InTopPanel = true;
     }
 
     [DefaultValue(Pose.Stand)]
@@ -25,7 +24,4 @@ public class PartySettings : PanelSettings
     [Browsable(false)]
 
     public override int Priority { get; set; }
-
-    [Browsable(false)]
-    public override bool InTopPanel { get; set; }
 }

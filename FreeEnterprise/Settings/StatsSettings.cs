@@ -21,11 +21,4 @@ public class StatsSettings : PanelSettings
         get => GetSetting(5);
         set => SaveSetting(value);
     }
-
-    [DefaultValue(false)]
-    public override bool InTopPanel
-    {
-        get => GetSetting(false);
-        set => SaveSetting(value);
-    }
 }
