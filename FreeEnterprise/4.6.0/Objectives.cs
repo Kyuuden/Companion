@@ -1,12 +1,8 @@
-﻿using FF.Rando.Companion.FreeEnterprise._5._0._0;
-using FF.Rando.Companion.FreeEnterprise.RomData;
+﻿using FF.Rando.Companion.FreeEnterprise.RomData;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FF.Rando.Companion.FreeEnterprise._4._6._0;
 internal class Objectives : IObjectiveGroup
@@ -110,6 +106,8 @@ internal class Task : ITask
             NotifyPropertyChanged();
         }
     }
+
+    public bool IsHardRequired => false;
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

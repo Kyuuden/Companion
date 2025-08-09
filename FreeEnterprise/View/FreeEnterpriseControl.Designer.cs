@@ -31,12 +31,12 @@ partial class FreeEnterpriseControl
     private void InitializeComponent()
     {
             this.TopPanel = new System.Windows.Forms.Panel();
-            this._objectives = new FF.Rando.Companion.FreeEnterprise.View.ObjectivesControl();
-            this._stats = new FF.Rando.Companion.FreeEnterprise.View.StatsControl();
-            this._bosses = new FF.Rando.Companion.FreeEnterprise.View.BossesControl();
-            this._locations = new FF.Rando.Companion.FreeEnterprise.View.LocationsControl();
-            this._keyItems = new FF.Rando.Companion.FreeEnterprise.View.KeyItemsControl();
-            this._party = new FF.Rando.Companion.FreeEnterprise.View.PartyControl();
+            this._objectives = new FF.Rando.Companion.FreeEnterprise.View.ObjectivesPanel();
+            this._stats = new FF.Rando.Companion.FreeEnterprise.View.StatsPanel();
+            this._bosses = new FF.Rando.Companion.FreeEnterprise.View.BossesPanel();
+            this._locations = new FF.Rando.Companion.FreeEnterprise.View.LocationsPanel();
+            this._keyItems = new FF.Rando.Companion.FreeEnterprise.View.KeyItemsPanel();
+            this._party = new FF.Rando.Companion.FreeEnterprise.View.PartyPanel();
             this.TopPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this._objectives)).BeginInit();
             this.SuspendLayout();
@@ -60,6 +60,7 @@ partial class FreeEnterpriseControl
             this._objectives.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this._objectives.TabIndex = 5;
             this._objectives.TabStop = false;
+            this._objectives.CanScrollChanged += CanScrollChanged;
             // 
             // _locations
             // 
@@ -72,6 +73,7 @@ partial class FreeEnterpriseControl
             this._locations.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this._locations.TabIndex = 5;
             this._locations.TabStop = false;
+            this._locations.CanScrollChanged += CanScrollChanged;
             // 
             // statsControl1
             // 
@@ -151,11 +153,11 @@ partial class FreeEnterpriseControl
 
     #endregion
 
-    private PartyControl _party;
-    private KeyItemsControl _keyItems;
-    private BossesControl _bosses;
-    private LocationsControl _locations;
+    private PartyPanel _party;
+    private KeyItemsPanel _keyItems;
+    private BossesPanel _bosses;
+    private LocationsPanel _locations;
     private System.Windows.Forms.Panel TopPanel;
-    private ObjectivesControl _objectives;
-    private StatsControl _stats;
+    private ObjectivesPanel _objectives;
+    private StatsPanel _stats;
 }

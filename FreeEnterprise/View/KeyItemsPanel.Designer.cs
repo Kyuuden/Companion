@@ -1,6 +1,6 @@
 ﻿namespace FF.Rando.Companion.FreeEnterprise.View;
 
-partial class BossesControl
+partial class KeyItemsPanel
 {
     /// <summary> 
     /// Required designer variable.

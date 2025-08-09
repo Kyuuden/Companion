@@ -3,9 +3,9 @@ using System.Windows.Forms;
 
 namespace FF.Rando.Companion.FreeEnterprise.View;
 
-public class StatsControl : FlowPanelControl<StatsSettings>
+public class StatsPanel : FlowPanel<StatsSettings>
 {
-    public StatsControl()
+    public StatsPanel()
         : base()
     {
         SpacingMode = SpacingMode.Columns;
@@ -14,7 +14,7 @@ public class StatsControl : FlowPanelControl<StatsSettings>
 
     public override DockStyle DefaultDockStyle => DockStyle.Bottom;
 
-    public override bool CanHaveFillDockStyle => false;
+    //public override bool CanHaveFillDockStyle => false;
 
     protected override Control[] GenerateControls(ISeed seed) 
         => 

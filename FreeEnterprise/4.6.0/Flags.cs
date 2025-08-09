@@ -46,7 +46,6 @@ internal class Flags
             1 => -1,
             var x => x - 1
         };
-        
 
     public bool VanillaAgility => _binaryFlags.Read<bool>(240);
 

@@ -8,4 +8,6 @@ public interface IPanel
     bool CanHaveFillDockStyle { get; }
     int Priority { get; }
     bool InTopPanel { get; }
+
+    bool IsEnabled { get; }
 }

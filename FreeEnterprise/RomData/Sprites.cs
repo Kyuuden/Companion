@@ -28,6 +28,11 @@ public enum Chest
     Open, Closed
 }
 
+public enum Arrow
+{
+    Up, Down, Left, Right
+}
+
 public class Sprites : IDisposable
 {
     private readonly List<List<byte[,]>> _combatTiles;
@@ -47,6 +52,7 @@ public class Sprites : IDisposable
 
     private Dictionary<Pose, List<Frame>> PoseFrames = new Dictionary<Pose, List<Frame>>();
     private Dictionary<BitmapKey, Bitmap> _frameCache = new Dictionary<BitmapKey, Bitmap>();
+    private Dictionary<Arrow, IReadableBitmapData> arrowCache = [];
     private Bitmap? _blank;
     private bool disposedValue;
 
@@ -200,22 +206,49 @@ public class Sprites : IDisposable
         return data;
     }
 
-    public IReadableBitmapData GetArrow(bool isUp)
+    public IReadableBitmapData GetArrow(Arrow arrow)
     {
-        int width = 8;
-        int height = 16;
-        var data = BitmapDataFactory.CreateBitmapData(new Size(width, height), KnownPixelFormat.Format8bppIndexed, _greyScaleStickerPalette);
-        var tail = _stickers[14];
-        var head = _stickers[15];
+        if (arrowCache.TryGetValue(arrow, out var cached))
+            return cached;
 
-        for (int x = 0; x < 8; x++) 
-            for (var y = 0; y < 8; y++)
-                data.SetColorIndex(x, isUp ? 15 - y : y, tail[x,y]);
-        for (int x = 0; x < 8; x++)
-            for (var y = 0; y < 8; y++)
-                data.SetColorIndex(x, isUp ? 7 - y : y + 8, head[x, y]);
 
-        return data;
+        if (arrow == Arrow.Up || arrow == Arrow.Down)
+        {
+            int width = 8;
+            int height = 16;
+            var data = BitmapDataFactory.CreateBitmapData(new Size(width, height), KnownPixelFormat.Format8bppIndexed, GreyScaleStickerPalette);
+            var tail = _stickers[14];
+            var head = _stickers[15];
+
+            for (int x = 0; x < 8; x++)
+                for (var y = 0; y < 8; y++)
+                    data.SetColorIndex(x, arrow == Arrow.Up ? 15 - y : y, tail[x, y]);
+            for (int x = 0; x < 8; x++)
+                for (var y = 0; y < 8; y++)
+                    data.SetColorIndex(x, arrow == Arrow.Up ? 7 - y : y + 8, head[x, y]);
+
+            arrowCache.Add(arrow, data);
+            return data;
+        }
+        else
+        {
+            int width = 16;
+            int height = 8;
+            var data = BitmapDataFactory.CreateBitmapData(new Size(width, height), KnownPixelFormat.Format8bppIndexed, GreyScaleStickerPalette);
+
+            var tail = _stickers[12];
+            var head = _stickers[13];
+
+            for (int x = 0; x < 8; x++)
+                for (var y = 0; y < 8; y++)
+                    data.SetColorIndex(arrow == Arrow.Left ? 15 - x : x, y, tail[x, y]);
+            for (int x = 0; x < 8; x++)
+                for (var y = 0; y < 8; y++)
+                    data.SetColorIndex(arrow == Arrow.Left ? 7 - x : x + 8, y, head[x, y]);
+
+            arrowCache.Add(arrow, data);
+            return data;
+        }
     }
 
     public Bitmap GetBlankCharacter()
@@ -275,6 +308,8 @@ public class Sprites : IDisposable
 
     private const int BattleSpritesPerCharacter = 64;
     private const int PortraitSpritesPerCharacter = 16;
+
+    public Palette GreyScaleStickerPalette => _greyScaleStickerPalette;
 
     private byte[,] GetTile(CharacterType character, int version, Pose pose, int spriteIndex)
         => pose switch

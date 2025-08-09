@@ -8,4 +8,5 @@ public interface ITask : INotifyPropertyChanged
     string Description { get; }
     TimeSpan? CompletedAt { get; }
     bool IsCompleted { get; }
+    bool IsHardRequired { get; }
 }

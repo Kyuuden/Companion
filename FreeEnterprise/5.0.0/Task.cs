@@ -95,6 +95,8 @@ internal class Task : ITask
         }
     }
 
+    public bool IsHardRequired => false;
+
     public event PropertyChangedEventHandler? PropertyChanged;
 
     protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")

@@ -4,9 +4,9 @@ using FF.Rando.Companion.FreeEnterprise.Settings;
 
 namespace FF.Rando.Companion.FreeEnterprise.View;
 
-public class PartyControl : FlowPanelControl<PartySettings>
+public class PartyPanel : FlowPanel<PartySettings>
 {
-    public PartyControl()
+    public PartyPanel()
         : base()
     {
         FlowDirection = FlowDirection.TopDown;
@@ -15,7 +15,7 @@ public class PartyControl : FlowPanelControl<PartySettings>
 
     public override DockStyle DefaultDockStyle => DockStyle.Left;
 
-    public override bool CanHaveFillDockStyle => false;
+    //public override bool CanHaveFillDockStyle => false;
 
     protected override Control[] GenerateControls(ISeed seed) 
         => (Seed?.Party ?? []).Select(c => new CharacterControl(seed, Settings!, c)).ToArray();

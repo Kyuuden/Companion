@@ -2,7 +2,7 @@
 
 namespace FF.Rando.Companion.FreeEnterprise.View;
 
-partial class FlowPanelControl<T>
+partial class FlowPanel<T>
 {
     /// Required designer variable.
     /// </summary>

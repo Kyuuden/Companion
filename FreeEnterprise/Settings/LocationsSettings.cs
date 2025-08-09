@@ -30,10 +30,10 @@ public class LocationsSettings : PanelSettings
 
     [DisplayName("Include character Loactions")]
     [Description("Show available character locations")]
-    [DefaultValue(false)]
+    [DefaultValue(true)]
     public bool ShowCharacterChecks
     {
-        get => GetSetting(false);
+        get => GetSetting(true);
         set => SaveSetting(value);
     }
 

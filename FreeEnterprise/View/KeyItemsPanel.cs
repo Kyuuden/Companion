@@ -4,16 +4,16 @@ using System.Windows.Forms;
 using FF.Rando.Companion.FreeEnterprise.Settings;
 
 namespace FF.Rando.Companion.FreeEnterprise.View;
-public partial class KeyItemsControl : FlowPanelControl<KeyItemSettings>
+public partial class KeyItemsPanel : FlowPanel<KeyItemSettings>
 {
-    public KeyItemsControl() :base()
+    public KeyItemsPanel() :base()
     {
         SpacingMode = SpacingMode.Columns;
     }
 
     public override DockStyle DefaultDockStyle => DockStyle.Top;
 
-    public override bool CanHaveFillDockStyle => true;
+    //public override bool CanHaveFillDockStyle => true;
 
     protected override Control[] GenerateControls(ISeed seed) 
         => (Seed?.KeyItems ?? []).Select(ki => new KeyItemControl(seed, Settings!, ki)).ToArray();

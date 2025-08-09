@@ -100,7 +100,7 @@ internal class Locations
     private bool IsInSeed(LocationType location)
         => location switch
         {
-            LocationType.StartingCharacter => true,
+            LocationType.StartingCharacter => false,
             LocationType.StartingPartner => true,
             LocationType.KaipoInn => !_flags.CNoEarned,
             LocationType.WateryPass => !_flags.CNoFree,
@@ -109,7 +109,7 @@ internal class Locations
             LocationType.MtHobbs => !_flags.CNoEarned,
             LocationType.Mysidia1 => !_flags.CNoFree,
             LocationType.Mysidia2 => !_flags.CNoFree,
-            LocationType.MtOrdealsCharacter => !_flags.CNoEarned,
+            LocationType.MtOrdealsCharacter => !_flags.CNoFree,
             LocationType.PlaceHolder1 => false,
             LocationType.PlaceHolder2 => false,
             LocationType.BaronInnCharacter => !_flags.CNoEarned,

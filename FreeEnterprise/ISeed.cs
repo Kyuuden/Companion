@@ -23,7 +23,5 @@ public interface ISeed : IGame
     RomData.Font Font { get; }
     Sprites Sprites { get; }
     bool CanTackBosses { get; }
-
     event Action<string>? ButtonPressed;
-
 }

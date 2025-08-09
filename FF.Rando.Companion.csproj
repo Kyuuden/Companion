@@ -316,9 +316,7 @@
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>FreeEnterprise.resx</DependentUpon>
 	  </Compile>
-	  <Compile Update="FreeEnterprise\View\LocationsControl.cs">
-	    <SubType>Component</SubType>
-	  </Compile>
+	  <Compile Update="FreeEnterprise\View\LocationsPanel.cs" />
 	  <Compile Update="FreeEnterprise\View\XpStatsControl.cs">
 	    <SubType>Component</SubType>
 	  </Compile>
@@ -327,7 +325,7 @@
 	  <Compile Update="FreeEnterprise\View\BossControl.cs">
 	    <SubType>UserControl</SubType>
 	  </Compile>
-	  <Compile Update="FreeEnterprise\View\BossesControl.cs" />
+	  <Compile Update="FreeEnterprise\View\BossesPanel.cs" />
 	  <Compile Update="FreeEnterprise\View\BossStatsControl.cs">
 	    <SubType>Component</SubType>
 	  </Compile>

@@ -13,11 +13,11 @@ public enum SpacingMode
     None, Columns, Rows
 }
 
-public abstract partial class FlowPanelControl<T> : UserControl, IPanel where T : PanelSettings
+public abstract partial class FlowPanel<T> : UserControl, IPanel where T : PanelSettings
 {
     bool _isloaded = false;
 
-    public FlowPanelControl()
+    public FlowPanel()
     {
         DoubleBuffered = true;
         InitializeComponent();
@@ -42,10 +42,12 @@ public abstract partial class FlowPanelControl<T> : UserControl, IPanel where T 
 
     public abstract DockStyle DefaultDockStyle { get; }
 
-    public abstract bool CanHaveFillDockStyle { get; }
+    public bool CanHaveFillDockStyle => false;
 
     public virtual int Priority => Settings?.Priority ?? int.MaxValue;
     public bool InTopPanel => Settings?.InTopPanel ?? false;
+
+    public virtual bool IsEnabled => Settings?.Enabled ?? false;    
 
     public virtual void InitializeDataSources(ISeed seed, T settings)
     {

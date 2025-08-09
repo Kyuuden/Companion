@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FF.Rando.Companion.FreeEnterprise._4._6._0;
+namespace FF.Rando.Companion.FreeEnterprise._4._6._1.Gale;
 internal class Party : IDisposable
 {
     private readonly IReadOnlyList<Character> _characters;

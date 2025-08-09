@@ -6,28 +6,17 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using System.Windows.Forms;
 
 namespace FF.Rando.Companion.FreeEnterprise._4._6._0;
-internal class Seed : SeedBase
-{
-    private enum RunState
-    {
-        Loading,
-        Menu,
-        RunStarted,
-        RunFinished,
-        Unknown
-    }
 
-    private RunState _runState;
+internal class Seed : LegacySeed
+{
     private readonly Flags? _flags;
     private readonly Descriptors _descriptors;
     private readonly KeyItems _keyItems;
     private readonly Party _party;
     private readonly Objectives _objectives;
     private readonly Locations _locations;
-    private Timer _loadingTimer;
 
     public override IEnumerable<ICharacter> Party => _party.Characters;
 
@@ -37,9 +26,7 @@ internal class Seed : SeedBase
 
     public override IEnumerable<IObjectiveGroup> Objectives  => _objectives.Yield();
 
-    public override IEnumerable<ILocation> AvailableLocations => _locations.Items;
-
-    public override bool RequiresMemoryEvents => true;
+    public override IEnumerable<ILocation> AvailableLocations => _locations.Items.Where(i=>i.IsAvailable && !i.IsChecked);
 
     public Seed(string hash, Metadata metadata, Container container)
         : base(hash, metadata, container)
@@ -55,90 +42,14 @@ internal class Seed : SeedBase
 
         _party = new Party(container.Settings.Party, Sprites, _flags?.VanillaAgility, _flags?.CHero);
         _objectives = new Objectives(metadata.Objectives!, _flags?.NumRequiredObjectives, _flags?.OWinGame, _flags?.OWinCrystal);
-        _locations = new Locations(_descriptors, _flags);
-        _runState = RunState.Loading;
-        _loadingTimer = new Timer
-        {
-            Enabled = true,
-            Interval = 2000,
-        };
-        _loadingTimer.Tick += _loadingTimer_Tick;
-        CreateCallbacks();
-    }
-
-    private void _loadingTimer_Tick(object sender, EventArgs e)
-    {
-        _loadingTimer.Stop();
-        _loadingTimer.Dispose();
-        _runState = RunState.Menu;
-        CreateCallbacks();
-    }
-
-    private void StartNewGame(uint address, uint value, uint flags)
-    {
-        RemoveCallbacks();
-        _runState = RunState.RunStarted;
-        Started = true;
-        CreateCallbacks();
-    }
-
-    private void Flash(uint address, uint value, uint flags)
-    {
-        RemoveCallbacks();
-        Victory = true;
-        _runState = RunState.RunFinished;
-    }
-
-    private void CreateCallbacks()
-    {
-        try
-        {
-            switch (_runState)
-            {
-                case RunState.RunStarted:
-                    if (Game.MemoryEvents == null)
-                        throw new KeyNotFoundException();
-
-                    if (_flags?.OWinCrystal ?? true)
-                        Game.MemoryEvents?.AddExecCallback(Flash, Addresses.SystemBus.ZeromusDeathAnimation, "System Bus");
-                    break;
-                case RunState.Menu:
-                    if (Game.MemoryEvents == null)
-                        throw new KeyNotFoundException();
-
-                    Game.MemoryEvents?.AddExecCallback(StartNewGame, Addresses.SystemBus.MenuSaveNewGame, "System Bus");
-                    break;
-            }
-        }
-        catch (KeyNotFoundException) //snes9X core doesn't support exec callbacks
-        {
-        }
-    }
-
-    private void RemoveCallbacks()
-    {
-        try
-        {
-            switch (_runState)
-            {
-                case RunState.RunStarted:
-                    Game.MemoryEvents?.RemoveMemoryCallback(Flash);
-                    break;
-                case RunState.Menu:
-                    Game.MemoryEvents?.RemoveMemoryCallback(StartNewGame);
-                    break;
-            }
-        }
-        catch (KeyNotFoundException) //snes9X core doesn't support exec callbacks
-        {
-        }
+        _locations = new Locations(_descriptors, _flags!);
     }
 
     public override void OnNewFrame()
     {
         base.OnNewFrame();
 
-        if (_runState == RunState.Loading)
+        if (IsLoading)
             return;
 
         if (Game.Emulation.FrameCount() % Game.RootSettings.TrackingInterval == 0)
@@ -172,7 +83,7 @@ internal class Seed : SeedBase
                 NotifyPropertyChanged(nameof(Objectives));
 
             if (_locations.Update(time, locationsChecked, _keyItems.Items.Where(ki => ki.IsFound).Select(ki => (KeyItemType)ki.Id).ToImmutableHashSet()))
-                NotifyPropertyChanged(nameof(Locations));
+                NotifyPropertyChanged(nameof(AvailableLocations));
 
             DefeatedEncounters = defeatedBosses;
         }

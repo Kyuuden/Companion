@@ -1,8 +1,6 @@
-﻿namespace FF.Rando.Companion.FreeEnterprise._5._0._0;
-
-public enum RewardSlot : uint
+﻿namespace FF.Rando.Companion.FreeEnterprise._4._6._1.Gale;
+internal enum RewardSlot : byte
 {
-    None = 0x00,
     StartingCharacter = 0x01,
     StartingPartnerCharacter = 0x02,
     MistCharacter = 0x03,
@@ -21,6 +19,7 @@ public enum RewardSlot : uint
     CaveEblanCharacter = 0x12,
     LunarPalaceCharacter = 0x13,
     GiantCharacter = 0x14,
+
     StartingItem = 0x20,
     AntlionItem = 0x21,
     FabulItem = 0x22,
@@ -49,25 +48,39 @@ public enum RewardSlot : uint
     LunarBoss4Item1 = 0x39,
     LunarBoss4Item2 = 0x3A,
     LunarBoss5Item = 0x3B,
-    RydiasMomItem = 0x3C,
-    FallenGolbezItem = 0x3D,
-    ForgeItem = 0x3E,
-    PinkTradeItem = 0X3F
+    ZotChest = 0x3C,
+    EblanChest1 = 0x3D,
+    EblanChest2 = 0x3E,
+    EblanChest3 = 0x3F,
+    LowerBabilChest1 = 0x40,
+    LowerBabilChest2 = 0x41,
+    LowerBabilChest3 = 0x42,
+    LowerBabilChest4 = 0x43,
+    CaveEblanChest = 0x44,
+    UpperBabilChest = 0x45,
+    CaveOfSummonsChest = 0x46,
+    SylphCaveChest1 = 0x47,
+    SylphCaveChest2 = 0x48,
+    SylphCaveChest3 = 0x49,
+    SylphCaveChest4 = 0x4A,
+    SylphCaveChest5 = 0x4B,
+    SylphCaveChest6 = 0x4C,
+    SylphCaveChest7 = 0x4D,
+    GiantChest = 0x4E,
+    LunarPathChest = 0x4F,
+    LunarCoreChest1 = 0x50,
+    LunarCoreChest2 = 0x51,
+    LunarCoreChest3 = 0x52,
+    LunarCoreChest4 = 0x53,
+    LunarCoreChest5 = 0x54,
+    LunarCoreChest6 = 0x55,
+    LunarCoreChest7 = 0x56,
+    LunarCoreChest8 = 0x57,
+    LunarCoreChest9 = 0x58,
+    RydiasMomItem = 0x59,
+    FallenGolbezItem = 0x5A,
+    ForgeItem = 0x5B,
+    PinkTradeItem = 0x5C,
+    FixedCrystal = 0x5D,
+    GatedObjective = 0x5E,
 }
-
-public enum ObjectiveXpBonus : ushort
-{
-    None = 0,
-    _2Percent = 1,
-    _3Percent = 2,
-    _5Percent = 4,
-    _8Percent = 8,
-    _10Percent = 16,
-    _12Percent = 32,
-    _14Percent = 64,
-    _16Percent = 128,
-    _20Percent = 256,
-    _25Percent = 512
-}
-
-
