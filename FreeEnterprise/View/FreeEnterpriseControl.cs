@@ -144,7 +144,7 @@ public partial class FreeEnterpriseControl : UserControl
 
         TopPanel.Controls.Add(_party);
 
-        if (TopPanel.Controls[0] is IPanel { CanHaveFillDockStyle: false })
+        if (filled && TopPanel.Controls[0] is IPanel { CanHaveFillDockStyle: false })
         {
             TopPanel.Controls[0].SendToBack();
             _party.SendToBack();
@@ -169,7 +169,7 @@ public partial class FreeEnterpriseControl : UserControl
             Controls.Add(panel as Control);
         }
 
-        if (Controls[0] is IPanel { CanHaveFillDockStyle: false })
+        if (filled && Controls[0] is IPanel { CanHaveFillDockStyle: false })
         {
             Controls[0].SendToBack();
         }

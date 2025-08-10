@@ -17,6 +17,7 @@ internal class Flags
         }
     }
 
+    public bool KMain => _binaryFlags.Read<bool>(788);
     public bool KSummon => _binaryFlags.Read<bool>(789);
     public bool KMoon => _binaryFlags.Read<bool>(790);
     public bool KChar => _binaryFlags.Read<bool>(796);
@@ -27,6 +28,7 @@ internal class Flags
     public bool KMaibLst => _binaryFlags.Read<bool>(794);
     public bool KMaibAll => _binaryFlags.Read<bool>(795);
     public bool KNoFree => _binaryFlags.Read<bool>(798);
+    public bool KRisky => _binaryFlags.Read<bool>(799);
 
 
     public bool CNoFree => _binaryFlags.Read<bool>(808);

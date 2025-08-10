@@ -1,23 +1,23 @@
 ﻿using BizHawk.Common.CollectionExtensions;
 using FF.Rando.Companion.Extensions;
 using FF.Rando.Companion.FreeEnterprise.RomData;
+using FF.Rando.Companion.FreeEnterprise.Shared;
 using FF.Rando.Companion.FreeEnterprise.View;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Windows.Forms;
 
 namespace FF.Rando.Companion.FreeEnterprise._5._0._0;
 internal class Seed : SeedBase
 {
-    private Descriptors _descriptors;
-    private Locations? _locations;
-
+    private readonly Descriptors _descriptors;
     private readonly Objectives _objectives;
     private readonly Party _party;
     private readonly KeyItems _keyItems;
     private readonly Bosses _bosses;
-
+    private readonly Locations _locations;
     private readonly Flags? _flags;
 
     public Seed(string hash, Metadata metadata, Container container)
@@ -40,6 +40,7 @@ internal class Seed : SeedBase
 
         _keyItems = new KeyItems(container.Settings.KeyItems, Font, _descriptors);
         _bosses = new Bosses(_descriptors);
+        _locations = new Locations(_descriptors, _flags!);
     }
 
     public override IEnumerable<ICharacter> Party => _party.Characters;
@@ -48,8 +49,9 @@ internal class Seed : SeedBase
 
     public override IEnumerable<IBoss> Bosses => _bosses.Items;
 
-    public override IEnumerable<IObjectiveGroup> Objectives { get => _objectives.Groups; }
-    public override IEnumerable<ILocation> AvailableLocations { get => Enumerable.Empty<ILocation>() ; }
+    public override IEnumerable<IObjectiveGroup> Objectives => _objectives.Groups;
+
+    public override IEnumerable<ILocation> AvailableLocations => _locations.All.Where(l => l.IsAvailable && !l.IsChecked);
 
     public override bool CanTackBosses => true;
 
@@ -91,8 +93,6 @@ internal class Seed : SeedBase
 
             var time = Elapsed;
 
-            _locations = new Locations(rewardSlotCheckedBits, bossLocations, shopCheckedBits);
-
             if(_keyItems.Update(time, keyItemsFound, keyItemUsed, keyItemLocations))
                 NotifyPropertyChanged(nameof(KeyItems));
             
@@ -107,6 +107,12 @@ internal class Seed : SeedBase
                 DefeatedEncounters = _bosses.Items.SelectMany(b => b.Encounters).Count(e => e.IsDefeated);
                 NotifyPropertyChanged(nameof(Bosses));
             }
+
+            var foundKIs = _keyItems.Items.Where(ki => ki.IsFound).Select(ki => (KeyItemType)ki.Id).ToImmutableHashSet();
+            var defeatedBosses = _bosses.Items.Where(b => b.Encounters.Any(e => e.IsDefeated)).Select(b => (BossType)b.Id).ToImmutableHashSet();
+
+            if (_locations.Update(time, rewardSlotCheckedBits, shopCheckedBits, teasureCount, bossLocationsDefeated, foundKIs, defeatedBosses))
+                NotifyPropertyChanged(nameof(AvailableLocations));
 
             if (_flags != null)
             {

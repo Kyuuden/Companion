@@ -13,6 +13,7 @@ internal class Descriptors : Companion.FreeEnterprise.Descriptors
     private readonly List<string> _rewardSlotDescriptions;
     private readonly byte[] _chestLookup;
 
+    private const int ShopOffset = 0x60;
     private const int ChestOffset = 0x90;
     private const int MiabOffset = 0xb8;
 
@@ -29,13 +30,27 @@ internal class Descriptors : Companion.FreeEnterprise.Descriptors
 
         if ((rewardSlot & 0x1000) != 0)
         { 
-            //TODO
+            return _rewardSlotDescriptions[(rewardSlot & 0x1FF) + ShopOffset];
         }
 
         if (rewardSlot < 0 || rewardSlot >= _rewardSlotDescriptions.Count)
             return string.Empty;
 
         return _rewardSlotDescriptions[rewardSlot];
+    }
+
+    internal string GetShopDescription(Shops shop)
+    {
+        return _rewardSlotDescriptions[(int)shop + ShopOffset];
+    }
+
+    internal string GetChestDescription(ChestSlot chest)
+    {
+        var location = _chestLookup[(int)chest];
+
+        return chest.IsMiab()
+            ? _rewardSlotDescriptions[location + MiabOffset]
+            : _rewardSlotDescriptions[location + ChestOffset];
     }
 
     internal string GetTaskDescription(RomData.Task task) 
@@ -166,6 +181,7 @@ internal class Descriptors : Companion.FreeEnterprise.Descriptors
         _rewardSlotDescriptions = rom.ReadBytes(Addresses.ROM.RewardSlots)
             .ReadMany<byte[]>(0, 8 * 32, 0x100)
             .Select(encoder.GetString)
+            .Select(s=> s.Trim())
             .ToList();
 
         _chestLookup = rom.ReadBytes(Addresses.ROM.ChestLookup);

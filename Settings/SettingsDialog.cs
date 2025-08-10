@@ -12,17 +12,11 @@ public partial class SettingsDialog : FormBase
         InitializeComponent();
     }
 
-    public SettingsDialog(IInputApi inputApi)
-    {
-        InitializeComponent();
-        InputApi = inputApi;
-    }
-
     protected override string WindowTitleStatic => "Settings";
 
     public override bool BlocksInputWhenFocused => false;
 
-    public SettingsDialog(ISettings settings, IInputApi inputApi) :this(inputApi)
+    public SettingsDialog(ISettings settings) :this()
     {
         propertyGrid1.SelectedObject = _settings = settings;
         propertyGrid1.LargeButtons = true;
@@ -49,8 +43,6 @@ public partial class SettingsDialog : FormBase
             tabControl1.TabPages.Add(gameTab);
         }
     }
-
-    public IInputApi InputApi { get; }
 
     private void PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
     {

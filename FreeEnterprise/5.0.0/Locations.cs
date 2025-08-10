@@ -1,223 +1,551 @@
-﻿using FF.Rando.Companion.FreeEnterprise.Shared;
+﻿using BizHawk.Common;
+using FF.Rando.Companion.Extensions;
+using FF.Rando.Companion.FreeEnterprise.Shared;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Collections.Immutable;
 using System.Linq;
 
 namespace FF.Rando.Companion.FreeEnterprise._5._0._0;
 
 internal class Locations
 {
-    private IReadOnlyList<RewardSlotLocation> _rewardSlots;
-    private IReadOnlyList<BossLocation> _bossLocations;
-    private IReadOnlyList<ShopLocation> _shopLocations;
+    private readonly Descriptors _descriptors;
+    private readonly Flags _flags;
 
-    public Locations(ReadOnlySpan<byte> rewardSlots, ReadOnlySpan<byte> bosses, ReadOnlySpan<byte> shops)
+    private readonly Dictionary<RewardSlot, RewardSlotLocation> _rewardSlots;
+    private readonly Dictionary<BossLocationType, BossLocation> _bossLocations;
+    private readonly Dictionary<Shops, ShopLocation> _shopLocations;
+    private readonly Dictionary<ChestSlot, ChestLocation> _chests;
+
+    public IEnumerable<ILocation> All => _rewardSlots.Values.OfType<ILocation>()
+        .Concat(_bossLocations.Values)
+        .Concat(_shopLocations.Values)
+        .Concat(_chests.Values);
+
+    public Locations(Descriptors descriptors, Flags flags)
     {
-        
+        _descriptors = descriptors;
+        _flags = flags;
+
+        _rewardSlots = Enum.GetValues(typeof(RewardSlot))
+            .OfType<RewardSlot>()
+            .Where(IsInSeed)
+            .ToDictionary(t => t, t => new RewardSlotLocation(t, _descriptors.GetRewardSlotDescription((int)t), CanHaveKeyItem(t), CanHaveCharcater(t)));
+
+        _bossLocations = Enum.GetValues(typeof(BossLocationType))
+            .OfType<BossLocationType>()
+            .Where(IsInSeed)
+            .ToDictionary(t => t, t => new BossLocation(t, (_descriptors as IBossDescriptor).GetLocationName(t)));
+
+        _shopLocations = Enum.GetValues(typeof(Shops))
+            .OfType<Shops>()
+            .ToDictionary(t => t, t => new ShopLocation(t, _descriptors.GetShopDescription(t)));
+
+        _chests = Enum.GetValues(typeof(ChestSlot))
+            .OfType<ChestSlot>()
+            .Where(IsInSeed)
+            .ToDictionary(t => t, t => new ChestLocation(t, _descriptors.GetChestDescription(t), CanHaveKeyItem(t), CanHaveCharcater(t)));
     }
 
-    public Locations(Descriptors descriptors, Flags? flags)
+    public bool Update(
+        TimeSpan time,
+        ReadOnlySpan<byte> checkedRewardSlots,
+        ReadOnlySpan<byte> checkedShops,
+        ReadOnlySpan<byte> checkedChests,
+        ReadOnlySpan<byte> defeatedBossLocations,
+        ImmutableHashSet<KeyItemType> foundKeyItems,
+        ImmutableHashSet<BossType> defeatedBosses)
     {
-        Enum.GetValues(typeof(RewardSlot)).OfType<RewardSlot>().Select(s => new RewardSlotLocation(s, descriptors, flags)).ToList();
-    }
-}
+        var updated = false;
+        var canGetUnderground = foundKeyItems.Contains(KeyItemType.Hook) || foundKeyItems.Contains(KeyItemType.MagmaKey);
+        var canGetToMoon = foundKeyItems.Contains(KeyItemType.DarknessCrystal);
 
-internal class RewardSlotLocation : ILocation
-{
-    public RewardSlotLocation(RewardSlot slot, Descriptors descriptors, Flags flags)
-    {
-        Description = descriptors.GetRewardSlotDescription((int)slot);
-        switch (slot)
+        foreach (var slot in _rewardSlots.Values)
         {
-            case RewardSlot.None:
-                break;
-            case RewardSlot.StartingCharacter:
-                IsCharacter = true;
-                break;
-            case RewardSlot.StartingPartnerCharacter:
-                IsCharacter = true;
-                IsKeyItem = flags.KChar;
-                break;
-            case RewardSlot.MistCharacter:
-                IsCharacter = flags.CNoEarned == false;
-                IsKeyItem = flags.KChar;
-                break;
-            case RewardSlot.WateryPassCharacter:
-                IsCharacter = flags.CNoFree == false;
-                break;
-            case RewardSlot.DamcyanCharacter:
-                IsCharacter = flags.CNoFree == false;
-                break;
-            case RewardSlot.KaipoCharacter:
-                IsCharacter = flags.CNoEarned == false;
-                IsKeyItem = flags.KChar;
-                break;
-            case RewardSlot.HobsCharacter:
-                IsCharacter = flags.CNoEarned == false;
-                IsKeyItem = flags.KChar;
-                break;
-            case RewardSlot.MysidiaCharacter1:
-                IsCharacter = flags.CNoFree == false;
-                break;
-            case RewardSlot.MysidiaCharacter2:
-                IsCharacter = flags.CNoFree == false;
-                break;
-            case RewardSlot.OrdealsCharacter:
-                IsCharacter = flags.CNoFree == false;
-                break;
-            case RewardSlot.BaronInnCharacter:
-                IsCharacter = flags.CNoEarned == false;
-                IsKeyItem = flags.KChar;
-                break;
-            case RewardSlot.BaronCastleCharacter:
-                IsCharacter = flags.CNoEarned == false;
-                IsKeyItem = flags.KChar;
-                break;
-            case RewardSlot.ZotCharacter1:
-                IsCharacter = flags.CNoEarned == false;
-                IsKeyItem = flags.KChar;
-                break;
-            case RewardSlot.ZotCharacter2:
-                IsCharacter = flags.CNoEarned == false;
-                IsKeyItem = flags.KChar;
-                break;
-            case RewardSlot.DwarfCastleCharacter:
-                IsCharacter = flags.CNoEarned == false;
-                IsKeyItem = flags.KChar;
-                break;
-            case RewardSlot.CaveEblanCharacter:
-                IsCharacter = flags.CNoEarned == false;
-                IsKeyItem = flags.KChar;
-                break;
-            case RewardSlot.LunarPalaceCharacter:
-                IsCharacter = flags.CNoEarned == false;
-                IsKeyItem = flags.KChar;
-                break;
-            case RewardSlot.GiantCharacter:
-                IsCharacter = (flags.CNoEarned == false) && (flags.CNoGiant == false);
-                break;
-            case RewardSlot.StartingItem:
-                IsKeyItem = true;
-                IsKeyItem = flags.KChar;
-                break;
-            case RewardSlot.AntlionItem:
-                break;
-            case RewardSlot.FabulItem:
-                break;
-            case RewardSlot.OrdealsItem:
-                break;
-            case RewardSlot.BaronInnItem:
-                break;
-            case RewardSlot.BaronCastleItem:
-                break;
-            case RewardSlot.ToroiaHospitalItem:
-                break;
-            case RewardSlot.MagnesItem:
-                break;
-            case RewardSlot.ZotItem:
-                break;
-            case RewardSlot.BabilBossItem:
-                break;
-            case RewardSlot.CannonItem:
-                break;
-            case RewardSlot.LucaItem:
-                break;
-            case RewardSlot.SealedCaveItem:
-                break;
-            case RewardSlot.FeymarchItem:
-                break;
-            case RewardSlot.RatTradeItem:
-                break;
-            case RewardSlot.FoundYangItem:
-                break;
-            case RewardSlot.PanTradeItem:
-                break;
-            case RewardSlot.FeymarchQueenItem:
-                break;
-            case RewardSlot.FeymarchKingItem:
-                break;
-            case RewardSlot.BaronThroneItem:
-                break;
-            case RewardSlot.SylphItem:
-                break;
-            case RewardSlot.BahamutItem:
-                break;
-            case RewardSlot.LunarBoss1Item:
-                break;
-            case RewardSlot.LunarBoss2Item:
-                break;
-            case RewardSlot.LunarBoss3Item:
-                break;
-            case RewardSlot.LunarBoss4Item1:
-                break;
-            case RewardSlot.LunarBoss4Item2:
-                break;
-            case RewardSlot.LunarBoss5Item:
-                break;
-            case RewardSlot.RydiasMomItem:
-                break;
-            case RewardSlot.FallenGolbezItem:
-                break;
-            case RewardSlot.ForgeItem:
-                break;
-            case RewardSlot.PinkTradeItem:
-                break;
+            var ischecked = checkedRewardSlots.Read<bool>(slot.ID);
+            if (ischecked != slot.IsChecked)
+            {
+                updated = true;
+                slot.IsChecked = ischecked;
+            }
         }
 
+        foreach (var slot in _shopLocations.Values)
+        {
+            var ischecked = checkedShops.Read<bool>(slot.ID);
+            if (ischecked != slot.IsChecked)
+            {
+                updated = true;
+                slot.IsChecked = ischecked;
+            }
+        }
+
+        foreach (var slot in _bossLocations.Values)
+        {
+            var ischecked = defeatedBossLocations.Read<bool>(slot.ID);
+            if (ischecked != slot.IsChecked)
+            {
+                updated = true;
+                slot.IsChecked = ischecked;
+            }
+        }
+
+        foreach (var slot in _chests.Values)
+        {
+            var isOpened = checkedChests.Read<bool>(slot.ID);
+            if (isOpened != slot.IsChecked)
+            {
+                updated = true;
+                slot.IsChecked = isOpened;
+            }
+        }
+
+        foreach (var slot in _rewardSlots.Values)
+        {
+            var loc = (RewardSlot)slot.ID;
+            var isAvailable =
+                IsInSeed(loc) &&
+                CanGetToWorld(loc, canGetUnderground, canGetToMoon) &&
+                HasKeyItemsFor(loc, foundKeyItems) &&
+                HasDefeatedBossFor(loc, defeatedBosses);
+
+            if (isAvailable != slot.IsAvailable)
+            {
+                updated = true;
+                slot.IsAvailable = isAvailable;
+            }
+        }
+
+        foreach (var slot in _shopLocations.Values)
+        {
+            var shop = (Shops)slot.ID;
+            var isAvailable = CanGetToWorld(shop, canGetUnderground, canGetToMoon) && HasKeyItemsFor(shop, foundKeyItems);
+            if (isAvailable != slot.IsAvailable)
+            {
+                updated = true;
+                slot.IsAvailable = isAvailable;
+            }
+        }
+
+        foreach (var slot in _bossLocations.Values)
+        {
+            var boss = (BossLocationType)slot.ID;
+            var isAvailable = CanGetToWorld(boss, canGetUnderground, canGetToMoon) && HasKeyItemsFor(boss, foundKeyItems);
+            if (isAvailable != slot.IsAvailable)
+            {
+                updated = true;
+                slot.IsAvailable = isAvailable;
+            }
+        }
+
+        foreach (var slot in _chests.Values)
+        {
+            var chest = (ChestSlot)slot.ID;
+            var isAvailable =
+                IsInSeed(chest) &&
+                CanGetToWorld(chest, canGetUnderground, canGetToMoon) &&
+                HasKeyItemsFor(chest, foundKeyItems);
+            if (isAvailable != slot.IsAvailable)
+            {
+                updated = true;
+                slot.IsAvailable = isAvailable;
+            }
+        }
+
+        return updated;
     }
 
-    public string Description { get; }
+    private bool HasDefeatedBossFor(RewardSlot slot, ImmutableHashSet<BossType> defeatedBosses)
+        => slot switch
+        { 
+            RewardSlot.RydiasMomItem => defeatedBosses.Contains(BossType.Dmist),
+            _ => true
+        };
 
-    public bool IsCharacter { get; }
+    private bool HasKeyItemsFor(RewardSlot slot, ImmutableHashSet<KeyItemType> foundKeyItems)
+        => slot switch
+        {
+            RewardSlot.MistCharacter => foundKeyItems.Contains(KeyItemType.Package),
+            RewardSlot.KaipoCharacter => foundKeyItems.Contains(KeyItemType.SandRuby),
+            RewardSlot.BaronCastleCharacter => foundKeyItems.Contains(KeyItemType.BaronKey),
+            RewardSlot.ZotCharacter1 => foundKeyItems.Contains(KeyItemType.EarthCrystal),
+            RewardSlot.ZotCharacter2 => foundKeyItems.Contains(KeyItemType.EarthCrystal),
+            RewardSlot.CaveEblanCharacter => foundKeyItems.Contains(KeyItemType.Hook),
+            RewardSlot.GiantCharacter => foundKeyItems.Contains(KeyItemType.DarknessCrystal),
 
-    public bool IsKeyItem { get; }
+            RewardSlot.BaronCastleItem => foundKeyItems.Contains(KeyItemType.BaronKey),
+            RewardSlot.MagnesItem => foundKeyItems.Contains(KeyItemType.TwinHarp),
+            RewardSlot.ZotItem => foundKeyItems.Contains(KeyItemType.EarthCrystal),
+            RewardSlot.CannonItem => foundKeyItems.Contains(KeyItemType.TowerKey),
+            RewardSlot.SealedCaveItem => foundKeyItems.Contains(KeyItemType.LucaKey),
+            RewardSlot.RatTradeItem => foundKeyItems.Contains(KeyItemType.Hook) && foundKeyItems.Contains(KeyItemType.RatTail),
+            RewardSlot.PinkTradeItem => foundKeyItems.Contains(KeyItemType.Hook) && foundKeyItems.Contains(KeyItemType.PinkTail),
+            RewardSlot.PanTradeItem => foundKeyItems.Contains(KeyItemType.Pan),
+            RewardSlot.BaronThroneItem => foundKeyItems.Contains(KeyItemType.BaronKey),
+            RewardSlot.SylphItem => foundKeyItems.Contains(KeyItemType.Pan),
+            RewardSlot.ForgeItem => foundKeyItems.Contains(KeyItemType.Adamant) && foundKeyItems.Contains(KeyItemType.LegendSword),
+            _ => true
+        };
 
-    public bool IsBoss => false;
+    private bool CanGetToWorld(RewardSlot slot, bool canGetUnderground, bool canGetToMoon)
+        => slot switch
+        {
+            RewardSlot.DwarfCastleCharacter => canGetUnderground,
+            RewardSlot.LunarPalaceCharacter => canGetToMoon,
+            RewardSlot.BabilBossItem => canGetUnderground,
+            RewardSlot.CannonItem => canGetUnderground,
+            RewardSlot.LucaItem => canGetUnderground,
+            RewardSlot.SealedCaveItem => canGetUnderground,
+            RewardSlot.FoundYangItem => canGetUnderground,
+            RewardSlot.PanTradeItem => canGetUnderground,
+            RewardSlot.FeymarchQueenItem => canGetUnderground,
+            RewardSlot.FeymarchKingItem => canGetUnderground,
+            RewardSlot.SylphItem => canGetUnderground,
+            RewardSlot.BahamutItem => canGetToMoon,
+            RewardSlot.LunarBoss1Item => canGetToMoon,
+            RewardSlot.LunarBoss2Item => canGetToMoon,
+            RewardSlot.LunarBoss3Item => canGetToMoon,
+            RewardSlot.LunarBoss5Item => canGetToMoon,
+            RewardSlot.ForgeItem => canGetUnderground,
+            _ => true
+        };
 
-    public bool IsShop => false;
+    public bool CanHaveCharcater(RewardSlot slot)
+        => slot switch
+        {
+            RewardSlot.None => false,
+            RewardSlot.StartingCharacter => false,
+            RewardSlot.StartingPartnerCharacter => true,
+            RewardSlot.MistCharacter => !_flags.CNoEarned,
+            RewardSlot.WateryPassCharacter => !_flags.CNoFree,
+            RewardSlot.DamcyanCharacter => !_flags.CNoFree,
+            RewardSlot.KaipoCharacter => !_flags.CNoEarned,
+            RewardSlot.HobsCharacter => !_flags.CNoEarned,
+            RewardSlot.MysidiaCharacter1 => !_flags.CNoFree,
+            RewardSlot.MysidiaCharacter2 => !_flags.CNoFree,
+            RewardSlot.OrdealsCharacter => !_flags.CNoFree,
+            RewardSlot.BaronInnCharacter => !_flags.CNoEarned,
+            RewardSlot.BaronCastleCharacter => !_flags.CNoEarned,
+            RewardSlot.ZotCharacter1 => !_flags.CNoEarned,
+            RewardSlot.ZotCharacter2 => !_flags.CNoEarned,
+            RewardSlot.DwarfCastleCharacter => !_flags.CNoEarned,
+            RewardSlot.CaveEblanCharacter => !_flags.CNoEarned,
+            RewardSlot.LunarPalaceCharacter => !_flags.CNoEarned,
+            RewardSlot.GiantCharacter => !_flags.CNoEarned && !_flags.CNoGiant,
+            RewardSlot.StartingItem => _flags.KMain && _flags.KChar,
+            RewardSlot.AntlionItem => _flags.KMain && _flags.KChar,
+            RewardSlot.FabulItem => _flags.KMain && _flags.KChar,
+            RewardSlot.OrdealsItem => _flags.KMain && _flags.KChar,
+            RewardSlot.BaronInnItem => _flags.KMain && _flags.KChar,
+            RewardSlot.BaronCastleItem => _flags.KMain && _flags.KChar,
+            RewardSlot.ToroiaHospitalItem => !_flags.KNoFree && _flags.KChar,
+            RewardSlot.MagnesItem => _flags.KMain && _flags.KChar,
+            RewardSlot.ZotItem => _flags.KMain && _flags.KChar,
+            RewardSlot.BabilBossItem => _flags.KMain && _flags.KChar,
+            RewardSlot.CannonItem => _flags.KMain && _flags.KChar,
+            RewardSlot.LucaItem => _flags.KMain && _flags.KChar,
+            RewardSlot.SealedCaveItem => _flags.KMain && _flags.KChar,
+            RewardSlot.RatTradeItem => _flags.KMain && _flags.KChar,
+            RewardSlot.FoundYangItem => _flags.KMain && _flags.KChar,
+            RewardSlot.PanTradeItem => _flags.KMain && _flags.KChar,
+            RewardSlot.FeymarchQueenItem => _flags.KSummon && _flags.KChar,
+            RewardSlot.FeymarchKingItem => _flags.KSummon && _flags.KChar,
+            RewardSlot.BaronThroneItem => _flags.KSummon && _flags.KChar,
+            RewardSlot.SylphItem => _flags.KSummon && _flags.KChar,
+            RewardSlot.BahamutItem => _flags.KSummon && _flags.KChar,
+            RewardSlot.LunarBoss1Item => _flags.KMoon && _flags.KChar,
+            RewardSlot.LunarBoss2Item => _flags.KMoon && _flags.KChar,
+            RewardSlot.LunarBoss3Item => _flags.KMoon && _flags.KChar,
+            RewardSlot.LunarBoss5Item => _flags.KMoon && _flags.KChar,
+            RewardSlot.RydiasMomItem => _flags.KNoFree && _flags.KChar,
+            RewardSlot.FallenGolbezItem => false,
+            RewardSlot.ForgeItem => _flags.KForge && _flags.KChar,
+            RewardSlot.PinkTradeItem => false,
+            _ => false
+        };
 
-    public bool IsAvailable => throw new NotImplementedException();
+    public bool CanHaveKeyItem(RewardSlot slot)
+        => slot switch
+        {
+            RewardSlot.None => false,
+            RewardSlot.StartingCharacter => false,
+            RewardSlot.StartingPartnerCharacter => _flags.KChar && !_flags.CNoEarned,
+            RewardSlot.MistCharacter => _flags.KChar && !_flags.CNoEarned,
+            RewardSlot.WateryPassCharacter => false,
+            RewardSlot.DamcyanCharacter => false,
+            RewardSlot.KaipoCharacter => _flags.KChar && !_flags.CNoEarned,
+            RewardSlot.HobsCharacter => _flags.KChar && !_flags.CNoEarned,
+            RewardSlot.MysidiaCharacter1 => false,
+            RewardSlot.MysidiaCharacter2 => false,
+            RewardSlot.OrdealsCharacter => false,
+            RewardSlot.BaronInnCharacter => _flags.KChar && !_flags.CNoEarned,
+            RewardSlot.BaronCastleCharacter => _flags.KChar && !_flags.CNoEarned,
+            RewardSlot.ZotCharacter1 => _flags.KChar && !_flags.CNoEarned,
+            RewardSlot.ZotCharacter2 => _flags.KChar && !_flags.CNoEarned,
+            RewardSlot.DwarfCastleCharacter => _flags.KChar && !_flags.CNoEarned,
+            RewardSlot.CaveEblanCharacter => _flags.KChar && !_flags.CNoEarned,
+            RewardSlot.LunarPalaceCharacter => _flags.KChar && !_flags.CNoEarned,
+            RewardSlot.GiantCharacter => _flags.KChar && !_flags.CNoEarned && !_flags.CNoGiant,
+            RewardSlot.StartingItem => _flags.KMain,
+            RewardSlot.AntlionItem => _flags.KMain,
+            RewardSlot.FabulItem => _flags.KMain,
+            RewardSlot.OrdealsItem => _flags.KMain,
+            RewardSlot.BaronInnItem => _flags.KMain,
+            RewardSlot.BaronCastleItem => _flags.KMain,
+            RewardSlot.ToroiaHospitalItem => !_flags.KNoFree,
+            RewardSlot.MagnesItem => _flags.KMain,
+            RewardSlot.ZotItem => _flags.KMain,
+            RewardSlot.BabilBossItem => _flags.KMain,
+            RewardSlot.CannonItem => _flags.KMain,
+            RewardSlot.LucaItem => _flags.KMain,
+            RewardSlot.SealedCaveItem => _flags.KMain,
+            RewardSlot.RatTradeItem => _flags.KMain,
+            RewardSlot.FoundYangItem => _flags.KMain,
+            RewardSlot.PanTradeItem => _flags.KMain,
+            RewardSlot.FeymarchQueenItem => _flags.KSummon,
+            RewardSlot.FeymarchKingItem => _flags.KSummon,
+            RewardSlot.BaronThroneItem => _flags.KSummon,
+            RewardSlot.SylphItem => _flags.KSummon,
+            RewardSlot.BahamutItem => _flags.KSummon,
+            RewardSlot.LunarBoss1Item => _flags.KMoon,
+            RewardSlot.LunarBoss2Item => _flags.KMoon,
+            RewardSlot.LunarBoss3Item => _flags.KMoon,
+            RewardSlot.LunarBoss5Item => _flags.KMoon,
+            RewardSlot.RydiasMomItem => _flags.KNoFree,
+            RewardSlot.FallenGolbezItem => !_flags.KMain,
+            RewardSlot.ForgeItem => _flags.KForge,
+            RewardSlot.PinkTradeItem => false,
+            _ => false
+        };
 
-    public bool IsChecked => throw new NotImplementedException();
+    private bool IsInSeed(RewardSlot slot) => CanHaveCharcater(slot) || CanHaveKeyItem(slot);
 
-    public event PropertyChangedEventHandler PropertyChanged;
-}
+    private bool HasKeyItemsFor(BossLocationType slot, ImmutableHashSet<KeyItemType> foundKeyItems)
+        => slot switch
+        {
+            BossLocationType.OfficerSlot => foundKeyItems.Contains(KeyItemType.Package),
+            BossLocationType.BaiganSlot => foundKeyItems.Contains(KeyItemType.BaronKey),
+            BossLocationType.KainazzoSlot => foundKeyItems.Contains(KeyItemType.BaronKey),
+            BossLocationType.DarkelfSlot => foundKeyItems.Contains(KeyItemType.TwinHarp),
+            BossLocationType.ValvalisSlot => foundKeyItems.Contains(KeyItemType.EarthCrystal),
+            BossLocationType.DarkimpSlot => foundKeyItems.Contains(KeyItemType.TowerKey),
+            BossLocationType.KingqueenSlot => foundKeyItems.Contains(KeyItemType.Hook),
+            BossLocationType.RubicantSlot => foundKeyItems.Contains(KeyItemType.Hook),
+            BossLocationType.EvilwallSlot => foundKeyItems.Contains(KeyItemType.LucaKey),
+            BossLocationType.OdinSlot => foundKeyItems.Contains(KeyItemType.BaronKey),
+            BossLocationType.ElementsSlot => foundKeyItems.Contains(KeyItemType.DarknessCrystal),
+            BossLocationType.CpuSlot => foundKeyItems.Contains(KeyItemType.DarknessCrystal),
+            _ => true
+        };
 
-internal class BossLocation : ILocation
-{ 
-    public string Description => throw new NotImplementedException();
+    private bool CanGetToWorld(BossLocationType slot, bool canGetUnderground, bool canGetToMoon)
+        => slot switch
+        {
+            BossLocationType.WaterhagSlot => false,
+            BossLocationType.CalbrenaSlot => canGetUnderground,
+            BossLocationType.GolbezSlot => canGetUnderground,
+            BossLocationType.LugaeSlot => canGetUnderground,
+            BossLocationType.DarkimpSlot => canGetUnderground,
+            BossLocationType.EvilwallSlot => canGetUnderground,
+            BossLocationType.AsuraSlot => canGetUnderground,
+            BossLocationType.LeviatanSlot => canGetUnderground,
+            BossLocationType.BahamutSlot => canGetToMoon,
+            BossLocationType.PaledimSlot => canGetToMoon,
+            BossLocationType.WyvernSlot => canGetToMoon,
+            BossLocationType.PlagueSlot => canGetToMoon,
+            BossLocationType.DlunarSlot => canGetToMoon,
+            BossLocationType.OgopogoSlot => canGetToMoon,
+            BossLocationType.NotFound => false,
+            _ => true
+        };
 
-    public bool IsCharacter => false;
+    private bool IsInSeed(BossLocationType boss)
+        => boss switch
+        {
+            BossLocationType.NotFound => false,
+            BossLocationType.WaterhagSlot => false,
+            _ => true
+        };
 
-    public bool IsKeyItem => false;
+    private bool HasKeyItemsFor(Shops slot, ImmutableHashSet<KeyItemType> foundKeyItems)
+        => slot switch
+        {
+            Shops.BaronWeaponShop => foundKeyItems.Contains(KeyItemType.BaronKey),
+            Shops.CaveEblanWeaponShop => foundKeyItems.Contains(KeyItemType.Hook),
+            Shops.SmithyShop => foundKeyItems.Contains(KeyItemType.Adamant) && foundKeyItems.Contains(KeyItemType.LegendSword),
+            Shops.BaronArmorShop => foundKeyItems.Contains(KeyItemType.BaronKey),
+            Shops.CaveEblanArmorShop => foundKeyItems.Contains(KeyItemType.Hook),
+            Shops.CaveEblanItemShop => foundKeyItems.Contains(KeyItemType.Hook),
+            _ => true
+        };
 
-    public bool IsBoss => true;
+    private bool CanGetToWorld(Shops slot, bool canGetUnderground, bool canGetToMoon)
+        => slot switch
+        {
+            Shops.KaipoWeaponShop => true,
+            Shops.FabulWeaponArmorShop => true,
+            Shops.MysidiaWeaponShop => true,
+            Shops.BaronWeaponShop => true,
+            Shops.ToroiaWeaponShop => true,
+            Shops.SilveraWeaponShop => true,
+            Shops.DwarfCastleWeaponShop => canGetUnderground,
+            Shops.CaveEblanWeaponShop => true,
+            Shops.TomraWeapon => canGetUnderground,
+            Shops.SmithyShop => canGetUnderground,
+            Shops.KaipoArmorShop => true,
+            Shops.MysidiaArmorShop => true,
+            Shops.BaronArmorShop => true,
+            Shops.ToroiaArmorShop => true,
+            Shops.SilveraArmorShop => true,
+            Shops.DwarfCastleArmorShop => canGetUnderground,
+            Shops.CaveEblanArmorShop => true,
+            Shops.TomraArmorShop => canGetUnderground,
+            Shops.MoonItemShop => canGetToMoon,
+            Shops.BaronItemShop => true,
+            Shops.MysidiaItemShop => true,
+            Shops.SilveraItemShop => true,
+            Shops.MistWeaponShop => true,
+            Shops.MistArmorShop => true,
+            Shops.CaveEblanItemShop => true,
+            Shops.AgartWeaponShop => true,
+            Shops.AgartArmorShop => true,
+            Shops.FeymarchWeaponShop => canGetUnderground,
+            Shops.FeymarchArmorShop => canGetUnderground,
+            Shops.TomraItemShop => canGetUnderground,
+            Shops.ToroiaCafeItemShop => true,
+            Shops.KaipoItemShop => true,
+            Shops.FabulItemShop => true,
+            Shops.ToroiaItemShop => true,
+            Shops.AgartItemShop => true,
+            Shops.DwarfCastleItemShop => canGetUnderground,
+            Shops.FeymarchItemShop => canGetUnderground,
+            _ => false
+        };
 
-    public bool IsShop => false;
+    private bool HasKeyItemsFor(ChestSlot slot, ImmutableHashSet<KeyItemType> foundKeyItems)
+        => slot switch
+        {
+            ChestSlot.CaveEblanChest => foundKeyItems.Contains(KeyItemType.Hook),
+            ChestSlot.UpperBabilChest => foundKeyItems.Contains(KeyItemType.Hook),
+            ChestSlot.GiantChest => foundKeyItems.Contains(KeyItemType.DarknessCrystal),
+            _ => true
+        };
 
-    public bool IsAvailable => throw new NotImplementedException();
 
-    public bool IsChecked => throw new NotImplementedException();
+    private bool CanGetToWorld(ChestSlot slot, bool canGetUnderground, bool canGetToMoon)
+        => slot switch
+        {
+            ChestSlot.Feymarch => canGetUnderground,
+            ChestSlot.RibbonRoom1 => canGetToMoon,
+            ChestSlot.RibbonRoom2 => canGetToMoon,
+            ChestSlot.ZotChest => true,
+            ChestSlot.EblanChest1 => true,
+            ChestSlot.EblanChest2 => true,
+            ChestSlot.EblanChest3 => true,
+            ChestSlot.LowerBabilChest1 => canGetUnderground,
+            ChestSlot.LowerBabilChest2 => canGetUnderground,
+            ChestSlot.LowerBabilChest3 => canGetUnderground,
+            ChestSlot.LowerBabilChest4 => canGetUnderground,
+            ChestSlot.CaveEblanChest => true,
+            ChestSlot.UpperBabilChest => true,
+            ChestSlot.CaveOfSummonsChest => canGetUnderground,
+            ChestSlot.SylphCaveChest1 => canGetUnderground,
+            ChestSlot.SylphCaveChest2 => canGetUnderground,
+            ChestSlot.SylphCaveChest3 => canGetUnderground,
+            ChestSlot.SylphCaveChest4 => canGetUnderground,
+            ChestSlot.SylphCaveChest5 => canGetUnderground,
+            ChestSlot.SylphCaveChest6 => canGetUnderground,
+            ChestSlot.SylphCaveChest7 => canGetUnderground,
+            ChestSlot.GiantChest => true,
+            ChestSlot.LunarPathChest => canGetToMoon,
+            ChestSlot.LunarCoreChest1 => canGetToMoon,
+            ChestSlot.LunarCoreChest2 => canGetToMoon,
+            ChestSlot.LunarCoreChest3 => canGetToMoon,
+            ChestSlot.LunarCoreChest4 => canGetToMoon,
+            ChestSlot.LunarCoreChest5 => canGetToMoon,
+            ChestSlot.LunarCoreChest6 => canGetToMoon,
+            ChestSlot.LunarCoreChest7 => canGetToMoon,
+            ChestSlot.LunarCoreChest8 => canGetToMoon,
+            ChestSlot.LunarCoreChest9 => canGetToMoon,
+            _ => false
+        };
 
-    public event PropertyChangedEventHandler PropertyChanged;
-}
+    public bool CanHaveCharcater(ChestSlot slot)
+        => _flags.KChar && slot switch
+        {
+            ChestSlot.Feymarch => _flags.KMain,
+            ChestSlot.RibbonRoom1 => _flags.KMoon,
+            ChestSlot.RibbonRoom2 => _flags.KMoon,
+            ChestSlot.ZotChest => _flags.KMaibAll || _flags.KMaib || _flags.KMaibAbove,
+            ChestSlot.EblanChest1 => _flags.KMaibAll || _flags.KMaib || _flags.KMaibAbove,
+            ChestSlot.EblanChest2 => _flags.KMaibAll || _flags.KMaib || _flags.KMaibAbove,
+            ChestSlot.EblanChest3 => _flags.KMaibAll || _flags.KMaib || _flags.KMaibAbove,
+            ChestSlot.LowerBabilChest1 => _flags.KMaibAll || _flags.KMaib || _flags.KMaibBelow,
+            ChestSlot.LowerBabilChest2 => _flags.KMaibAll || _flags.KMaib || _flags.KMaibBelow,
+            ChestSlot.LowerBabilChest3 => _flags.KMaibAll || _flags.KMaib || _flags.KMaibBelow,
+            ChestSlot.LowerBabilChest4 => _flags.KMaibAll || _flags.KMaib || _flags.KMaibBelow,
+            ChestSlot.CaveEblanChest => _flags.KMaibAll || _flags.KMaib || _flags.KMaibAbove,
+            ChestSlot.UpperBabilChest => _flags.KMaibAll || _flags.KMaib || _flags.KMaibAbove,
+            ChestSlot.CaveOfSummonsChest => _flags.KMaibAll || _flags.KMaib || _flags.KMaibBelow,
+            ChestSlot.SylphCaveChest1 => _flags.KMaibAll || _flags.KMaib || _flags.KMaibBelow,
+            ChestSlot.SylphCaveChest2 => _flags.KMaibAll || _flags.KMaib || _flags.KMaibBelow,
+            ChestSlot.SylphCaveChest3 => _flags.KMaibAll || _flags.KMaib || _flags.KMaibBelow,
+            ChestSlot.SylphCaveChest4 => _flags.KMaibAll || _flags.KMaib || _flags.KMaibBelow,
+            ChestSlot.SylphCaveChest5 => _flags.KMaibAll || _flags.KMaib || _flags.KMaibBelow,
+            ChestSlot.SylphCaveChest6 => _flags.KMaibAll || _flags.KMaib || _flags.KMaibBelow,
+            ChestSlot.SylphCaveChest7 => _flags.KMaibAll || _flags.KMaib || _flags.KMaibBelow,
+            ChestSlot.GiantChest => _flags.KMaibAll || _flags.KMaib || _flags.KMaibAbove,
+            ChestSlot.LunarPathChest => _flags.KMaibAll || _flags.KMaib || _flags.KMaibAbove,
+            ChestSlot.LunarCoreChest1 => _flags.KMaibAll || (_flags.KMaib && (_flags.KMoon || _flags.KRisky)) || _flags.KMaibLst,
+            ChestSlot.LunarCoreChest2 => _flags.KMaibAll || (_flags.KMaib && (_flags.KMoon || _flags.KRisky)) || _flags.KMaibLst,
+            ChestSlot.LunarCoreChest3 => _flags.KMaibAll || (_flags.KMaib && (_flags.KMoon || _flags.KRisky)) || _flags.KMaibLst,
+            ChestSlot.LunarCoreChest4 => _flags.KMaibAll || (_flags.KMaib && (_flags.KMoon || _flags.KRisky)) || _flags.KMaibLst,
+            ChestSlot.LunarCoreChest5 => _flags.KMaibAll || (_flags.KMaib && (_flags.KMoon || _flags.KRisky)) || _flags.KMaibLst,
+            ChestSlot.LunarCoreChest6 => _flags.KMaibAll || (_flags.KMaib && (_flags.KMoon || _flags.KRisky)) || _flags.KMaibLst,
+            ChestSlot.LunarCoreChest7 => _flags.KMaibAll || (_flags.KMaib && (_flags.KMoon || _flags.KRisky)) || _flags.KMaibLst,
+            ChestSlot.LunarCoreChest8 => _flags.KMaibAll || (_flags.KMaib && (_flags.KMoon || _flags.KRisky)) || _flags.KMaibLst,
+            ChestSlot.LunarCoreChest9 => _flags.KMaibAll || (_flags.KMaib && (_flags.KMoon || _flags.KRisky)) || _flags.KMaibLst,
+            _ => false
+        };
 
-internal class ShopLocation : ILocation
-{
-    public string Description => throw new NotImplementedException();
+    public bool CanHaveKeyItem(ChestSlot slot)
+        => slot switch
+        {
+            ChestSlot.Feymarch => _flags.KMain,
+            ChestSlot.RibbonRoom1 => _flags.KMoon,
+            ChestSlot.RibbonRoom2 => _flags.KMoon,
+            ChestSlot.ZotChest => _flags.KMaibAll || _flags.KMaib || _flags.KMaibAbove,
+            ChestSlot.EblanChest1 => _flags.KMaibAll || _flags.KMaib || _flags.KMaibAbove,
+            ChestSlot.EblanChest2 => _flags.KMaibAll || _flags.KMaib || _flags.KMaibAbove,
+            ChestSlot.EblanChest3 => _flags.KMaibAll || _flags.KMaib || _flags.KMaibAbove,
+            ChestSlot.LowerBabilChest1 => _flags.KMaibAll || _flags.KMaib || _flags.KMaibBelow,
+            ChestSlot.LowerBabilChest2 => _flags.KMaibAll || _flags.KMaib || _flags.KMaibBelow,
+            ChestSlot.LowerBabilChest3 => _flags.KMaibAll || _flags.KMaib || _flags.KMaibBelow,
+            ChestSlot.LowerBabilChest4 => _flags.KMaibAll || _flags.KMaib || _flags.KMaibBelow,
+            ChestSlot.CaveEblanChest => _flags.KMaibAll || _flags.KMaib || _flags.KMaibAbove,
+            ChestSlot.UpperBabilChest => _flags.KMaibAll || _flags.KMaib || _flags.KMaibAbove,
+            ChestSlot.CaveOfSummonsChest => _flags.KMaibAll || _flags.KMaib || _flags.KMaibBelow,
+            ChestSlot.SylphCaveChest1 => _flags.KMaibAll || _flags.KMaib || _flags.KMaibBelow,
+            ChestSlot.SylphCaveChest2 => _flags.KMaibAll || _flags.KMaib || _flags.KMaibBelow,
+            ChestSlot.SylphCaveChest3 => _flags.KMaibAll || _flags.KMaib || _flags.KMaibBelow,
+            ChestSlot.SylphCaveChest4 => _flags.KMaibAll || _flags.KMaib || _flags.KMaibBelow,
+            ChestSlot.SylphCaveChest5 => _flags.KMaibAll || _flags.KMaib || _flags.KMaibBelow,
+            ChestSlot.SylphCaveChest6 => _flags.KMaibAll || _flags.KMaib || _flags.KMaibBelow,
+            ChestSlot.SylphCaveChest7 => _flags.KMaibAll || _flags.KMaib || _flags.KMaibBelow,
+            ChestSlot.GiantChest => _flags.KMaibAll || _flags.KMaib || _flags.KMaibAbove,
+            ChestSlot.LunarPathChest => _flags.KMaibAll || _flags.KMaib || _flags.KMaibAbove,
+            ChestSlot.LunarCoreChest1 => _flags.KMaibAll || (_flags.KMaib && (_flags.KMoon || _flags.KRisky)) || _flags.KMaibLst,
+            ChestSlot.LunarCoreChest2 => _flags.KMaibAll || (_flags.KMaib && (_flags.KMoon || _flags.KRisky)) || _flags.KMaibLst,
+            ChestSlot.LunarCoreChest3 => _flags.KMaibAll || (_flags.KMaib && (_flags.KMoon || _flags.KRisky)) || _flags.KMaibLst,
+            ChestSlot.LunarCoreChest4 => _flags.KMaibAll || (_flags.KMaib && (_flags.KMoon || _flags.KRisky)) || _flags.KMaibLst,
+            ChestSlot.LunarCoreChest5 => _flags.KMaibAll || (_flags.KMaib && (_flags.KMoon || _flags.KRisky)) || _flags.KMaibLst,
+            ChestSlot.LunarCoreChest6 => _flags.KMaibAll || (_flags.KMaib && (_flags.KMoon || _flags.KRisky)) || _flags.KMaibLst,
+            ChestSlot.LunarCoreChest7 => _flags.KMaibAll || (_flags.KMaib && (_flags.KMoon || _flags.KRisky)) || _flags.KMaibLst,
+            ChestSlot.LunarCoreChest8 => _flags.KMaibAll || (_flags.KMaib && (_flags.KMoon || _flags.KRisky)) || _flags.KMaibLst,
+            ChestSlot.LunarCoreChest9 => _flags.KMaibAll || (_flags.KMaib && (_flags.KMoon || _flags.KRisky)) || _flags.KMaibLst,
+            _ => false
+        };
 
-    public bool IsCharacter => false;
-
-    public bool IsKeyItem => false;
-
-    public bool IsBoss => false;
-
-    public bool IsShop => true;
-
-    public bool IsAvailable => throw new NotImplementedException();
-
-    public bool IsChecked => throw new NotImplementedException();
-
-    public event PropertyChangedEventHandler PropertyChanged;
+    private bool IsInSeed(ChestSlot slot) => CanHaveCharcater(slot) || CanHaveKeyItem(slot);
 }

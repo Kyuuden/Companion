@@ -101,6 +101,7 @@ public abstract class ScrollablePanel<TSettings> : PictureBox, IPanel, IScrollab
                 if (line.Height + y > baseImage.Height - 8)
                 {
                     _canScrollDown = true;
+                    SetScrollSate();
                     break;
                 }
 

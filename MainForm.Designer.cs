@@ -122,7 +122,7 @@ partial class MainForm
             return;
         }
 
-        var dialog = new SettingsDialog(_settings, APIs.Input)
+        var dialog = new SettingsDialog(_settings)
         {
             Owner = this,
             StartPosition = FormStartPosition.CenterParent

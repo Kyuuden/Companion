@@ -4,6 +4,7 @@ namespace FF.Rando.Companion.FreeEnterprise;
 
 public interface ILocation : INotifyPropertyChanged
 {
+    int ID { get; }
     string Description { get; }
     bool IsAvailable { get; }
     bool IsChecked { get; }
