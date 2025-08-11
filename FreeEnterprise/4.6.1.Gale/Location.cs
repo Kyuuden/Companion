@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using FF.Rando.Companion.FreeEnterprise.Shared;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace FF.Rando.Companion.FreeEnterprise._4._6._1.Gale;
@@ -7,12 +8,13 @@ internal class Location : ILocation
     private bool _isAvailable;
     private bool _isChecked;
 
-    public Location(RewardSlot type, string description, bool isKI, bool isChar)
+    public Location(RewardSlot type, World world, string description, bool isKI, bool isChar)
     {
         ID = (int)type;
         Description = description;
         IsCharacter = isChar;
         IsKeyItem = isKI;
+        World = world;
     }
 
     public int ID { get; }
@@ -52,6 +54,8 @@ internal class Location : ILocation
             NotifyPropertyChanged();
         }
     }
+
+    public World World { get; }
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

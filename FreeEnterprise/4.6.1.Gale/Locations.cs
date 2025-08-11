@@ -21,7 +21,7 @@ internal class Locations
         _locations = Enum.GetValues(typeof(RewardSlot))
             .OfType<RewardSlot>()
             .Where(IsInSeed)
-            .ToDictionary(t => t, t => new Location(t, _descriptors.GetRewardSlotName(t), CanHaveKeyItem(t), CanHaveCharcater(t)));
+            .ToDictionary(t => t, t => new Location(t, GetWorld(t), _descriptors.GetRewardSlotName(t), CanHaveKeyItem(t), CanHaveCharcater(t)));
     }
 
     public bool Update(TimeSpan time, ReadOnlySpan<byte> checkedLocations, ImmutableHashSet<KeyItemType> foundKeyItems)
@@ -58,6 +58,91 @@ internal class Locations
 
         return updated;
     }
+
+    private World GetWorld(RewardSlot slot)
+    => slot switch
+    {
+        RewardSlot.StartingCharacter => World.Main,
+        RewardSlot.StartingPartnerCharacter => World.Main,
+        RewardSlot.MistCharacter => World.Main,
+        RewardSlot.WateryPassCharacter => World.Main,
+        RewardSlot.DamcyanCharacter => World.Main,
+        RewardSlot.KaipoCharacter => World.Main,
+        RewardSlot.HobsCharacter => World.Main,
+        RewardSlot.MysidiaCharacter1 => World.Main,
+        RewardSlot.MysidiaCharacter2 => World.Main,
+        RewardSlot.OrdealsCharacter => World.Main,
+        RewardSlot.BaronInnCharacter => World.Main,
+        RewardSlot.BaronCastleCharacter => World.Main,
+        RewardSlot.ZotCharacter1 => World.Main,
+        RewardSlot.ZotCharacter2 => World.Main,
+        RewardSlot.DwarfCastleCharacter => World.Underground,
+        RewardSlot.CaveEblanCharacter => World.Main,
+        RewardSlot.LunarPalaceCharacter => World.Moon,
+        RewardSlot.GiantCharacter => World.Main,
+        RewardSlot.StartingItem => World.Main,
+        RewardSlot.AntlionItem => World.Main,
+        RewardSlot.FabulItem => World.Main,
+        RewardSlot.OrdealsItem => World.Main,
+        RewardSlot.BaronInnItem => World.Main,
+        RewardSlot.BaronCastleItem => World.Main,
+        RewardSlot.ToroiaHospitalItem when _flags.KNoFreeMode != KNoFreeMode.DwarfCastle => World.Main,
+        RewardSlot.ToroiaHospitalItem when _flags.KNoFreeMode == KNoFreeMode.DwarfCastle => World.Underground,
+        RewardSlot.MagnesItem => World.Main,
+        RewardSlot.ZotItem => World.Main,
+        RewardSlot.BabilBossItem => World.Underground,
+        RewardSlot.CannonItem => World.Underground,
+        RewardSlot.LucaItem => World.Underground,
+        RewardSlot.SealedCaveItem => World.Underground,
+        RewardSlot.FeymarchItem => World.Underground,
+        RewardSlot.RatTradeItem => World.Main,
+        RewardSlot.FoundYangItem => World.Underground,
+        RewardSlot.PanTradeItem => World.Underground,
+        RewardSlot.FeymarchQueenItem => World.Underground,
+        RewardSlot.FeymarchKingItem => World.Underground,
+        RewardSlot.BaronThroneItem => World.Main,
+        RewardSlot.SylphItem => World.Underground,
+        RewardSlot.BahamutItem => World.Moon,
+        RewardSlot.LunarBoss1Item => World.Moon,
+        RewardSlot.LunarBoss2Item => World.Moon,
+        RewardSlot.LunarBoss3Item => World.Moon,
+        RewardSlot.LunarBoss4Item1 => World.Moon,
+        RewardSlot.LunarBoss4Item2 => World.Moon,
+        RewardSlot.LunarBoss5Item => World.Moon,
+        RewardSlot.ZotChest => World.Main,
+        RewardSlot.EblanChest1 => World.Main,
+        RewardSlot.EblanChest2 => World.Main,
+        RewardSlot.EblanChest3 => World.Main,
+        RewardSlot.LowerBabilChest1 => World.Underground,
+        RewardSlot.LowerBabilChest2 => World.Underground,
+        RewardSlot.LowerBabilChest3 => World.Underground,
+        RewardSlot.LowerBabilChest4 => World.Underground,
+        RewardSlot.CaveEblanChest => World.Main,
+        RewardSlot.UpperBabilChest => World.Main,
+        RewardSlot.CaveOfSummonsChest => World.Underground,
+        RewardSlot.SylphCaveChest1 => World.Underground,
+        RewardSlot.SylphCaveChest2 => World.Underground,
+        RewardSlot.SylphCaveChest3 => World.Underground,
+        RewardSlot.SylphCaveChest4 => World.Underground,
+        RewardSlot.SylphCaveChest5 => World.Underground,
+        RewardSlot.SylphCaveChest6 => World.Underground,
+        RewardSlot.SylphCaveChest7 => World.Underground,
+        RewardSlot.GiantChest => World.Main,
+        RewardSlot.LunarPathChest => World.Moon,
+        RewardSlot.LunarCoreChest1 => World.Moon,
+        RewardSlot.LunarCoreChest2 => World.Moon,
+        RewardSlot.LunarCoreChest3 => World.Moon,
+        RewardSlot.LunarCoreChest4 => World.Moon,
+        RewardSlot.LunarCoreChest5 => World.Moon,
+        RewardSlot.LunarCoreChest6 => World.Moon,
+        RewardSlot.LunarCoreChest7 => World.Moon,
+        RewardSlot.LunarCoreChest8 => World.Moon,
+        RewardSlot.LunarCoreChest9 => World.Moon,
+        RewardSlot.RydiasMomItem => World.Main,
+        RewardSlot.ForgeItem => World.Underground,
+        RewardSlot.PinkTradeItem => World.Main,
+        _ => World.Unknown
+    };
 
     private bool HasKeyItemsFor(RewardSlot location, ImmutableHashSet<KeyItemType> foundKeyItems)
         => location switch

@@ -189,26 +189,12 @@ internal class Locations
         };
 
     private bool CanGetToWorld(RewardSlot slot, bool canGetUnderground, bool canGetToMoon)
-        => slot switch
+        => slot.World() switch
         {
-            RewardSlot.DwarfCastleCharacter => canGetUnderground,
-            RewardSlot.LunarPalaceCharacter => canGetToMoon,
-            RewardSlot.BabilBossItem => canGetUnderground,
-            RewardSlot.CannonItem => canGetUnderground,
-            RewardSlot.LucaItem => canGetUnderground,
-            RewardSlot.SealedCaveItem => canGetUnderground,
-            RewardSlot.FoundYangItem => canGetUnderground,
-            RewardSlot.PanTradeItem => canGetUnderground,
-            RewardSlot.FeymarchQueenItem => canGetUnderground,
-            RewardSlot.FeymarchKingItem => canGetUnderground,
-            RewardSlot.SylphItem => canGetUnderground,
-            RewardSlot.BahamutItem => canGetToMoon,
-            RewardSlot.LunarBoss1Item => canGetToMoon,
-            RewardSlot.LunarBoss2Item => canGetToMoon,
-            RewardSlot.LunarBoss3Item => canGetToMoon,
-            RewardSlot.LunarBoss5Item => canGetToMoon,
-            RewardSlot.ForgeItem => canGetUnderground,
-            _ => true
+            World.Underground => canGetUnderground,
+            World.Main => true,
+            World.Moon => canGetToMoon,
+            _ => false
         };
 
     public bool CanHaveCharcater(RewardSlot slot)
@@ -340,24 +326,12 @@ internal class Locations
         };
 
     private bool CanGetToWorld(BossLocationType slot, bool canGetUnderground, bool canGetToMoon)
-        => slot switch
+        => slot.World() switch
         {
-            BossLocationType.WaterhagSlot => false,
-            BossLocationType.CalbrenaSlot => canGetUnderground,
-            BossLocationType.GolbezSlot => canGetUnderground,
-            BossLocationType.LugaeSlot => canGetUnderground,
-            BossLocationType.DarkimpSlot => canGetUnderground,
-            BossLocationType.EvilwallSlot => canGetUnderground,
-            BossLocationType.AsuraSlot => canGetUnderground,
-            BossLocationType.LeviatanSlot => canGetUnderground,
-            BossLocationType.BahamutSlot => canGetToMoon,
-            BossLocationType.PaledimSlot => canGetToMoon,
-            BossLocationType.WyvernSlot => canGetToMoon,
-            BossLocationType.PlagueSlot => canGetToMoon,
-            BossLocationType.DlunarSlot => canGetToMoon,
-            BossLocationType.OgopogoSlot => canGetToMoon,
-            BossLocationType.NotFound => false,
-            _ => true
+            World.Underground => canGetUnderground,
+            World.Main => true,
+            World.Moon => canGetToMoon,
+            _ => false
         };
 
     private bool IsInSeed(BossLocationType boss)
@@ -381,45 +355,11 @@ internal class Locations
         };
 
     private bool CanGetToWorld(Shops slot, bool canGetUnderground, bool canGetToMoon)
-        => slot switch
+        => slot.World() switch
         {
-            Shops.KaipoWeaponShop => true,
-            Shops.FabulWeaponArmorShop => true,
-            Shops.MysidiaWeaponShop => true,
-            Shops.BaronWeaponShop => true,
-            Shops.ToroiaWeaponShop => true,
-            Shops.SilveraWeaponShop => true,
-            Shops.DwarfCastleWeaponShop => canGetUnderground,
-            Shops.CaveEblanWeaponShop => true,
-            Shops.TomraWeapon => canGetUnderground,
-            Shops.SmithyShop => canGetUnderground,
-            Shops.KaipoArmorShop => true,
-            Shops.MysidiaArmorShop => true,
-            Shops.BaronArmorShop => true,
-            Shops.ToroiaArmorShop => true,
-            Shops.SilveraArmorShop => true,
-            Shops.DwarfCastleArmorShop => canGetUnderground,
-            Shops.CaveEblanArmorShop => true,
-            Shops.TomraArmorShop => canGetUnderground,
-            Shops.MoonItemShop => canGetToMoon,
-            Shops.BaronItemShop => true,
-            Shops.MysidiaItemShop => true,
-            Shops.SilveraItemShop => true,
-            Shops.MistWeaponShop => true,
-            Shops.MistArmorShop => true,
-            Shops.CaveEblanItemShop => true,
-            Shops.AgartWeaponShop => true,
-            Shops.AgartArmorShop => true,
-            Shops.FeymarchWeaponShop => canGetUnderground,
-            Shops.FeymarchArmorShop => canGetUnderground,
-            Shops.TomraItemShop => canGetUnderground,
-            Shops.ToroiaCafeItemShop => true,
-            Shops.KaipoItemShop => true,
-            Shops.FabulItemShop => true,
-            Shops.ToroiaItemShop => true,
-            Shops.AgartItemShop => true,
-            Shops.DwarfCastleItemShop => canGetUnderground,
-            Shops.FeymarchItemShop => canGetUnderground,
+            World.Underground => canGetUnderground,
+            World.Main => true,
+            World.Moon => canGetToMoon,
             _ => false
         };
 
@@ -432,42 +372,12 @@ internal class Locations
             _ => true
         };
 
-
     private bool CanGetToWorld(ChestSlot slot, bool canGetUnderground, bool canGetToMoon)
-        => slot switch
+        => slot.World() switch
         {
-            ChestSlot.Feymarch => canGetUnderground,
-            ChestSlot.RibbonRoom1 => canGetToMoon,
-            ChestSlot.RibbonRoom2 => canGetToMoon,
-            ChestSlot.ZotChest => true,
-            ChestSlot.EblanChest1 => true,
-            ChestSlot.EblanChest2 => true,
-            ChestSlot.EblanChest3 => true,
-            ChestSlot.LowerBabilChest1 => canGetUnderground,
-            ChestSlot.LowerBabilChest2 => canGetUnderground,
-            ChestSlot.LowerBabilChest3 => canGetUnderground,
-            ChestSlot.LowerBabilChest4 => canGetUnderground,
-            ChestSlot.CaveEblanChest => true,
-            ChestSlot.UpperBabilChest => true,
-            ChestSlot.CaveOfSummonsChest => canGetUnderground,
-            ChestSlot.SylphCaveChest1 => canGetUnderground,
-            ChestSlot.SylphCaveChest2 => canGetUnderground,
-            ChestSlot.SylphCaveChest3 => canGetUnderground,
-            ChestSlot.SylphCaveChest4 => canGetUnderground,
-            ChestSlot.SylphCaveChest5 => canGetUnderground,
-            ChestSlot.SylphCaveChest6 => canGetUnderground,
-            ChestSlot.SylphCaveChest7 => canGetUnderground,
-            ChestSlot.GiantChest => true,
-            ChestSlot.LunarPathChest => canGetToMoon,
-            ChestSlot.LunarCoreChest1 => canGetToMoon,
-            ChestSlot.LunarCoreChest2 => canGetToMoon,
-            ChestSlot.LunarCoreChest3 => canGetToMoon,
-            ChestSlot.LunarCoreChest4 => canGetToMoon,
-            ChestSlot.LunarCoreChest5 => canGetToMoon,
-            ChestSlot.LunarCoreChest6 => canGetToMoon,
-            ChestSlot.LunarCoreChest7 => canGetToMoon,
-            ChestSlot.LunarCoreChest8 => canGetToMoon,
-            ChestSlot.LunarCoreChest9 => canGetToMoon,
+            World.Underground => canGetUnderground,
+            World.Main => true,
+            World.Moon => canGetToMoon,
             _ => false
         };
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FF.Rando.Companion.FreeEnterprise.Shared;
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -15,6 +16,7 @@ internal class RewardSlotLocation : ILocation
         Description = description;
         IsCharacter = isChar;
         IsKeyItem = isKI;
+        World = slot.World();
     }
 
     public int ID { get; }
@@ -54,6 +56,8 @@ internal class RewardSlotLocation : ILocation
             NotifyPropertyChanged();
         }
     }
+
+    public World World { get; }
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

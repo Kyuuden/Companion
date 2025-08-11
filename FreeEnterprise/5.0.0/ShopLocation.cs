@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FF.Rando.Companion.FreeEnterprise.Shared;
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -13,6 +14,7 @@ internal class ShopLocation : ILocation
     {
         ID = (int)slot;
         Description = description;
+        World = slot.World();
     }
 
     public int ID { get; }
@@ -52,6 +54,8 @@ internal class ShopLocation : ILocation
             NotifyPropertyChanged();
         }
     }
+
+    public World World { get; }
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

@@ -88,13 +88,13 @@ internal class Locations
             _ => true
         };
 
-    private bool CanGetTo(LocationType location, bool canGetUnderground, bool canGetToMoon) 
-        => location switch
+    private bool CanGetTo(LocationType location, bool canGetUnderground, bool canGetToMoon)
+        => location.World() switch
         {
-            LocationType.StartingCharacter or LocationType.StartingPartner or LocationType.KaipoInn or LocationType.WateryPass or LocationType.Damcyan or LocationType.KaipoInfirmary or LocationType.MtHobbs or LocationType.Mysidia1 or LocationType.Mysidia2 or LocationType.MtOrdealsCharacter or LocationType.BaronInnCharacter or LocationType.BaronCastleCharacter or LocationType.Zot1 or LocationType.Zot2 or LocationType.EblanCave or LocationType.Giant or LocationType.RatTailTrade or LocationType.StartingItem or LocationType.AntlionNest or LocationType.DefendingFabul or LocationType.MtOrdeals or LocationType.BaronInn or LocationType.BaronCastle or LocationType.EdwardInToroia or LocationType.CaveMagnes or LocationType.TowerOfZot or LocationType.OdinThrone or LocationType.RydiasMom or LocationType.GiantOfBabIlTrappedChest or LocationType.UpperBabIlTrappedChest or LocationType.CaveEblanTrappedChest or LocationType.TowerOfZotTrappedChest or LocationType.EblanTrappedChest1 or LocationType.EblanTrappedChest2 or LocationType.EblanTrappedChest3 => true,
-            LocationType.DwarfCastle or LocationType.LowerBabIlBoss or LocationType.SuperCannon or LocationType.Luca or LocationType.SealedCave or LocationType.FeymarchChest or LocationType.Shelia1 or LocationType.Shelia2 or LocationType.FeymarchQueen or LocationType.FeymarchKing or LocationType.FromTheSylphs or LocationType.LowerBabIlTrappedChest1 or LocationType.LowerBabIlTrappedChest2 or LocationType.LowerBabIlTrappedChest3 or LocationType.LowerBabIlTrappedChest4 or LocationType.CaveOfSummonsTrappedChest or LocationType.SylphCaveTrappedChest1 or LocationType.SylphCaveTrappedChest2 or LocationType.SylphCaveTrappedChest3 or LocationType.SylphCaveTrappedChest4 or LocationType.SylphCaveTrappedChest5 or LocationType.SylphCaveTrappedChest6 or LocationType.SylphCaveTrappedChest7 => canGetUnderground,
-            LocationType.Moon or LocationType.CaveBahamut or LocationType.MurasameAltar or LocationType.CrystalSwordAltar or LocationType.WhiteSpearAltar or LocationType.RibbonChest1 or LocationType.RibbonChest2 or LocationType.MasamuneAltar or LocationType.LunarPathTrappedChest or LocationType.LunarCoreTrappedChest1 or LocationType.LunarCoreTrappedChest2 or LocationType.LunarCoreTrappedChest3 or LocationType.LunarCoreTrappedChest4 or LocationType.LunarCoreTrappedChest5 or LocationType.LunarCoreTrappedChest6 or LocationType.LunarCoreTrappedChest7 or LocationType.LunarCoreTrappedChest8 or LocationType.LunarCoreTrappedChest9 => canGetToMoon,
-            _ => false,
+            World.Main => true,
+            World.Underground=> canGetUnderground,
+            World.Moon => canGetToMoon,
+            _ => false
         };
 
     private bool IsInSeed(LocationType location)

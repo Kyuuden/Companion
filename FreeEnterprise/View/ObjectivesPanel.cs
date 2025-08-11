@@ -45,7 +45,7 @@ public class ObjectivesPanel : ScrollablePanel<ObjectivesSettings>
         if (totalGroups == 1)
             yield return Seed.Font.RenderText(group.Name.ToUpper(), RomData.TextMode.Normal);
         else
-            yield return Seed.Font.RenderText(group.Name.ToUpper().PadRight(charWidth - 11) + $"Group {groupNum,2}/{totalGroups,2}", RomData.TextMode.Normal);
+            yield return Seed.Font.RenderText(group.Name.ToUpper().PadRight(Math.Max(0,charWidth - 11)) + $"Group {groupNum,2}/{totalGroups,2}", RomData.TextMode.Normal);
 
         var taskNum = 1;
         var completed = 0;

@@ -14,6 +14,7 @@ internal class BossLocation : ILocation
     {
         ID = (int)slot;
         Description = description;
+        World = slot.World();
     }
 
     public int ID { get; }
@@ -53,6 +54,8 @@ internal class BossLocation : ILocation
             NotifyPropertyChanged();
         }
     }
+
+    public World World { get; }
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

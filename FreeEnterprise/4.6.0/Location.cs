@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using FF.Rando.Companion.FreeEnterprise.Shared;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace FF.Rando.Companion.FreeEnterprise._4._6._0;
@@ -15,6 +16,8 @@ internal class Location : ILocation
             IsCharacter = true;
         else
             IsKeyItem = true;
+
+        World = type.World();
     }
 
     public int ID { get; }
@@ -54,6 +57,8 @@ internal class Location : ILocation
             NotifyPropertyChanged();
         }
     }
+
+    public World World { get; }
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

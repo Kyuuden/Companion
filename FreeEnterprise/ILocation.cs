@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using FF.Rando.Companion.FreeEnterprise.Shared;
+using System.ComponentModel;
 
 namespace FF.Rando.Companion.FreeEnterprise;
 
@@ -12,4 +13,5 @@ public interface ILocation : INotifyPropertyChanged
     bool IsKeyItem { get; }
     bool IsBoss { get; }
     bool IsShop { get; }
+    World World { get; }
 }

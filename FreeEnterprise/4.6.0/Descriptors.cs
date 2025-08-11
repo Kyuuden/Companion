@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace FF.Rando.Companion.FreeEnterprise._4._6._0;
+﻿namespace FF.Rando.Companion.FreeEnterprise._4._6._0;
 internal class Descriptors : Companion.FreeEnterprise.Descriptors
 {
     public string GetLocationName(LocationType location)
@@ -86,6 +84,6 @@ internal class Descriptors : Companion.FreeEnterprise.Descriptors
             LocationType.RydiasMom => "Rydia's Mom",
             LocationType.FallenGolbez => "Fallen Golbez",
             LocationType.ObjectiveCompletion => "Objective completion",
-            _ => throw new NotImplementedException(),
+            _ => "UNKNOWN",
         };
 }

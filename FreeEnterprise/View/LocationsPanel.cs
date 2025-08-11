@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
-using System.Windows.Forms;
 
 namespace FF.Rando.Companion.FreeEnterprise.View;
 
@@ -20,14 +19,17 @@ public class LocationsPanel : ScrollablePanel<LocationsSettings>
         if (Seed == null || Settings == null)
             yield break;
 
-        if (Settings.ShowKeyItemChecks && Seed.AvailableLocations.Any(l => l.IsKeyItem))
-            yield return GenerateData("KEY ITEM CHECKS", Seed.AvailableLocations.Where(l => l.IsKeyItem)).ToList();
+        if (Settings.ShowKeyItemChecks && Settings.ShowCharacterChecks && Seed.AvailableLocations.Any(l=>l.IsKeyItem && l.IsCharacter))
+            yield return GenerateData("KEY ITEM / CHARACTER CHECKS", Seed.AvailableLocations.Where(l => l.IsKeyItem && l.IsCharacter).OrderBy(l => l.World).ThenBy(l => l.Description)).ToList();
 
-        if (Settings.ShowCharacterChecks && Seed.AvailableLocations.Any(l => l.IsCharacter))
-            yield return GenerateData("CHARACTER CHECKS", Seed.AvailableLocations.Where(l => l.IsCharacter)).ToList();
+        if (Settings.ShowKeyItemChecks && Seed.AvailableLocations.Any(l => l.IsKeyItem && !l.IsCharacter))
+            yield return GenerateData("KEY ITEM CHECKS", Seed.AvailableLocations.Where(l => l.IsKeyItem && !l.IsCharacter).OrderBy(l => l.World).ThenBy(l => l.Description)).ToList();
+
+        if (Settings.ShowCharacterChecks && Seed.AvailableLocations.Any(l => l.IsCharacter && !l.IsKeyItem))
+            yield return GenerateData("CHARACTER CHECKS", Seed.AvailableLocations.Where(l => l.IsCharacter && !l.IsKeyItem).OrderBy(l => l.World).ThenBy(l => l.Description)).ToList();
 
         if (Settings.ShowShopChecks && Seed.AvailableLocations.Any(l => l.IsShop))
-            yield return GenerateData("SHOP CHECKS", Seed.AvailableLocations.Where(l => l.IsShop)).ToList();
+            yield return GenerateData("SHOP CHECKS", Seed.AvailableLocations.Where(l => l.IsShop).OrderBy(l => l.World).ThenBy(l => l.Description)).ToList();
     }
 
     protected override void PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -49,8 +51,16 @@ public class LocationsPanel : ScrollablePanel<LocationsSettings>
 
         foreach (var loc in locations)
         {
-            var marker = Seed.Font.RenderText(" • ", RomData.TextMode.Normal);
-            var locText = Seed.Font.RenderText(loc.Description, RomData.TextMode.Normal, charWidth - 3);
+            var textmode = loc.World switch
+            {
+                Shared.World.Main => RomData.TextMode.Normal,
+                Shared.World.Underground => RomData.TextMode.Special,
+                Shared.World.Moon => RomData.TextMode.Highlighted,
+                _ => RomData.TextMode.Disabled
+            };
+
+            var marker = Seed.Font.RenderText(" • ", textmode);
+            var locText = Seed.Font.RenderText(loc.Description, textmode, charWidth - 3);
             var locData = BitmapDataFactory.CreateBitmapData(new Size(marker.Width + locText.Width, Math.Max(marker.Height, locText.Height)), KnownPixelFormat.Format8bppIndexed, locText.Palette);
 
             marker.CopyTo(locData);

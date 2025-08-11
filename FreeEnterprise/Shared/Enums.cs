@@ -121,3 +121,11 @@ public enum BossLocationType : uint
     OgopogoSlot = 0x22,
     NotFound = 0xFF
 }
+
+public enum World
+{
+    Unknown,
+    Main,
+    Underground,
+    Moon
+}
