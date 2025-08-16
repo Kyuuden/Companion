@@ -12,7 +12,6 @@ public partial class AboutDialog : Form
     public AboutDialog()
     {
         InitializeComponent();
-        Text += $" {Assembly.GetAssembly(GetType()).GetName().Version}";
     }
 
     private async void AboutDialog_Load(object sender, EventArgs e)
