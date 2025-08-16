@@ -84,14 +84,15 @@ public abstract class ScrollablePanel<TSettings> : PictureBox, IPanel, IScrollab
 
         try
         {
-
-            Image?.Dispose();
             var unscaledSize = Settings.Unscale(Size);
             unscaledSize = new Size((unscaledSize.Width / 8) * 8, (unscaledSize.Height / 8) * 8);
             var y = 8;
 
             if (unscaledSize.Width <= 0 || unscaledSize.Height <= 0)
                 return;
+
+            Image?.Dispose();
+            Image = null;
 
             var baseImage = Seed.Font.RenderBox(unscaledSize.Width / 8, unscaledSize.Height / 8, Seed.Sprites.GreyScaleStickerPalette);
 
@@ -160,7 +161,6 @@ public abstract class ScrollablePanel<TSettings> : PictureBox, IPanel, IScrollab
         if (Seed == null)
             return;
 
-        Image?.Dispose();
         foreach (var l in _pageBitmapData)
             foreach (var b in l)
                 b.Dispose();

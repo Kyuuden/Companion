@@ -1,6 +1,8 @@
 ﻿using FF.Rando.Companion.FreeEnterprise.RomData;
 using System;
+using System.Buffers.Binary;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace FF.Rando.Companion.FreeEnterprise;
@@ -26,6 +28,8 @@ internal abstract class LegacySeed : SeedBase
     protected bool IsLoading => _state == RunState.Loading;
 
     public override bool RequiresMemoryEvents => true;
+
+    protected abstract bool OWinGame { get; }
 
     public LegacySeed(string hash, Metadata metadata, Container container)
     : base(hash, metadata, container)
@@ -107,4 +111,19 @@ internal abstract class LegacySeed : SeedBase
         }
     }
 
+    public override void OnNewFrame()
+    {
+        base.OnNewFrame();
+
+        if (!IsLoading && OWinGame)
+        {
+            var time = Game.Wram.ReadBytes(Shared.Addresses.WRAM.EndGameTime);
+            if (time.Any(t => t != 0))
+            {
+                RemoveCallbacks();
+                Victory = true;
+                _state = RunState.RunFinished;
+            }
+        }
+    }
 }

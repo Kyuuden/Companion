@@ -117,10 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="richTextBox1.Text" xml:space="preserve">
-    <value>Free Enterprise Companion is an auto-tracker for Free Enterprise (www.ff4fe.com), a Final Fantasy 4 Randomizer.
+  <data name="descriptionLabel.Text" xml:space="preserve">
+    <value>Final Fantasy Rando Companion is an auto-tracker for Free Enterprise, a Final Fantasy Randomizer.
 
-Design and development by: Kyuuden (https://www.twitch.tv/kyuuden)
-Icons by: SchalaKitty (https://www.twitch.tv/schalakitty)</value>
+Design and development by Kyuuden.
+Icons by SchalaKitty
+
+Links for referenced libraries, tools, and randomizers:</value>
   </data>
 </root>

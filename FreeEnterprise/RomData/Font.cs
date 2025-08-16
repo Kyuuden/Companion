@@ -183,6 +183,7 @@ public class Font : IDisposable
                     foreach (var bmp in list.Value)
                         bmp.Dispose();
             }
+            _bitmaps.Clear();
 
             disposedValue = true;
         }

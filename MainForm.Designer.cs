@@ -1,5 +1,9 @@
 ﻿using FF.Rando.Companion.Settings;
+using FF.Rando.Companion.Utils;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace FF.Rando.Companion;
@@ -111,33 +115,6 @@ partial class MainForm
             this.PerformLayout();
 
     }
-
-    private void DisplayToolStripMenuItem_Click(object sender, System.EventArgs e)
-    {
-        var existing = OwnedForms.OfType<SettingsDialog>().FirstOrDefault();
-
-        if (existing is not null)
-        {
-            existing.Focus();
-            return;
-        }
-
-        var dialog = new SettingsDialog(_settings)
-        {
-            Owner = this,
-            StartPosition = FormStartPosition.CenterParent
-        };
-
-        dialog.FormClosed += (_, _) => dialog.Dispose();
-        dialog.Show();
-    }
-
-    private void AboutToolStripMenuItem_Click(object sender, System.EventArgs e)
-    {
-        using var about = new AboutDialog() { Owner = this, StartPosition = FormStartPosition.CenterParent };
-        about.ShowDialog();
-    }
-
     #endregion
 
     private System.Windows.Forms.MenuStrip menuStrip;

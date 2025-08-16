@@ -10,6 +10,7 @@ using System.Collections.Immutable;
 using FF.Rando.Companion.FreeEnterprise.Settings;
 using System.Diagnostics;
 using FF.Rando.Companion.FreeEnterprise.View;
+using FF.Rando.Companion.Settings;
 
 namespace FF.Rando.Companion.FreeEnterprise;
 
@@ -153,6 +154,8 @@ internal abstract class SeedBase : ISeed
 
     protected Container Game { get; private set; }
 
+    public IEmulationContainer Container => Game;
+
     public SeedBase(string hash, Metadata metadata, Container container)
     {
         if (container == null) throw new ArgumentNullException(nameof(container));
@@ -212,6 +215,8 @@ internal abstract class SeedBase : ISeed
     }
 
     public FreeEnterpriseSettings Settings { get; private set; }
+
+    GameSettings IGame.Settings => Settings;
 
     public Bitmap Icon { get; }
     public virtual bool CanTackBosses => false;

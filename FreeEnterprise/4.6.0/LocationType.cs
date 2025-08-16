@@ -170,7 +170,7 @@ internal static class LocationTypeExtensions
             LocationType.LunarCoreTrappedChest7 or 
             LocationType.LunarCoreTrappedChest8 or 
             LocationType.LunarCoreTrappedChest9 
-                => Shared.World.Main,
+                => Shared.World.Moon,
             _ => Shared.World.Unknown,
         };
 }

@@ -9,7 +9,6 @@ public class KeyItemSettings : PanelSettings
     public KeyItemSettings(JToken jToken)
     : base(jToken)
     {
-        KeyItemStyle = jToken?[nameof(KeyItemStyle).ToSnakeCase()]?.ToObject<KeyItemStyle>() ?? KeyItemStyle.Text;
     }
 
     [Description("How to show key items, either text (like the track in-game menu) or icons.")]

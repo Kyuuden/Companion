@@ -91,6 +91,7 @@ internal class Addresses
 
     internal static class WRAM
     {
+        public readonly static Range<long> EndGameTime = 0x157dL.WithLength(3);
         public readonly static Range<long> BackgroundColor =  0x16AAL.WithLength(2);
         public readonly static Range<long> TreasureBits = 0x12A0L.RangeTo(0x12DF);
     }

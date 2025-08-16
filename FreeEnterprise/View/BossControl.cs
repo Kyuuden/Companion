@@ -38,7 +38,6 @@ public partial class BossControl : ImageControl<IBoss>
         var description = Seed.Font.RenderText(Value.Name, TextMode.Normal, 28);
         var encounters = new List<IReadableBitmapData>();
 
-
         if (Value.Encounters.Any())
         {
             foreach (var encounter in Value.Encounters)

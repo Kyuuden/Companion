@@ -5,7 +5,7 @@ using FF.Rando.Companion.MemoryManagement;
 using System;
 
 namespace FF.Rando.Companion;
-internal abstract class EmulationContainerBase
+public abstract class EmulationContainerBase : IEmulationContainer
 {
     public IMemorySpace Rom { get; private set; }
     public IMemorySpace Wram { get; private set; }

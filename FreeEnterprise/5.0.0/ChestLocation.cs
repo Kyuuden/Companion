@@ -17,9 +17,12 @@ internal class ChestLocation : ILocation
         IsCharacter = isChar;
         IsKeyItem = isKI;
         World = slot.World();
+        IsMiab = slot.IsMiab();
     }
 
     public int ID { get; }
+
+    public bool IsMiab { get; }
 
     public string Description { get; }
 

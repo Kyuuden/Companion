@@ -38,10 +38,13 @@ public class ObjectivesPanel : ScrollablePanel<ObjectivesSettings>
     private IEnumerable<IReadableBitmapData> GenerateData(IObjectiveGroup group, int groupNum, int totalGroups)
     {
         if (Seed == null || Settings == null)
-            throw new InvalidOperationException();
+            yield break;
 
         var unscaledSize = Settings.Unscale(Size);
         var charWidth = (unscaledSize.Width / 8) - 2;
+        if (charWidth < 5)
+            yield break;
+
         if (totalGroups == 1)
             yield return Seed.Font.RenderText(group.Name.ToUpper(), RomData.TextMode.Normal);
         else

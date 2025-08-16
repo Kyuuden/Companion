@@ -2,14 +2,22 @@
 using BizHawk.Client.EmuHawk;
 using BizHawk.Emulation.Common;
 using FF.Rando.Companion.Settings;
+using FF.Rando.Companion.Utils;
 using System;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Runtime;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace FF.Rando.Companion;
 
 [ExternalToolEmbeddedIcon("FF.Rando.Companion.Resources.Crystal.png")]
-[ExternalTool("Final Fantasy Rando Companion", Description = "An autotracker (currently) for Free Enterprise, a Final Fantasy IV randomizer")]
+[ExternalTool("Final Fantasy Rando Companion", 
+    Description = "An autotracker (currently) for Free Enterprise, a Final Fantasy IV randomizer")]
 public partial class MainForm : ToolFormBase, IExternalToolForm
 {
     protected override string WindowTitleStatic => "Final Fantasy Rando Companion";
@@ -159,6 +167,36 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
         _docking = false;
     }
 
+    protected override void OnClosing(CancelEventArgs e)
+    {
+        if (_settings.WindowStyle == WindowStyle.Custom && _settings is RootSettings root)
+        {
+            if (WindowState == FormWindowState.Maximized)
+            {
+                root.WindowPosition = RestoreBounds.Location;
+                root.WindowSize = RestoreBounds.Size;
+                root.IsWindowMaximized = true;
+                root.IsWindowMinimized = false;
+            }
+            else if (WindowState == FormWindowState.Normal)
+            {
+                root.WindowPosition = Location;
+                root.WindowSize = Size;
+                root.IsWindowMaximized = false;
+                root.IsWindowMinimized = false;
+            }
+            else
+            {
+               root.WindowPosition = RestoreBounds.Location;
+               root.WindowSize = RestoreBounds.Size;
+               root.IsWindowMaximized = false;
+               root.IsWindowMinimized = true;
+            }
+            root.SaveToFile();
+        }
+        base.OnClosing(e);
+    }
+
     protected override void OnResize(EventArgs e)
     {
         base.OnResize(e);
@@ -193,6 +231,17 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
             ((BizHawk.Client.EmuHawk.MainForm)MainForm).Move += OwnerMoved;
             ((BizHawk.Client.EmuHawk.MainForm)MainForm).Resize += OwnerResized;
             _parentFormLinked = true;
+
+            if (_settings.WindowStyle == WindowStyle.Custom)
+            {
+                Location = _settings.WindowPosition;
+                Size = _settings.WindowSize;
+                WindowState = _settings.IsWindowMinimized
+                    ? FormWindowState.Minimized
+                    : _settings.IsWindowMaximized
+                        ? FormWindowState.Maximized
+                        : FormWindowState.Normal;
+            }
         }
     }
 
@@ -228,5 +277,46 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
         _viewModel.APIs = APIs;
         _viewModel.MemoryDomains = _memoryDomains;
         _viewModel.Initialize(Game);
+    }
+
+    private void DisplayToolStripMenuItem_Click(object sender, System.EventArgs e)
+    {
+        var existing = OwnedForms.OfType<SettingsDialog>().FirstOrDefault();
+
+        if (existing is not null)
+        {
+            existing.Focus();
+            return;
+        }
+
+        var dialog = new SettingsDialog(_settings)
+        {
+            Owner = MainForm as Form,
+            StartPosition = FormStartPosition.CenterParent
+        };
+
+        dialog.FormClosed += (_, _) => dialog.Dispose();
+        dialog.Show();
+    }
+
+    private void AboutToolStripMenuItem_Click(object sender, System.EventArgs e)
+    {
+        using var about = new AboutDialog() { Owner = this, StartPosition = FormStartPosition.CenterParent };
+        var result = about.ShowDialog();
+        if (result == DialogResult.Yes)
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                string path = Directory.GetCurrentDirectory();
+                var updater = new ProcessStartInfo() { FileName = path + Paths.UpdaterPath, UseShellExecute = false };
+                updater.WorkingDirectory = (path + Paths.UpdaterFolderPath);
+                Process.Start(updater);
+                Application.Exit();
+            }
+            else
+            {
+                Process.Start(Paths.LatestReleaseUrl);
+            }
+        }
     }
 }

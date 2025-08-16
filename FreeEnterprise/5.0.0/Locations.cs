@@ -1,10 +1,13 @@
 ﻿using BizHawk.Common;
 using FF.Rando.Companion.Extensions;
+using FF.Rando.Companion.FreeEnterprise._4._6._1.Gale;
 using FF.Rando.Companion.FreeEnterprise.Shared;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace FF.Rando.Companion.FreeEnterprise._5._0._0;
 
@@ -17,6 +20,7 @@ internal class Locations
     private readonly Dictionary<BossLocationType, BossLocation> _bossLocations;
     private readonly Dictionary<Shops, ShopLocation> _shopLocations;
     private readonly Dictionary<ChestSlot, ChestLocation> _chests;
+    private readonly Dictionary<int, ChestLocation> _miabLookup = [];
 
     public IEnumerable<ILocation> All => _rewardSlots.Values.OfType<ILocation>()
         .Concat(_bossLocations.Values)
@@ -54,12 +58,53 @@ internal class Locations
         ReadOnlySpan<byte> checkedShops,
         ReadOnlySpan<byte> checkedChests,
         ReadOnlySpan<byte> defeatedBossLocations,
+        ReadOnlySpan<byte> axtorData,
+        ReadOnlySpan<byte> keyItemLocations,
         ImmutableHashSet<KeyItemType> foundKeyItems,
         ImmutableHashSet<BossType> defeatedBosses)
     {
         var updated = false;
         var canGetUnderground = foundKeyItems.Contains(KeyItemType.Hook) || foundKeyItems.Contains(KeyItemType.MagmaKey);
         var canGetToMoon = foundKeyItems.Contains(KeyItemType.DarknessCrystal);
+ 
+        HashSet<int> mapped = [];
+        foreach (var loc in MemoryMarshal.Cast<byte, ushort>(keyItemLocations))
+        {
+            if ((loc & 0xC000) != 0xC000)
+                continue;
+
+            var chestId = loc & 0x1FF;
+            if (_miabLookup.ContainsKey(chestId))
+                continue;
+
+            var description = _descriptors.GetRewardSlotDescription(loc);
+            var chest = _chests.Values.FirstOrDefault(c => !mapped.Contains(c.ID) && c.Description == description);
+            if (chest != null)
+            {
+                mapped.Add(chest.ID);
+                _miabLookup.Add(chestId, chest); 
+            }
+        }
+
+        foreach (var axtor in MemoryMarshal.Cast<byte, uint>(axtorData))
+        {
+            var loc = axtor >> 16;
+
+            if ((loc & 0xC000) != 0xC000)
+                continue;
+
+            var chestId = (int)(loc & 0x1FF);
+            if (_miabLookup.ContainsKey(chestId))
+                continue;
+
+            var description = _descriptors.GetRewardSlotDescription((int)loc);
+            var chest = _chests.Values.FirstOrDefault(c => !mapped.Contains(c.ID) && c.Description == description);
+            if (chest != null)
+            {
+                mapped.Add(chest.ID);
+                _miabLookup.Add(chestId, chest);
+            }
+        }
 
         foreach (var slot in _rewardSlots.Values)
         {
@@ -94,10 +139,20 @@ internal class Locations
         foreach (var slot in _chests.Values)
         {
             var isOpened = checkedChests.Read<bool>(slot.ID);
-            if (isOpened != slot.IsChecked)
+            if (isOpened != slot.IsChecked && !slot.IsMiab)
             {
                 updated = true;
                 slot.IsChecked = isOpened;
+            }
+        }
+
+        foreach (var map in _miabLookup)
+        {
+            var isOpened = checkedChests.Read<bool>(map.Key);
+            if (isOpened != map.Value.IsChecked)
+            {
+                updated = true;
+                map.Value.IsChecked = isOpened;
             }
         }
 

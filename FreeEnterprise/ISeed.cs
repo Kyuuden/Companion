@@ -19,7 +19,7 @@ public interface ISeed : IGame
     IEnumerable<IObjectiveGroup> Objectives { get; }
     IEnumerable<ICharacter> Party { get; }
     bool Victory { get; }
-    FreeEnterpriseSettings Settings { get; }
+    new FreeEnterpriseSettings Settings { get; }
     RomData.Font Font { get; }
     Sprites Sprites { get; }
     bool CanTackBosses { get; }

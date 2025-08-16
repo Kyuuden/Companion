@@ -34,7 +34,7 @@ internal class Party : IDisposable
             var cClass = cData.Read<CharacterType>(8, 4);
             var fashion = axtorData[cId * 4 + 1];
 
-            if (character.Id != cId || character.Type != cClass)
+            if (character.Id != cId || character.Type != cClass || character.Fashion != fashion)
             {
                 updated = true; 
                 character.Id = cId;

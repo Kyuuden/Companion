@@ -5,9 +5,11 @@
 	  <Nullable>enable</Nullable>
 	  <TargetFramework>net48</TargetFramework>
 	  <UseWindowsForms>True</UseWindowsForms>
-	  <Version>2.0.0-alpha</Version>
+	  <Version>2.0.0-beta</Version>
 	  <Description>Auto-Tracker for Final Fantasy Randomizers.</Description>
 	  <Copyright>2025 Kyuuden</Copyright>
+	  <AssemblyVersion></AssemblyVersion>
+	  <FileVersion></FileVersion>
   </PropertyGroup>
 
 	<PropertyGroup Condition=" '$(BIZHAWK_HOME)' == '' ">
@@ -19,11 +21,18 @@
 		<!-- ignore this; on NixOS these are different dirs -->
 	</PropertyGroup>
 	<ItemGroup>
+		<PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.43">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
 		<PackageReference Include="KGySoft.Drawing" Version="9.2.0" />
 		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="System.Collections.Immutable" Version="9.0.7" />
 		<PackageReference Include="System.Memory" Version="4.6.3" />
+		<Reference Include="System.Net.Http">
+		  <HintPath>..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.8\System.Net.Http.dll</HintPath>
+		</Reference>
 		<Reference Include="System.Windows.Forms" />
 		<Reference Include="BizHawk.Client.Common" HintPath="$(BIZHAWK_HOME)dll/BizHawk.Client.Common.dll" />
 		<Reference Include="BizHawk.Client.EmuHawk" HintPath="$(BIZHAWK_HOME)EmuHawk.exe" />
@@ -31,19 +40,31 @@
 		<Reference Include="BizHawk.Emulation.Common" HintPath="$(BIZHAWK_HOME)dll/BizHawk.Emulation.Common.dll" />
 		<Reference Include="BizHawk.WinForms.Controls" HintPath="$(BIZHAWK_HOME)dll/BizHawk.WinForms.Controls.dll" />
 	</ItemGroup>
-	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<ItemGroup>
+	<Target Name="PostBuild" AfterTargets="ILRepacker">
+		<!--<ItemGroup>
 			<KGySoftFiles Include="$(OutputPath)KGySoft*.dll" />
 		</ItemGroup>
 		
-		<Copy SourceFiles="@(KGySoftFiles)" DestinationFolder="$(BIZHAWK_DATA_HOME)ExternalTools" />
+		<Copy SourceFiles="@(KGySoftFiles)" DestinationFolder="$(BIZHAWK_DATA_HOME)ExternalTools/FF.Rando.Companion/dll" />-->
 		<Copy SourceFiles="$(OutputPath)$(MSBuildProjectName).dll" DestinationFolder="$(BIZHAWK_DATA_HOME)ExternalTools" />
 	</Target>
 	
 	<ItemGroup>
     <Compile Remove="BizHawk-2.10\**" />
+    <Compile Remove="BizHawk-2.6.1\**" />
+    <Compile Remove="BizHawk-2.7\**" />
+    <Compile Remove="BizHawk-2.8\**" />
+    <Compile Remove="BizHawk-2.9\**" />
     <EmbeddedResource Remove="BizHawk-2.10\**" />
+    <EmbeddedResource Remove="BizHawk-2.6.1\**" />
+    <EmbeddedResource Remove="BizHawk-2.7\**" />
+    <EmbeddedResource Remove="BizHawk-2.8\**" />
+    <EmbeddedResource Remove="BizHawk-2.9\**" />
     <None Remove="BizHawk-2.10\**" />
+    <None Remove="BizHawk-2.6.1\**" />
+    <None Remove="BizHawk-2.7\**" />
+    <None Remove="BizHawk-2.8\**" />
+    <None Remove="BizHawk-2.9\**" />
   </ItemGroup>
 	
 	<ItemGroup>

@@ -146,6 +146,9 @@ internal class Seed : LegacySeed
             }
 
             DefeatedEncounters = defeatedBosses;
+            BackgroundColor = Game.Wram.ReadBytes(Shared.Addresses.WRAM.BackgroundColor).Read<ushort>(0).ToColor();
         }
     }
+
+    protected override bool OWinGame => _flags?.OWinGame ?? false;
 }

@@ -1,8 +1,12 @@
 ﻿using BizHawk.Client.Common;
 using BizHawk.Emulation.Common;
 using FF.Rando.Companion.Settings;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows.Forms;
 
 namespace FF.Rando.Companion;
 
@@ -12,13 +16,24 @@ public class GameViewModel : INotifyPropertyChanged
     private ApiContainer? _apiContainer;
     private IMemoryDomains? _memoryDomains;
     private ISettings _settings;
+    private readonly List<IGameParser> _gameParsers;
 
     public GameViewModel(ISettings settings)
     {
         _settings = settings;
+        var parserType = typeof(IGameParser);
+        var parsers = AppDomain.CurrentDomain.GetAssemblies()
+            .SelectMany(s => s.GetTypes())
+            .Where(p => p != parserType && parserType.IsAssignableFrom(p));
+
+        _gameParsers = [];
+        foreach (var parser in parsers)
+        {
+            _gameParsers.Add((IGameParser)Activator.CreateInstance(parser));
+        }
     }
 
-    private EmulationContainerBase? _emulationContainer { get; set; }
+    private IEmulationContainer? _emulationContainer { get; set; }
 
     public IGame? Game
     {
@@ -70,11 +85,17 @@ public class GameViewModel : INotifyPropertyChanged
         if (Game != null && Game.Hash == gameInfo.Hash)
             return;
 
-        if (gameInfo.Name.ToUpper().StartsWith("FF4FE"))
+        if (gameInfo.IsNullInstance())
+            return;
+
+        foreach (var parser in _gameParsers)
         {
-            var feContainer = new FreeEnterprise.Container(APIs!, MemoryDomains!, _settings);
-            _emulationContainer = feContainer;
-            Game = FreeEnterprise.SeedFactory.Create(gameInfo.Hash, feContainer);
+            if (parser.TryParseGameInfo(APIs!, MemoryDomains!, _settings, gameInfo, out var game))
+            {
+                Game = game!;
+                _emulationContainer = Game.Container;
+                return;
+            }
         }
     }
 

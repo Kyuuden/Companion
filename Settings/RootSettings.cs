@@ -102,6 +102,18 @@ public class RootSettings : ISettings
     [Browsable(false)]
     public Dictionary<string, GameSettings> GameSettings => _gameSettings;
 
+    [Browsable(false)]
+    public Size WindowSize { get => GetSetting(new Size(0,0)); set => SaveSetting(value); }
+
+    [Browsable(false)]
+    public Point WindowPosition { get => GetSetting(new Point(0, 0)); set => SaveSetting(value); }
+
+    [Browsable(false)]
+    public bool IsWindowMaximized { get => GetSetting(false); set => SaveSetting(value); }
+
+    [Browsable(false)]
+    public bool IsWindowMinimized { get => GetSetting(false); set => SaveSetting(value); }
+
     public event PropertyChangedEventHandler? PropertyChanged;
 
     protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")

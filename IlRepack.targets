@@ -1,0 +1,18 @@
+<Project>
+	<Target Name="ILRepacker" AfterTargets="Build">
+		<ItemGroup>
+			<InputAssemblies Include="$(OutputPath)\FF.Rando.Companion.dll" />
+			<InputAssemblies Include="$(OutputPath)\KGySoft.CoreLibraries.dll" />
+			<InputAssemblies Include="$(OutputPath)\KGySoft.Drawing.Core.dll" />
+			<InputAssemblies Include="$(OutputPath)\KGySoft.Drawing.dll" />
+		</ItemGroup>
+		<Message Text="MERGING" />
+		<ILRepack
+			LibraryPath="$(OutputPath)"
+			Parallel="true"
+			InputAssemblies="@(InputAssemblies)"
+			TargetKind="Dll"
+			OutputFile="$(OutputPath)\$(AssemblyName).dll"
+		/>
+	</Target>
+</Project>

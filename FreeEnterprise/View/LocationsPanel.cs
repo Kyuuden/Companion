@@ -47,6 +47,9 @@ public class LocationsPanel : ScrollablePanel<LocationsSettings>
 
         var unscaledSize = Settings.Unscale(Size);
         var charWidth = (unscaledSize.Width / 8) - 2;
+        if (charWidth < 4)
+            yield break;
+
         yield return Seed.Font.RenderText(header.ToUpper(), RomData.TextMode.Normal);
 
         foreach (var loc in locations)

@@ -6,6 +6,7 @@ using FF.Rando.Companion.FreeEnterprise.View;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -111,7 +112,7 @@ internal class Seed : SeedBase
             var foundKIs = _keyItems.Items.Where(ki => ki.IsFound).Select(ki => (KeyItemType)ki.Id).ToImmutableHashSet();
             var defeatedBosses = _bosses.Items.Where(b => b.Encounters.Any(e => e.IsDefeated)).Select(b => (BossType)b.Id).ToImmutableHashSet();
 
-            if (_locations.Update(time, rewardSlotCheckedBits, shopCheckedBits, teasureCount, bossLocationsDefeated, foundKIs, defeatedBosses))
+            if (_locations.Update(time, rewardSlotCheckedBits, shopCheckedBits, teasureCount, bossLocationsDefeated, axtorData, keyItemLocations, foundKIs, defeatedBosses))
                 NotifyPropertyChanged(nameof(AvailableLocations));
 
             if (_flags != null)
