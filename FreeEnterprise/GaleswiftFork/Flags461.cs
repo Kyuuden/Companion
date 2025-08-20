@@ -1,10 +1,10 @@
 ﻿using FF.Rando.Companion.Extensions;
 
-namespace FF.Rando.Companion.FreeEnterprise._4._6._1.Gale;
-internal class Flags
+namespace FF.Rando.Companion.FreeEnterprise.GaleswiftFork;
+internal class Flags461 : IFlags
 {
     private readonly byte[] _binaryFlags;
-    public Flags(byte[] binaryFlags)
+    public Flags461(byte[] binaryFlags)
     {
         if (binaryFlags.Length < 63)
         {
@@ -62,54 +62,11 @@ internal class Flags
     public KeyItemZonkXpBonus XKeyItemZonkXpBonus => _binaryFlags.Read<KeyItemZonkXpBonus>(419, 3);
     public MiabXpBonus XMiabXpBonus => _binaryFlags.Read<MiabXpBonus>(421, 2);
     public MoonXpBonus XMoonXpBonus => _binaryFlags.Read<MoonXpBonus>(423, 2);
+
+    public byte MaxPartySize => 5;
+
+    public bool XSmallParty => false;
 }
 
-public enum ObjectiveXpBonus : byte
-{
-    None = 0,
-    _5Percent = 3,
-    _10Percent = 2,
-    _25Percent = 1,
-    Split = 4,
-}
-
-public enum KeyItemCheckXpBonus : byte
-{
-    None = 0,
-    _2Percent = 3,
-    _5Percent = 2,
-    _10Percent = 1,
-    Split = 4,
-}
-
-public enum KeyItemZonkXpBonus : byte
-{
-    None = 0,
-    _2Percent = 3,
-    _5Percent = 2,
-    _10Percent = 1,
-}
-
-public enum MiabXpBonus : byte
-{
-    None = 0,
-    _100Percent = 1,
-    _50Percent = 2,
-}
-
-public enum MoonXpBonus : byte
-{
-    None = 0,
-    _200Percent = 1,
-    _100Percent = 2,
-}
-
-public enum KNoFreeMode : byte
-{
-    Disabled = 0,
-    Standard = 1,
-    DwarfCastle = 2,
-    Package = 3
-}
 
 

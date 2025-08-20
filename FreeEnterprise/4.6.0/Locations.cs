@@ -10,11 +10,11 @@ internal class Locations
 {
     private readonly Dictionary<LocationType, Location> _locations;
     private readonly Descriptors _descriptors;
-    private readonly Flags _flags;
+    private readonly IFlags _flags;
 
     internal IEnumerable<Location> Items => _locations.Values;
 
-    public Locations(Descriptors descriptors, Flags flags)
+    public Locations(Descriptors descriptors, IFlags flags)
     {
         _descriptors = descriptors;
         _flags = flags;

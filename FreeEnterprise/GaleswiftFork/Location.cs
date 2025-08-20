@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace FF.Rando.Companion.FreeEnterprise._4._6._1.Gale;
+namespace FF.Rando.Companion.FreeEnterprise.GaleswiftFork;
 internal class Location : ILocation
 {
     private bool _isAvailable;

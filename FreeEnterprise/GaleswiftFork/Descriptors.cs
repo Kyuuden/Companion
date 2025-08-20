@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace FF.Rando.Companion.FreeEnterprise._4._6._1.Gale;
+namespace FF.Rando.Companion.FreeEnterprise.GaleswiftFork;
 internal class Descriptors : Companion.FreeEnterprise.Descriptors
 {
-    private readonly Flags? _flags;
+    private readonly IFlags? _flags;
 
-    public Descriptors(Flags? flags)
+    public Descriptors(IFlags? flags)
     {
         _flags = flags;
     }

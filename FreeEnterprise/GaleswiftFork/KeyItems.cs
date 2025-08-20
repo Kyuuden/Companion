@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FF.Rando.Companion.FreeEnterprise._4._6._1.Gale;
+namespace FF.Rando.Companion.FreeEnterprise.GaleswiftFork;
 internal class KeyItems
 {
     private readonly IReadOnlyList<KeyItem> _items;

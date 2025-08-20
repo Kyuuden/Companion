@@ -5,16 +5,16 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 
-namespace FF.Rando.Companion.FreeEnterprise._4._6._1.Gale;
+namespace FF.Rando.Companion.FreeEnterprise.GaleswiftFork;
 internal class Locations
 {
     private readonly Dictionary<RewardSlot, Location> _locations;
     private readonly Descriptors _descriptors;
-    private readonly Flags _flags;
+    private readonly IFlags _flags;
 
     internal IEnumerable<Location> Items => _locations.Values;
 
-    public Locations(Descriptors descriptors, Flags flags)
+    public Locations(Descriptors descriptors, IFlags flags)
     {
         _descriptors = descriptors;
         _flags = flags;

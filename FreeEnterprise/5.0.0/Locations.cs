@@ -1,11 +1,8 @@
-﻿using BizHawk.Common;
-using FF.Rando.Companion.Extensions;
-using FF.Rando.Companion.FreeEnterprise._4._6._1.Gale;
+﻿using FF.Rando.Companion.Extensions;
 using FF.Rando.Companion.FreeEnterprise.Shared;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 

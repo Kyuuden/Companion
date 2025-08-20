@@ -11,7 +11,7 @@ namespace FF.Rando.Companion.FreeEnterprise._4._6._0;
 
 internal class Seed : LegacySeed
 {
-    private readonly Flags? _flags;
+    private readonly IFlags _flags;
     private readonly Descriptors _descriptors;
     private readonly KeyItems _keyItems;
     private readonly Party _party;
@@ -40,9 +40,11 @@ internal class Seed : LegacySeed
             XpRate = 1;
         }
 
-        _party = new Party(container.Settings.Party, Sprites, _flags?.VanillaAgility, _flags?.CHero);
-        _objectives = new Objectives(metadata.Objectives!, _flags?.NumRequiredObjectives, _flags?.OWinGame, _flags?.OWinCrystal);
-        _locations = new Locations(_descriptors, _flags!);
+        _flags ??= new MysteryFlags();
+
+        _party = new Party(container.Settings.Party, Sprites, _flags.VanillaAgility, _flags.CHero);
+        _objectives = new Objectives(metadata.Objectives!, _flags?.NumRequiredObjectives, _flags.OWinGame, _flags.OWinCrystal);
+        _locations = new Locations(_descriptors, _flags);
     }
 
     public override void OnNewFrame()

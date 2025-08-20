@@ -5,7 +5,7 @@
 	  <Nullable>enable</Nullable>
 	  <TargetFramework>net48</TargetFramework>
 	  <UseWindowsForms>True</UseWindowsForms>
-	  <Version>2.0.1</Version>
+	  <Version>2.0.2</Version>
 	  <Description>Auto-Tracker for Final Fantasy Randomizers.</Description>
 	  <Copyright>2025 Kyuuden</Copyright>
 	  <AssemblyVersion></AssemblyVersion>
@@ -13,7 +13,7 @@
   </PropertyGroup>
 
 	<PropertyGroup Condition=" '$(BIZHAWK_HOME)' == '' ">
-		<BIZHAWK_HOME>$(ProjectDir)BizHawk-2.10/</BIZHAWK_HOME>
+		<BIZHAWK_HOME>$(ProjectDir)..\BizHawk/</BIZHAWK_HOME>
 		<!-- if building EmuHawk from source, point to e.g. `$(ProjectDir)../BizHawk/output/` -->
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(BIZHAWK_DATA_HOME)' == '' ">
@@ -40,12 +40,25 @@
 		<Reference Include="BizHawk.Emulation.Common" HintPath="$(BIZHAWK_HOME)dll/BizHawk.Emulation.Common.dll" />
 		<Reference Include="BizHawk.WinForms.Controls" HintPath="$(BIZHAWK_HOME)dll/BizHawk.WinForms.Controls.dll" />
 	</ItemGroup>
-	<Target Name="PostBuild" AfterTargets="ILRepacker">
-		<!--<ItemGroup>
+	<Target Name="ReleasePostBuild" AfterTargets="ILRepacker" Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<ItemGroup>
+			<FilesToDelete Include="$(BIZHAWK_DATA_HOME)ExternalTools/KGySoft*.dll"/>
+		</ItemGroup>
+		<Delete Files="@(FilesToDelete)">
+			<Output
+			   TaskParameter="DeletedFiles"
+			   ItemName="FilesDeleted"/>
+		</Delete>
+		<Message Text="Files deleted: @(FilesDeleted)" Importance="high"/>
+		<Copy SourceFiles="$(OutputPath)$(MSBuildProjectName).dll" DestinationFolder="$(BIZHAWK_DATA_HOME)ExternalTools" />
+	</Target>
+
+	<Target Name="DebugPostBuild" AfterTargets="Build" Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<ItemGroup>
 			<KGySoftFiles Include="$(OutputPath)KGySoft*.dll" />
 		</ItemGroup>
 		
-		<Copy SourceFiles="@(KGySoftFiles)" DestinationFolder="$(BIZHAWK_DATA_HOME)ExternalTools/FF.Rando.Companion/dll" />-->
+		<Copy SourceFiles="@(KGySoftFiles)" DestinationFolder="$(BIZHAWK_DATA_HOME)ExternalTools/" />
 		<Copy SourceFiles="$(OutputPath)$(MSBuildProjectName).dll" DestinationFolder="$(BIZHAWK_DATA_HOME)ExternalTools" />
 	</Target>
 	

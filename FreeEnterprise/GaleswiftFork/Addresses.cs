@@ -1,6 +1,6 @@
 ﻿using BizHawk.Common;
 
-namespace FF.Rando.Companion.FreeEnterprise._4._6._1.Gale;
+namespace FF.Rando.Companion.FreeEnterprise.GaleswiftFork;
 
 internal static class Addresses
 {

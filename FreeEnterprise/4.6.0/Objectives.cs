@@ -16,7 +16,7 @@ internal class Objectives : IObjectiveGroup
 
     public IEnumerable<IReward> Rewards => _rewards;
 
-    public Objectives(IEnumerable<RomData.Objective> objectives, int? required, bool? winGame, bool? winCrystal)
+    public Objectives(IEnumerable<RomData.Objective> objectives, int? required, bool winGame, bool winCrystal)
     {
         foreach (var objective in objectives)
         {

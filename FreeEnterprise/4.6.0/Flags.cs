@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace FF.Rando.Companion.FreeEnterprise._4._6._0;
-internal class Flags
+internal class Flags : IFlags
 {
     private readonly byte[] _binaryFlags;
     public Flags(byte[] binaryFlags)

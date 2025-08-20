@@ -8,10 +8,10 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 
-namespace FF.Rando.Companion.FreeEnterprise._4._6._1.Gale;
+namespace FF.Rando.Companion.FreeEnterprise.GaleswiftFork;
 internal class Seed : LegacySeed
 {
-    private readonly Flags? _flags;
+    private readonly IFlags? _flags;
     private readonly Descriptors _descriptors;
     private readonly KeyItems _keyItems;
     private readonly Party _party;
@@ -31,12 +31,12 @@ internal class Seed : LegacySeed
     public Seed(string hash, Metadata metadata, Container container)
         : base(hash, metadata, container)
     {
-        if (Flags.Binary != null)
-        {
-            _flags = new Flags(Flags.Binary);
-            XpRate = 1;
-        }
+        XpRate = 1;
 
+        if (!string.IsNullOrEmpty(Flags.Text) && Flags.Text != "(hidden)")
+            _flags = new TextFlags(Flags.Text!);
+
+        _flags ??= new MysteryFlags();
         _descriptors = new Descriptors(_flags);
         _keyItems = new KeyItems(container.Settings.KeyItems, Font, _descriptors);
         _party = new Party(container.Settings.Party, Sprites, _flags?.VanillaAgility, (_flags?.CHero ?? false) || (_flags?.CSuperhero ?? false));
@@ -105,26 +105,26 @@ internal class Seed : LegacySeed
                 if (keyItemLocations.Contains((byte)RewardSlot.StartingItem)) // starting check doesn't count
                     kIchecks--;
 
-                xpRate *= 1 + kIchecks * _flags.XKeyItemCheckBonus switch 
+                xpRate *= 1 + (kIchecks * _flags.XKeyItemCheckBonus switch 
                 {
                     KeyItemCheckXpBonus._2Percent => 0.2m,
                     KeyItemCheckXpBonus._5Percent => 0.5m,
                     KeyItemCheckXpBonus._10Percent => 0.10m,
                     KeyItemCheckXpBonus.Split => (1.0m / _locations.Items.Count(l => l.IsKeyItem)),
                     _ => 0m
-                };
+                });
 
                 var zonks = kIchecks - kiCount;
                 if (!keyItemLocations.Contains((byte)RewardSlot.StartingItem)) // starting zonk doesn't count
                     zonks--;
 
-                xpRate *= 1 + zonks * _flags.XKeyItemZonkXpBonus switch
+                xpRate *= 1 + (zonks * _flags.XKeyItemZonkXpBonus switch
                 {
                     KeyItemZonkXpBonus._2Percent => 0.2m,
                     KeyItemZonkXpBonus._5Percent => 0.5m,
                     KeyItemZonkXpBonus._10Percent => 0.10m,
                     _ => 0m
-                };
+                });
 
                 if (_flags.XMoonXpBonus != MoonXpBonus.None && (currentLocation[0] == 2 || (currentLocation[0] == 3 && BinaryPrimitives.ReadUInt16BigEndian(currentLocation.Slice(1)) >= 0x015a)))
                 {
@@ -141,6 +141,17 @@ internal class Seed : LegacySeed
 
                 if (!_flags.XNoKeyBonus && KeyItems.Count(ki => ki.IsFound && ki.IsTrackable) >= 10)
                     xpRate *= 2;
+
+                if (_flags.XSmallParty && _party.Characters.Count(c=> c.Id != 0) < _flags.MaxPartySize)
+                {
+                    var bonuses = 0;
+                    var currentPartySize = _party.Characters.Count(c => c.Id != 0);
+                    for (var size = currentPartySize; size < _flags.MaxPartySize; size++)
+                    {
+                        bonuses += _flags.MaxPartySize - size;
+                    }
+                    xpRate *= 1 + (bonuses * 0.1m);
+                }
 
                 XpRate = xpRate / 100.0m;
             }

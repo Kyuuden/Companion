@@ -30,23 +30,26 @@ public class SeedParser : IGameParser
             var json = Encoding.UTF8.GetString(jsonData);
             var jObj = JObject.Parse(json);
             var metadata = new Metadata(jObj);
-            var version = jObj["version"]?.ToObject<string>();
 
-            switch (version)
+            if (metadata.Version?.StartsWith("v5") == true)
             {
-                case "v5.0.0-a.1":
-                    game = new _5._0._0.Seed(gameInfo.Hash, metadata, feContainer);
-                    return true;
-                case "v4.6.0":
-                    game = new _4._6._0.Seed(gameInfo.Hash, metadata, feContainer);
-                    return true;
-                case "v4.6.1.Gale":
-                    game = new _4._6._1.Gale.Seed(gameInfo.Hash, metadata, feContainer);
-                    return true;
-                default:
-                    throw new NotSupportedException($"Unsupported Free Enterprise version: {version}");
+                game = new _5._0._0.Seed(gameInfo.Hash, metadata, feContainer);
+                return true;
             }
-
+            else if (metadata.Version?.EndsWith(".Gale") == true)
+            {
+                game = new GaleswiftFork.Seed(gameInfo.Hash, metadata, feContainer);
+                return true;
+            }
+            else if (metadata.Version?.StartsWith("v4.6.0") == true)
+            {
+                game = new _4._6._0.Seed(gameInfo.Hash, metadata, feContainer);
+                return true;
+            }
+            else
+            {
+                throw new NotSupportedException($"Unsupported Free Enterprise version: {metadata.Version}");
+            }
         }
         catch
         {

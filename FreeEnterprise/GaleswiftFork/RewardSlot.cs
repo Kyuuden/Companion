@@ -1,4 +1,4 @@
-﻿namespace FF.Rando.Companion.FreeEnterprise._4._6._1.Gale;
+﻿namespace FF.Rando.Companion.FreeEnterprise.GaleswiftFork;
 internal enum RewardSlot : byte
 {
     StartingCharacter = 0x01,

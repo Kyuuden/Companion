@@ -1,5 +1,4 @@
-﻿using FF.Rando.Companion.FreeEnterprise._4._6._1.Gale;
-using FF.Rando.Companion.FreeEnterprise.Shared;
+﻿using FF.Rando.Companion.FreeEnterprise.Shared;
 
 namespace FF.Rando.Companion.FreeEnterprise._4._6._0;
 

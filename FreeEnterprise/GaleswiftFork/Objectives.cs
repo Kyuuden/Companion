@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
-namespace FF.Rando.Companion.FreeEnterprise._4._6._1.Gale;
+namespace FF.Rando.Companion.FreeEnterprise.GaleswiftFork;
 
 internal class Objectives : IObjectiveGroup
 {
@@ -18,7 +18,7 @@ internal class Objectives : IObjectiveGroup
 
     public IEnumerable<IReward> Rewards => _rewards;
 
-    public Objectives(IEnumerable<RomData.Objective> objectives, Flags? flags)
+    public Objectives(IEnumerable<RomData.Objective> objectives, IFlags? flags)
     {
         if (flags == null)
         {
