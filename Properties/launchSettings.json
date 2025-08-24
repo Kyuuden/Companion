@@ -2,8 +2,8 @@
   "profiles": {
     "BizHawk 2.10": {
       "commandName": "Executable",
-      "executablePath": "C:\\Users\\kuren\\source\\repos\\Companion\\BizHawk-2.10\\EmuHawk.exe",
-      "workingDirectory": "C:\\Users\\kuren\\source\\repos\\Companion\\BizHawk-2.10\\"
+      "executablePath": "C:\\Users\\kuren\\source\\repos\\BizHawk\\EmuHawk.exe",
+      "workingDirectory": "C:\\Users\\kuren\\source\\repos\\BizHawk\\"
     }
   }
 }

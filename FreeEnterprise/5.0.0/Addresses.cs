@@ -19,7 +19,7 @@ internal static class Addresses
         public readonly static long VictoryIndicatorAddress = 0x151F;
 
         public readonly static Range<long> PartyRegion = 0x1000L.RangeTo(0x1140);
-        public readonly static Range<long> WramRegion = 0x1500L.RangeTo(0x155F);
+        public readonly static Range<long> WramRegion = 0x1500L.RangeTo(0x15FF);
 
         public readonly static System.Range KeyItemFoundBits = new(0x00, 0x03);
         public readonly static System.Range KeyItemUsedBits = new(0x03, 0x06);
@@ -31,6 +31,8 @@ internal static class Addresses
         public readonly static System.Range RewardSlotCheckedBits = new(0x20, 0x30);
         public readonly static System.Range ObjectiveTaskProgress = new(0x30, 0x50);
         public readonly static System.Range ObjectiveGroupProress = new(0x50, 0x60);
+        public readonly static System.Index KeyItemCheckCount = new(0x76);
+        public readonly static System.Index KeyItemZonkCount = new(0x77);
     }
 
     internal static class ROM

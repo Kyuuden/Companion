@@ -142,5 +142,56 @@ public enum ObjectiveXpBonus : ushort
     _14Percent = 64,
     _16Percent = 128,
     _20Percent = 256,
-    _25Percent = 512
+    _25Percent = 512,
+    _33Percent = 1024,
+}
+
+
+public enum KeyItemCheckXpBonus : byte
+{
+    None = 0,
+    _1Percent = 1,
+    _2Percent = 2,
+    _3Percent = 4,
+    _4Percent = 8,
+    _5Percent = 16,
+    _8Percent = 32,
+    _10Percent = 64,
+}
+
+public enum KeyItemZonkXpBonus : byte
+{
+    None = 0,
+    _1Percent = 1,
+    _2Percent = 2,
+    _3Percent = 4,
+    _4Percent = 8,
+    _5Percent = 16,
+    _8Percent = 32,
+    _10Percent = 64,
+}
+
+public enum MaxXpRate : ushort
+{
+    Unlimited = 0,
+    _50Percent = 1,
+    _75Percent = 2,
+    _100Percent = 4,
+    _150Percent = 8,
+    _200Percent = 16,
+    _250Percent = 32,
+    _300Percent = 64,
+    _400Percent = 128,
+    _500Percent = 256,
+    _600Percent = 512,
+    _700Percent = 1024,
+    _800Percent = 2048,
+    _1000Percent = 4096,
+}
+
+public enum XPBonusMode : byte
+{
+    Default = 0,
+    Additive = 1,
+    Multiplicative = 2
 }

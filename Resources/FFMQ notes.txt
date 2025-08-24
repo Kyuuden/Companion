@@ -1,0 +1,41 @@
+item sprites;
+0x20000
+
+item palette:
+???
+
+Character sprites:
+0x21A20 (0x180)
+0x24A20 (0x780)
+
+Character palette:
+0x3D826 (0x0E) - no color 0
+
+item palette map:
+
+0C 08 08 08 04 10 04 08 
+08 08 08 08 08 04 10 04 
+04 04 00 0C 0C 0C 0C 0C 
+0C 0C 0C 0C 0C 0C 0C 0C 
+04 04 04 08 08 08 08 04 
+04 0C 00 00 08 08 08 0C
+0C 04 04 04 04 0C 0C 0C 
+04 04 04 04 04 04 04 0C
+
+00 = 3d8e4
+04 = 3d8f4
+08 = 3d904
+0C = 3d914
+10 = 3d924
+
+Resistances:
+sprites start at 0x21840
+palettes: 0x3d7f4, 0x3d804, 0x3d814
+
+Character Palettes:
+
+Ben 		0x3d824
+Kaeli		0x3d874
+Tristam		0x3d864
+Phoebe		0x3d854
+Reuben		0x3d844

@@ -1,10 +1,10 @@
 ﻿using FF.Rando.Companion.Extensions;
 
 namespace FF.Rando.Companion.FreeEnterprise._5._0._0;
-internal class Flags
+internal class FlagsAlpha1 : IFlags
 {
     private readonly byte[] _binaryFlags;
-    public Flags(byte[] binaryFlags)
+    public FlagsAlpha1(byte[] binaryFlags)
     {
         if (binaryFlags.Length < 128)
         {
@@ -33,7 +33,7 @@ internal class Flags
 
     public bool CNoFree => _binaryFlags.Read<bool>(808);
     public bool CNoEarned => _binaryFlags.Read<bool>(809);
-    public bool CNoGiant=> _binaryFlags.Read<bool>(810);
+    public bool CNoGiant => _binaryFlags.Read<bool>(810);
     public bool CHero => _binaryFlags.Read<bool>(889);
     public bool CWishes => _binaryFlags.Read<bool>(890);
 
@@ -42,4 +42,14 @@ internal class Flags
     public bool XNoKeyBonus => _binaryFlags.Read<bool>(942);
 
     public ObjectiveXpBonus XObjBonus => _binaryFlags.Read<ObjectiveXpBonus>(943, 10);
+
+    public bool CNoPartner => false;
+
+    public KeyItemCheckXpBonus XKeyItemCheckBonus => KeyItemCheckXpBonus.None;
+
+    public KeyItemZonkXpBonus XKeyItemZonkXpBonus => KeyItemZonkXpBonus.None;
+
+    public MaxXpRate XMaxXpRate => MaxXpRate.Unlimited;
+
+    public XPBonusMode XPBonusMode => XPBonusMode.Multiplicative;
 }

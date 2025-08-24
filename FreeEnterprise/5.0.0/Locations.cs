@@ -11,7 +11,7 @@ namespace FF.Rando.Companion.FreeEnterprise._5._0._0;
 internal class Locations
 {
     private readonly Descriptors _descriptors;
-    private readonly Flags _flags;
+    private readonly IFlags _flags;
 
     private readonly Dictionary<RewardSlot, RewardSlotLocation> _rewardSlots;
     private readonly Dictionary<BossLocationType, BossLocation> _bossLocations;
@@ -24,7 +24,7 @@ internal class Locations
         .Concat(_shopLocations.Values)
         .Concat(_chests.Values);
 
-    public Locations(Descriptors descriptors, Flags flags)
+    public Locations(Descriptors descriptors, IFlags flags)
     {
         _descriptors = descriptors;
         _flags = flags;
@@ -254,7 +254,7 @@ internal class Locations
         {
             RewardSlot.None => false,
             RewardSlot.StartingCharacter => false,
-            RewardSlot.StartingPartnerCharacter => true,
+            RewardSlot.StartingPartnerCharacter => !_flags.CNoPartner,
             RewardSlot.MistCharacter => !_flags.CNoEarned,
             RewardSlot.WateryPassCharacter => !_flags.CNoFree,
             RewardSlot.DamcyanCharacter => !_flags.CNoFree,
@@ -308,7 +308,7 @@ internal class Locations
         {
             RewardSlot.None => false,
             RewardSlot.StartingCharacter => false,
-            RewardSlot.StartingPartnerCharacter => _flags.KChar && !_flags.CNoEarned,
+            RewardSlot.StartingPartnerCharacter => _flags.KChar && !_flags.CNoPartner,
             RewardSlot.MistCharacter => _flags.KChar && !_flags.CNoEarned,
             RewardSlot.WateryPassCharacter => false,
             RewardSlot.DamcyanCharacter => false,

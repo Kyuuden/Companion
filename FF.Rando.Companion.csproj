@@ -5,7 +5,7 @@
 	  <Nullable>enable</Nullable>
 	  <TargetFramework>net48</TargetFramework>
 	  <UseWindowsForms>True</UseWindowsForms>
-	  <Version>2.0.2</Version>
+	  <Version>2.0.3</Version>
 	  <Description>Auto-Tracker for Final Fantasy Randomizers.</Description>
 	  <Copyright>2025 Kyuuden</Copyright>
 	  <AssemblyVersion></AssemblyVersion>
@@ -42,14 +42,12 @@
 	</ItemGroup>
 	<Target Name="ReleasePostBuild" AfterTargets="ILRepacker" Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<ItemGroup>
-			<FilesToDelete Include="$(BIZHAWK_DATA_HOME)ExternalTools/KGySoft*.dll"/>
+			<FilesToDelete Include="$(BIZHAWK_DATA_HOME)ExternalTools/KGySoft*.dll" />
 		</ItemGroup>
 		<Delete Files="@(FilesToDelete)">
-			<Output
-			   TaskParameter="DeletedFiles"
-			   ItemName="FilesDeleted"/>
+			<Output TaskParameter="DeletedFiles" ItemName="FilesDeleted" />
 		</Delete>
-		<Message Text="Files deleted: @(FilesDeleted)" Importance="high"/>
+		<Message Text="Files deleted: @(FilesDeleted)" Importance="high" />
 		<Copy SourceFiles="$(OutputPath)$(MSBuildProjectName).dll" DestinationFolder="$(BIZHAWK_DATA_HOME)ExternalTools" />
 	</Target>
 
@@ -61,24 +59,6 @@
 		<Copy SourceFiles="@(KGySoftFiles)" DestinationFolder="$(BIZHAWK_DATA_HOME)ExternalTools/" />
 		<Copy SourceFiles="$(OutputPath)$(MSBuildProjectName).dll" DestinationFolder="$(BIZHAWK_DATA_HOME)ExternalTools" />
 	</Target>
-	
-	<ItemGroup>
-    <Compile Remove="BizHawk-2.10\**" />
-    <Compile Remove="BizHawk-2.6.1\**" />
-    <Compile Remove="BizHawk-2.7\**" />
-    <Compile Remove="BizHawk-2.8\**" />
-    <Compile Remove="BizHawk-2.9\**" />
-    <EmbeddedResource Remove="BizHawk-2.10\**" />
-    <EmbeddedResource Remove="BizHawk-2.6.1\**" />
-    <EmbeddedResource Remove="BizHawk-2.7\**" />
-    <EmbeddedResource Remove="BizHawk-2.8\**" />
-    <EmbeddedResource Remove="BizHawk-2.9\**" />
-    <None Remove="BizHawk-2.10\**" />
-    <None Remove="BizHawk-2.6.1\**" />
-    <None Remove="BizHawk-2.7\**" />
-    <None Remove="BizHawk-2.8\**" />
-    <None Remove="BizHawk-2.9\**" />
-  </ItemGroup>
 	
 	<ItemGroup>
 	  <None Remove="FreeEnterprise\Resources\Crystal.png" />
@@ -379,6 +359,10 @@
 	    <Generator>ResXFileCodeGenerator</Generator>
 	    <LastGenOutput>Resources.Designer.cs</LastGenOutput>
 	  </EmbeddedResource>
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <Folder Include="MysticQuestRandomizer\RomData\" />
 	</ItemGroup>
 
 </Project>
