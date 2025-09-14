@@ -1,4 +1,5 @@
 ﻿using FF.Rando.Companion.Extensions;
+using FF.Rando.Companion.Settings.Editor;
 using FF.Rando.Companion.Settings.TypeConverters;
 using KGySoft.Drawing.Imaging;
 using Newtonsoft.Json;
@@ -7,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Design;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -26,7 +28,6 @@ public class RootSettings : ISettings
     public RootSettings()
     {
         _settingsFile = (File.Exists(FileName) ? JObject.Parse(File.ReadAllText(FileName)) : []) ?? [];
-
         var gameSettingsType = typeof(GameSettings);
         var gameSettings = AppDomain.CurrentDomain.GetAssemblies()
             .SelectMany(s => s.GetTypes())
@@ -98,6 +99,61 @@ public class RootSettings : ISettings
     [Description("Pause timer when emulation is paused.")]
     [DefaultValue(true)]
     public bool AutoPauseTimer { get => GetSetting(true); set => SaveSetting(value); }
+    
+    [DisplayName("Next Panel")]
+    [DefaultValue("X1 Back")]
+    [Category("Buttons")]
+    [Editor(typeof(ButtonAssignmentEditor), typeof(UITypeEditor))]
+    [TypeConverter(typeof(ButtonAssignmentConverter))]
+    public string NextPanelButton
+    {
+        get => GetStringSetting("X1 Back");
+        set => SaveStringSetting(value);
+    }
+
+    [DisplayName("Next Page")]
+    [DefaultValue("X1 RightTrigger")]
+    [Category("Buttons")]
+    [Editor(typeof(ButtonAssignmentEditor), typeof(UITypeEditor))]
+    [TypeConverter(typeof(ButtonAssignmentConverter))]
+    public string NextPageButton
+    {
+        get => GetStringSetting("X1 RightTrigger");
+        set => SaveStringSetting(value);
+    }
+
+    [DisplayName("Previous Page")]
+    [DefaultValue("X1 LeftTrigger")]
+    [Category("Buttons")]
+    [Editor(typeof(ButtonAssignmentEditor), typeof(UITypeEditor))]
+    [TypeConverter(typeof(ButtonAssignmentConverter))]
+    public string PreviousPageButton
+    {
+        get => GetStringSetting("X1 LeftTrigger");
+        set => SaveStringSetting(value);
+    }
+
+    [DisplayName("Scroll Down")]
+    [DefaultValue("X1 RStickDown")]
+    [Category("Buttons")]
+    [Editor(typeof(ButtonAssignmentEditor), typeof(UITypeEditor))]
+    [TypeConverter(typeof(ButtonAssignmentConverter))]
+    public string ScrollDownButton
+    {
+        get => GetStringSetting("X1 RStickDown");
+        set => SaveStringSetting(value);
+    }
+
+    [DisplayName("Scroll Up")]
+    [DefaultValue("X1 RStickUp")]
+    [Category("Buttons")]
+    [Editor(typeof(ButtonAssignmentEditor), typeof(UITypeEditor))]
+    [TypeConverter(typeof(ButtonAssignmentConverter))]
+    public string ScrollUpButton
+    {
+        get => GetStringSetting("X1 RStickUp");
+        set => SaveStringSetting(value);
+    }
 
     [Browsable(false)]
     public Dictionary<string, GameSettings> GameSettings => _gameSettings;

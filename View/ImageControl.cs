@@ -1,32 +1,32 @@
 ﻿using System;
 using System.Windows.Forms;
-using FF.Rando.Companion.FreeEnterprise.Settings;
+using FF.Rando.Companion.Settings;
 
-namespace FF.Rando.Companion.FreeEnterprise.View;
-public class ImageControl<T> : PictureBox, IScalableControl where T : IImageTracker
+namespace FF.Rando.Companion.View;
+public class ImageControl<TGame, TImageSource> : PictureBox, IScalableControl where TGame : IGame where TImageSource : IImageTracker
 {
-    protected T Value { get; }
-    protected ISeed Seed { get; }
-    protected PanelSettings Settings { get;}
+    protected TImageSource Value { get; }
+    protected TGame Game { get; }
+    protected PanelSettings Settings { get; }
 
-    public ImageControl(ISeed seed, PanelSettings settings, T item)
+    public ImageControl(TGame seed, PanelSettings settings, TImageSource item)
     {
-        Seed = seed ?? throw new ArgumentNullException();
+        Game = seed ?? throw new ArgumentNullException();
         Value = item ?? throw new ArgumentNullException();
         Settings = settings ?? throw new ArgumentNullException();
 
-        ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)this).BeginInit();
         SuspendLayout();
         Size = new System.Drawing.Size(32, 32);
         DoubleBuffered = true;
-        BackColor = Seed.BackgroundColor;
+        BackColor = Game.BackgroundColor;
         Margin = new Padding(4);
         SizeMode = PictureBoxSizeMode.Zoom;
         Value.PropertyChanged += Value_PropertyChanged;
-        Seed.PropertyChanged += Value_PropertyChanged;
+        Game.PropertyChanged += Value_PropertyChanged;
         Name = "ImageControl";
         UpdateImage();
-        ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
+        ((System.ComponentModel.ISupportInitialize)this).EndInit();
         ResumeLayout(false);
     }
 
@@ -40,8 +40,8 @@ public class ImageControl<T> : PictureBox, IScalableControl where T : IImageTrac
             case nameof(IImageTracker.Image):
                 UpdateImage();
                 break;
-            case nameof(ISeed.BackgroundColor):
-                BackColor = Seed.BackgroundColor;
+            case nameof(IGame.BackgroundColor):
+                BackColor = Game.BackgroundColor;
                 break;
         }
     }

@@ -1,5 +1,6 @@
 ﻿using FF.Rando.Companion.FreeEnterprise.Settings;
 using System.Windows.Forms;
+using FF.Rando.Companion.View;
 
 namespace FF.Rando.Companion.FreeEnterprise.View;
 

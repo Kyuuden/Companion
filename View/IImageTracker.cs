@@ -1,11 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Drawing;
 
-namespace FF.Rando.Companion.FreeEnterprise;
+namespace FF.Rando.Companion.View;
 
 public interface IImageTracker : INotifyPropertyChanged
 {
     Bitmap Image { get; }
-
-    bool IsGameAsset { get; }
 }

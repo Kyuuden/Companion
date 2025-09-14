@@ -20,5 +20,12 @@ public interface ISettings : INotifyPropertyChanged
     public bool AutoPauseTimer { get; }
     JObject Source { get; }
     Dictionary<string, GameSettings> GameSettings { get; }
+
+    string NextPanelButton { get; }
+    string NextPageButton { get; }
+    string PreviousPageButton { get; }
+    string ScrollDownButton { get; }
+    string ScrollUpButton { get; }
+
     void SaveToFile();
 }

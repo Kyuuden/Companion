@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel;
 using System.Drawing;
 using FF.Rando.Companion.FreeEnterprise.Settings;
+using FF.Rando.Companion.View;
 
 namespace FF.Rando.Companion.FreeEnterprise.View;
 
-public partial class CharacterControl : ImageControl<ICharacter>
+public partial class CharacterControl : ImageControl<ISeed, ICharacter>
 {
     private readonly PartySettings _settings;
 

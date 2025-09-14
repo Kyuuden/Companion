@@ -154,6 +154,8 @@ internal abstract class SeedBase : ISeed
 
     protected Container Game { get; private set; }
 
+    public ISettings RootSettings => Game.RootSettings;
+
     public IEmulationContainer Container => Game;
 
     public SeedBase(string hash, Metadata metadata, Container container)

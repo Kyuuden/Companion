@@ -1,4 +1,4 @@
-﻿using FF.Rando.Companion.FreeEnterprise.Settings;
+﻿using FF.Rando.Companion.Settings;
 using KGySoft.Drawing.Imaging;
 
 namespace FF.Rando.Companion.FreeEnterprise.View;

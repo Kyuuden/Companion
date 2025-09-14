@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using FF.Rando.Companion.View;
 
 namespace FF.Rando.Companion.FreeEnterprise;
 

@@ -1,16 +1,12 @@
 ﻿using BizHawk.Common.CollectionExtensions;
 using FF.Rando.Companion.Extensions;
-using FF.Rando.Companion.FreeEnterprise.GaleswiftFork;
 using FF.Rando.Companion.FreeEnterprise.RomData;
 using FF.Rando.Companion.FreeEnterprise.Shared;
-using FF.Rando.Companion.FreeEnterprise.View;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
 
 namespace FF.Rando.Companion.FreeEnterprise._5._0._0;
 internal class Seed : SeedBase

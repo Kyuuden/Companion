@@ -1,6 +1,7 @@
 ﻿using FF.Rando.Companion.Extensions;
 using FF.Rando.Companion.FreeEnterprise.Shared;
 using FF.Rando.Companion.MemoryManagement;
+using FF.Rando.Companion.View;
 using KGySoft.Drawing.Imaging;
 using System;
 using System.Collections.Generic;
@@ -26,11 +27,6 @@ public enum Pose
 public enum Chest
 {
     Open, Closed
-}
-
-public enum Arrow
-{
-    Up, Down, Left, Right
 }
 
 public class Sprites : IDisposable

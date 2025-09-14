@@ -1,4 +1,5 @@
 ﻿using FF.Rando.Companion.FreeEnterprise.Shared;
+using FF.Rando.Companion.View;
 
 namespace FF.Rando.Companion.FreeEnterprise;
 

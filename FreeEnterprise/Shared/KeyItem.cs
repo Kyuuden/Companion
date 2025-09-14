@@ -123,8 +123,6 @@ internal class KeyItem : IKeyItem, IDisposable
         }
     }
 
-    public bool IsGameAsset => _settings.KeyItemStyle == KeyItemStyle.Text;
-
     private void SetImage()
     {
         Image = _settings.KeyItemStyle switch

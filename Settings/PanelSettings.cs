@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.CompilerServices;
 
-namespace FF.Rando.Companion.FreeEnterprise.Settings;
+namespace FF.Rando.Companion.Settings;
 
 public abstract class PanelSettings : INotifyPropertyChanged
 {

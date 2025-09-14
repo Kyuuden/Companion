@@ -109,8 +109,6 @@ internal class Character : ICharacter, IDisposable
         }
     }
 
-    public bool IsGameAsset => true;
-
     public event PropertyChangedEventHandler? PropertyChanged;
 
     private void SetImage()

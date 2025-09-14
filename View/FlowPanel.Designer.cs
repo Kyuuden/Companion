@@ -1,8 +1,8 @@
 ﻿using System.Drawing;
 
-namespace FF.Rando.Companion.FreeEnterprise.View;
+namespace FF.Rando.Companion.View;
 
-partial class FlowPanel<T>
+partial class FlowPanel<TGame, TSettings>
 {
     /// Required designer variable.
     /// </summary>

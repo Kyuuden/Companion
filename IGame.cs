@@ -12,6 +12,8 @@ public interface IGame: INotifyPropertyChanged, IDisposable
 
     Bitmap Icon { get; }
 
+    Color BackgroundColor { get; }
+
     void OnNewFrame();
 
     bool Started { get; }

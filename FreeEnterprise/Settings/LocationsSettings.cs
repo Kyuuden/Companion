@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using FF.Rando.Companion.Settings;
+using Newtonsoft.Json.Linq;
 using System.ComponentModel;
 
 namespace FF.Rando.Companion.FreeEnterprise.Settings;

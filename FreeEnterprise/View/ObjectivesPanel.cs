@@ -16,12 +16,12 @@ public class ObjectivesPanel : ScrollablePanel<ObjectivesSettings>
 
     protected override IEnumerable<List<IReadableBitmapData>> GeneratePageBitmaps()
     {
-        if (Seed == null) 
+        if (Game == null) 
             yield break;
 
-        var groupCount = Seed.Objectives.Count();
+        var groupCount = Game.Objectives.Count();
         var gnum = 0;
-        foreach (var group in Seed.Objectives)
+        foreach (var group in Game.Objectives)
         {
             yield return GenerateData(group, ++gnum, groupCount).ToList();
         }
@@ -37,7 +37,7 @@ public class ObjectivesPanel : ScrollablePanel<ObjectivesSettings>
 
     private IEnumerable<IReadableBitmapData> GenerateData(IObjectiveGroup group, int groupNum, int totalGroups)
     {
-        if (Seed == null || Settings == null)
+        if (Game == null || Settings == null)
             yield break;
 
         var unscaledSize = Settings.Unscale(Size);
@@ -46,9 +46,9 @@ public class ObjectivesPanel : ScrollablePanel<ObjectivesSettings>
             yield break;
 
         if (totalGroups == 1)
-            yield return Seed.Font.RenderText(group.Name.ToUpper(), RomData.TextMode.Normal);
+            yield return Game.Font.RenderText(group.Name.ToUpper(), RomData.TextMode.Normal);
         else
-            yield return Seed.Font.RenderText(group.Name.ToUpper().PadRight(Math.Max(0,charWidth - 11)) + $"Group {groupNum,2}/{totalGroups,2}", RomData.TextMode.Normal);
+            yield return Game.Font.RenderText(group.Name.ToUpper().PadRight(Math.Max(0,charWidth - 11)) + $"Group {groupNum,2}/{totalGroups,2}", RomData.TextMode.Normal);
 
         var taskNum = 1;
         var completed = 0;
@@ -66,13 +66,13 @@ public class ObjectivesPanel : ScrollablePanel<ObjectivesSettings>
                         ? RomData.TextMode.Highlighted
                         : RomData.TextMode.Normal;
 
-            var num = Seed.Font.RenderText($"{taskNum++,2}. ", taskColor);
+            var num = Game.Font.RenderText($"{taskNum++,2}. ", taskColor);
 
             var description = task.IsCompleted && task.CompletedAt > TimeSpan.Zero
                 ? $"{task.Description} - {task.CompletedAt.Value.ToString("hh':'mm':'ss'.'ff")}"
                 : task.Description;
 
-            var taskText = Seed.Font.RenderText(description, taskColor, charWidth - 4);
+            var taskText = Game.Font.RenderText(description, taskColor, charWidth - 4);
             var taskData = BitmapDataFactory.CreateBitmapData(new Size(num.Width + taskText.Width, Math.Max(num.Height, taskText.Height)), KnownPixelFormat.Format8bppIndexed, taskText.Palette);
 
             num.CopyTo(taskData);
@@ -83,7 +83,7 @@ public class ObjectivesPanel : ScrollablePanel<ObjectivesSettings>
             yield return taskData;
         }
 
-        yield return Seed.Font.RenderText("-- REWARDS --", RomData.TextMode.Normal);
+        yield return Game.Font.RenderText("-- REWARDS --", RomData.TextMode.Normal);
         foreach (var reward in group.Rewards)
         {
             var textmode = RomData.TextMode.Normal;
@@ -102,7 +102,7 @@ public class ObjectivesPanel : ScrollablePanel<ObjectivesSettings>
                 }
             }
 
-            yield return Seed.Font.RenderText(reward.Description, textmode, charWidth);
+            yield return Game.Font.RenderText(reward.Description, textmode, charWidth);
         }
     }
 }

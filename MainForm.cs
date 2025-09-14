@@ -252,8 +252,12 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
         if (Game.IsNullInstance() || Game == null)
             return;
 
-        if (_parentFormLinked && !_docking) 
-            _viewModel.OnFrame(Game);
+        try
+        {
+            if (_parentFormLinked && !_docking)
+                _viewModel.OnFrame(Game);
+        }
+        catch { } // If i've done something wrong, don't crash bizhawk.
 
         StopWatchLabel.Text = _game?.Elapsed.ToString("hh':'mm':'ss'.'ff");
     }

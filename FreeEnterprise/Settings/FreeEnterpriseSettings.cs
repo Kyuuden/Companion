@@ -19,7 +19,6 @@ public class FreeEnterpriseSettings : GameSettings
         Party = new PartySettings(SettingsData);
         Locations = new LocationsSettings(SettingsData);
         Stats = new StatsSettings(SettingsData);
-        KeyBindings = new KeyBindingSettings(SettingsData);
     }
 
     [TypeConverter(typeof(ExpandableObjectConverter))]
@@ -46,9 +45,4 @@ public class FreeEnterpriseSettings : GameSettings
     [TypeConverter(typeof(ExpandableObjectConverter))]
     [Description("Tracking of general statistics")]
     public StatsSettings Stats { get; }
-
-    [DisplayName("Key Bindings")]
-    [TypeConverter(typeof(ExpandableObjectConverter))]
-    [Description("Binding keyboard key or controller inputs to tracker control")]
-    public KeyBindingSettings KeyBindings { get; }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace FF.Rando.Companion.FreeEnterprise.View;
+namespace FF.Rando.Companion.View;
 
 public interface IPanel
 {

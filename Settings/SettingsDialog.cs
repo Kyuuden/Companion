@@ -1,5 +1,6 @@
 ﻿using BizHawk.Client.Common;
 using BizHawk.Client.EmuHawk;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace FF.Rando.Companion.Settings;
@@ -20,6 +21,11 @@ public partial class SettingsDialog : FormBase
     {
         propertyGrid1.SelectedObject = _settings = settings;
         propertyGrid1.LargeButtons = true;
+
+        var buttons = propertyGrid1.SelectedGridItem?.Parent?.Parent?.GridItems?.Cast<GridItem>().FirstOrDefault(i => i.Label == "Buttons");
+
+        if (buttons != null)
+            buttons.Expanded = true;
 
         foreach (var game in settings.GameSettings)
         {

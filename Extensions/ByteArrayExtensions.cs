@@ -1,19 +1,13 @@
 ﻿using BizHawk.Common;
+using KGySoft.Drawing.Imaging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 
 namespace FF.Rando.Companion.Extensions;
-
-
-
-
-
-
-
-
 
 /// <summary>
 /// Adds abilities to read/write from a byte array at arbitrary bit indexes
@@ -76,6 +70,11 @@ public static class ByteArrayExtensions
         throw new NotSupportedException();
     }
 
+    public static IEnumerable<T> ReadMany<T>(this byte[] b, uint elementBits)
+    {
+        return ReadMany<T>(b, 0, elementBits, b.Length / ((int)elementBits >> 3));
+    }
+
     public static IEnumerable<T> ReadMany<T>(this byte[] b, uint startBitIndex, uint elementBits, int count)
     {
         return b.ReadMany<T>(startBitIndex, elementBits, count, null);
@@ -91,28 +90,114 @@ public static class ByteArrayExtensions
         return ulong.Parse(new string(b.Read<byte[]>(startByteIndex * 8, numBytes * 8).SelectMany(bcd => bcd.ToString("X2")).ToArray()));
     }
 
-    public static byte[,] DecodeTile(this byte[] data, int bitDepth)
+    public static byte[,] DecodeTile(this byte[] data, int bitsPerPixel, uint width = 8, uint height = 8)
     {
-        var tile = new byte[8, 8];
+        if (width % 8 != 0 || height % 8 != 0)
+            throw new InvalidOperationException("Dimensions must be multiple of 8");
 
-        for (var y = 0u; y < 8; y++)
+        var tile = new byte[width, height];
+        var spanData = data.AsSpan();
+        uint x = 0;
+        uint y = 0;
+        int bitPlane3Offset = (int)(width / 4 * height);
+
+
+        switch (bitsPerPixel)
         {
-            for (var x = 0u; x < 8; x++)
-            {
-                byte color = bitDepth switch
+            case 1:
+                foreach (var row in  data)
                 {
-                    1 => data.Read<byte>(y * 8 + (7 - x), 1),
-                    2 => (byte)(data.Read<byte>(y * 16 + (7 - x), 1) | (data.Read<byte>(y * 16 + (7 - x) + 8, 1) << 1)),
-                    3 => (byte)(data.Read<byte>(y * 16 + (7 - x), 1) | (data.Read<byte>(y * 16 + (7 - x) + 8, 1) << 1) | (data.Read<byte>(128 + y * 8 + (7 - x), 1) << 2)),
-                    4 => (byte)(data.Read<byte>(y * 16 + (7 - x), 1) | (data.Read<byte>(y * 16 + (7 - x) + 8, 1) << 1) | (data.Read<byte>(128 + y * 16 + (7 - x), 1) << 2) | (data.Read<byte>(128 + y * 16 + (7 - x) + 8, 1) << 3)),
-                    _ => 0,
-                };
+                    for (var p = 0; p < 8; p++)
+                    {
+                        tile[x + p, y] = row.GetPixel(p);
+                    }
 
-                tile[x, y] = color;
-            }
+                    y += (x + 8) / width;
+                    x = (x + 8) % width;
+                }
+                break;
+            case 2:
+                foreach (var row in MemoryMarshal.Cast<byte, ushort>(spanData))
+                {
+                    for (var p = 0; p < 8; p++)
+                        tile[x + p, y] = row.GetPixel(p);
+
+                    y += (x + 8) / width;
+                    x = (x + 8) % width;
+                }
+                break;
+            case 3:
+                foreach (var row in MemoryMarshal.Cast<byte, ushort>(spanData[..bitPlane3Offset]))
+                {
+                    for (var p = 0; p < 8; p++)
+                        tile[x + p, y] = row.GetPixel(p);
+
+                    y += (x + 8) / width;
+                    x = (x + 8) % width;
+                }
+
+                x = y = 0;
+                foreach (var row in spanData[bitPlane3Offset..])
+                {
+                    for (var p = 0; p < 8; p++)
+                        tile[x + p, y] += (byte)(row.GetPixel(p) << 2);
+
+                    y += (x + 8) / width;
+                    x = (x + 8) % width;
+                }
+                break;
+
+            case 4:
+                foreach (var row in MemoryMarshal.Cast<byte, ushort>(spanData[..bitPlane3Offset]))
+                {
+                    for (var p = 0; p < 8; p++)
+                        tile[x + p, y] = row.GetPixel(p);
+
+                    y += (x + 8) / width;
+                    x = (x + 8) % width;
+                }
+
+                x = y = 0;
+                foreach (var row in MemoryMarshal.Cast<byte, ushort>(spanData[bitPlane3Offset..]))
+                {
+                    for (var p = 0; p < 8; p++)
+                        tile[x + p, y] |= (byte)(row.GetPixel(p) << 2);
+
+                    y += (x + 8) / width;
+                    x = (x + 8) % width;
+                }
+
+                break;
+            default:
+                throw new InvalidOperationException();
         }
 
         return tile;
+    }
+
+    private static byte GetPixel(this ushort spriteRow, int x)
+        => (byte)(((spriteRow >> (7 - x)) & 0x01) | ((spriteRow >> (14 - x)) & 0x02));
+
+    private static byte GetPixel(this byte spriteRow, int x)
+        => (byte)((spriteRow >> (7 - x)) & 0x01);
+
+    public static Palette DecodePalette(this byte[] paletteData, Color32? colorZero = null)
+    {
+        bool first = true;
+        List<Color32> colors = [];
+        foreach (var color in MemoryMarshal.Cast<byte, ushort>(paletteData))
+        {
+            if (first && colorZero.HasValue)
+            {
+                colors.Add(colorZero.Value);
+                first = false;
+            }
+            else
+            {
+                colors.Add(color.ToColor());
+            }
+        }
+        return new Palette(colors);
     }
 
     private static byte[] SignExtend(this byte[] b, uint valueWidth, ByteOrder? order)

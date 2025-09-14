@@ -1,4 +1,5 @@
 ﻿using FF.Rando.Companion.Extensions;
+using FF.Rando.Companion.Settings;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel;
 

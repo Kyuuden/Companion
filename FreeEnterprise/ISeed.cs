@@ -1,5 +1,6 @@
 ﻿using FF.Rando.Companion.FreeEnterprise.RomData;
 using FF.Rando.Companion.FreeEnterprise.Settings;
+using FF.Rando.Companion.Settings;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -7,8 +8,7 @@ using System.Drawing;
 namespace FF.Rando.Companion.FreeEnterprise;
 public interface ISeed : IGame
 {
-    IEnumerable<ILocation> AvailableLocations { get; }
-    Color BackgroundColor { get; }
+    IEnumerable<ILocation> AvailableLocations { get; }    
     decimal? XpRate { get; }
     int TreasureCount { get; }
     IEnumerable<IBoss> Bosses { get; }
@@ -20,6 +20,7 @@ public interface ISeed : IGame
     IEnumerable<ICharacter> Party { get; }
     bool Victory { get; }
     new FreeEnterpriseSettings Settings { get; }
+    ISettings RootSettings { get; }
     RomData.Font Font { get; }
     Sprites Sprites { get; }
     bool CanTackBosses { get; }

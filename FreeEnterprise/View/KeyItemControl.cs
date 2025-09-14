@@ -1,5 +1,6 @@
 ﻿using FF.Rando.Companion.FreeEnterprise.RomData;
 using FF.Rando.Companion.FreeEnterprise.Settings;
+using FF.Rando.Companion.View;
 using KGySoft.Drawing.Imaging;
 using KGySoft.Drawing.Shapes;
 using System;
@@ -7,7 +8,7 @@ using System.ComponentModel;
 using System.Drawing;
 
 namespace FF.Rando.Companion.FreeEnterprise.View;
-public partial class KeyItemControl : ImageControl<IKeyItem>
+public partial class KeyItemControl : ImageControl<ISeed, IKeyItem>
 {
     private readonly FreeEnterpriseToolTip _toolTip;
 
@@ -34,30 +35,30 @@ public partial class KeyItemControl : ImageControl<IKeyItem>
 
     private void GenerateToolTip()
     {
-        var description = Seed.Font.RenderText(Value.Description, TextMode.Normal, 28);
+        var description = Game.Font.RenderText(Value.Description, TextMode.Normal, 28);
         IReadableBitmapData? found = null;
         IReadableBitmapData? used = null;
         if (Value.IsFound)
         {
             found = Value.WhenFound.HasValue && Value.WhenFound > TimeSpan.Zero
-                ? Seed.Font.RenderText($"Received at {Value.WhenFound.Value.ToString("hh':'mm':'ss'.'ff")} from {Value.WhereFound ?? ""}", TextMode.Special, 28)
-                : Seed.Font.RenderText($"Received from:\n{Value.WhereFound ?? ""}", TextMode.Special, 28);
+                ? Game.Font.RenderText($"Received at {Value.WhenFound.Value.ToString("hh':'mm':'ss'.'ff")} from {Value.WhereFound ?? ""}", TextMode.Special, 28)
+                : Game.Font.RenderText($"Received from:\n{Value.WhereFound ?? ""}", TextMode.Special, 28);
             if (!Value.IsUsed)
-                used = Seed.Font.RenderText("(unused)", TextMode.Highlighted, 28);
+                used = Game.Font.RenderText("(unused)", TextMode.Highlighted, 28);
             else if (Value.WhenUsed.HasValue && Value.WhenUsed > TimeSpan.Zero)
-                used = Seed.Font.RenderText($"Used at {Value.WhenUsed.Value.ToString("hh':'mm':'ss'.'ff")}", TextMode.Special, 28);
+                used = Game.Font.RenderText($"Used at {Value.WhenUsed.Value.ToString("hh':'mm':'ss'.'ff")}", TextMode.Special, 28);
         }
         else
         {
-            found = Seed.Font.RenderText("(not yet found)", TextMode.Disabled, 28);
+            found = Game.Font.RenderText("(not yet found)", TextMode.Disabled, 28);
         }
 
         var toolTipImage = BitmapDataFactory.CreateBitmapData(new Size(240, Value.IsUsed && Value.WhenUsed > TimeSpan.Zero ? 80 : 64));
-        toolTipImage.FillRectangle(Seed.BackgroundColor, new Rectangle(default, toolTipImage.Size));
+        toolTipImage.FillRectangle(Game.BackgroundColor, new Rectangle(default, toolTipImage.Size));
 
         var border = Value.IsUsed && Value.WhenUsed > TimeSpan.Zero
-            ? Seed.Font.RenderBox(30, 10)
-            : Seed.Font.RenderBox(30, 8);
+            ? Game.Font.RenderBox(30, 10)
+            : Game.Font.RenderBox(30, 8);
         border.DrawInto(toolTipImage);
 
         description.DrawInto(toolTipImage, new Point(8, 8));

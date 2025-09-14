@@ -72,8 +72,6 @@ internal class Boss : IBoss
         return false;
     }
 
-    public bool IsGameAsset => false;
-
     public IEnumerable<IEncounter> Encounters => _encounters.Values;
 
     private void SetImage()

@@ -29,7 +29,7 @@ item palette map:
 10 = 3d924
 
 Resistances:
-sprites start at 0x21840
+sprites start at 0x21840 (alternates at 0x80F00)
 palettes: 0x3d7f4, 0x3d804, 0x3d814
 
 Character Palettes:
@@ -39,3 +39,93 @@ Kaeli		0x3d874
 Tristam		0x3d864
 Phoebe		0x3d854
 Reuben		0x3d844
+
+grescale palettes:
+3da34
+3dac4
+
+
+
+        /*
+
+        var skyFragmentsMarker = ;
+        var pazuzuMarker = ;
+        var resistsMarker = ;
+        var kaeiliMarker = _textConverter.TextToByte("Kaeli", true);
+        var tristamMarker = _textConverter.TextToByte("Tristam", true);
+        var phoebeMarker = _textConverter.TextToByte("Phoebe", true);
+        var reubenMarker = _textConverter.TextToByte("Reuben", true);
+
+
+        int? skyfragmentsPos = null;
+        int? pazuzuPos = null;
+        int? resistsPos = null;
+        int? kaeiliPos = null;
+        int? tristamPos = null;
+        int? phoebePos = null;
+        int? reubenPos = null;
+
+        for (var i = 0; i < gameinfo.Length; i++)
+        {
+            if (skyfragmentsPos == null &&
+                i + skyFragmentsMarker.Length < gameinfo.Length &&
+                gameinfo[i..(i + skyFragmentsMarker.Length)].SequenceEqual(skyFragmentsMarker))
+                skyfragmentsPos = i + skyFragmentsMarker.Length + 4 + 13;
+
+            if (pazuzuPos == null &&
+                i + pazuzuMarker.Length < gameinfo.Length &&
+                gameinfo[i..(i + pazuzuMarker.Length)].SequenceEqual(pazuzuMarker))
+                pazuzuPos = i;
+
+            if (resistsPos == null &&
+                i + resistsMarker.Length < gameinfo.Length &&
+                gameinfo[i..(i + resistsMarker.Length)].SequenceEqual(resistsMarker))
+                resistsPos = i + resistsMarker.Length + 4;
+
+            if (kaeiliPos == null &&
+                i + kaeiliMarker.Length < gameinfo.Length &&
+                gameinfo[i..(i + kaeiliMarker.Length)].SequenceEqual(kaeiliMarker))
+                kaeiliPos = i + kaeiliMarker.Length + 4;
+
+            if (tristamPos == null &&
+                i + tristamMarker.Length < gameinfo.Length &&
+                gameinfo[i..(i + tristamMarker.Length)].SequenceEqual(tristamMarker))
+                tristamPos = i + tristamMarker.Length + 4;
+
+            if (phoebePos == null &&
+                i + phoebeMarker.Length < gameinfo.Length &&
+                gameinfo[i..(i + phoebeMarker.Length)].SequenceEqual(phoebeMarker))
+                phoebePos = i + phoebeMarker.Length + 4;
+
+            if (reubenPos == null &&
+                i + reubenMarker.Length < gameinfo.Length &&
+                gameinfo[i..(i + reubenMarker.Length)].SequenceEqual(reubenMarker))
+                reubenPos = i + reubenMarker.Length + 4;
+        }
+
+
+
+        if (pazuzuPos.HasValue)
+            _randomizedPazuzu = true;
+
+        if (resistsPos.HasValue)
+        {
+            var currentPosition = resistsPos.Value;
+
+            while (gameinfo[currentPosition + 3] == 0xDC)
+            {
+                try
+                {
+                    var originalElement = GetElement(gameinfo.Read<uint>(currentPosition * 8, 24));
+                    var newElement = GetElement(gameinfo.Read<uint>((currentPosition + 4) * 8, 24));
+
+                    _elements.Add(originalElement, newElement);
+
+                    currentPosition += 8;
+                }
+                catch
+                {
+                    break;
+                }
+            }
+        }*/

@@ -1,5 +1,6 @@
 ﻿using FF.Rando.Companion.FreeEnterprise._5._0._0;
-using FF.Rando.Companion.FreeEnterprise.Settings;
+using FF.Rando.Companion.Settings;
+using FF.Rando.Companion.View;
 using KGySoft.CoreLibraries;
 using System;
 using System.Collections.Generic;
@@ -47,27 +48,26 @@ public partial class FreeEnterpriseControl : UserControl
 
     private void Seed_ButtonPressed(string obj)
     {
-        var keyBindings = _seed?.Settings?.KeyBindings;
-        if (keyBindings == null || _scrollables.Count == 0 || !_scrollables.TryGetElementAt(_scrollIndex, out var target))
+        if (_seed?.RootSettings == null || _scrollables.Count == 0 || !_scrollables.TryGetElementAt(_scrollIndex, out var target))
             return;
 
-        if (target.CanScroll && obj.Equals(keyBindings.NextPageButton, StringComparison.InvariantCultureIgnoreCase))
+        if (target.CanScroll && obj.Equals(_seed.RootSettings.NextPageButton, StringComparison.InvariantCultureIgnoreCase))
         {
             target.ScrollRight();
         }
-        else if (target.CanScroll && obj.Equals(keyBindings.PreviousPageButton, StringComparison.InvariantCultureIgnoreCase))
+        else if (target.CanScroll && obj.Equals(_seed.RootSettings.PreviousPageButton, StringComparison.InvariantCultureIgnoreCase))
         {
             target.ScrollLeft();
         }
-        else if (target.CanScroll && obj.Equals(keyBindings.ScrollDownButton, StringComparison.InvariantCultureIgnoreCase))
+        else if (target.CanScroll && obj.Equals(_seed.RootSettings.ScrollDownButton, StringComparison.InvariantCultureIgnoreCase))
         {
             target.ScrollDown();
         }
-        else if (target.CanScroll && obj.Equals(keyBindings.ScrollUpButton, StringComparison.InvariantCultureIgnoreCase))
+        else if (target.CanScroll && obj.Equals(_seed.RootSettings.ScrollUpButton, StringComparison.InvariantCultureIgnoreCase))
         {
             target.ScrollUp();
         }
-        else if (obj.Equals(keyBindings.NextPanelButton, StringComparison.InvariantCultureIgnoreCase))
+        else if (obj.Equals(_seed.RootSettings.NextPanelButton, StringComparison.InvariantCultureIgnoreCase))
         {
             target.IsEnabledForScrolling = false;
             _scrollIndex = (_scrollIndex + 1) % _scrollables.Count;

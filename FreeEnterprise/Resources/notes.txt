@@ -1,0 +1,41 @@
+0x0687D0
+
+
+
+player_field_sprite_palette_data		0x068000
+generic_field_sprite_palette_data		0x068040
+npc_field_sprite_palette_data			0x0680D0
+
+
+681c0 - greyscale palette
+
+4 tiles for look down
+4 tiles for look up
+4 tiles for walk 1
+4 tiles for walk 2
+
+dc8000 - fabul gauntlet
+
+
+
+npc sprites start at Db300 run until DFFE0: 3bpp
+noc sprite palettes start at 680D0 until 681f0. 0xF bytes per. (18 palettes total)
+
+Dead golbez: tiles 784-787, palette 2
+Crystal: tiles 480-495 (4 frames), palette 2 or 8
+
+Cave sprite data: starts at 0F0020, 3bpp
+Chest open: tiles 215-218 (starts at f1448)
+Chest closed: tiles 213, 214, 217, 218 (f1418, f1478)
+
+Palette data: A5300 - A6D00. Red chest: a5f70
+
+
+Key items: Crystal
+Defeated boss count: Dead Golbez
+Treasure count: Open red chest
+XP rate?
+
+
+
+ |  |  |  | 

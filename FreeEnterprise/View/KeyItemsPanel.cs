@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows.Forms;
 using FF.Rando.Companion.FreeEnterprise.Settings;
+using FF.Rando.Companion.View;
 
 namespace FF.Rando.Companion.FreeEnterprise.View;
 public partial class KeyItemsPanel : FlowPanel<KeyItemSettings>
@@ -14,7 +15,7 @@ public partial class KeyItemsPanel : FlowPanel<KeyItemSettings>
     public override DockStyle DefaultDockStyle => DockStyle.Top;
 
     protected override Control[] GenerateControls(ISeed seed) 
-        => (Seed?.KeyItems ?? []).Select(ki => new KeyItemControl(seed, Settings!, ki)).ToArray();
+        => (Game?.KeyItems ?? []).Select(ki => new KeyItemControl(seed, Settings!, ki)).ToArray();
 
     protected override void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
     {

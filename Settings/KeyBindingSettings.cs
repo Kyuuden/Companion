@@ -6,7 +6,7 @@ using System.ComponentModel;
 using System.Drawing.Design;
 using System.Runtime.CompilerServices;
 
-namespace FF.Rando.Companion.FreeEnterprise.Settings;
+namespace FF.Rando.Companion.Settings;
 public class KeyBindingSettings : INotifyPropertyChanged
 {
     protected JToken SettingsData { get; }
@@ -96,5 +96,10 @@ public class KeyBindingSettings : INotifyPropertyChanged
     protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    public override string ToString()
+    {
+        return "";
     }
 }

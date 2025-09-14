@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace FF.Rando.Companion.FreeEnterprise.View;
+namespace FF.Rando.Companion.View;
 internal interface IScrollablePanel : IPanel
 {
     bool IsEnabledForScrolling { get; set; }

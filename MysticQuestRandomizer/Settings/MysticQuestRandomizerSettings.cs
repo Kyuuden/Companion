@@ -1,10 +1,6 @@
 ﻿using FF.Rando.Companion.Settings;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace FF.Rando.Companion.MysticQuestRandomizer.Settings;
 internal class MysticQuestRandomizerSettings : GameSettings
@@ -16,5 +12,25 @@ internal class MysticQuestRandomizerSettings : GameSettings
     public MysticQuestRandomizerSettings(JObject parent)
         : base(parent)
     {
+        Equipment = new EquipmentSettings(SettingsData);
+        Elements = new ElementsSettings(SettingsData);
+        Companions = new CompanionsSettings(SettingsData);
+
     }
+
+    [DisplayName("Equipment")]
+    [TypeConverter(typeof(ExpandableObjectConverter))]
+    [Description("Tracking of found Weapons, Armors, Spells, and Key Items.")]
+    public EquipmentSettings Equipment { get; }
+
+    [DisplayName("Elements")]
+    [TypeConverter(typeof(ExpandableObjectConverter))]
+    [Description("Tracking of Randomized Elemental Weaknesses.")]
+    public ElementsSettings Elements{ get; }
+
+    [DisplayName("Companions")]
+    [TypeConverter(typeof(ExpandableObjectConverter))]
+    [Description("Tracking of Companions' Spells and Quests.")]
+    public CompanionsSettings Companions { get; }
 }
+

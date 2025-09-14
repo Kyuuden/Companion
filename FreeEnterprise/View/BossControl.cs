@@ -1,5 +1,6 @@
 ﻿using FF.Rando.Companion.FreeEnterprise.RomData;
 using FF.Rando.Companion.FreeEnterprise.Settings;
+using FF.Rando.Companion.View;
 using KGySoft.Drawing.Imaging;
 using KGySoft.Drawing.Shapes;
 using System;
@@ -9,7 +10,7 @@ using System.Drawing;
 using System.Linq;
 
 namespace FF.Rando.Companion.FreeEnterprise.View;
-public partial class BossControl : ImageControl<IBoss>
+public partial class BossControl : ImageControl<ISeed, IBoss>
 {
     private readonly FreeEnterpriseToolTip _toolTip;
 
@@ -35,25 +36,25 @@ public partial class BossControl : ImageControl<IBoss>
 
     private void GenerateToolTip()
     {
-        var description = Seed.Font.RenderText(Value.Name, TextMode.Normal, 28);
+        var description = Game.Font.RenderText(Value.Name, TextMode.Normal, 28);
         var encounters = new List<IReadableBitmapData>();
 
         if (Value.Encounters.Any())
         {
             foreach (var encounter in Value.Encounters)
             {
-                encounters.Add(Seed.Font.RenderText($"Found {(encounter.IsDefeated ? "and defeated " : "")} in {encounter.Location}", TextMode.Special, 36));
+                encounters.Add(Game.Font.RenderText($"Found {(encounter.IsDefeated ? "and defeated " : "")} in {encounter.Location}", TextMode.Special, 36));
             }
         }
         else
         {
-            encounters.Add(Seed.Font.RenderText("(not yet found)", TextMode.Disabled, 28));
+            encounters.Add(Game.Font.RenderText("(not yet found)", TextMode.Disabled, 28));
         }
 
         var toolTipImage = BitmapDataFactory.CreateBitmapData(new Size(304, Math.Max(64, encounters.Sum(e=> e.Height + 8) + 32)));
-        toolTipImage.FillRectangle(Seed.BackgroundColor, new Rectangle(default, toolTipImage.Size));
+        toolTipImage.FillRectangle(Game.BackgroundColor, new Rectangle(default, toolTipImage.Size));
 
-        var border = Seed.Font.RenderBox(38, toolTipImage.Height / 8);
+        var border = Game.Font.RenderBox(38, toolTipImage.Height / 8);
         border.DrawInto(toolTipImage);
 
         description.DrawInto(toolTipImage, new Point(8, 8));

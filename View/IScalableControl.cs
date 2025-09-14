@@ -1,4 +1,4 @@
-﻿namespace FF.Rando.Companion.FreeEnterprise.View;
+﻿namespace FF.Rando.Companion.View;
 
 public interface IScalableControl
 {
