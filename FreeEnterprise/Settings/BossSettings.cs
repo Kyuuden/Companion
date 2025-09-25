@@ -4,11 +4,8 @@ using System.ComponentModel;
 
 namespace FF.Rando.Companion.FreeEnterprise.Settings;
 
-public class BossSettings : PanelSettings
+public class BossSettings(JToken jToken) : PanelSettings(jToken)
 {
-    public BossSettings(JToken jToken)
-        : base(jToken) { }
-
     [Browsable(false)]
     public override string Name => "Bosses";
 

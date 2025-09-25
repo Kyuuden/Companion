@@ -9,17 +9,15 @@ namespace FF.Rando.Companion.FreeEnterprise._5._0._0;
 
 internal class Task : ITask
 {
-    private readonly RomData.Task _task;
     private bool _completed = false;
-    private int? _required;
+    private readonly int? _required;
     private int _current = 0;
 
-    private string _baseDescription;
+    private readonly string _baseDescription;
     private TimeSpan? _completedAt;
 
     internal Task(Descriptors descriptors, RomData.Task task, IEnumerable<RomData.GroupObjectives> groups)
     {
-        _task = task;
         _baseDescription = descriptors.GetTaskDescription(task);
 
         switch (task)

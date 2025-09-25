@@ -21,7 +21,7 @@ public abstract class ScrollablePanel<TGame, TSettings> : PictureBox, IPanel, IS
     private bool _canScrollUp;
     private int _pageIndex;
 
-    private List<List<IReadableBitmapData>> _pageBitmapData = [];
+    private readonly List<List<IReadableBitmapData>> _pageBitmapData = [];
     private bool canScroll;
 
     public event EventHandler? CanScrollChanged;

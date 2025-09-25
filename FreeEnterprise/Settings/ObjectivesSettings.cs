@@ -1,17 +1,11 @@
 ﻿using FF.Rando.Companion.Settings;
-using FF.Rando.Companion.Settings.Editor;
-using FF.Rando.Companion.Settings.TypeConverters;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel;
-using System.Drawing.Design;
 
 namespace FF.Rando.Companion.FreeEnterprise.Settings;
 
-public class ObjectivesSettings : PanelSettings
+public class ObjectivesSettings(JToken jToken) : PanelSettings(jToken)
 {
-    public ObjectivesSettings(JToken jToken)
-        : base(jToken) { }
-
     public override string Name => "Objectives";
 
     [DisplayName("Combine Objective Groups")]

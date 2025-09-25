@@ -1,7 +1,7 @@
-﻿using System.ComponentModel;
-using System.Drawing;
-using FF.Rando.Companion.FreeEnterprise.Settings;
+﻿using FF.Rando.Companion.FreeEnterprise.Settings;
 using FF.Rando.Companion.View;
+using System.ComponentModel;
+using System.Drawing;
 
 namespace FF.Rando.Companion.FreeEnterprise.View;
 

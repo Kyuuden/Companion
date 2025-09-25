@@ -9,7 +9,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Runtime;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -17,23 +16,23 @@ namespace FF.Rando.Companion;
 
 [ExternalToolEmbeddedIcon("FF.Rando.Companion.Resources.Crystal.png")]
 [ExternalTool("Final Fantasy Rando Companion", 
-    Description = "An autotracker (currently) for Free Enterprise, a Final Fantasy IV randomizer")]
+    Description = "An autotracker for Free Enterprise (A Final Fantasy IV randomizer) and Final Fantasy Mystic Quest Randomizer. ")]
 public partial class MainForm : ToolFormBase, IExternalToolForm
 {
     protected override string WindowTitleStatic => "Final Fantasy Rando Companion";
 
-    public ApiContainer? _maybeAPIContainer { get; set; }
+    public ApiContainer? MaybeAPIContainer { get; set; }
 
-    private ApiContainer APIs => _maybeAPIContainer!;
+    private ApiContainer APIs => MaybeAPIContainer!;
 
-    private ISettings _settings;
+    private readonly ISettings _settings;
 
     [OptionalService]
-    public IMemoryDomains? _memoryDomains { get; set; }
+    public IMemoryDomains? MemoryDomains { get; set; }
 
     private bool _parentFormLinked = false;
 
-    private GameViewModel _viewModel;
+    private readonly GameViewModel _viewModel;
     private IGame? _game;
 
     public MainForm() 
@@ -223,7 +222,7 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
         base.OnLoad(e);
 
         _viewModel.APIs = APIs;
-        _viewModel.MemoryDomains = _memoryDomains;
+        _viewModel.MemoryDomains = MemoryDomains;
 
         DockToScreen();
         if (!_parentFormLinked)
@@ -279,7 +278,7 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
     public override void Restart()
     {
         _viewModel.APIs = APIs;
-        _viewModel.MemoryDomains = _memoryDomains;
+        _viewModel.MemoryDomains = MemoryDomains;
         _viewModel.Initialize(Game);
     }
 
@@ -312,8 +311,12 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 string path = Directory.GetCurrentDirectory();
-                var updater = new ProcessStartInfo() { FileName = path + Paths.UpdaterPath, UseShellExecute = false };
-                updater.WorkingDirectory = (path + Paths.UpdaterFolderPath);
+                var updater = new ProcessStartInfo
+                {
+                    FileName = path + Paths.UpdaterPath,
+                    UseShellExecute = false,
+                    WorkingDirectory = (path + Paths.UpdaterFolderPath)
+                };
                 Process.Start(updater);
                 Application.Exit();
             }

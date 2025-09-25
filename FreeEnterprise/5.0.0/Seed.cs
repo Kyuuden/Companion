@@ -26,17 +26,11 @@ internal class Seed : SeedBase
 
         if (Flags.Binary != null)
         {
-            switch (metadata.Version)
+            _flags = metadata.Version switch
             {
-                case "v5.0.0-a.1":
-                    _flags = new FlagsAlpha1(Flags.Binary);
-                    break;
-                case "v5.0.0-a.2":
-                default:
-                    _flags = new FlagsAlpha2(Flags.Binary);
-                    break;
-            }
-
+                "v5.0.0-a.1" => new FlagsAlpha1(Flags.Binary),
+                _ => new FlagsAlpha2(Flags.Binary),
+            };
             XpRate = 1;
         }
 
@@ -113,7 +107,7 @@ internal class Seed : SeedBase
             if (_objectives.Update(time, objectiveTaskProgress, objectiveGroupProress))
                 NotifyPropertyChanged(nameof(Objectives));
 
-            if (_bosses.Update(time, bossLocations, bossDefeated, bossLocationsDefeated))
+            if (_bosses.Update(time, bossLocations, bossLocationsDefeated))
             {
                 DefeatedEncounters = _bosses.Items.SelectMany(b => b.Encounters).Count(e => e.IsDefeated);
                 NotifyPropertyChanged(nameof(Bosses));

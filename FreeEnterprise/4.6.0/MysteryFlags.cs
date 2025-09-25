@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FF.Rando.Companion.FreeEnterprise._4._6._0;
+﻿namespace FF.Rando.Companion.FreeEnterprise._4._6._0;
 internal class MysteryFlags : IFlags
 {
     public bool CClassicGiant => false;

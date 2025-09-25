@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 
 namespace FF.Rando.Companion.View;
 internal interface IScrollablePanel : IPanel

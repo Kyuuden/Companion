@@ -1,23 +1,23 @@
 ﻿using FF.Rando.Companion.FreeEnterprise.RomData;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Drawing;
-using System.Windows.Forms;
-using System.Collections.Immutable;
 using FF.Rando.Companion.FreeEnterprise.Settings;
-using System.Diagnostics;
 using FF.Rando.Companion.FreeEnterprise.View;
 using FF.Rando.Companion.Settings;
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Windows.Forms;
 
 namespace FF.Rando.Companion.FreeEnterprise;
 
 internal abstract class SeedBase : ISeed
 {
     private Color _backgroundColor = Color.FromArgb(0, 0, 99);
-    private Stopwatch _stopwatch = new Stopwatch();
+    private readonly Stopwatch _stopwatch = new();
     private bool _started = false;
     private bool _victory = false;
     private decimal? _xpRate = null;
@@ -160,11 +160,9 @@ internal abstract class SeedBase : ISeed
 
     public SeedBase(string hash, Metadata metadata, Container container)
     {
-        if (container == null) throw new ArgumentNullException(nameof(container));
-
         Hash = hash ?? throw new ArgumentNullException(nameof(hash));
         Metadata = metadata ?? throw new ArgumentNullException(nameof(metadata));
-        Game = container;
+        Game = container ?? throw new ArgumentNullException(nameof(container));
 
         Font = new RomData.Font(Game.Rom);
         Sprites = new Sprites(Game.Rom);
@@ -183,7 +181,7 @@ internal abstract class SeedBase : ISeed
     {
         var code = base64[0];
 
-        base64 = base64.Substring(1);
+        base64 = base64[1..];
         while (base64.Length % 4 != 0)
             base64 += '=';
         base64 = base64.Replace('-', '+').Replace('_', '/');

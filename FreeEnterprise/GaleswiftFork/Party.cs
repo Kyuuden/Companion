@@ -7,20 +7,18 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace FF.Rando.Companion.FreeEnterprise.GaleswiftFork;
-internal class Party : IDisposable
+internal class Party(PartySettings settings, Sprites sprites, bool? vanillaAgility, bool? chero) : IDisposable
 {
-    private readonly IReadOnlyList<Character> _characters;
-    private bool? _vanillaAgility;
-    private bool? _chero;
+    private readonly IReadOnlyList<Character> _characters = 
+    [
+        new Character(settings, sprites), 
+        new Character(settings, sprites), 
+        new Character(settings, sprites), 
+        new Character(settings, sprites), 
+        new Character(settings, sprites)
+    ];
 
     internal IReadOnlyList<Character> Characters => _characters;
-
-    public Party(PartySettings settings, Sprites sprites, bool? vanillaAgility, bool? chero)
-    {
-        _vanillaAgility = vanillaAgility;
-        _chero = chero;
-        _characters = [new Character(settings, sprites), new Character(settings, sprites), new Character(settings, sprites), new Character(settings, sprites), new Character(settings, sprites)];
-    }
 
     public bool Update(TimeSpan time, ReadOnlySpan<byte> currentParty)
     {
@@ -42,13 +40,13 @@ internal class Party : IDisposable
             }
         }
 
-        if (updated && _chero.HasValue && _vanillaAgility.HasValue)
+        if (updated && chero.HasValue && vanillaAgility.HasValue)
         {
             Character? anchor = null;
-            if (_vanillaAgility.Value)
+            if (vanillaAgility.Value)
                 anchor = Characters.OrderBy(c=>c.Slot).FirstOrDefault(c => c.Id != 0 && (c.Type == CharacterType.Cecil || c.Type == CharacterType.DarkKnightCecil));
 
-            if (anchor == null && _chero.Value)
+            if (anchor == null && chero.Value)
                 anchor = Characters.OrderBy(c => c.Slot).FirstOrDefault(c => c.Id == 1);
 
             anchor ??= Characters.OrderBy(c => c.Slot).FirstOrDefault(c => c.Id != 0);

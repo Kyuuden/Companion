@@ -1,6 +1,6 @@
-﻿using System;
+﻿using FF.Rando.Companion.Settings;
+using System;
 using System.Windows.Forms;
-using FF.Rando.Companion.Settings;
 
 namespace FF.Rando.Companion.View;
 

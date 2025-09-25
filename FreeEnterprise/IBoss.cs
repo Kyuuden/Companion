@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using FF.Rando.Companion.View;
+﻿using FF.Rando.Companion.View;
+using System.Collections.Generic;
 
 namespace FF.Rando.Companion.FreeEnterprise;
 

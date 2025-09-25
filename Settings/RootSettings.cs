@@ -17,7 +17,7 @@ namespace FF.Rando.Companion.Settings;
 
 public class RootSettings : ISettings
 {
-    private static string FileName = "FF.Rando.Companion.Settings.json";
+    private static readonly string FileName = "FF.Rando.Companion.Settings.json";
 
     private readonly Dictionary<string, GameSettings> _gameSettings = [];
 

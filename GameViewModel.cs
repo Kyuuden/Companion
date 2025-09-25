@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows.Forms;
 
 namespace FF.Rando.Companion;
 
@@ -15,7 +14,7 @@ public class GameViewModel : INotifyPropertyChanged
     private IGame? _game;
     private ApiContainer? _apiContainer;
     private IMemoryDomains? _memoryDomains;
-    private ISettings _settings;
+    private readonly ISettings _settings;
     private readonly List<IGameParser> _gameParsers;
 
     public GameViewModel(ISettings settings)
@@ -33,7 +32,7 @@ public class GameViewModel : INotifyPropertyChanged
         }
     }
 
-    private IEmulationContainer? _emulationContainer { get; set; }
+    private IEmulationContainer? _emulationContainer;
 
     public IGame? Game
     {

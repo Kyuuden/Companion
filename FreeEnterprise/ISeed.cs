@@ -3,7 +3,6 @@ using FF.Rando.Companion.FreeEnterprise.Settings;
 using FF.Rando.Companion.Settings;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 
 namespace FF.Rando.Companion.FreeEnterprise;
 public interface ISeed : IGame

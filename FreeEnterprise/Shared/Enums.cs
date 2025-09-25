@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace FF.Rando.Companion.FreeEnterprise.Shared;
+﻿namespace FF.Rando.Companion.FreeEnterprise.Shared;
 
 public enum CharacterType : uint
 {

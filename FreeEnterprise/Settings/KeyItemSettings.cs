@@ -1,17 +1,11 @@
-﻿using FF.Rando.Companion.Extensions;
-using FF.Rando.Companion.Settings;
+﻿using FF.Rando.Companion.Settings;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel;
 
 namespace FF.Rando.Companion.FreeEnterprise.Settings;
 
-public class KeyItemSettings : PanelSettings
+public class KeyItemSettings(JToken jToken) : PanelSettings(jToken)
 {
-    public KeyItemSettings(JToken jToken)
-    : base(jToken)
-    {
-    }
-
     [Description("How to show key items, either text (like the track in-game menu) or icons.")]
     [DefaultValue(KeyItemStyle.Text)]
     public KeyItemStyle KeyItemStyle

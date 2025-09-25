@@ -3,27 +3,18 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace FF.Rando.Companion.FreeEnterprise.GaleswiftFork;
-internal class Location : ILocation
+internal class Location(RewardSlot type, World world, string description, bool isKI, bool isChar) : ILocation
 {
     private bool _isAvailable;
     private bool _isChecked;
 
-    public Location(RewardSlot type, World world, string description, bool isKI, bool isChar)
-    {
-        ID = (int)type;
-        Description = description;
-        IsCharacter = isChar;
-        IsKeyItem = isKI;
-        World = world;
-    }
+    public int ID { get; } = (int)type;
 
-    public int ID { get; }
+    public string Description { get; } = description;
 
-    public string Description { get; }
+    public bool IsCharacter { get; } = isChar;
 
-    public bool IsCharacter { get; }
-
-    public bool IsKeyItem { get; }
+    public bool IsKeyItem { get; } = isKI;
 
     public bool IsBoss { get; }
 
@@ -55,7 +46,7 @@ internal class Location : ILocation
         }
     }
 
-    public World World { get; }
+    public World World { get; } = world;
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

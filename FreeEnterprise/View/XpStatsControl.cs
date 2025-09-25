@@ -3,12 +3,8 @@ using KGySoft.Drawing.Imaging;
 
 namespace FF.Rando.Companion.FreeEnterprise.View;
 
-public class XpStatsControl : StatisticControl<decimal>
+public class XpStatsControl(ISeed seed, PanelSettings settings) : StatisticControl<decimal>(seed, settings)
 {
-    public XpStatsControl(ISeed seed, PanelSettings settings) : base(seed, settings)
-    {
-    }
-
     protected override string PropertyName => nameof(ISeed.XpRate);
 
     protected override IReadableBitmapData GetIcon() => Game.Sprites.GetEgg();

@@ -1,5 +1,4 @@
 ﻿using KGySoft.Drawing.Imaging;
-using System.Drawing;
 
 namespace FF.Rando.Companion.Extensions;
 

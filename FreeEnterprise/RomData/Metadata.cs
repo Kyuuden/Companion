@@ -13,7 +13,7 @@ public class Metadata
         Flags = o[nameof(Flags).ToSnakeCase()]?.ToObject<string>();
         BinaryFlags = o[nameof(BinaryFlags).ToSnakeCase()]?.ToObject<string>();
         Seed = o[nameof(Seed).ToSnakeCase()]?.ToObject<string>();
-        Objectives = (o[nameof(Objectives).ToSnakeCase()]?.Children().ToList() ?? new List<JToken>()).Select(ObjectiveFactory.Create).ToArray();
+        Objectives = (o[nameof(Objectives).ToSnakeCase()]?.Children().ToList() ?? []).Select(ObjectiveFactory.Create).ToArray();
     }
 
     public string? Version { get; }

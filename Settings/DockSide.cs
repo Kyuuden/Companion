@@ -4,6 +4,3 @@ public enum DockSide
 {
     Left, Right
 }
-
-
-

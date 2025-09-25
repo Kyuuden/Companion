@@ -11,6 +11,3 @@ public enum WindowStyle
     [Description("Dock (16x10)")]
     Dock_16x10
 }
-
-
-

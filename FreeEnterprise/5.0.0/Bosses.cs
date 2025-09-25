@@ -9,7 +9,6 @@ namespace FF.Rando.Companion.FreeEnterprise._5._0._0;
 internal class Bosses
 {
     private readonly Dictionary<BossType, Boss> _bosses;
-    private readonly IBossDescriptor _descriptors;
 
     public Bosses(IBossDescriptor descriptors)
     {
@@ -19,12 +18,11 @@ internal class Bosses
             .ToDictionary(t => t, t => new Boss(descriptors, t));
 
         _bosses[BossType.Altgauntlet] = _bosses[BossType.FabulGauntlet];
-        _descriptors = descriptors;
     }
 
     public IReadOnlyList<Boss> Items => _bosses.Where(v => v.Key != BossType.Altgauntlet).Select(v=> v.Value).ToList();
 
-    public bool Update(TimeSpan time, ReadOnlySpan<byte> locations, ReadOnlySpan<byte> defeated, ReadOnlySpan<byte> bossLocationsDefeated)
+    public bool Update(TimeSpan time, ReadOnlySpan<byte> locations, ReadOnlySpan<byte> bossLocationsDefeated)
     {
         var updated = false;
 
@@ -35,7 +33,7 @@ internal class Bosses
             if (bossId == 0xFF)
                 continue;
 
-            var location = _descriptors.GetLocationName((BossLocationType)i);
+            //var location = _descriptors.GetLocationName((BossLocationType)i);
 
             if (_bosses.TryGetValue((BossType)bossId, out var boss))
             {

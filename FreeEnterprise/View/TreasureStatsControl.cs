@@ -3,12 +3,8 @@ using KGySoft.Drawing.Imaging;
 
 namespace FF.Rando.Companion.FreeEnterprise.View;
 
-public class TreasureStatsControl : StatisticControl<int>
+public class TreasureStatsControl(ISeed seed, PanelSettings settings) : StatisticControl<int>(seed, settings)
 {
-    public TreasureStatsControl(ISeed seed, PanelSettings settings) : base(seed, settings)
-    {
-    }
-
     protected override string PropertyName => nameof(ISeed.TreasureCount);
 
     protected override IReadableBitmapData GetIcon() => Game.Sprites.GetChestImage(RomData.Chest.Open);

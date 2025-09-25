@@ -1,9 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Drawing.Design;
-using System.Windows.Forms.Design;
-using System.Windows.Forms;
 using System.Linq;
+using System.Windows.Forms;
+using System.Windows.Forms.Design;
 
 namespace FF.Rando.Companion.Settings.Editor;
 
@@ -16,8 +16,7 @@ internal class EnumListEditor<T> : UITypeEditor where T : Enum
 
     public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
     {
-        var service = provider?.GetService(typeof(IWindowsFormsEditorService)) as IWindowsFormsEditorService;
-        if (service == null)
+        if (provider?.GetService(typeof(IWindowsFormsEditorService)) is not IWindowsFormsEditorService service)
             return value;
 
         var currentValues = ((value as string)?.Split([',', ' ', ';'], StringSplitOptions.RemoveEmptyEntries) ?? Enumerable.Empty<string>())

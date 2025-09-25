@@ -1,8 +1,8 @@
-﻿using System.ComponentModel;
+﻿using FF.Rando.Companion.FreeEnterprise.Settings;
+using FF.Rando.Companion.View;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
-using FF.Rando.Companion.FreeEnterprise.Settings;
-using FF.Rando.Companion.View;
 
 namespace FF.Rando.Companion.FreeEnterprise.View;
 public partial class KeyItemsPanel : FlowPanel<KeyItemSettings>

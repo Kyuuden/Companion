@@ -1,6 +1,6 @@
-﻿using System.Drawing;
+﻿using FF.Rando.Companion.Settings;
+using System.Drawing;
 using System.Windows.Forms;
-using FF.Rando.Companion.Settings;
 
 namespace FF.Rando.Companion.FreeEnterprise.View;
 internal class FreeEnterpriseToolTip : ToolTip

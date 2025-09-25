@@ -1,6 +1,5 @@
 ﻿using FF.Rando.Companion.FreeEnterprise.RomData;
 using System;
-using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -11,7 +10,7 @@ internal abstract class LegacySeed : SeedBase
 {
     private const int ZeromusDeathAnimation = 0x03F591;
     private const int MenuSaveNewGame = 0x019914;
-    private const int MenuLoadSaveGame = 0x0198AD;
+    //private const int MenuLoadSaveGame = 0x0198AD;
 
     private enum RunState
     {
@@ -23,7 +22,7 @@ internal abstract class LegacySeed : SeedBase
     }
 
     private RunState _state;
-    private Timer _loadingTimer;
+    private readonly Timer _loadingTimer;
 
     protected bool IsLoading => _state == RunState.Loading;
 
@@ -32,7 +31,7 @@ internal abstract class LegacySeed : SeedBase
     protected abstract bool OWinGame { get; }
 
     public LegacySeed(string hash, Metadata metadata, Container container)
-    : base(hash, metadata, container)
+        : base(hash, metadata, container)
     {
         _state = RunState.Loading;
         _loadingTimer = new Timer
@@ -40,11 +39,11 @@ internal abstract class LegacySeed : SeedBase
             Enabled = true,
             Interval = 2000,
         };
-        _loadingTimer.Tick += _loadingTimer_Tick;
+        _loadingTimer.Tick += LoadingTimer_Tick;
         CreateCallbacks();
     }
 
-    private void _loadingTimer_Tick(object sender, EventArgs e)
+    private void LoadingTimer_Tick(object sender, EventArgs e)
     {
         _loadingTimer.Stop();
         _loadingTimer.Dispose();

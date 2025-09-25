@@ -1,15 +1,11 @@
-﻿using System;
-using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime;
-using System.Security.Policy;
-using System.Text;
-using BizHawk.Client.Common;
+﻿using BizHawk.Client.Common;
 using BizHawk.Emulation.Common;
 using FF.Rando.Companion.Extensions;
 using FF.Rando.Companion.FreeEnterprise.RomData;
 using FF.Rando.Companion.Settings;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Text;
 
 namespace FF.Rando.Companion.FreeEnterprise;
 

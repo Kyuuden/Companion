@@ -86,7 +86,7 @@ namespace FF.Rando.Companion
             this.ff4Link.TabIndex = 12;
             this.ff4Link.TabStop = true;
             this.ff4Link.Text = "FF4: Free Enterprise";
-            this.ff4Link.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ff4Link_LinkClicked);
+            this.ff4Link.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.FF4Link_LinkClicked);
             // 
             // ff4SourceLink
             // 
@@ -98,7 +98,7 @@ namespace FF.Rando.Companion
             this.ff4SourceLink.TabIndex = 14;
             this.ff4SourceLink.TabStop = true;
             this.ff4SourceLink.Text = "(source)";
-            this.ff4SourceLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ff4SourceLink_LinkClicked);
+            this.ff4SourceLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.FF4SourceLink_LinkClicked);
             // 
             // sotnToolsLink
             // 
@@ -110,7 +110,7 @@ namespace FF.Rando.Companion
             this.sotnToolsLink.TabIndex = 15;
             this.sotnToolsLink.TabStop = true;
             this.sotnToolsLink.Text = "SotnRandoTools";
-            this.sotnToolsLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.sotnToolsLink_LinkClicked);
+            this.sotnToolsLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.SotnToolsLink_LinkClicked);
             // 
             // updaterLink
             // 
@@ -122,7 +122,7 @@ namespace FF.Rando.Companion
             this.updaterLink.TabIndex = 16;
             this.updaterLink.TabStop = true;
             this.updaterLink.Text = "SimpleLatestReleaseUpdater";
-            this.updaterLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.updaterLink_LinkClicked);
+            this.updaterLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.UpdaterLink_LinkClicked);
             // 
             // schalaLink
             // 
@@ -134,7 +134,7 @@ namespace FF.Rando.Companion
             this.schalaLink.TabIndex = 17;
             this.schalaLink.TabStop = true;
             this.schalaLink.Text = "SchalaKitty";
-            this.schalaLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.schalaLink_LinkClicked);
+            this.schalaLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.SchalaLink_LinkClicked);
             // 
             // kgySoftLink
             // 
@@ -146,7 +146,7 @@ namespace FF.Rando.Companion
             this.kgySoftLink.TabIndex = 18;
             this.kgySoftLink.TabStop = true;
             this.kgySoftLink.Text = "KGySoft.Drawing";
-            this.kgySoftLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.kgySoftLink_LinkClicked);
+            this.kgySoftLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.KGySoftLink_LinkClicked);
             // 
             // updateButton
             // 
@@ -170,7 +170,7 @@ namespace FF.Rando.Companion
             this.ff6Link.TabIndex = 20;
             this.ff6Link.TabStop = true;
             this.ff6Link.Text = "FFVI: Worlds Collide";
-            this.ff6Link.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ff6Link_LinkClicked);
+            this.ff6Link.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.FF6Link_LinkClicked);
             // 
             // ffmqLink
             // 
@@ -182,7 +182,7 @@ namespace FF.Rando.Companion
             this.ffmqLink.TabIndex = 21;
             this.ffmqLink.TabStop = true;
             this.ffmqLink.Text = "Mystic Quest Randomizer";
-            this.ffmqLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ffmqLink_LinkClicked);
+            this.ffmqLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.FFmqLink_LinkClicked);
             // 
             // AboutDialog
             // 

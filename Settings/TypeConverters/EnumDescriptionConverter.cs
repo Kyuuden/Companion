@@ -5,15 +5,9 @@ using System.Reflection;
 
 namespace FF.Rando.Companion.Settings.TypeConverters;
 
-public class EnumDescriptionConverter : EnumConverter
+public class EnumDescriptionConverter(Type type) : EnumConverter(type)
 {
-    private Type _enumType;
-
-    public EnumDescriptionConverter(Type type)
-    : base(type)
-    {
-        _enumType = type;
-    }
+    private readonly Type _enumType = type;
 
     public override bool CanConvertTo(ITypeDescriptorContext context, Type destType)
     {
@@ -36,7 +30,6 @@ public class EnumDescriptionConverter : EnumConverter
     }
 
     public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
-
     {
         foreach (FieldInfo fi in _enumType.GetFields())
         {

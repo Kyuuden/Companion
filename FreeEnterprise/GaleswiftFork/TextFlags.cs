@@ -6,7 +6,7 @@ using System.Linq;
 namespace FF.Rando.Companion.FreeEnterprise.GaleswiftFork;
 internal class TextFlags : IFlags
 {
-    HashSet<uint> _hardRequiredObjectives = [];
+    private readonly HashSet<uint> _hardRequiredObjectives = [];
 
     public TextFlags(string flagString)
     {
@@ -51,7 +51,7 @@ internal class TextFlags : IFlags
             var miabs = keyItemFlags.FirstOrDefault(f => f.StartsWith("miab:", StringComparison.InvariantCultureIgnoreCase));
             if (miabs != null)
             {
-                var miabFlags = miabs.Substring(5).Split(',');
+                var miabFlags = miabs[5..].Split(',');
                 KMaibAbove = FlagExists("above", miabFlags);
                 KMaibAll = FlagExists("standard", miabFlags);
                 KMaibBelow = FlagExists("below", miabFlags);
@@ -89,7 +89,7 @@ internal class TextFlags : IFlags
             var xp = otherFlags.FirstOrDefault(f => f.StartsWith("exp:", StringComparison.InvariantCultureIgnoreCase));
             if (xp != null)
             {
-                var xpFlags = xp.Substring(4).Split(',');
+                var xpFlags = xp[4..].Split(',');
 
                 XCrystalBonus = FlagExists("crystalbonus", xpFlags);
                 XNoKeyBonus = FlagExists("nokeybonus", xpFlags);

@@ -1,14 +1,9 @@
 ﻿using System;
 
 namespace FF.Rando.Companion.FreeEnterprise.GaleswiftFork;
-internal class Descriptors : Companion.FreeEnterprise.Descriptors
+internal class Descriptors(IFlags? flags) : Companion.FreeEnterprise.Descriptors
 {
-    private readonly IFlags? _flags;
-
-    public Descriptors(IFlags? flags)
-    {
-        _flags = flags;
-    }
+    private readonly IFlags? _flags = flags;
 
     public string GetRewardSlotName(RewardSlot slot)
         => slot switch

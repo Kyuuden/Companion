@@ -1,5 +1,4 @@
 ﻿using BizHawk.Common;
-using System;
 
 namespace FF.Rando.Companion.Extensions;
 

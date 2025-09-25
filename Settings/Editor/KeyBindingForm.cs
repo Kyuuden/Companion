@@ -6,7 +6,7 @@ using System.Windows.Forms;
 namespace FF.Rando.Companion.Settings.TypeConverters;
 public partial class KeyBindingForm : FormBase
 {
-    private ToolTip tooltip;
+    private readonly ToolTip tooltip;
 
     public KeyBindingForm(ITypeDescriptorContext context, string? currentValue)
     {

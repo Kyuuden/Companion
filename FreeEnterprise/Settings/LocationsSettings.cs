@@ -4,12 +4,9 @@ using System.ComponentModel;
 
 namespace FF.Rando.Companion.FreeEnterprise.Settings;
 
-public class LocationsSettings : PanelSettings
+public class LocationsSettings(JToken jToken) : PanelSettings(jToken)
 {
     public override string Name => "Locations";
-
-    public LocationsSettings(JToken jToken)
-    : base(jToken) { }
 
     [DisplayName("Combine Location Types")]
     [Description("Display all location types at once (Will probably require scrolling)")]

@@ -84,9 +84,9 @@ internal class Objectives : IObjectiveGroup
 internal class Task : ITask
 {
     private bool _completed = false;
-    private int? _required;
+    private readonly int? _required;
     private int _current = 0;
-    private string _baseDescription;
+    private readonly string _baseDescription;
     private TimeSpan? _completedAt;
 
     internal Task(BasicObjective basicObjective)

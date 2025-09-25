@@ -69,7 +69,7 @@ public class ObjectivesPanel : ScrollablePanel<ObjectivesSettings>
             var num = Game.Font.RenderText($"{taskNum++,2}. ", taskColor);
 
             var description = task.IsCompleted && task.CompletedAt > TimeSpan.Zero
-                ? $"{task.Description} - {task.CompletedAt.Value.ToString("hh':'mm':'ss'.'ff")}"
+                ? $"{task.Description} - {task.CompletedAt.Value:hh':'mm':'ss'.'ff}"
                 : task.Description;
 
             var taskText = Game.Font.RenderText(description, taskColor, charWidth - 4);

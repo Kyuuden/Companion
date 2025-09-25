@@ -15,8 +15,8 @@ public static class ObjectiveFactory
         return new GroupObjectives(
             o[nameof(GroupObjectives.Key).ToSnakeCase()]?.ToObject<string>(),
             o[nameof(GroupObjectives.Name).ToSnakeCase()]?.ToObject<string>(),
-            (o[nameof(GroupObjectives.Tasks).ToSnakeCase()]?.Children().ToList() ?? new List<JToken>()).Select(TaskFactory.Create).ToArray(),
-            (o[nameof(GroupObjectives.Rewards).ToSnakeCase()]?.Children().ToList() ?? new List<JToken>()).Select(ob => new Reward(ob)).ToArray());
+            (o[nameof(GroupObjectives.Tasks).ToSnakeCase()]?.Children().ToList() ?? []).Select(TaskFactory.Create).ToArray(),
+            (o[nameof(GroupObjectives.Rewards).ToSnakeCase()]?.Children().ToList() ?? []).Select(ob => new Reward(ob)).ToArray());
     }
 }
 

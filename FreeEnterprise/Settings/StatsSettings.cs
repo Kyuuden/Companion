@@ -4,12 +4,9 @@ using System.ComponentModel;
 
 namespace FF.Rando.Companion.FreeEnterprise.Settings;
 
-public class StatsSettings : PanelSettings
+public class StatsSettings(JToken jToken) : PanelSettings(jToken)
 {
     protected override float DefaultScaleFactor => 1f;
-
-    public StatsSettings(JToken jToken)
-        :base(jToken) { }
 
     public override string Name => "Stats";
 

@@ -1,5 +1,4 @@
 ﻿using BizHawk.Client.Common;
-using BizHawk.Client.EmuHawk;
 using BizHawk.Emulation.Common;
 using FF.Rando.Companion.MemoryManagement;
 using System;

@@ -1,11 +1,4 @@
-﻿using BizHawk.Common;
-using FF.Rando.Companion.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
+﻿using FF.Rando.Companion.Extensions;
 
 namespace FF.Rando.Companion.FreeEnterprise._4._6._0;
 internal class Flags : IFlags

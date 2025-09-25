@@ -1,10 +1,7 @@
 ﻿using FF.Rando.Companion.Settings;
-using KGySoft.Drawing.Imaging;
 using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Runtime;
 using System.Windows.Forms;
 
 namespace FF.Rando.Companion.View;

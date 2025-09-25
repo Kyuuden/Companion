@@ -5,15 +5,9 @@ using System;
 
 namespace FF.Rando.Companion.MemoryManagement;
 
-public class MemoryDomainMemorySpace : IMemorySpace
+public class MemoryDomainMemorySpace(MemoryDomain domain) : IMemorySpace
 {
-    private readonly MemoryDomain _domain;
-
-    public MemoryDomainMemorySpace(MemoryDomain domain)
-    {
-        if (domain == null) throw new ArgumentNullException(nameof(domain));
-        _domain = domain;
-    }
+    private readonly MemoryDomain _domain = domain ?? throw new ArgumentNullException(nameof(domain));
 
     public string? Name => _domain?.Name;
 

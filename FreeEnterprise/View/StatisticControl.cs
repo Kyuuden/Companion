@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Windows.Forms;
-using FF.Rando.Companion.Extensions;
+﻿using FF.Rando.Companion.Extensions;
 using FF.Rando.Companion.Settings;
 using FF.Rando.Companion.View;
 using KGySoft.Drawing.Imaging;
+using System.Drawing;
 
 namespace FF.Rando.Companion.FreeEnterprise.View;
 

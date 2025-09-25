@@ -1,25 +1,17 @@
 ﻿using FF.Rando.Companion.FreeEnterprise.Shared;
-using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace FF.Rando.Companion.FreeEnterprise._5._0._0;
 
-internal class BossLocation : ILocation
+internal class BossLocation(BossLocationType slot, string description) : ILocation
 {
     private bool _isAvailable;
     private bool _isChecked;
 
-    public BossLocation(BossLocationType slot, string description)
-    {
-        ID = (int)slot;
-        Description = description;
-        World = slot.World();
-    }
+    public int ID { get; } = (int)slot;
 
-    public int ID { get; }
-
-    public string Description { get; }
+    public string Description { get; } = description;
 
     public bool IsCharacter => false;
 
@@ -55,7 +47,7 @@ internal class BossLocation : ILocation
         }
     }
 
-    public World World { get; }
+    public World World { get; } = slot.World();
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

@@ -6,8 +6,8 @@ namespace FF.Rando.Companion.FreeEnterprise._5._0._0;
 
 internal class ObjectiveGroup : IObjectiveGroup
 {
-    private IList<Task> _tasks;
-    private IList<Reward> _rewards;
+    private readonly IList<Task> _tasks;
+    private readonly IList<Reward> _rewards;
 
     public int NumCompleted { get; private set; }
 

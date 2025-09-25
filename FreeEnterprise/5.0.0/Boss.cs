@@ -12,7 +12,7 @@ internal class Boss : IBoss
 {
     private Bitmap? _image;
 
-    private Dictionary<BossLocationType, Encounter> _encounters = [];
+    private readonly Dictionary<BossLocationType, Encounter> _encounters = [];
     private readonly IBossDescriptor _descriptors;
 
     public Boss(IBossDescriptor descriptors, BossType type)

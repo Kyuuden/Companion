@@ -1,15 +1,11 @@
-﻿using System.Linq;
-using FF.Rando.Companion.Settings;
+﻿using FF.Rando.Companion.Settings;
 using KGySoft.Drawing.Imaging;
+using System.Linq;
 
 namespace FF.Rando.Companion.FreeEnterprise.View;
 
-public class KeyItemStatsControl : StatisticControl<int>
+public class KeyItemStatsControl(ISeed seed, PanelSettings settings) : StatisticControl<int>(seed, settings)
 {
-    public KeyItemStatsControl(ISeed seed, PanelSettings settings) : base(seed, settings)
-    {
-    }
-
     protected override string PropertyName => nameof(ISeed.KeyItems);
 
     protected override IReadableBitmapData GetIcon() => Game.Sprites.GetNpcImage(new int[2, 2] { { 480, 481 }, { 482, 483 } }, 8);

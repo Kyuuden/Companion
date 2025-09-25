@@ -126,7 +126,7 @@ internal class Seed : LegacySeed
                     _ => 0m
                 });
 
-                if (_flags.XMoonXpBonus != MoonXpBonus.None && (currentLocation[0] == 2 || (currentLocation[0] == 3 && BinaryPrimitives.ReadUInt16BigEndian(currentLocation.Slice(1)) >= 0x015a)))
+                if (_flags.XMoonXpBonus != MoonXpBonus.None && (currentLocation[0] == 2 || (currentLocation[0] == 3 && BinaryPrimitives.ReadUInt16BigEndian(currentLocation[1..]) >= 0x015a)))
                 {
                     xpRate *= 1 + _flags.XMoonXpBonus switch
                     {

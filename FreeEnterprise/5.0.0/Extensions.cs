@@ -1,5 +1,4 @@
 ﻿using FF.Rando.Companion.FreeEnterprise.Shared;
-using System;
 
 namespace FF.Rando.Companion.FreeEnterprise._5._0._0;
 internal static class Extensions

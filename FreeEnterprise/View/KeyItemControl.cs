@@ -36,17 +36,17 @@ public partial class KeyItemControl : ImageControl<ISeed, IKeyItem>
     private void GenerateToolTip()
     {
         var description = Game.Font.RenderText(Value.Description, TextMode.Normal, 28);
-        IReadableBitmapData? found = null;
+        IReadableBitmapData? found;
         IReadableBitmapData? used = null;
         if (Value.IsFound)
         {
             found = Value.WhenFound.HasValue && Value.WhenFound > TimeSpan.Zero
-                ? Game.Font.RenderText($"Received at {Value.WhenFound.Value.ToString("hh':'mm':'ss'.'ff")} from {Value.WhereFound ?? ""}", TextMode.Special, 28)
+                ? Game.Font.RenderText($"Received at {Value.WhenFound.Value:hh':'mm':'ss'.'ff} from {Value.WhereFound ?? ""}", TextMode.Special, 28)
                 : Game.Font.RenderText($"Received from:\n{Value.WhereFound ?? ""}", TextMode.Special, 28);
             if (!Value.IsUsed)
                 used = Game.Font.RenderText("(unused)", TextMode.Highlighted, 28);
             else if (Value.WhenUsed.HasValue && Value.WhenUsed > TimeSpan.Zero)
-                used = Game.Font.RenderText($"Used at {Value.WhenUsed.Value.ToString("hh':'mm':'ss'.'ff")}", TextMode.Special, 28);
+                used = Game.Font.RenderText($"Used at {Value.WhenUsed.Value:hh':'mm':'ss'.'ff}", TextMode.Special, 28);
         }
         else
         {

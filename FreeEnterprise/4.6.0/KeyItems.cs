@@ -7,21 +7,18 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace FF.Rando.Companion.FreeEnterprise._4._6._0;
-internal class KeyItems
+internal class KeyItems(KeyItemSettings settings, Font font, Descriptors descriptors)
 {
-    private readonly IReadOnlyList<KeyItem> _items;
-    private readonly Descriptors _descriptors;
+    private readonly IReadOnlyList<KeyItem> _items = 
+        Enum.GetValues(typeof(KeyItemType))
+        .OfType<KeyItemType>()
+        .Select(t => new KeyItem(settings, font, descriptors, t, t != KeyItemType.Pass))
+        .ToList();
 
     public int NumFound { get; private set; }
     public int NumUsed { get; private set; }
 
     internal IReadOnlyList<KeyItem> Items => _items;
-
-    public KeyItems(KeyItemSettings settings, Font font, Descriptors descriptors)
-    {
-        _items = Enum.GetValues(typeof(KeyItemType)).OfType<KeyItemType>().Select(t => new KeyItem(settings, font, descriptors, t, t != KeyItemType.Pass)).ToList();
-        _descriptors = descriptors;
-    }
 
     public bool Update(TimeSpan time, ReadOnlySpan<byte> found, ReadOnlySpan<byte> used, ReadOnlySpan<byte> locations, ReadOnlySpan<byte> inventory)
     {
@@ -39,7 +36,7 @@ internal class KeyItems
                 {
                     updated = true;
                     var slot = (LocationType)locations.Read<uint>(keyitem.Id * 16, 16);
-                    var slotDescription = _descriptors.GetLocationName(slot);
+                    var slotDescription = descriptors.GetLocationName(slot);
                     keyitem.WhenFound = time;
                     keyitem.WhereFound = slotDescription;
                     keyitem.IsFound = isfound;

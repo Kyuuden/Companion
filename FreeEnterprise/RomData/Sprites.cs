@@ -10,25 +10,6 @@ using System.Linq;
 
 namespace FF.Rando.Companion.FreeEnterprise.RomData;
 
-public enum Pose
-{
-    Stand,
-    Walk,
-    Queued,
-    Crouch,
-    Damaged,
-    Casting,
-    Special,
-    Celebrate,
-    Dead,
-    Portrait
-}
-
-public enum Chest
-{
-    Open, Closed
-}
-
 public class Sprites : IDisposable
 {
     private readonly List<List<byte[,]>> _combatTiles;
@@ -46,9 +27,9 @@ public class Sprites : IDisposable
     private readonly List<Palette> _npcPalettes;
     private readonly Palette _eggPalette;
 
-    private Dictionary<Pose, List<Frame>> PoseFrames = new Dictionary<Pose, List<Frame>>();
-    private Dictionary<BitmapKey, Bitmap> _frameCache = new Dictionary<BitmapKey, Bitmap>();
-    private Dictionary<Arrow, IReadableBitmapData> arrowCache = [];
+    private readonly Dictionary<Pose, List<Frame>> PoseFrames = [];
+    private readonly Dictionary<BitmapKey, Bitmap> _frameCache = [];
+    private readonly Dictionary<Arrow, IReadableBitmapData> arrowCache = [];
     private Bitmap? _blank;
     private bool disposedValue;
 
@@ -83,7 +64,7 @@ public class Sprites : IDisposable
 
         PoseFrames[Pose.Portrait] = [new Frame(0, new byte[4, 4] { { 0, 1, 2, 3 }, { 4, 5, 6, 7 }, { 8, 9, 10, 11 }, { 12, 13, 14, 15 } })];
 
-        _combatTiles = new List<List<byte[,]>>();
+        _combatTiles = [];
         foreach (var range in Addresses.ROM.CharacterSprites)
             _combatTiles.Add(
                 memorySpace.ReadBytes(range)
@@ -91,7 +72,7 @@ public class Sprites : IDisposable
                 .Select(data => data.DecodeTile(4))
                 .ToList());
 
-        _combatPalettes = new List<List<Palette>>();
+        _combatPalettes = [];
         foreach (var range in Addresses.ROM.CharacterPalettes)
             _combatPalettes.Add(
                 memorySpace.ReadBytes(range)
@@ -345,71 +326,5 @@ public class Sprites : IDisposable
         // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
         Dispose(disposing: true);
         GC.SuppressFinalize(this);
-    }
-}
-
-public class Frame
-{
-    public Frame(int frameDelay, byte[,] spriteIndexes, sbyte?[,]? sticker = null)
-    {
-        FrameDelay = frameDelay;
-        IndexArray = spriteIndexes;
-        StickerArray = sticker;
-    }
-
-    public int FrameDelay { get; }
-
-    public byte[,] IndexArray { get; }
-
-    public sbyte?[,]? StickerArray { get; }
-
-    public IReadableBitmapData Render(Func<int, byte[,]> tileLookup, Palette tilePalette, Func<int, byte[,]> stickerLookup, Palette stickerPalette)
-    {
-        var combined = new List<Color32>();
-        for(int i = 0; i < tilePalette.Count; i ++)
-            combined.Add(tilePalette[i]);
-        for(int i = 0;i < stickerPalette.Count; i ++)
-            combined.Add(stickerPalette[i]);
-        int width = IndexArray.GetLength(1) * 8;
-        int height = IndexArray.GetLength(0) * 8;
-
-        var xOffset = 0;
-        int yOffset = 0;
-
-        if (height > width)
-        {
-            xOffset = (height - width) / 2;
-        }
-        else if (width > height)
-        {
-            yOffset = (width - height) / 2;
-        }
-
-        var data = BitmapDataFactory.CreateBitmapData(new Size(Math.Max(width, height), Math.Max(width, height)), KnownPixelFormat.Format8bppIndexed, new Palette(combined));
-
-        for (var y = 0; y < height; y++)
-        {
-            for (var x = 0; x < width; x++)
-            {
-                var tileIndex = IndexArray[y / 8, x / 8];
-                if (tileIndex != 255)
-                    data.SetColorIndex(x + xOffset, y + yOffset, tileLookup(tileIndex)[x % 8, y % 8]);
-
-                var stickerIndex = StickerArray?[y / 8, x / 8];
-                if (stickerIndex.HasValue)
-                {
-                    byte? color = null;
-                    if (stickerIndex > 0)
-                        color = stickerLookup(stickerIndex.Value)[x % 8, y % 8];
-                    if (stickerIndex < 0)
-                        color = stickerLookup(Math.Abs(stickerIndex.Value))[7 - x % 8, y % 8];
-
-                    if (color.HasValue && color.Value != 0)
-                        data.SetColorIndex(x + xOffset, y + yOffset, color.Value + tilePalette.Count);
-                }
-            }
-        }
-
-        return data;
     }
 }

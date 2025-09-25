@@ -1,34 +1,23 @@
 ﻿using FF.Rando.Companion.FreeEnterprise.Shared;
-using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace FF.Rando.Companion.FreeEnterprise._5._0._0;
 
-internal class ChestLocation : ILocation
+internal class ChestLocation(ChestSlot slot, string description, bool isKI, bool isChar) : ILocation
 {
     private bool _isAvailable;
     private bool _isChecked;
 
-    public ChestLocation(ChestSlot slot, string description, bool isKI, bool isChar)
-    {
-        ID = (int)slot;
-        Description = description;
-        IsCharacter = isChar;
-        IsKeyItem = isKI;
-        World = slot.World();
-        IsMiab = slot.IsMiab();
-    }
+    public int ID { get; } = (int)slot;
 
-    public int ID { get; }
+    public bool IsMiab { get; } = slot.IsMiab();
 
-    public bool IsMiab { get; }
+    public string Description { get; } = description;
 
-    public string Description { get; }
+    public bool IsCharacter { get; } = isChar;
 
-    public bool IsCharacter { get; }
-
-    public bool IsKeyItem { get; }
+    public bool IsKeyItem { get; } = isKI;
 
     public bool IsBoss => false;
 
@@ -60,7 +49,7 @@ internal class ChestLocation : ILocation
         }
     }
 
-    public World World { get; }
+    public World World { get; } = slot.World();
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

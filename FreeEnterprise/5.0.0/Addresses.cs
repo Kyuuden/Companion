@@ -9,9 +9,9 @@ internal static class Addresses
         public readonly static long StartedIndicatorAddress = 0x70F3;
 
         public readonly static Range<long> SramRegion = 0x7C00L.RangeTo(0x7CFF);
-        public readonly static System.Range KeyItemLocationBits = new System.Range(0x00, 0x30);
-        public readonly static System.Range BossLocationBits = new System.Range(0x30, 0x80);
-        public readonly static System.Range AxtorBits = new System.Range(0x80, 0x100);
+        public readonly static System.Range KeyItemLocationBits = new(0x00, 0x30);
+        public readonly static System.Range BossLocationBits = new(0x30, 0x80);
+        public readonly static System.Range AxtorBits = new(0x80, 0x100);
     }
 
     internal static class WRAM

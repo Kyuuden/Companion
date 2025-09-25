@@ -5,14 +5,8 @@ using System.ComponentModel;
 
 namespace FF.Rando.Companion.FreeEnterprise.Settings;
 
-public class PartySettings : PanelSettings
+public class PartySettings(JToken jToken) : PanelSettings(jToken)
 {
-    public PartySettings(JToken jToken)
-        : base(jToken)
-    {
-        Priority = 0;
-    }
-
     [DefaultValue(Pose.Stand)]
     public Pose Pose
     {
@@ -24,5 +18,5 @@ public class PartySettings : PanelSettings
 
     [Browsable(false)]
 
-    public override int Priority { get; set; }
+    public override int Priority { get; set; } = 0;
 }

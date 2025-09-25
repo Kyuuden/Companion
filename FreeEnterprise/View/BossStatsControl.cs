@@ -1,15 +1,10 @@
-﻿using System.Linq;
-using FF.Rando.Companion.Settings;
+﻿using FF.Rando.Companion.Settings;
 using KGySoft.Drawing.Imaging;
 
 namespace FF.Rando.Companion.FreeEnterprise.View;
 
-public class BossStatsControl : StatisticControl<int>
+public class BossStatsControl(ISeed seed, PanelSettings settings) : StatisticControl<int>(seed, settings)
 {
-    public BossStatsControl(ISeed seed, PanelSettings settings) : base(seed, settings)
-    {
-    }
-
     protected override string PropertyName => nameof(ISeed.DefeatedEncounters);
 
     protected override IReadableBitmapData GetIcon() => Game.Sprites.GetNpcImage(new int[2, 2] { { 784, 785 }, { 786, 787 } }, 1);

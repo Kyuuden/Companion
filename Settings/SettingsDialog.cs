@@ -1,12 +1,11 @@
-﻿using BizHawk.Client.Common;
-using BizHawk.Client.EmuHawk;
+﻿using BizHawk.Client.EmuHawk;
 using System.Linq;
 using System.Windows.Forms;
 
 namespace FF.Rando.Companion.Settings;
 public partial class SettingsDialog : FormBase
 {
-    private ISettings? _settings;
+    private readonly ISettings? _settings;
 
     public SettingsDialog()
     {
@@ -29,9 +28,11 @@ public partial class SettingsDialog : FormBase
 
         foreach (var game in settings.GameSettings)
         {
-            var gameTab = new TabPage();
-            gameTab.Name = game.Value.Name;
-            gameTab.Text = game.Value.DisplayName;
+            var gameTab = new TabPage
+            {
+                Name = game.Value.Name,
+                Text = game.Value.DisplayName
+            };
 
             var gamePropertyGrid = new PropertyGrid
             {
