@@ -8,11 +8,25 @@ internal class ElementsSettings(JToken parentData) : PanelSettings(parentData)
 {
     public override string Name => "Elements";
 
+    protected override float DefaultScaleFactor => 3f;
+
+    [DefaultValue(3.0f)]
+    public override float ScaleFactor { get => base.ScaleFactor; set => base.ScaleFactor = value; }
+
     [Description("How to show key items, either icons (like the game info menu) or text.")]
     [DefaultValue(ElementsStyle.Icons)]
     public ElementsStyle ElementsStyle
     {
         get => GetSetting(ElementsStyle.Icons);
+        set => SaveSetting(value);
+    }
+
+    [DisplayName("Hide Unchanged")]
+    [Description("Hide elements that were randomized to themselves.")]
+    [DefaultValue(false)]
+    public bool HideUnchanged
+    {
+        get => GetSetting(false);
         set => SaveSetting(value);
     }
 

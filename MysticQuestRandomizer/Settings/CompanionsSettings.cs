@@ -1,5 +1,4 @@
-﻿using BizHawk.Common.ReflectionExtensions;
-using FF.Rando.Companion.Settings;
+﻿using FF.Rando.Companion.Settings;
 using FF.Rando.Companion.Settings.Editor;
 using FF.Rando.Companion.Settings.TypeConverters;
 using Newtonsoft.Json.Linq;
@@ -14,6 +13,11 @@ namespace FF.Rando.Companion.MysticQuestRandomizer.Settings;
 internal class CompanionsSettings(JToken parentData) : PanelSettings(parentData)
 {
     public override string Name => "Companions";
+
+    protected override float DefaultScaleFactor => 3f;
+
+    [DefaultValue(3.0f)]
+    public override float ScaleFactor { get => base.ScaleFactor; set => base.ScaleFactor = value; }
 
     [DefaultValue(3)]
     public override int Priority

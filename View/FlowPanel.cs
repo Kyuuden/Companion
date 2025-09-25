@@ -118,7 +118,7 @@ public abstract partial class FlowPanel<TGame, TSettings> : UserControl, IPanel 
 
     protected virtual int GetItemWidth(ControlCollection controlCollection)
     {
-        return controlCollection.OfType<Control>().Max(c => c.Width) + 8;
+        return controlCollection.OfType<Control>().Where(c => c.Visible).Max(c => c.Width) + 8;
     }
 
     protected virtual bool CenterMultiColumnItems => false;
@@ -141,7 +141,7 @@ public abstract partial class FlowPanel<TGame, TSettings> : UserControl, IPanel 
                 break;
             case SpacingMode.Columns:
                 var elementsize = GetItemWidth(flowLayoutPanel1.Controls);
-                var columns = Math.Min(WrapAfter, Math.Min(flowLayoutPanel1.Controls.Count, flowLayoutPanel1.Width / elementsize));
+                var columns = Math.Min(WrapAfter, Math.Min(flowLayoutPanel1.Controls.OfType<Control>().Where(c => c.Visible).Count(), flowLayoutPanel1.Width / elementsize));
                 var extra = flowLayoutPanel1.Width - (elementsize * columns);
                 var divisions = columns > 1 ? (columns - 1) * 2 : 2;
                 var margin = extra / divisions;
@@ -152,29 +152,38 @@ public abstract partial class FlowPanel<TGame, TSettings> : UserControl, IPanel 
                 flowLayoutPanel1.SuspendLayout();
 
                 SortControls(flowLayoutPanel1.Controls, columns);
+                var invisibleCount = 0;
                 for (int i = 0; i < flowLayoutPanel1.Controls.Count; i++)
                 {
                     var c = flowLayoutPanel1.Controls[i];
-                    if (!CenterMultiColumnItems || c.Width + 8 <= elementsize)
-                    {
-                        var marginAdjustment = Math.Max(0, elementsize - c.Width - 8);
 
-                        if (i % columns == 0)
-                            c.Margin = new(4, 4, 4 + margin + marginAdjustment, 4);
-                        else if ((i + 1) % columns == 0)
-                            c.Margin = new(4 + margin, 4, 4, 4);
-                        else
-                            c.Margin = new(4 + margin, 4, 4 + margin + marginAdjustment, 4);
+                    if (!c.Visible)
+                    {
+                        invisibleCount++;
                     }
                     else
                     {
-                        var columnSpan = (int)Math.Ceiling((double)c.Width / (elementsize-8));
-                        var columnsWidth = columnSpan * elementsize + margin * (columnSpan - 1) * 2;
-                        var halfRemaining = (columnsWidth - c.Width) / 2;
-                        c.Margin = new(4 + halfRemaining, 4, 4 + halfRemaining, 4);
+                        if (!CenterMultiColumnItems || c.Width + 8 <= elementsize)
+                        {
+                            var marginAdjustment = Math.Max(0, elementsize - c.Width - 8);
+
+                            if ((i - invisibleCount) % columns == 0)
+                                c.Margin = new(4, 4, 4 + margin + marginAdjustment, 4);
+                            else if ((i - invisibleCount + 1) % columns == 0)
+                                c.Margin = new(4 + margin, 4, 4, 4);
+                            else
+                                c.Margin = new(4 + margin, 4, 4 + margin + marginAdjustment, 4);
+                        }
+                        else
+                        {
+                            var columnSpan = (int)Math.Ceiling((double)c.Width / (elementsize - 8));
+                            var columnsWidth = columnSpan * elementsize + margin * (columnSpan - 1) * 2;
+                            var halfRemaining = (columnsWidth - c.Width) / 2;
+                            c.Margin = new(4 + halfRemaining, 4, 4 + halfRemaining, 4);
+                        }
                     }
 
-                    flowLayoutPanel1.SetFlowBreak(c, (i + 1) % columns == 0);
+                    flowLayoutPanel1.SetFlowBreak(c, (i - invisibleCount + 1) % columns == 0);
                 }
                 flowLayoutPanel1.ResumeLayout();
                 //flowLayoutPanel1.PerformLayout();

@@ -18,7 +18,7 @@ internal class MysticQuestRandomizerSettings : GameSettings
         //Stats = new StatsSettings(SettingsData);
     }
 
-    [DisplayName("Equipment")]
+    [DisplayName("Equipment, Spells, and Key Items")]
     [TypeConverter(typeof(ExpandableObjectConverter))]
     [Description("Tracking of found Weapons, Armors, Spells, and Key Items.")]
     public EquipmentSettings Equipment { get; }

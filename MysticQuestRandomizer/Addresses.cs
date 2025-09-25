@@ -23,7 +23,9 @@ internal class Addresses
         public static readonly Range<long> ActivePartner = 0x004dL.WithLength(1);
 
         public static readonly long GameStateIndicator = 0x3749;
-        public static readonly long GameVictoryIndicator = 0x0EC6;
+
+        public static readonly long GameVictoryIndicator = 0x0F22;
+        public static readonly long GameVictoryIndicator2 = 0x0EC6;
 
         public static readonly Range<long> WramRegion = 0x0e00L.WithLength(0x280);
 

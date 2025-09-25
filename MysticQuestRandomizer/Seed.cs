@@ -152,8 +152,8 @@ public class Seed : IGame
             Started = MQRContainer.Wram.ReadByte(Addresses.WRAM.GameStateIndicator) == 1;
 
         if (!Victory)
-            Victory = (MQRContainer.Wram.ReadByte(Addresses.WRAM.GameStateIndicator) & 0x80) == 0x80 &&
-                (MQRContainer.Wram.ReadByte(Addresses.WRAM.GameVictoryIndicator) & 0x18) == 0x18;
+            Victory = (MQRContainer.Wram.ReadByte(Addresses.WRAM.GameVictoryIndicator) & 0x80) == 0x80 &&
+                (MQRContainer.Wram.ReadByte(Addresses.WRAM.GameVictoryIndicator2) & 0x18) == 0x18;
 
         if (Started && MQRContainer.Emulation.FrameCount() % MQRContainer.RootSettings.TrackingInterval == 0)
         {

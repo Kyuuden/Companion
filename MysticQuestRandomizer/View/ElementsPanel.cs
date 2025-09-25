@@ -25,5 +25,7 @@ internal partial class ElementsPanel : FlowPanel<ElementsSettings>
         base.Settings_PropertyChanged(sender, e);
         if (e.PropertyName == nameof(ElementsSettings.ElementsStyle))
             Arrange();
+        if (e.PropertyName == nameof(ElementsSettings.HideUnchanged))
+            BeginInvoke(() => Arrange());
     }
 }

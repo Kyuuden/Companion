@@ -32,6 +32,8 @@ public class Element : IImageTracker
             SetImage();
     }
 
+    public bool IsUnchanged => _original == _updated;
+
     public Bitmap Image
     {
         get => _image!;

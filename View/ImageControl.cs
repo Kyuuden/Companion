@@ -24,6 +24,7 @@ public class ImageControl<TGame, TImageSource> : PictureBox, IScalableControl wh
         SizeMode = PictureBoxSizeMode.Zoom;
         Value.PropertyChanged += Value_PropertyChanged;
         Game.PropertyChanged += Value_PropertyChanged;
+        Settings.PropertyChanged += Value_PropertyChanged;
         Name = "ImageControl";
         UpdateImage();
         ((System.ComponentModel.ISupportInitialize)this).EndInit();
