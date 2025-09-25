@@ -1,16 +1,11 @@
-﻿
-using FF.Rando.Companion.Settings;
+﻿using FF.Rando.Companion.Settings;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel;
 
 namespace FF.Rando.Companion.MysticQuestRandomizer.Settings;
 
-internal class EquipmentSettings : PanelSettings
+internal class EquipmentSettings(JToken parentData) : PanelSettings(parentData)
 {
-    public EquipmentSettings(JToken parentData) : base(parentData)
-    {
-    }
-
     public override string Name => "Equipment";
 
     [DefaultValue(1)]

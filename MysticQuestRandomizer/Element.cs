@@ -12,7 +12,6 @@ public class Element : IImageTracker
 {
     private readonly ElementsType _original;
     private readonly ElementsType _updated;
-    private readonly int padding;
     private readonly RomData.Font _font;
     private readonly ElementsSettings _settings;
     private Bitmap? _image;
@@ -24,7 +23,6 @@ public class Element : IImageTracker
         _font = font;
         _settings = settings;
         _settings.PropertyChanged += SettingsChanged;
-        padding = Enum.GetValues(typeof(ElementsType)).OfType<ElementsType>().Select(e=>e.ToString().Length).Max();
         SetImage();
     }
 
@@ -50,7 +48,11 @@ public class Element : IImageTracker
 
     private void SetImage()
     {
-        Image = _font.RenderText($"{GetStringFor(_original)}>{GetStringFor(_updated)} ").ToBitmap();
+        Image = _settings.ElementsStyle switch
+        {
+            ElementsStyle.Icons => _font.RenderText($"{GetStringFor(_original)}>{GetStringFor(_updated)} ").ToBitmap(),
+            _ => _font.RenderText($"{GetStringFor(_original)} > {GetStringFor(_updated)} ").ToBitmap()
+        };
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -63,8 +65,8 @@ public class Element : IImageTracker
     private string GetStringFor(ElementsType elementType)
         => _settings.ElementsStyle switch
         {
-            ElementsStyle.Icons => $"[{elementType.ToString()}]",
-            ElementsStyle.Text => $"{elementType.ToString()}",
+            ElementsStyle.Icons => $"[{elementType}]",
+            ElementsStyle.Text => $"{elementType}",
             _ => elementType.ToString()
         };
 }

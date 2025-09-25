@@ -1,16 +1,11 @@
-﻿
-using FF.Rando.Companion.Settings;
+﻿using FF.Rando.Companion.Settings;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel;
 
 namespace FF.Rando.Companion.MysticQuestRandomizer.Settings;
 
-internal class ElementsSettings : PanelSettings
+internal class ElementsSettings(JToken parentData) : PanelSettings(parentData)
 {
-    public ElementsSettings(JToken parentData) : base(parentData)
-    {
-    }
-
     public override string Name => "Elements";
 
     [Description("How to show key items, either icons (like the game info menu) or text.")]
@@ -24,7 +19,7 @@ internal class ElementsSettings : PanelSettings
     [DefaultValue(2)]
     public override int Priority
     {
-        get => GetSetting(5);
+        get => GetSetting(2);
         set => SaveSetting(value);
     }
 }

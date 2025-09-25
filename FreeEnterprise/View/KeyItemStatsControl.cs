@@ -12,9 +12,9 @@ public class KeyItemStatsControl : StatisticControl<int>
 
     protected override string PropertyName => nameof(ISeed.KeyItems);
 
-    protected override IReadableBitmapData GetIcon() => Seed.Sprites.GetNpcImage(new int[2, 2] { { 480, 481 }, { 482, 483 } }, 8);
+    protected override IReadableBitmapData GetIcon() => Game.Sprites.GetNpcImage(new int[2, 2] { { 480, 481 }, { 482, 483 } }, 8);
 
-    protected override int GetStat() => Seed.KeyItems.Count(ki => ki.IsFound && ki.IsTrackable);
+    protected override int GetStat() => Game.KeyItems.Count(ki => ki.IsFound && ki.IsTrackable);
 
-    protected override string GetStatText() => $"{Stat,2}/{Seed.KeyItems.Count(ki => ki.IsTrackable)}";
+    protected override string GetStatText() => $"{Stat,2}/{Game.KeyItems.Count(ki => ki.IsTrackable)}";
 }

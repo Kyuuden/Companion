@@ -30,11 +30,13 @@ public partial class MysticQuestRandomizerControl : UserControl
         _equipment.InitializeDataSources(seed, seed.Settings.Equipment);
         _elements.InitializeDataSources(seed, seed.Settings.Elements);
         _companions.InitializeDataSources(seed, seed.Settings.Companions);
+        //_statistics.InitializeDataSources(seed, seed.Settings.Stats);
 
         _seed.PropertyChanged += Seed_PropertyChanged;
         seed.Settings.Equipment.PropertyChanged += Seed_PropertyChanged;
         seed.Settings.Elements.PropertyChanged += Seed_PropertyChanged;
         seed.Settings.Companions.PropertyChanged += Seed_PropertyChanged;
+       // seed.Settings.Stats.PropertyChanged += Seed_PropertyChanged;
 
         seed.ButtonPressed += Seed_ButtonPressed;
         ArrangePanels();
@@ -104,7 +106,7 @@ public partial class MysticQuestRandomizerControl : UserControl
     {
         SuspendLayout();
 
-        List<IPanel> panels = [_equipment, _elements, _companions];
+        List<IPanel> panels = [_equipment, _elements, /*_statistics,*/ _companions];
         panels.Sort((x, y) => x.Priority > y.Priority ? 1 : -1);
 
         while (Controls.Count > 0)

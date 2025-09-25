@@ -5,15 +5,9 @@ using System.Linq;
 
 namespace FF.Rando.Companion.MysticQuestRandomizer;
 
-internal abstract class Equipments<T, TEnum> where T : Equipment<TEnum> where TEnum : struct
+internal abstract class Equipments<T, TEnum>(List<T> items) where T : Equipment<TEnum> where TEnum : struct
 {
-    private readonly List<T> _items;
-    protected Equipments(List<T> items)
-    {
-        _items = items;
-    }
-
-    internal IReadOnlyList<T> Items => _items;
+    internal IReadOnlyList<T> Items => items;
 
     public bool Update(TimeSpan time, ReadOnlySpan<byte> found)
     {
@@ -27,7 +21,7 @@ internal abstract class Equipments<T, TEnum> where T : Equipment<TEnum> where TE
                 foundTypes.Add(enumValue);
         }
 
-        foreach (var item in _items)
+        foreach (var item in items)
         {
             var desired = item.Desired.Intersect(foundTypes);
 

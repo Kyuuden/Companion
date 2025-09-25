@@ -43,8 +43,8 @@ internal class Seed : LegacySeed
         _flags ??= new MysteryFlags();
 
         _party = new Party(container.Settings.Party, Sprites, _flags.VanillaAgility, _flags.CHero);
-        _objectives = new Objectives(metadata.Objectives!, _flags?.NumRequiredObjectives, _flags.OWinGame, _flags.OWinCrystal);
-        _locations = new Locations(_descriptors, _flags);
+        _objectives = new Objectives(metadata.Objectives!, _flags?.NumRequiredObjectives, _flags?.OWinGame == true, _flags?.OWinCrystal == true);
+        _locations = new Locations(_descriptors, _flags!);
     }
 
     public override void OnNewFrame()

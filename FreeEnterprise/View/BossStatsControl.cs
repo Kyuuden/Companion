@@ -12,9 +12,9 @@ public class BossStatsControl : StatisticControl<int>
 
     protected override string PropertyName => nameof(ISeed.DefeatedEncounters);
 
-    protected override IReadableBitmapData GetIcon() => Seed.Sprites.GetNpcImage(new int[2, 2] { { 784, 785 }, { 786, 787 } }, 1);
+    protected override IReadableBitmapData GetIcon() => Game.Sprites.GetNpcImage(new int[2, 2] { { 784, 785 }, { 786, 787 } }, 1);
 
-    protected override int GetStat() => Seed.DefeatedEncounters;
+    protected override int GetStat() => Game.DefeatedEncounters;
 
     protected override string GetStatText() => $"{Stat,2}/34";
 }

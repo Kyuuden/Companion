@@ -1,19 +1,14 @@
 ﻿using System.Collections.Generic;
 
 namespace FF.Rando.Companion.MysticQuestRandomizer;
-public class Companion
+public class Companion(CompanionType companion)
 {
     private readonly List<CharacterSpell> _spells = [];
     private readonly List<string> _quests = [];
 
-    public Companion(CompanionType companion)
-    {
-        Type = companion;
-    }
-
     public int Id => (int)Type;
 
-    public CompanionType Type { get; }
+    public CompanionType Type { get; } = companion;
 
     public bool ExistsInSeed => _quests.Count > 0 || _spells.Count > 0;
 

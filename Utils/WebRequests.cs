@@ -30,7 +30,7 @@ public static class WebRequests
         if (response.IsSuccessStatusCode)
         {
             string data = await response.Content.ReadAsStringAsync();
-            string latest = JsonConvert.DeserializeObject<IEnumerable<Release>>(data).FirstOrDefault().tag_name;
+            string? latest = JsonConvert.DeserializeObject<IEnumerable<Release>>(data)?.FirstOrDefault()?.tag_name;
             if (string.CompareOrdinal(latest, 0, currentVersion, 0, 5) > 0)
             {
                 Console.WriteLine($"Release {latest} is newer than current version {currentVersion}");

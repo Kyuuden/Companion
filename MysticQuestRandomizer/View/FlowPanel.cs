@@ -10,7 +10,6 @@ internal abstract class FlowPanel<TSettings> : FlowPanel<Seed, TSettings> where 
         :base()
     {
         SpacingMode = SpacingMode.Columns;
-        WrapAfter = 8;
     }
 
     protected override Bitmap? GenerateBackgroundImage(Size unscaledSize)

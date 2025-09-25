@@ -27,7 +27,6 @@ internal class Boss : IBoss
 
     public string Name { get; }
 
-  
     public Bitmap Image
     {
         get => _image!;

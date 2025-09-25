@@ -12,7 +12,7 @@ namespace FF.Rando.Companion.MysticQuestRandomizer;
 
 public abstract class Equipment<TType> : IImageTracker
 {
-    private IList<TType> _order;
+    private readonly IList<TType> _order;
     private readonly Sprites _sprites;
     private ImmutableHashSet<TType> _found = [];
     private Bitmap? _image;

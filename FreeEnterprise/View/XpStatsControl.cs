@@ -11,9 +11,9 @@ public class XpStatsControl : StatisticControl<decimal>
 
     protected override string PropertyName => nameof(ISeed.XpRate);
 
-    protected override IReadableBitmapData GetIcon() => Seed.Sprites.GetEgg();
+    protected override IReadableBitmapData GetIcon() => Game.Sprites.GetEgg();
 
-    protected override decimal GetStat() => Seed.XpRate ?? 1;
+    protected override decimal GetStat() => Game.XpRate ?? 1;
 
     protected override string GetStatText() => $"{Stat:F2}x";
 }

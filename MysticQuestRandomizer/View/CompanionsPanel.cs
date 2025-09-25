@@ -2,24 +2,23 @@
 using FF.Rando.Companion.MysticQuestRandomizer.Settings;
 using FF.Rando.Companion.View;
 using KGySoft.Drawing.Imaging;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FF.Rando.Companion.MysticQuestRandomizer.View;
 
 internal class CompanionsPanel : ScrollablePanel<Seed, CompanionsSettings>
 {
-    Dictionary<Arrow, IReadableBitmapData> _arrows = [];
-
+    private readonly Dictionary<Arrow, IReadableBitmapData> _arrows = [];
+    private int _maxNameWidth;
 
     public override void InitializeDataSources(Seed game, CompanionsSettings settings)
     {
         base.InitializeDataSources(game, settings);
+
+        _maxNameWidth = Game!.Companions.Max(c => c.Type.ToString().Length + 1);
 
         _arrows.Clear();
         _arrows[Arrow.Right] = Game!.Font.RenderText(">");
@@ -28,15 +27,16 @@ internal class CompanionsPanel : ScrollablePanel<Seed, CompanionsSettings>
         _arrows[Arrow.Down] = Game!.Font.RenderText(">").CopyRotateFlip(RotateFlipType.Rotate90FlipNone);
     }
 
-
     protected override bool CombinePages => Settings?.CombineCompanions == true;
 
     protected override int ScrollLines => 1;
+
     protected override void PropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         base.PropertyChanged(sender, e);
 
-        if (e.PropertyName == nameof(CompanionsSettings.CombineCompanions))
+        if (e.PropertyName == nameof(CompanionsSettings.CombineCompanions) ||
+            e.PropertyName == nameof(CompanionsSettings.ImportantSpells))
             RegerateData();
     }
 
@@ -74,23 +74,32 @@ internal class CompanionsPanel : ScrollablePanel<Seed, CompanionsSettings>
         if (charWidth < 4)
             yield break;
 
+        var name = Game.Font.RenderText(companion.Type.ToString().ToUpperInvariant() + ":");
+        var spellWidth = charWidth - _maxNameWidth;
+        var shownSpells = companion.Spells.Where(s => Settings.Spells.Contains(s.Type));
 
-        yield return Game.Font.RenderText(companion.Type.ToString().ToUpperInvariant());
+        if (spellWidth < 4)
+            yield break;
 
-        if (companion.Spells.Any())
+        if (shownSpells.Any())
         {
-            foreach(var group in companion.Spells.Chunk(charWidth/3))
+            var first = true;
+            foreach(var group in shownSpells.Chunk(spellWidth / 3))
             {
                 var list = group.ToList();
                 var spells = list.Select(s=> Game.Sprites.GetSpellData(s.Type)).ToList();
-                var palette = PaletteExtensions.Combine(spells.Select(s => s.Palette!).Append(Game.Font.Palette));
-                
-                var spellRow = BitmapDataFactory.CreateBitmapData(new Size(24 * list.Count() - 8, 24));
+                var spellRow = BitmapDataFactory.CreateBitmapData(new Size(charWidth * 8, 24));
+
+                if (first)
+                {
+                    first = false;
+                    name.DrawInto(spellRow, new Point(0, 8));
+                }
 
                 for (int i = 0; i < list.Count; i++)
                 {
-                    spells[i].DrawInto(spellRow, new Point(i*24, 0));
-                    Game.Font.RenderText(ToSmallNumbers(list[i].Level.ToString().PadLeft(2))).DrawInto(spellRow, new Point(i * 24, 16));
+                    spells[i].DrawInto(spellRow, new Point((charWidth - spellWidth) * 8 + i*24, 0));
+                    Game.Font.RenderText(ToSmallNumbers(list[i].Level.ToString().PadLeft(2))).DrawInto(spellRow, new Point((charWidth - spellWidth) * 8 + i * 24, 16));
                 }
 
                 yield return spellRow;
@@ -100,7 +109,8 @@ internal class CompanionsPanel : ScrollablePanel<Seed, CompanionsSettings>
         foreach (var quest in companion.Quests)
             yield return Game.Font.RenderText(quest, charWidth);
 
-        yield return Game.Font.RenderText("");
+        if (companion.Quests.Any())
+            yield return Game.Font.RenderText("");
     }
 
     protected override void Dispose(bool disposing)

@@ -15,7 +15,7 @@ internal class MysticQuestRandomizerSettings : GameSettings
         Equipment = new EquipmentSettings(SettingsData);
         Elements = new ElementsSettings(SettingsData);
         Companions = new CompanionsSettings(SettingsData);
-
+        //Stats = new StatsSettings(SettingsData);
     }
 
     [DisplayName("Equipment")]
@@ -32,5 +32,9 @@ internal class MysticQuestRandomizerSettings : GameSettings
     [TypeConverter(typeof(ExpandableObjectConverter))]
     [Description("Tracking of Companions' Spells and Quests.")]
     public CompanionsSettings Companions { get; }
+
+    //[TypeConverter(typeof(ExpandableObjectConverter))]
+    //[Description("Tracking of general statistics")]
+    //public StatsSettings Stats { get; }
 }
 

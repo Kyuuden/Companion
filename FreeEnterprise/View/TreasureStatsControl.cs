@@ -11,9 +11,9 @@ public class TreasureStatsControl : StatisticControl<int>
 
     protected override string PropertyName => nameof(ISeed.TreasureCount);
 
-    protected override IReadableBitmapData GetIcon() => Seed.Sprites.GetChestImage(RomData.Chest.Open);
+    protected override IReadableBitmapData GetIcon() => Game.Sprites.GetChestImage(RomData.Chest.Open);
 
-    protected override int GetStat() => Seed.TreasureCount;
+    protected override int GetStat() => Game.TreasureCount;
 
     protected override string GetStatText() => $"{Stat,4}";
 }

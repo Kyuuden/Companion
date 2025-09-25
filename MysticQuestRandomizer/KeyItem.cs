@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace FF.Rando.Companion.MysticQuestRandomizer;
@@ -15,12 +14,14 @@ public class KeyItem : IImageTracker
     private Bitmap? _image;
     private TimeSpan? _whenFound;
     private bool _isFound;
-    private Sprites _sprites;
+    private readonly Sprites _sprites;
+    private readonly bool _blank;
 
-    internal KeyItem(KeyItemType type, Sprites sprites)
+    internal KeyItem(KeyItemType type, Sprites sprites, bool blank = false)
     {
         _itemType = type;
         _sprites = sprites;
+        _blank = blank;
         SetImage();
     }
 
@@ -70,7 +71,10 @@ public class KeyItem : IImageTracker
 
     private void SetImage()
     {
-        Image = _sprites.GetKeyItem(_itemType, IsFound);
+        if (_blank)
+            Image = new Bitmap(16, 16);
+        else
+            Image = _sprites.GetKeyItem(_itemType, IsFound);
     }
 
     protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
@@ -79,13 +83,9 @@ public class KeyItem : IImageTracker
     }
 }
 
-internal class KeyItems
+internal class KeyItems(Sprites sprites, bool shatteredSkyCoin)
 {
-    private readonly IReadOnlyList<KeyItem> _items;
-
-    public KeyItems(Sprites sprites)
-    {
-        _items =
+    private readonly IReadOnlyList<KeyItem> _items =
         [
             new KeyItem(KeyItemType.Elixer, sprites),
             new KeyItem(KeyItemType.TreeWither, sprites),
@@ -102,13 +102,12 @@ internal class KeyItems
             new KeyItem(KeyItemType.SandCoin, sprites),
             new KeyItem(KeyItemType.RiverCoin, sprites),
             new KeyItem(KeyItemType.SunCoin, sprites),
-            new KeyItem(KeyItemType.SkyCoin, sprites),
+            new KeyItem(KeyItemType.SkyCoin, sprites, shatteredSkyCoin),
         ];
-    }
 
     public IReadOnlyList<KeyItem> Items => _items;
 
-    public bool Update(TimeSpan time, ReadOnlySpan<byte> found, byte shardCount)
+    public bool Update(TimeSpan time, ReadOnlySpan<byte> found)
     {
         var updated = false;
 

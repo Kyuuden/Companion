@@ -141,6 +141,8 @@ internal class Sprites : IDisposable
 
     internal Bitmap GetKeyItem(KeyItemType keyItemType, bool isFound) => _keyItemBuilders[keyItemType].Render(!isFound);
 
+    internal IReadableBitmapData GetKeyItemData(KeyItemType keyItemType) => _keyItemBuilders[keyItemType].RenderData();
+
     internal Bitmap GetSpell(SpellType spellType, bool isFound = true) => _spellBuilders[spellType].Render(!isFound);
 
     internal IReadableBitmapData GetSpellData(SpellType spellType) => _spellBuilders[spellType].RenderData();

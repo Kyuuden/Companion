@@ -5,17 +5,6 @@ using System.Reflection;
 
 namespace FF.Rando.Companion.Settings.TypeConverters;
 
-public class ButtonAssignmentConverter : TypeConverter
-{
-    public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
-    {
-        if (sourceType == typeof(string)) return false;
-
-        return base.CanConvertFrom(context, sourceType);
-    }
-
-}
-
 public class EnumDescriptionConverter : EnumConverter
 {
     private Type _enumType;

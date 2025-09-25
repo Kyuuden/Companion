@@ -5,10 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FF.Rando.Companion.MysticQuestRandomizer;
 public class Spell : IImageTracker
@@ -17,7 +14,7 @@ public class Spell : IImageTracker
     private Bitmap? _image;
     private TimeSpan? _whenFound;
     private bool _isFound;
-    private Sprites _sprites;
+    private readonly Sprites _sprites;
 
     internal Spell(SpellType type, Sprites sprites)
     {
@@ -81,13 +78,9 @@ public class Spell : IImageTracker
     }
 }
 
-internal class Spells
+internal class Spells(Sprites sprites)
 {
-    private readonly IReadOnlyList<Spell> _items;
-
-    public Spells(Sprites sprites)
-    {
-        _items =
+    private readonly IReadOnlyList<Spell> _items =
         [
             new Spell(SpellType.Exit, sprites),
             new Spell(SpellType.Cure, sprites),
@@ -102,7 +95,6 @@ internal class Spells
             new Spell(SpellType.Meteor, sprites),
             new Spell(SpellType.Flare, sprites),
         ];
-    }
 
     public IReadOnlyList<Spell> Items => _items;
 

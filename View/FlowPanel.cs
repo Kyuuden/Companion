@@ -1,6 +1,7 @@
 ﻿using FF.Rando.Companion.Settings;
 using KGySoft.Drawing.Imaging;
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Runtime;
@@ -113,22 +114,17 @@ public abstract partial class FlowPanel<TGame, TSettings> : UserControl, IPanel 
         if (_isloaded) Arrange();
     }
 
-    private bool _arranging = false;
-    private void DelayedArrange()
-    {
-        if (!_arranging)
-            BeginInvoke(() =>
-            {
-                _arranging = true;
-                Arrange();
-                _arranging = false;
-            });
-    }
-
     protected virtual void SortControls(ControlCollection controlCollection, int columns)
     {
 
     }
+
+    protected virtual int GetItemWidth(ControlCollection controlCollection)
+    {
+        return controlCollection.OfType<Control>().Max(c => c.Width) + 8;
+    }
+
+    protected virtual bool CenterMultiColumnItems => false;
 
     protected void Arrange()
     {
@@ -140,45 +136,46 @@ public abstract partial class FlowPanel<TGame, TSettings> : UserControl, IPanel 
         if (unscaledSize.Height < 8 || unscaledSize.Width < 8)
             return;
 
+        Padding = new Padding(Settings.TileSize);
 
         switch (SpacingMode)
         {
             case SpacingMode.Rows:
                 break;
             case SpacingMode.Columns:
-                var elementsize = (flowLayoutPanel1.Controls.OfType<Control>().Max(c => c.Width) + 8);
-                var columns = Math.Min(WrapAfter, Math.Min(flowLayoutPanel1.Controls.Count, flowLayoutPanel1.Size.Width / elementsize));
-                var extra = (flowLayoutPanel1.Size.Width - (elementsize * columns)) - 8;
+                var elementsize = GetItemWidth(flowLayoutPanel1.Controls);
+                var columns = Math.Min(WrapAfter, Math.Min(flowLayoutPanel1.Controls.Count, flowLayoutPanel1.Width / elementsize));
+                var extra = flowLayoutPanel1.Width - (elementsize * columns);
                 var divisions = columns > 1 ? (columns - 1) * 2 : 2;
-                var margin = Math.Max(4, extra / divisions);
+                var margin = extra / divisions;
 
                 if (columns <= 0)
                     break;
 
                 flowLayoutPanel1.SuspendLayout();
 
-                if (extra > (margin * divisions))
-                {
-                    var paddingAjustment = (extra - (margin * divisions)) / 2 + 1;
-                    Padding = new Padding(Settings.TileSize + paddingAjustment, Settings.TileSize, Settings.TileSize + paddingAjustment, Settings.TileSize);
-                }
-                else
-                {
-                    Padding = new Padding(Settings.TileSize);
-                }
-
                 SortControls(flowLayoutPanel1.Controls, columns);
                 for (int i = 0; i < flowLayoutPanel1.Controls.Count; i++)
                 {
                     var c = flowLayoutPanel1.Controls[i];
-                    var marginAdjustment = (elementsize - c.Width - 8);
+                    if (!CenterMultiColumnItems || c.Width + 8 <= elementsize)
+                    {
+                        var marginAdjustment = Math.Max(0, elementsize - c.Width - 8);
 
-                    if (i % columns == 0)
-                        c.Margin = new(4, 4, margin+ marginAdjustment, 4);
-                    else if ((i + 1) % columns == 0)
-                        c.Margin = new(margin, 4, 4, 4);
+                        if (i % columns == 0)
+                            c.Margin = new(4, 4, 4 + margin + marginAdjustment, 4);
+                        else if ((i + 1) % columns == 0)
+                            c.Margin = new(4 + margin, 4, 4, 4);
+                        else
+                            c.Margin = new(4 + margin, 4, 4 + margin + marginAdjustment, 4);
+                    }
                     else
-                        c.Margin = new(margin, 4, margin+ marginAdjustment, 4);
+                    {
+                        var columnSpan = (int)Math.Ceiling((double)c.Width / (elementsize-8));
+                        var columnsWidth = columnSpan * elementsize + margin * (columnSpan - 1) * 2;
+                        var halfRemaining = (columnsWidth - c.Width) / 2;
+                        c.Margin = new(4 + halfRemaining, 4, 4 + halfRemaining, 4);
+                    }
 
                     flowLayoutPanel1.SetFlowBreak(c, (i + 1) % columns == 0);
                 }

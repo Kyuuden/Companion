@@ -357,6 +357,9 @@
 	  <Compile Update="MysticQuestRandomizer\View\MysticQuestRandomizerControl.cs">
 	    <SubType>UserControl</SubType>
 	  </Compile>
+	  <Compile Update="MysticQuestRandomizer\View\StatsPanel.cs">
+	    <SubType>UserControl</SubType>
+	  </Compile>
 	  <Compile Update="Properties\Resources.Designer.cs">
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
@@ -364,6 +367,9 @@
 	  </Compile>
 	  <Compile Update="View\FlowPanel.cs">
 	    <SubType>UserControl</SubType>
+	  </Compile>
+	  <Compile Update="View\StatisticControl.cs">
+	    <SubType>Component</SubType>
 	  </Compile>
 	</ItemGroup>
 	

@@ -1,6 +1,5 @@
 ﻿using BizHawk.Common;
 using FF.Rando.Companion.Extensions;
-using System.Collections.Generic;
 
 namespace FF.Rando.Companion.MysticQuestRandomizer;
 internal class Addresses
@@ -23,11 +22,13 @@ internal class Addresses
     {
         public static readonly Range<long> ActivePartner = 0x004dL.WithLength(1);
 
+        public static readonly long GameStateIndicator = 0x3749;
+        public static readonly long GameVictoryIndicator = 0x0EC6;
+
         public static readonly Range<long> WramRegion = 0x0e00L.WithLength(0x280);
 
-        public static readonly System.Range CheckedNpcBits = new(0xA8, 0xA8);
-        public static readonly System.Range CheckedlocationBits = new(0xc8, 0xA8);
-        public static readonly System.Range CheckedBattlefieldBits = new(0x1d4, 0xA8);
+        public static readonly System.Range GameStateFlags = new(0xA8, 0xE8);
+        public static readonly System.Range CheckedBattlefieldBits = new(0x1d4, 0x1d7);
 
         public static readonly System.Range FoundShards = new(0x93, 0x94);
         public static readonly System.Range FoundKeyItemBits = new(0xa6, 0xa8);

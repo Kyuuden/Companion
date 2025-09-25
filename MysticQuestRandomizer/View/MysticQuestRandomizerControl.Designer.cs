@@ -33,6 +33,7 @@ partial class MysticQuestRandomizerControl
             this._equipment = new FF.Rando.Companion.MysticQuestRandomizer.View.EquipmentPanel();
             this._elements = new FF.Rando.Companion.MysticQuestRandomizer.View.ElementsPanel();
             this._companions = new FF.Rando.Companion.MysticQuestRandomizer.View.CompanionsPanel();
+            this._statistics = new FF.Rando.Companion.MysticQuestRandomizer.View.StatsPanel();
             this.SuspendLayout();
             // 
             // _companions
@@ -79,6 +80,21 @@ partial class MysticQuestRandomizerControl
             this._equipment.TabIndex = 2;
             this._equipment.WrapContents = true;
             // 
+            // _statistics
+            // 
+            this._statistics.AutoResize = true;
+            this._statistics.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this._statistics.BackColor = Color.FromArgb(0, 0, 99);
+            this._statistics.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this._statistics.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this._statistics.FlowDirection = System.Windows.Forms.FlowDirection.LeftToRight;
+            this._statistics.Icons = false;
+            this._statistics.Location = new System.Drawing.Point(0, 0);
+            this._statistics.Name = "_statistics";
+            this._statistics.Size = new System.Drawing.Size(346, 160);
+            this._statistics.TabIndex = 2;
+            this._statistics.WrapContents = false;
+            // 
             // MysticQuestRandomizerControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -92,6 +108,7 @@ partial class MysticQuestRandomizerControl
 
     #endregion
 
+    private StatsPanel _statistics;
     private EquipmentPanel _equipment;
     private ElementsPanel _elements;
     private CompanionsPanel _companions;

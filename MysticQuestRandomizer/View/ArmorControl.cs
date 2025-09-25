@@ -1,5 +1,5 @@
-﻿using FF.Rando.Companion.View;
-using FF.Rando.Companion.MysticQuestRandomizer.Settings;
+﻿using FF.Rando.Companion.MysticQuestRandomizer.Settings;
+using FF.Rando.Companion.View;
 
 namespace FF.Rando.Companion.MysticQuestRandomizer.View;
 

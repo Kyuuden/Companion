@@ -1,9 +1,9 @@
-﻿using System;
+﻿using FF.Rando.Companion.Settings.TypeConverters;
+using System;
 using System.ComponentModel;
 using System.Drawing.Design;
-using System.Windows.Forms.Design;
 using System.Windows.Forms;
-using FF.Rando.Companion.Settings.TypeConverters;
+using System.Windows.Forms.Design;
 
 namespace FF.Rando.Companion.Settings.Editor;
 internal class ButtonAssignmentEditor : System.Drawing.Design.UITypeEditor
