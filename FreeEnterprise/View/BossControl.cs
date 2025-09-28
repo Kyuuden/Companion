@@ -72,4 +72,13 @@ public partial class BossControl : ImageControl<ISeed, IBoss>
         border?.Dispose();
         toolTipImage.Dispose();
     }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _toolTip.Dispose();
+        }
+        base.Dispose(disposing);
+    }
 }

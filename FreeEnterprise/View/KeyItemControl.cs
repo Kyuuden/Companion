@@ -76,4 +76,13 @@ public partial class KeyItemControl : ImageControl<ISeed, IKeyItem>
         border?.Dispose();
         toolTipImage.Dispose();
     }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _toolTip.Dispose();
+        }
+        base.Dispose(disposing);
+    }
 }

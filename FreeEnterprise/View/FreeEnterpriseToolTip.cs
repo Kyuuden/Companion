@@ -35,4 +35,15 @@ internal class FreeEnterpriseToolTip : ToolTip
             _image = value;
         }
     }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            Image?.Dispose();
+            Popup -= FreeEnterpriseToolTip_Popup;
+            Draw -= FreeEnterpriseToolTip_Draw;
+        }
+        base.Dispose(disposing);
+    }
 }

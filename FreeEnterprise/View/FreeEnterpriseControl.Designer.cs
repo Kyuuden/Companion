@@ -15,9 +15,15 @@ partial class FreeEnterpriseControl
     /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
     protected override void Dispose(bool disposing)
     {
-        if (disposing && (components != null))
+        if (disposing)
         {
-            components.Dispose();
+            components?.Dispose();
+            _objectives?.Dispose();
+            _stats?.Dispose();
+            _bosses?.Dispose();
+            _locations?.Dispose();
+            _keyItems?.Dispose();
+            _party?.Dispose();
         }
         base.Dispose(disposing);
     }
