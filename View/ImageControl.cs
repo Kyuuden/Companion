@@ -58,4 +58,21 @@ public class ImageControl<TGame, TImageSource> : PictureBox, IScalableControl wh
     {
         Size = Settings.Scale(Image.Size);
     }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            if (Value != null)
+                Value.PropertyChanged -= Value_PropertyChanged;
+            
+            if (Game != null)
+                Game.PropertyChanged -= Value_PropertyChanged;
+            
+            if (Settings != null)
+                Settings.PropertyChanged -= Value_PropertyChanged;
+        }
+
+        base.Dispose(disposing);
+    }
 }

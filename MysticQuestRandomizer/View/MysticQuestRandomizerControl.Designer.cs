@@ -19,6 +19,15 @@ partial class MysticQuestRandomizerControl
         {
             components.Dispose();
         }
+
+        if (disposing)
+        {
+            _elements.Dispose();
+            _companions.Dispose();
+            _equipment.Dispose();
+            _statistics.Dispose();
+        }
+
         base.Dispose(disposing);
     }
 

@@ -14,9 +14,11 @@ partial class FlowPanel<TGame, TSettings>
     /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
     protected override void Dispose(bool disposing)
     {
-        if (disposing && (components != null))
+        if (disposing)
         {
-            components.Dispose();
+            if (Settings != null) Settings.PropertyChanged -= Settings_PropertyChanged;
+            if (Game != null) Game.PropertyChanged -= Settings_PropertyChanged;
+            components?.Dispose();
         }
         base.Dispose(disposing);
     }

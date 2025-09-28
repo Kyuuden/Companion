@@ -117,6 +117,11 @@ internal class CompanionsPanel : ScrollablePanel<Seed, CompanionsSettings>
     {
         if (disposing)
         {
+            foreach (var item in _arrows)
+            {
+                item.Value.Dispose();
+            }
+            _arrows.Clear();
         }
 
         base.Dispose(disposing);

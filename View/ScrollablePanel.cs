@@ -252,4 +252,17 @@ public abstract class ScrollablePanel<TGame, TSettings> : PictureBox, IPanel, IS
     protected abstract IEnumerable<List<IReadableBitmapData>> GeneratePageBitmaps();
     protected abstract bool CombinePages { get; }
     protected abstract int ScrollLines { get; }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            if (Settings != null)
+                Settings.PropertyChanged -= PropertyChanged;
+
+            if (Game != null)
+                Game.PropertyChanged -= PropertyChanged;
+        }
+        base.Dispose(disposing);
+    }
 }

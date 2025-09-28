@@ -41,8 +41,8 @@ internal class Seed : LegacySeed
         _descriptors = new Descriptors();
         _keyItems = new KeyItems(container.Settings.KeyItems, Font, _descriptors);
         _party = new Party(container.Settings.Party, Sprites, _flags.VanillaAgility, _flags.CHero);
-        _objectives = new Objectives(metadata.Objectives!, _flags?.NumRequiredObjectives, _flags?.OWinGame == true, _flags?.OWinCrystal == true);
-        _locations = new Locations(_descriptors, _flags!);
+        _objectives = new Objectives(metadata.Objectives!, _flags.NumRequiredObjectives, _flags.OWinGame == true, _flags.OWinCrystal == true);
+        _locations = new Locations(_descriptors, _flags);
     }
 
     public override void OnNewFrame()
@@ -72,7 +72,7 @@ internal class Seed : LegacySeed
             {
                 NotifyPropertyChanged(nameof(KeyItems));
 
-                XpRate = (_flags != null && !_flags.XNoKeyBonus && KeyItems.Count(ki => ki.IsFound && ki.IsTrackable) >= 10)
+                XpRate = (!_flags.XNoKeyBonus && KeyItems.Count(ki => ki.IsFound && ki.IsTrackable) >= 10)
                     ? 2m : 1m;
             }
 
@@ -90,5 +90,5 @@ internal class Seed : LegacySeed
         }
     }
 
-    protected override bool OWinGame => _flags?.OWinGame ?? false;
+    protected override bool OWinGame => _flags.OWinGame;
 }

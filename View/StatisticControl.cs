@@ -1,4 +1,5 @@
 ﻿using FF.Rando.Companion.Settings;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Windows.Forms;
 
@@ -63,5 +64,16 @@ public abstract class StatisticControl<T, TGame> : PictureBox, IScalableControl 
     public void Rescale()
     {
         Size = Settings.Scale(Image.Size);
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            if (Game != null)
+                Game.PropertyChanged -= Seed_PropertyChanged;
+        }
+
+        base.Dispose(disposing);
     }
 }
