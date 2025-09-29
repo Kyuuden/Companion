@@ -11,7 +11,8 @@ public enum SpellType : byte
     Cure,
     Exit,
     Flare,
-    Meteor,
+
+    Meteor = 13,
     White,
     Thunder
 }
@@ -26,6 +27,7 @@ public enum KeyItemType : byte
     WakeWater,
     TreeWither,
     Elixer,
+
     SkyCoin,
     SunCoin,
     RiverCoin,
@@ -56,7 +58,7 @@ public enum ArmorType : byte
     BlackRobe,
     FlameArmor,
 
-    CupidLocket
+    CupidLocket = 23
 }
 
 public enum WeaponType : byte
@@ -70,7 +72,7 @@ public enum WeaponType : byte
     KnightSword,
     SteelSword,
 
-    MegaGrenade,
+    MegaGrenade = 12,
     JumboBomb,
     Bomb,
     DragonClaw
