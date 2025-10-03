@@ -20,12 +20,14 @@ internal class Addresses
 
     internal static class WRAM
     {
-        public static readonly Range<long> ActivePartner = 0x004dL.WithLength(1);
+        public static readonly long ActivePartner = 0x004dL;
 
         public static readonly long GameStateIndicator = 0x3749;
 
         public static readonly long GameVictoryIndicator = 0x0F22;
-        public static readonly long GameVictoryIndicator2 = 0x0EC6;
+        public static readonly Range<long> Mob1Health = 0x1114L.WithLength(2);
+        public static readonly Range<long> Mob2Health = 0x1194L.WithLength(2);
+        public static readonly Range<long> Mob3Health = 0x1214L.WithLength(2);
 
         public static readonly Range<long> WramRegion = 0x0e00L.WithLength(0x280);
 
@@ -36,6 +38,6 @@ internal class Addresses
         public static readonly System.Range FoundKeyItemBits = new(0xa6, 0xa8);
         public static readonly System.Range FoundWeaponBits = new(0x232, 0x235);
         public static readonly System.Range FoundArmorBits = new(0x235, 0x238);
-        public static readonly System.Range FoundSpellBits = new(0x238, 0x240);
+        public static readonly System.Range FoundSpellBits = new(0x238, 0x23A);
     }
 }

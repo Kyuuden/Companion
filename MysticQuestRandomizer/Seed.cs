@@ -136,6 +136,7 @@ public class Seed : IGame
 
     public void Dispose()
     {
+        Font.Dispose();
         Sprites.Dispose();
     }
 
@@ -153,7 +154,9 @@ public class Seed : IGame
 
         if (!Victory)
             Victory = (MQRContainer.Wram.ReadByte(Addresses.WRAM.GameVictoryIndicator) & 0x80) == 0x80 &&
-                (MQRContainer.Wram.ReadByte(Addresses.WRAM.GameVictoryIndicator2) & 0x18) == 0x18;
+                MQRContainer.Wram.ReadBytes(Addresses.WRAM.Mob1Health).Read<ushort>(0, 16) is ushort.MinValue or ushort.MaxValue &&
+                MQRContainer.Wram.ReadBytes(Addresses.WRAM.Mob2Health).Read<ushort>(0, 16) is ushort.MinValue or ushort.MaxValue &&
+                MQRContainer.Wram.ReadBytes(Addresses.WRAM.Mob3Health).Read<ushort>(0, 16) is ushort.MinValue or ushort.MaxValue;
 
         if (Started && MQRContainer.Emulation.FrameCount() % MQRContainer.RootSettings.TrackingInterval == 0)
         {

@@ -31,16 +31,14 @@ internal class SpriteDefinition(List<byte[,]> tileData, byte[,] tileIndexes, Pal
         {
             for (var x = 0; x < width; x++)
             {
-                var tileIndex = tileIndexes[y / 8, x / 8];
-                if (tileIndex != 255)
-                    data.SetColorIndex(x, y, tileData[tileIndex][x % 8, y % 8]);
+                data.SetColorIndex(x, y, tileData[tileIndexes[y / 8, x / 8]][x % 8, y % 8]);
             }
         }
 
         if (greyscale)
         {
             data.MakeGrayscale();
-            data.AdjustBrightness(-0.25f);
+            data.AdjustBrightness(-0.5f);
             _cachedGreyScaleData = data;
             return _cachedGreyScaleData;
         }

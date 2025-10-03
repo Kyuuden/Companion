@@ -48,7 +48,7 @@ namespace FF.Rando.Companion
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button1.Location = new System.Drawing.Point(297, 306);
+            this.button1.Location = new System.Drawing.Point(297, 313);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 0;
@@ -72,14 +72,14 @@ namespace FF.Rando.Companion
             this.descriptionLabel.Location = new System.Drawing.Point(12, 66);
             this.descriptionLabel.MaximumSize = new System.Drawing.Size(370, 0);
             this.descriptionLabel.Name = "descriptionLabel";
-            this.descriptionLabel.Size = new System.Drawing.Size(349, 91);
+            this.descriptionLabel.Size = new System.Drawing.Size(268, 104);
             this.descriptionLabel.TabIndex = 11;
             this.descriptionLabel.Text = resources.GetString("descriptionLabel.Text");
             // 
             // ff4Link
             // 
             this.ff4Link.AutoSize = true;
-            this.ff4Link.Location = new System.Drawing.Point(29, 167);
+            this.ff4Link.Location = new System.Drawing.Point(29, 175);
             this.ff4Link.Margin = new System.Windows.Forms.Padding(20, 5, 5, 5);
             this.ff4Link.Name = "ff4Link";
             this.ff4Link.Size = new System.Drawing.Size(102, 13);
@@ -91,7 +91,7 @@ namespace FF.Rando.Companion
             // ff4SourceLink
             // 
             this.ff4SourceLink.AutoSize = true;
-            this.ff4SourceLink.Location = new System.Drawing.Point(136, 167);
+            this.ff4SourceLink.Location = new System.Drawing.Point(136, 175);
             this.ff4SourceLink.Margin = new System.Windows.Forms.Padding(0, 5, 5, 5);
             this.ff4SourceLink.Name = "ff4SourceLink";
             this.ff4SourceLink.Size = new System.Drawing.Size(45, 13);
@@ -103,7 +103,7 @@ namespace FF.Rando.Companion
             // sotnToolsLink
             // 
             this.sotnToolsLink.AutoSize = true;
-            this.sotnToolsLink.Location = new System.Drawing.Point(29, 305);
+            this.sotnToolsLink.Location = new System.Drawing.Point(29, 313);
             this.sotnToolsLink.Margin = new System.Windows.Forms.Padding(20, 5, 5, 5);
             this.sotnToolsLink.Name = "sotnToolsLink";
             this.sotnToolsLink.Size = new System.Drawing.Size(87, 13);
@@ -115,7 +115,7 @@ namespace FF.Rando.Companion
             // updaterLink
             // 
             this.updaterLink.AutoSize = true;
-            this.updaterLink.Location = new System.Drawing.Point(29, 282);
+            this.updaterLink.Location = new System.Drawing.Point(29, 290);
             this.updaterLink.Margin = new System.Windows.Forms.Padding(20, 5, 5, 5);
             this.updaterLink.Name = "updaterLink";
             this.updaterLink.Size = new System.Drawing.Size(144, 13);
@@ -127,7 +127,7 @@ namespace FF.Rando.Companion
             // schalaLink
             // 
             this.schalaLink.AutoSize = true;
-            this.schalaLink.Location = new System.Drawing.Point(29, 236);
+            this.schalaLink.Location = new System.Drawing.Point(29, 244);
             this.schalaLink.Margin = new System.Windows.Forms.Padding(20, 5, 5, 5);
             this.schalaLink.Name = "schalaLink";
             this.schalaLink.Size = new System.Drawing.Size(60, 13);
@@ -139,7 +139,7 @@ namespace FF.Rando.Companion
             // kgySoftLink
             // 
             this.kgySoftLink.AutoSize = true;
-            this.kgySoftLink.Location = new System.Drawing.Point(29, 259);
+            this.kgySoftLink.Location = new System.Drawing.Point(29, 267);
             this.kgySoftLink.Margin = new System.Windows.Forms.Padding(20, 5, 5, 5);
             this.kgySoftLink.Name = "kgySoftLink";
             this.kgySoftLink.Size = new System.Drawing.Size(88, 13);
@@ -163,7 +163,7 @@ namespace FF.Rando.Companion
             // ff6Link
             // 
             this.ff6Link.AutoSize = true;
-            this.ff6Link.Location = new System.Drawing.Point(29, 190);
+            this.ff6Link.Location = new System.Drawing.Point(29, 198);
             this.ff6Link.Margin = new System.Windows.Forms.Padding(20, 5, 5, 5);
             this.ff6Link.Name = "ff6Link";
             this.ff6Link.Size = new System.Drawing.Size(102, 13);
@@ -175,7 +175,7 @@ namespace FF.Rando.Companion
             // ffmqLink
             // 
             this.ffmqLink.AutoSize = true;
-            this.ffmqLink.Location = new System.Drawing.Point(29, 213);
+            this.ffmqLink.Location = new System.Drawing.Point(29, 221);
             this.ffmqLink.Margin = new System.Windows.Forms.Padding(20, 5, 5, 5);
             this.ffmqLink.Name = "ffmqLink";
             this.ffmqLink.Size = new System.Drawing.Size(127, 13);
@@ -189,7 +189,7 @@ namespace FF.Rando.Companion
             this.AcceptButton = this.button1;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(384, 341);
+            this.ClientSize = new System.Drawing.Size(384, 348);
             this.ControlBox = false;
             this.Controls.Add(this.ffmqLink);
             this.Controls.Add(this.ff6Link);

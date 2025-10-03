@@ -118,7 +118,11 @@ public abstract partial class FlowPanel<TGame, TSettings> : UserControl, IPanel 
 
     protected virtual int GetItemWidth(ControlCollection controlCollection)
     {
-        return controlCollection.OfType<Control>().Where(c => c.Visible).Max(c => c.Width) + 8;
+        var visibleControls = controlCollection.OfType<Control>().Where(c => c.Visible).ToList();
+        if (visibleControls.Any())
+            return visibleControls.Max(c => c.Width) + 8;
+
+        return controlCollection.OfType<Control>().Max(c => c.Width) + 8;
     }
 
     protected virtual bool CenterMultiColumnItems => false;
@@ -131,6 +135,9 @@ public abstract partial class FlowPanel<TGame, TSettings> : UserControl, IPanel 
         var unscaledSize = Settings.Unscale(Size);
 
         if (unscaledSize.Height < 8 || unscaledSize.Width < 8)
+            return;
+
+        if (!Visible) 
             return;
 
         Padding = new Padding(Settings.TileSize);
@@ -186,7 +193,6 @@ public abstract partial class FlowPanel<TGame, TSettings> : UserControl, IPanel 
                     flowLayoutPanel1.SetFlowBreak(c, (i - invisibleCount + 1) % columns == 0);
                 }
                 flowLayoutPanel1.ResumeLayout();
-                //flowLayoutPanel1.PerformLayout();
 
                 break;
             case SpacingMode.None:

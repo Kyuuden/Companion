@@ -1,9 +1,8 @@
 ﻿# Final Fantasy Rando Companion
 [![(latest) release | GitHub](https://img.shields.io/github/release/Kyuuden/Companion.svg?logo=github&logoColor=333333&style=popout)](https://github.com/Kyuuden/Companion/releases/latest)
 
-An auto-tracker (currently) for [Free Enterprise, a Final Fantasy IV randomizer](https://ff4fe.com/).
-Plans exist to extend its support to be able to track [Worlds Collide](https://ff6worldscollide.com/) and [Mystic Quest Randomizer](https://www.ffmqrando.net/).
-
+An auto-tracker (currently) for [Free Enterprise, a Final Fantasy IV randomizer](https://ff4fe.com/) and [Mystic Quest Randomizer](https://www.ffmqrando.net/).
+Plans exist to extend its support to be able to track [Worlds Collide](https://ff6worldscollide.com/).
 
 ## Installation
 This tool requires [the latest BizHawk version](https://github.com/TASEmulators/BizHawk/releases/latest).

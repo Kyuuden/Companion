@@ -38,31 +38,31 @@ public class Sprites : IDisposable
 
     public Sprites(IMemorySpace memorySpace)
     {
-        PoseFrames[Pose.Stand] = [new Frame(0, new byte[3, 2] { { 0, 1 }, { 2, 3 }, { 4, 5 } })];
-        PoseFrames[Pose.Walk] = [new Frame(0, new byte[3, 2] { { 0, 1 }, { 2, 3 }, { 12, 13 } })];
-        PoseFrames[Pose.Queued] = [new Frame(0, new byte[3, 2] { { 6, 7 }, { 8, 9 }, { 10, 11 } })];
+        PoseFrames[Pose.Stand] = [new Frame(0, new byte?[3, 2] { { 0, 1 }, { 2, 3 }, { 4, 5 } })];
+        PoseFrames[Pose.Walk] = [new Frame(0, new byte?[3, 2] { { 0, 1 }, { 2, 3 }, { 12, 13 } })];
+        PoseFrames[Pose.Queued] = [new Frame(0, new byte?[3, 2] { { 6, 7 }, { 8, 9 }, { 10, 11 } })];
         PoseFrames[Pose.Crouch] =
             [
-            new Frame(8, new byte[3, 2] { { 14, 15 }, { 16, 17 }, { 18, 19 } }, new sbyte?[3, 2] { { 44, -44 }, { null, null }, { null, null } }),
-            new Frame(8, new byte[3, 2] { { 14, 15 }, { 16, 17 }, { 18, 19 } }, new sbyte?[3, 2] { { 45, -45 }, { null, null }, { null, null } })
+            new Frame(8, new byte?[3, 2] { { 14, 15 }, { 16, 17 }, { 18, 19 } }, new sbyte?[3, 2] { { 44, -44 }, { default, default }, { default, default } }),
+            new Frame(8, new byte?[3, 2] { { 14, 15 }, { 16, 17 }, { 18, 19 } }, new sbyte?[3, 2] { { 45, -45 }, { default, default }, { default, default } })
             ];
 
-        PoseFrames[Pose.Damaged] = [new Frame(0, new byte[3, 2] { { 30, 31 }, { 32, 33 }, { 34, 35 } })];
+        PoseFrames[Pose.Damaged] = [new Frame(0, new byte?[3, 2] { { 30, 31 }, { 32, 33 }, { 34, 35 } })];
         PoseFrames[Pose.Celebrate] =
             [
-            new Frame(16, new byte[3, 2] { { 36, 37 }, { 38, 39 }, { 40, 41 } }),
-            new Frame(16, new byte[3, 2] { { 0, 1 }, { 2, 3 }, { 4, 5 } })
+            new Frame(16, new byte?[3, 2] { { 36, 37 }, { 38, 39 }, { 40, 41 } }),
+            new Frame(16, new byte?[3, 2] { { 0, 1 }, { 2, 3 }, { 4, 5 } })
             ];
 
-        PoseFrames[Pose.Dead] = [new Frame(0, new byte[3, 3] { { 255, 255, 255 }, { 42, 43, 44 }, { 45, 46, 47 } })];
-        PoseFrames[Pose.Special] = [new Frame(0, new byte[3, 3] { { 48, 49, 50 }, { 51, 52, 53 }, { 255, 55, 56 } })];
+        PoseFrames[Pose.Dead] = [new Frame(0, new byte?[3, 3] { { default, default, default }, { 42, 43, 44 }, { 45, 46, 47 } })];
+        PoseFrames[Pose.Special] = [new Frame(0, new byte?[3, 3] { { 48, 49, 50 }, { 51, 52, 53 }, { default, 55, 56 } })];
         PoseFrames[Pose.Casting] =
             [
-            new Frame(8, new byte[3, 2] { { 57, 58 }, { 59, 60 }, { 61, 62 } }),
-            new Frame(8, new byte[3, 2] { { 57, 58 }, { 63, 60 }, { 61, 62 } })
+            new Frame(8, new byte?[3, 2] { { 57, 58 }, { 59, 60 }, { 61, 62 } }),
+            new Frame(8, new byte?[3, 2] { { 57, 58 }, { 63, 60 }, { 61, 62 } })
             ];
 
-        PoseFrames[Pose.Portrait] = [new Frame(0, new byte[4, 4] { { 0, 1, 2, 3 }, { 4, 5, 6, 7 }, { 8, 9, 10, 11 }, { 12, 13, 14, 15 } })];
+        PoseFrames[Pose.Portrait] = [new Frame(0, new byte?[4, 4] { { 0, 1, 2, 3 }, { 4, 5, 6, 7 }, { 8, 9, 10, 11 }, { 12, 13, 14, 15 } })];
 
         _combatTiles = [];
         foreach (var range in Addresses.ROM.CharacterSprites)

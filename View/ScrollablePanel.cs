@@ -96,6 +96,9 @@ public abstract class ScrollablePanel<TGame, TSettings> : PictureBox, IPanel, IS
             if (unscaledSize.Width <= 0 || unscaledSize.Height <= 0)
                 return;
 
+            if (!Visible)
+                return;
+
             Image?.Dispose();
             Image = null;
 

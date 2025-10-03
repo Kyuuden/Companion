@@ -5,11 +5,11 @@ using System.Drawing;
 
 namespace FF.Rando.Companion.FreeEnterprise.RomData;
 
-public class Frame(int frameDelay, byte[,] spriteIndexes, sbyte?[,]? sticker = null)
+public class Frame(int frameDelay, byte?[,] spriteIndexes, sbyte?[,]? sticker = null)
 {
     public int FrameDelay { get; } = frameDelay;
 
-    public byte[,] IndexArray { get; } = spriteIndexes;
+    public byte?[,] IndexArray { get; } = spriteIndexes;
 
     public sbyte?[,]? StickerArray { get; } = sticker;
 
@@ -42,8 +42,8 @@ public class Frame(int frameDelay, byte[,] spriteIndexes, sbyte?[,]? sticker = n
             for (var x = 0; x < width; x++)
             {
                 var tileIndex = IndexArray[y / 8, x / 8];
-                if (tileIndex != 255)
-                    data.SetColorIndex(x + xOffset, y + yOffset, tileLookup(tileIndex)[x % 8, y % 8]);
+                if (tileIndex.HasValue)
+                    data.SetColorIndex(x + xOffset, y + yOffset, tileLookup(tileIndex.Value)[x % 8, y % 8]);
 
                 var stickerIndex = StickerArray?[y / 8, x / 8];
                 if (stickerIndex.HasValue)

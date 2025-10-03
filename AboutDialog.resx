@@ -118,10 +118,12 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="descriptionLabel.Text" xml:space="preserve">
-    <value>Final Fantasy Rando Companion is an auto-tracker for Free Enterprise, a Final Fantasy Randomizer.
+    <value>Final Fantasy Rando Companion is an auto-tracker for:
+- Free Enterprise, a Final Fantasy IV Randomizer
+- Mystic Quest Randomizer
 
 Design and development by Kyuuden.
-Icons by SchalaKitty
+Free Enterprise Boss and Key Item Icons by SchalaKitty
 
 Links for referenced libraries, tools, and randomizers:</value>
   </data>
