@@ -5,11 +5,12 @@
 	  <Nullable>enable</Nullable>
 	  <TargetFramework>net48</TargetFramework>
 	  <UseWindowsForms>True</UseWindowsForms>
-	  <Version>2.0.4</Version>
+	  <Version>2.0.5</Version>
 	  <Description>Auto-Tracker for Final Fantasy Randomizers.</Description>
 	  <Copyright>2025 Kyuuden</Copyright>
 	  <AssemblyVersion></AssemblyVersion>
 	  <FileVersion></FileVersion>
+	  <Configurations>Debug;Release;Publish</Configurations>
   </PropertyGroup>
 
 	<PropertyGroup Condition=" '$(BIZHAWK_HOME)' == '' ">
@@ -40,6 +41,19 @@
 		<Reference Include="BizHawk.Emulation.Common" HintPath="$(BIZHAWK_HOME)dll/BizHawk.Emulation.Common.dll" />
 		<Reference Include="BizHawk.WinForms.Controls" HintPath="$(BIZHAWK_HOME)dll/BizHawk.WinForms.Controls.dll" />
 	</ItemGroup>
+
+	<Target Name="PublishPostBuild" AfterTargets="ILRepacker" Condition="'$(Configuration)|$(Platform)'=='Publish|AnyCPU'">
+		<ItemGroup>
+			<FilesToDelete Include="$(BIZHAWK_DATA_HOME)ExternalTools/KGySoft*.dll" />
+		</ItemGroup>
+		<Delete Files="@(FilesToDelete)">
+			<Output TaskParameter="DeletedFiles" ItemName="FilesDeleted" />
+		</Delete>
+		<Message Text="Files deleted: @(FilesDeleted)" Importance="high" />
+		<Copy SourceFiles="$(OutputPath)$(MSBuildProjectName).dll" DestinationFolder="$(BIZHAWK_DATA_HOME)ExternalTools" />
+		<ZipDirectory Overwrite="true" SourceDirectory="$(BIZHAWK_DATA_HOME)ExternalTools" DestinationFile="$(OutputPath)$(MSBuildProjectName)-$(Version).zip" />
+	</Target>
+	
 	<Target Name="ReleasePostBuild" AfterTargets="ILRepacker" Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<ItemGroup>
 			<FilesToDelete Include="$(BIZHAWK_DATA_HOME)ExternalTools/KGySoft*.dll" />

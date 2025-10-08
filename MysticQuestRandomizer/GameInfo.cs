@@ -4,6 +4,7 @@ using FF.Rando.Companion.MemoryManagement;
 using FF.Rando.Companion.MysticQuestRandomizer.Settings;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FF.Rando.Companion.MysticQuestRandomizer;
 internal class GameInfo
@@ -133,12 +134,16 @@ internal class GameInfo
 
     private static Companion? ParseCharcter(TextConverter textConverter, CompanionType character, ReadOnlySpan<byte> buffer)
     {
+        var characterEndMarker = new byte[] { 0x25, 0x0C, 0x15, 0x19, 0x15, 0x19 };
         var nameBytes = textConverter.TextToByte(character.ToString());
 
         var start = buffer.IndexOf(nameBytes);
         if (start == -1) return null;
 
-        var characterBuffer = buffer[start..];
+        var end = buffer[start..].IndexOf(characterEndMarker);
+        if (end == -1) return null;
+
+        var characterBuffer = buffer.Slice(start, end);
         var c = new Companion(character);
 
         var spellsStart = nameBytes.Length + 12 + textConverter.TextToByte("Spells").Length + 4;
@@ -147,6 +152,9 @@ internal class GameInfo
         SpellType? currentSpell;
         do
         {
+            if (spellsStart + 6 > characterBuffer.Length)
+                break;
+
             currentSpell = ParseSpell(characterBuffer.Read<ulong>(spellsStart * 8, 48));
             if (currentSpell != null)
             {
@@ -175,27 +183,20 @@ internal class GameInfo
         if (quests.HasValue)
         {
             var questStart = quests.Value.End.Value + 7;
-            var characterEndMarker = new byte[] { 0x25, 0x0C, 0x15, 0x19, 0x15, 0x19 };
-            var end = characterBuffer[questStart..].IndexOf(characterEndMarker);
-
-            if (end > 0)
+            var questsbuffer = characterBuffer[questStart..];
+            var questStartMarker = new byte[] { 0x05, 0x3B };
+            int nextQuestStart;
+            do
             {
-                end--;
-                var questsbuffer = characterBuffer[questStart..][..end];
-                var questStartMarker = new byte[] { 0x05, 0x3B };
-                int nextQuestStart;
-                do
+                nextQuestStart = questsbuffer.IndexOf(questStartMarker);
+                if (nextQuestStart > 0)
                 {
-                    nextQuestStart = questsbuffer.IndexOf(questStartMarker);
-                    if (nextQuestStart > 0)
-                    {
-                        c.AddQuest(textConverter.SpanToText(questsbuffer[..nextQuestStart]));
-                        questsbuffer = questsbuffer[(nextQuestStart + 7)..];
-                    }
-                } while (nextQuestStart > 0);
+                    c.AddQuest(textConverter.SpanToText(questsbuffer[..nextQuestStart]));
+                    questsbuffer = questsbuffer[(nextQuestStart + 7)..];
+                }
+            } while (nextQuestStart > 0);
 
-                c.AddQuest(textConverter.SpanToText(questsbuffer));
-            }
+            c.AddQuest(textConverter.SpanToText(questsbuffer));
         }
 
         return c;

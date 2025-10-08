@@ -10,9 +10,9 @@ public enum SpellType : byte
     Heal,
     Cure,
     Exit,
-    Flare,
 
-    Meteor = 13,
+    Flare = 12,
+    Meteor,
     White,
     Thunder
 }
