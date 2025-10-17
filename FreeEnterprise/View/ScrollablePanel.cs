@@ -19,6 +19,6 @@ public abstract class ScrollablePanel<TSettings> : ScrollablePanel<ISeed, TSetti
 
     protected override IReadableBitmapData GeneragePageCounter(int current, int total)
     {
-        return Game?.Font.RenderText($"{current}/{total}", RomData.TextMode.Normal)!;
+        return Game?.Font.RenderText($"{current}/{total}", TextMode.Normal)!;
     }
 }

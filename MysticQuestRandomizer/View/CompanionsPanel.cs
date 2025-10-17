@@ -2,6 +2,7 @@
 using FF.Rando.Companion.MysticQuestRandomizer.Settings;
 using FF.Rando.Companion.View;
 using KGySoft.Drawing.Imaging;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -31,12 +32,15 @@ internal class CompanionsPanel : ScrollablePanel<Seed, CompanionsSettings>
 
     protected override int ScrollLines => 1;
 
+    protected override int SpaceBetweenLines => 4;
+
     protected override void PropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         base.PropertyChanged(sender, e);
 
         if (e.PropertyName == nameof(CompanionsSettings.CombineCompanions) ||
-            e.PropertyName == nameof(CompanionsSettings.ImportantSpells))
+            e.PropertyName == nameof(CompanionsSettings.ImportantSpells) ||
+            e.PropertyName == nameof(Seed.Companions))
             RegerateData();
     }
 
@@ -106,8 +110,21 @@ internal class CompanionsPanel : ScrollablePanel<Seed, CompanionsSettings>
             }
         }
 
+        var taskNum = 1;
         foreach (var quest in companion.Quests)
-            yield return Game.Font.RenderText(quest, charWidth);
+        {
+            var color = quest.IsCompleted ? TextMode.Special : TextMode.Normal;
+            var num = Game.Font.RenderText($"{taskNum++,1}.", color);
+            var taskText = Game.Font.RenderText(quest.Description, color, charWidth - 2);
+            var questData = BitmapDataFactory.CreateBitmapData(new Size(num.Width + taskText.Width, Math.Max(num.Height, taskText.Height)), KnownPixelFormat.Format8bppIndexed, taskText.Palette);
+
+            num.CopyTo(questData);
+            taskText.CopyTo(questData, new Point(num.Width, 0));
+            num.Dispose();
+            taskText.Dispose();
+
+            yield return questData;
+        }
 
         if (companion.Quests.Any())
             yield return Game.Font.RenderText("");

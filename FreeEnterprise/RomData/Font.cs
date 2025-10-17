@@ -1,6 +1,7 @@
 ﻿using FF.Rando.Companion.Extensions;
 using FF.Rando.Companion.FreeEnterprise.Shared;
 using FF.Rando.Companion.MemoryManagement;
+using FF.Rando.Companion.View;
 using KGySoft.Drawing.Imaging;
 using System;
 using System.Collections.Generic;
@@ -9,14 +10,6 @@ using System.Linq;
 using static FF.Rando.Companion.FreeEnterprise.Shared.Addresses;
 
 namespace FF.Rando.Companion.FreeEnterprise.RomData;
-
-public enum TextMode
-{
-    Normal,
-    Disabled,
-    Highlighted,
-    Special
-}
 
 public class Font : IDisposable
 {

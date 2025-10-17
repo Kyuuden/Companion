@@ -1,4 +1,5 @@
 ﻿using FF.Rando.Companion.FreeEnterprise.Settings;
+using FF.Rando.Companion.View;
 using KGySoft.Drawing.Imaging;
 using System;
 using System.Collections.Generic;
@@ -50,16 +51,16 @@ public class LocationsPanel : ScrollablePanel<LocationsSettings>
         if (charWidth < 4)
             yield break;
 
-        yield return Game.Font.RenderText(header.ToUpper(), RomData.TextMode.Normal);
+        yield return Game.Font.RenderText(header.ToUpper(), TextMode.Normal);
 
         foreach (var loc in locations)
         {
             var textmode = loc.World switch
             {
-                Shared.World.Main => RomData.TextMode.Normal,
-                Shared.World.Underground => RomData.TextMode.Special,
-                Shared.World.Moon => RomData.TextMode.Highlighted,
-                _ => RomData.TextMode.Disabled
+                Shared.World.Main => TextMode.Normal,
+                Shared.World.Underground => TextMode.Special,
+                Shared.World.Moon => TextMode.Highlighted,
+                _ => TextMode.Disabled
             };
 
             var marker = Game.Font.RenderText(" • ", textmode);

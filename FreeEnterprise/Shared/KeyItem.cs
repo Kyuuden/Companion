@@ -1,5 +1,6 @@
 ﻿using FF.Rando.Companion.FreeEnterprise.RomData;
 using FF.Rando.Companion.FreeEnterprise.Settings;
+using FF.Rando.Companion.View;
 using KGySoft.Drawing.Imaging;
 using System;
 using System.ComponentModel;

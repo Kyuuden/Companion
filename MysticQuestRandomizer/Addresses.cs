@@ -23,7 +23,6 @@ internal class Addresses
         public static readonly long ActivePartner = 0x004dL;
 
         public static readonly long GameStateIndicator = 0x3749;
-
         public static readonly long GameVictoryIndicator = 0x0F22;
         public static readonly Range<long> Mob1Health = 0x1114L.WithLength(2);
         public static readonly Range<long> Mob2Health = 0x1194L.WithLength(2);
@@ -31,7 +30,8 @@ internal class Addresses
 
         public static readonly Range<long> WramRegion = 0x0e00L.WithLength(0x280);
 
-        public static readonly System.Range GameStateFlags = new(0xA8, 0xE8);
+        public static readonly System.Range CheckedQuests = new(0xA8, 0xC8);
+        public static readonly System.Range CheckedLocations = new(0xC8, 0xE8);
         public static readonly System.Range CheckedBattlefieldBits = new(0x1d4, 0x1d7);
 
         public static readonly System.Range FoundShards = new(0x93, 0x94);

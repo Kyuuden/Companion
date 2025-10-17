@@ -1,4 +1,5 @@
 ﻿using FF.Rando.Companion.FreeEnterprise.Settings;
+using FF.Rando.Companion.View;
 using KGySoft.Drawing.Imaging;
 using System;
 using System.Collections.Generic;
@@ -46,9 +47,9 @@ public class ObjectivesPanel : ScrollablePanel<ObjectivesSettings>
             yield break;
 
         if (totalGroups == 1)
-            yield return Game.Font.RenderText(group.Name.ToUpper(), RomData.TextMode.Normal);
+            yield return Game.Font.RenderText(group.Name.ToUpper(), TextMode.Normal);
         else
-            yield return Game.Font.RenderText(group.Name.ToUpper().PadRight(Math.Max(0,charWidth - 11)) + $"Group {groupNum,2}/{totalGroups,2}", RomData.TextMode.Normal);
+            yield return Game.Font.RenderText(group.Name.ToUpper().PadRight(Math.Max(0,charWidth - 11)) + $"Group {groupNum,2}/{totalGroups,2}", TextMode.Normal);
 
         var taskNum = 1;
         var completed = 0;
@@ -61,10 +62,10 @@ public class ObjectivesPanel : ScrollablePanel<ObjectivesSettings>
             if (task.IsCompleted && task.IsHardRequired) completedHardReq++;
 
             var taskColor = task.IsCompleted
-                    ? RomData.TextMode.Disabled
+                    ? TextMode.Disabled
                     : task.IsHardRequired
-                        ? RomData.TextMode.Highlighted
-                        : RomData.TextMode.Normal;
+                        ? TextMode.Highlighted
+                        : TextMode.Normal;
 
             var num = Game.Font.RenderText($"{taskNum++,2}. ", taskColor);
 
@@ -83,21 +84,21 @@ public class ObjectivesPanel : ScrollablePanel<ObjectivesSettings>
             yield return taskData;
         }
 
-        yield return Game.Font.RenderText("-- REWARDS --", RomData.TextMode.Normal);
+        yield return Game.Font.RenderText("-- REWARDS --", TextMode.Normal);
         foreach (var reward in group.Rewards)
         {
-            var textmode = RomData.TextMode.Normal;
+            var textmode = TextMode.Normal;
             if (reward.Required.HasValue)
             {
                 switch (reward.Required.Value)
                 {
                     case -1:
                         if (completed == group.Tasks.Count())
-                            textmode = RomData.TextMode.Disabled;
+                            textmode = TextMode.Disabled;
                         break;
                     default:
                         if (completed >= reward.Required.Value && completedHardReq == hardReq)
-                            textmode = RomData.TextMode.Disabled;
+                            textmode = TextMode.Disabled;
                         break;
                 }
             }

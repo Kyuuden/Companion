@@ -76,6 +76,8 @@ public abstract class ScrollablePanel<TGame, TSettings> : PictureBox, IPanel, IS
             RenderImage(_pageBitmapData[_pageIndex]);
     }
 
+    protected virtual int SpaceBetweenLines => 8;
+
     protected abstract IReadWriteBitmapData GenerateBackgroundImage(Size unscaledSize);
 
     protected abstract IReadableBitmapData GenerateArrow(Arrow direction);
@@ -115,7 +117,7 @@ public abstract class ScrollablePanel<TGame, TSettings> : PictureBox, IPanel, IS
                 }
 
                 line.CopyTo(baseImage, new Point(8, y));
-                y += (line.Height + 8);
+                y += (line.Height + SpaceBetweenLines);
             }
 
             if (_canScrollDown && IsEnabledForScrolling)

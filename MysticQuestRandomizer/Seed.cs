@@ -9,6 +9,7 @@ using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 
@@ -161,9 +162,8 @@ public class Seed : IGame
         if (Started && MQRContainer.Emulation.FrameCount() % MQRContainer.RootSettings.TrackingInterval == 0)
         {
             ReadOnlySpan<byte> wramData = Container.Wram.ReadBytes(Addresses.WRAM.WramRegion).AsSpan();
-
             //var checkedBattlefields = wramData.Slice(Addresses.WRAM.CheckedBattlefieldBits);
-            //var checkedLocations = wramData.Slice(Addresses.WRAM.GameStateFlags);
+            //var checkedLocations = wramData[Addresses.WRAM.GameStateFlags].ToArray();
 
             if (RequiredSkyFragmentCount.HasValue)
                 CollectedSkyFragments = wramData.Slice(Addresses.WRAM.FoundShards).Read<byte>(0);
@@ -172,6 +172,10 @@ public class Seed : IGame
             var weapons = wramData[Addresses.WRAM.FoundWeaponBits];
             var armors = wramData[Addresses.WRAM.FoundArmorBits];
             var spells = wramData[Addresses.WRAM.FoundSpellBits];
+            var quests = wramData[Addresses.WRAM.CheckedQuests];
+
+            if (_gameinfo.UpdateQuests(Elapsed, quests))
+                NotifyPropertyChanged(nameof(Companions));
 
             if (_weapons.Update(Elapsed, weapons))
                 NotifyPropertyChanged(nameof(Weapons));

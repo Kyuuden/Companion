@@ -21,7 +21,7 @@ public abstract class StatisticControl<T> : StatisticControl<T, ISeed> where T :
     protected override Image Render()
     {
         var icon = GetIcon();
-        var text = Game.Font.RenderText(GetStatText(), RomData.TextMode.Normal);
+        var text = Game.Font.RenderText(GetStatText(), TextMode.Normal);
         var combined = PaletteExtensions.Combine(icon.Palette!, text.Palette!);
         var data = BitmapDataFactory.CreateBitmapData(new Size(112, 32), KnownPixelFormat.Format8bppIndexed, combined);
 

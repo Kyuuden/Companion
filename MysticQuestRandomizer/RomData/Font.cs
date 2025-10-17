@@ -1,5 +1,6 @@
 ﻿using FF.Rando.Companion.Extensions;
 using FF.Rando.Companion.MemoryManagement;
+using FF.Rando.Companion.View;
 using KGySoft.Drawing.Imaging;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ internal class Font : IDisposable
 {
     private readonly List<byte[,]> _tiles;
     private readonly List<byte[,]> _resistanceTiles;
-    private readonly List<IReadableBitmapData> _bitmaps;    
+    private readonly Dictionary<TextMode, List<IReadableBitmapData>> _bitmaps = [];
     private readonly TextEncoding _encoding = new();
     private bool disposedValue;
 
@@ -36,16 +37,20 @@ internal class Font : IDisposable
         {
             Color.Transparent.ToColor32(),
             Color.Transparent.ToColor32(),
-            Color.FromArgb(255, 255, 255).ToColor32(),
-            Color.FromArgb(0, 0, 0).ToColor32()
+            Color.FromArgb(255, 255, 255), Color.FromArgb(0, 0, 0),
+            Color.FromArgb(255, 255, 255), Color.FromArgb(0, 0, 0),
+            Color.FromArgb(255, 255, 255), Color.FromArgb(0, 0, 0),
+            Color.FromArgb(255, 206, 0), Color.FromArgb(255, 255, 0)
         }.Concat(resistancePalettes.SelectMany(p => p.GetEntries())));
 
-        _bitmaps = BuildBitmaps();
+
+        _bitmaps[TextMode.Normal] = BuildBitmaps(TextMode.Normal);
+        _bitmaps[TextMode.Special] = BuildBitmaps(TextMode.Special);
     }
 
     public Palette Palette { get; }
 
-    private List<IReadableBitmapData> BuildBitmaps()
+    private List<IReadableBitmapData> BuildBitmaps(TextMode mode)
     {
         var list = new List<IReadableBitmapData>();
         foreach (var tile in _tiles)
@@ -58,7 +63,7 @@ internal class Font : IDisposable
                 {
                     for (var x = 0; x < 8; x++)
                     {
-                        data.SetColorIndex(x, y, tile[x + (i * 8), y]);
+                        data.SetColorIndex(x, y, tile[x + (i * 8), y] + ((int)mode) * 2);
                     }
                 }
 
@@ -98,8 +103,8 @@ internal class Font : IDisposable
 
             var colorOffset = i switch
             {
-                (0 or 1 or 2 or 3 or 12 or 13 or 14 or 15 or 16) => 4,
-                _ => 12
+                (0 or 1 or 2 or 3 or 12 or 13 or 14 or 15 or 16) => 6,
+                _ => 14
             };
 
             if (i is 4 or 5 or 6)
@@ -153,7 +158,7 @@ internal class Font : IDisposable
                 else if (iy == height - 1)
                     b = TextEncoding.BorderBottom;
 
-                var bmp = _bitmaps![b];
+                var bmp = _bitmaps![TextMode.Normal][b];
 
                 bmp.CopyTo(data, new Point(ix * 8, iy * 8));
             }
@@ -185,7 +190,7 @@ internal class Font : IDisposable
             yield return string.Empty;
     }
 
-    public IReadableBitmapData RenderText(string text, int? cwidth = null)
+    public IReadableBitmapData RenderText(string text, TextMode mode = TextMode.Normal, int? cwidth = null)
     {
         var preprocessed = _encoding.ConvertTagsToSymbols(text);
 
@@ -202,7 +207,7 @@ internal class Font : IDisposable
             var linesBytes = _encoding.GetBytes(lines[y]);
             for (var x = 0; x < linesBytes.Length; x++)
             {
-                var bmp = _bitmaps![linesBytes[x]];
+                var bmp = _bitmaps![mode][linesBytes[x]];
                 bmp.CopyTo(data, new Point(x * 8, y * 8));
             }
         }
@@ -216,7 +221,8 @@ internal class Font : IDisposable
         {
             if (disposing)
             {
-                foreach (var bmp in _bitmaps)
+                foreach (var mode in _bitmaps)
+                    foreach (var bmp in mode.Value)
                         bmp.Dispose();
             }
             _bitmaps.Clear();

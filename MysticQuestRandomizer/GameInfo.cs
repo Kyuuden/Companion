@@ -182,23 +182,33 @@ internal class GameInfo
         var quests = Search(characterBuffer, textConverter.TextToByte("Quests\n\n"));
         if (quests.HasValue)
         {
-            var questStart = quests.Value.End.Value + 7;
-            var questsbuffer = characterBuffer[questStart..];
             var questStartMarker = new byte[] { 0x05, 0x3B };
+            var questsbuffer = characterBuffer[(quests.Value.End.Value + 2)..];
             int nextQuestStart;
             do
             {
                 nextQuestStart = questsbuffer.IndexOf(questStartMarker);
                 if (nextQuestStart > 0)
                 {
-                    c.AddQuest(textConverter.SpanToText(questsbuffer[..nextQuestStart]));
-                    questsbuffer = questsbuffer[(nextQuestStart + 7)..];
+                    c.AddQuest(questsbuffer[0], textConverter.SpanToText(questsbuffer[5..nextQuestStart]));
+                    questsbuffer = questsbuffer[(nextQuestStart + 2)..];
                 }
             } while (nextQuestStart > 0);
 
-            c.AddQuest(textConverter.SpanToText(questsbuffer));
+            c.AddQuest(questsbuffer[0], textConverter.SpanToText(questsbuffer[5..]));
         }
 
         return c;
+    }
+
+    internal bool UpdateQuests(TimeSpan elapsed, ReadOnlySpan<byte> quests)
+    {
+        var updated = false;
+        foreach (var quest in Companions.SelectMany(c => c.Quests))
+        {
+            updated |= quest.Update(elapsed, quests);
+        }
+
+        return updated;
     }
 }
