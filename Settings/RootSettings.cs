@@ -73,7 +73,14 @@ public class RootSettings : ISettings
     {
         get
         {
-            return (Font)_fontConverter.ConvertFromString(GetStringSetting("Lucida Console, 27.75pt"));
+            try
+            {
+                return (Font)_fontConverter.ConvertFromString(GetStringSetting("Lucida Console, 27.75pt"));
+            }
+            catch
+            { 
+                return SystemFonts.StatusFont;
+            }
         }
         set
         {

@@ -109,6 +109,10 @@ internal class CompanionsPanel : ScrollablePanel<Seed, CompanionsSettings>
                 yield return spellRow;
             }
         }
+        else
+        {
+            yield return name;
+        }
 
         var taskNum = 1;
         foreach (var quest in companion.Quests)

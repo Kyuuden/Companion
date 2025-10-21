@@ -32,6 +32,8 @@ internal class EnumListEditor<T> : UITypeEditor where T : Enum
         {
             listBox.Items.Add(v, currentValues.Contains(v));
         }
+        listBox.CheckOnClick = true;
+        listBox.Height = Enumerable.Range(0, listBox.Items.Count).Sum(i=> listBox.GetItemRectangle(i).Height) + listBox.Margin.Vertical;
 
         service.DropDownControl(listBox);
 
