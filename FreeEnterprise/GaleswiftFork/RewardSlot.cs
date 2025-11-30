@@ -83,4 +83,5 @@ internal enum RewardSlot : byte
     PinkTradeItem = 0x5C,
     FixedCrystal = 0x5D,
     GatedObjective = 0x5E,
+    DwarfHospitalItem = 0x5F,
 }

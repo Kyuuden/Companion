@@ -1,6 +1,8 @@
 ﻿using FF.Rando.Companion.Extensions;
 using FF.Rando.Companion.MysticQuestRandomizer.RomData;
 using FF.Rando.Companion.View;
+using KGySoft.Drawing;
+using KGySoft.Drawing.Imaging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,18 +16,28 @@ public class KeyItem : IImageTracker
     private Bitmap? _image;
     private TimeSpan? _whenFound;
     private bool _isFound;
+    private bool _isUsed;
+    private TimeSpan? _whenUsed;
     private readonly Sprites _sprites;
-    private readonly bool _blank;
+    private readonly bool _blankWhenNotFound;
+    private readonly Func<GameState, bool> _usedCheck;
 
-    internal KeyItem(KeyItemType type, Sprites sprites, bool blank = false)
+    internal KeyItem(KeyItemType type, Sprites sprites, Func<GameState, bool> usedCheck, bool blankWhenNotFound = false, KeyItemType? imageKeyItemType = null)
     {
-        _itemType = type;
+        Id = (int)(type);
+        Type = type;
+        _itemType = imageKeyItemType ?? type;
         _sprites = sprites;
-        _blank = blank;
+        _blankWhenNotFound = blankWhenNotFound;
+        _usedCheck = usedCheck;
         SetImage();
     }
 
-    public int Id => (int)_itemType;
+    public int Id { get; }
+
+    public KeyItemType Type { get; }
+
+    public bool CheckUsed(GameState state) => _usedCheck(state);
 
     public bool IsFound
     {
@@ -54,6 +66,33 @@ public class KeyItem : IImageTracker
         }
     }
 
+    public bool IsUsed
+    {
+        get => _isUsed;
+        set
+        {
+            if (_isUsed == value)
+                return;
+
+            _isUsed = value;
+            NotifyPropertyChanged();
+            SetImage();
+        }
+    }
+
+    public TimeSpan? WhenUsed
+    {
+        get => _whenUsed;
+        set
+        {
+            if (_whenUsed == value || _whenUsed.HasValue)
+                return;
+
+            _whenUsed = value;
+            NotifyPropertyChanged();
+        }
+    }
+
     public Bitmap Image
     {
         get => _image!;
@@ -71,10 +110,29 @@ public class KeyItem : IImageTracker
 
     private void SetImage()
     {
-        if (_blank)
+        if (_blankWhenNotFound && !IsFound)
             Image = new Bitmap(16, 16);
         else
-            Image = _sprites.GetKeyItem(_itemType, IsFound);
+        {
+            if (IsUsed)
+            {
+                var keyItemImage = _sprites.GetKeyItemData(_itemType, IsFound);
+                var data = BitmapDataFactory.CreateBitmapData(keyItemImage.Size);
+                keyItemImage.CopyTo(data);
+                
+                var dropShadow = MysticQuest.Check.GetReadableBitmapData().ToGrayscale();
+                dropShadow.DrawInto(data, new Rectangle(data.Width - 9, data.Height - 9, 9, 9));
+
+                var check = MysticQuest.Check.GetReadableBitmapData();
+                check.DrawInto(data, new Rectangle(data.Width - 9, data.Height - 9, 8, 8));
+
+                Image = data.ToBitmap();
+            }
+            else
+            {
+                Image = _sprites.GetKeyItem(_itemType, IsFound);
+            }
+        }
     }
 
     protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
@@ -87,38 +145,65 @@ internal class KeyItems(Sprites sprites, bool shatteredSkyCoin)
 {
     private readonly IReadOnlyList<KeyItem> _items =
         [
-            new KeyItem(KeyItemType.Elixer, sprites),
-            new KeyItem(KeyItemType.TreeWither, sprites),
-            new KeyItem(KeyItemType.WakeWater, sprites),
-            new KeyItem(KeyItemType.VenusKey, sprites),
-            new KeyItem(KeyItemType.MultiKey, sprites),
-            new KeyItem(KeyItemType.GasMask, sprites),
-            new KeyItem(KeyItemType.MagicMirror, sprites),
-            new KeyItem(KeyItemType.ThunderRock, sprites),
-            new KeyItem(KeyItemType.CapitansCap, sprites),
-            new KeyItem(KeyItemType.LibraCrest, sprites),
-            new KeyItem(KeyItemType.GeminiCrest, sprites),
-            new KeyItem(KeyItemType.MobiusCrest, sprites),
-            new KeyItem(KeyItemType.SandCoin, sprites),
-            new KeyItem(KeyItemType.RiverCoin, sprites),
-            new KeyItem(KeyItemType.SunCoin, sprites),
-            new KeyItem(KeyItemType.SkyCoin, sprites, shatteredSkyCoin),
+            new KeyItem(KeyItemType.Elixer, sprites, s => s.KaeliCured),
+            new KeyItem(KeyItemType.TreeWither, sprites, s=> s.MinotaurDefeated),
+            new KeyItem(KeyItemType.WakeWater, sprites, s => s.WakeWaterUsed),
+            new KeyItem(KeyItemType.VenusKey, sprites, s => !s.VenusChestUnopened ),
+            new KeyItem(KeyItemType.MultiKey, sprites, s=> s.TalkToGrenadeGuy),
+            new KeyItem(KeyItemType.GasMask, sprites, s=> false),
+            new KeyItem(KeyItemType.MagicMirror, sprites, s => false),
+            new KeyItem(KeyItemType.ThunderRock, sprites, s => s.RainbowRoad),
+            new KeyItem(KeyItemType.CapitansCap, sprites, s=> s.SpencerItemGiven),
+            new KeyItem(KeyItemType.LibraCrest, sprites, s=> false),
+            new KeyItem(KeyItemType.GeminiCrest, sprites, s=> false),
+            new KeyItem(KeyItemType.MobiusCrest, sprites, s=> false),
+            new KeyItem(KeyItemType.SandCoin, sprites, s=> s.SandCoinUsed),
+            new KeyItem(KeyItemType.RiverCoin, sprites, s=> s.UseRiverCoin),
+            new KeyItem(KeyItemType.SunCoin, sprites, s=> false),
+            new KeyItem(KeyItemType.SkyCoin, sprites, s=> false, shatteredSkyCoin, KeyItemType.CompleteSkyCoin),
         ];
 
     public IReadOnlyList<KeyItem> Items => _items;
 
-    public bool Update(TimeSpan time, ReadOnlySpan<byte> found)
+    public bool Update(TimeSpan time, ReadOnlySpan<byte> found, bool? skyCoinComplete)
     {
         var updated = false;
 
         foreach (var keyitem in _items)
         {
             var isfound = found.Read<bool>(keyitem.Id);
-            if (isfound != keyitem.IsFound)
+            if (keyitem.Type == KeyItemType.SkyCoin && skyCoinComplete.HasValue)
+            {
+                if (skyCoinComplete.Value != keyitem.IsFound)
+                {
+                    updated = true;
+                    keyitem.WhenFound = time;
+                    keyitem.IsFound = isfound;
+                }
+            }
+            else if (isfound != keyitem.IsFound)
             {
                 updated = true;
                 keyitem.WhenFound = time;
                 keyitem.IsFound = isfound;
+            }
+        }
+
+        return updated;
+    }
+
+    public bool UpdateUsed(TimeSpan time, GameState flags)
+    {
+        var updated = false;
+
+        foreach (var keyitem in _items)
+        {
+            var isUsed = keyitem.CheckUsed(flags);
+            if (isUsed != keyitem.IsUsed)
+            {
+                updated = true;
+                keyitem.WhenUsed = time;
+                keyitem.IsUsed = isUsed;
             }
         }
 

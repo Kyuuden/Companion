@@ -66,7 +66,7 @@ public class SkyShardsStats(Seed seed, PanelSettings settings) : TextStatisticCo
 
     protected override Image Render()
     {
-        if (!Game.RequiredSkyFragmentCount.HasValue)
+        if (!Game.RequiredSkyFragmentCount.HasValue || GetStat() >= Game.RequiredSkyFragmentCount)
             return new Bitmap(56, 16);
 
         var icon = GetIcon();

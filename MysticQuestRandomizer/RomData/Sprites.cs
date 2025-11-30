@@ -2,13 +2,18 @@
 using FF.Rando.Companion.MemoryManagement;
 using KGySoft.Drawing.Imaging;
 using System;
+using System.Buffers;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 
 namespace FF.Rando.Companion.MysticQuestRandomizer.RomData;
 internal class Sprites : IDisposable
 {
+    private readonly byte[] _defaultSkyCoin = [0x0d, 0x08, 0x1f, 0x00, 0x37, 0x07, 0x6b, 0x0f, 0xdf, 0x9f, 0xfc, 0x3e, 0x7f, 0x3f, 0xff, 0x3f, 0x0a, 0x00, 0x0f, 0x18, 0xbe, 0x35, 0xac, 0x2c, 0x70, 0x10, 0xf8, 0x00, 0xec, 0xe0, 0xd6, 0xf0, 0xfb, 0xf9, 0x3f, 0x7c, 0xff, 0xfc, 0xff, 0xfc, 0x90, 0x00, 0xf0, 0x18, 0x7d, 0xac, 0x34, 0x34, 0x7d, 0x3f, 0xfc, 0x3f, 0xbe, 0x2f, 0xff, 0x97, 0x5c, 0x0f, 0x2f, 0x07, 0x1b, 0x00, 0x0d, 0x08, 0xb4, 0x3c, 0x6e, 0x96, 0x2c, 0x17, 0x04, 0x0a, 0xbf, 0xfc, 0x3f, 0xfc, 0x7f, 0xf4, 0xff, 0xe9, 0x3e, 0xf0, 0xfc, 0xe0, 0x78, 0x00, 0x30, 0x10, 0x2c, 0x3c, 0x74, 0x69, 0x30, 0xe0, 0x80, 0xd0];
+
+    private readonly List<byte[,]> _skyCoin;
     private readonly List<byte[,]> _itemData;
     private readonly List<byte[,]> _characterData;
     private readonly List<byte[,]> _resistanceData;
@@ -23,6 +28,11 @@ internal class Sprites : IDisposable
 
     public Sprites(IMemorySpace memorySpace)
     {
+        _skyCoin = _defaultSkyCoin
+            .ReadMany<byte[]>(0x18 * 8)
+            .Select(data => data.DecodeTile(3))
+            .ToList();
+
         _itemData = memorySpace.ReadBytes(Addresses.ROM.Items)
             .ReadMany<byte[]>(0x18 * 8)
             .Select(data => data.DecodeTile(3))
@@ -82,22 +92,23 @@ internal class Sprites : IDisposable
 
         _keyItemBuilders = new Dictionary<KeyItemType, SpriteDefinition>
         {
-            {KeyItemType.ThunderRock, new SpriteDefinition(_itemData, new byte[2,2]{ { 14, 15 },{ 30, 31 }  }, _palettes[17]) },
-            {KeyItemType.MagicMirror, new SpriteDefinition(_itemData, new byte[2,2]{ { 12, 13 },{ 28, 29 }  }, _palettes[16]) },
-            {KeyItemType.GasMask,     new SpriteDefinition(_itemData, new byte[2,2]{ { 10, 11 },{ 26, 27 }  }, _palettes[19]) },
-            {KeyItemType.MultiKey,    new SpriteDefinition(_itemData, new byte[2,2]{ {  8,  9 },{ 24, 25 }  }, _palettes[16]) },
-            {KeyItemType.VenusKey,    new SpriteDefinition(_itemData, new byte[2,2]{ {  6,  7 },{ 22, 23 }  }, _palettes[17]) },
-            {KeyItemType.WakeWater,   new SpriteDefinition(_itemData, new byte[2,2]{ {  4,  5 },{ 20, 21 }  }, _palettes[17]) },
-            {KeyItemType.TreeWither,  new SpriteDefinition(_itemData, new byte[2,2]{ {  2,  3 },{ 18, 19 }  }, _palettes[17]) },
-            {KeyItemType.Elixer,      new SpriteDefinition(_itemData, new byte[2,2]{ {  0,  1 },{ 16, 17 }  }, _palettes[18]) },
-            {KeyItemType.SkyCoin,     new SpriteDefinition(_itemData, new byte[2,2]{ { 46, 47 },{ 62, 63 }  }, _palettes[16]) },
-            {KeyItemType.SunCoin,     new SpriteDefinition(_itemData, new byte[2,2]{ { 44, 45 },{ 60, 61 }  }, _palettes[19]) },
-            {KeyItemType.RiverCoin,   new SpriteDefinition(_itemData, new byte[2,2]{ { 42, 43 },{ 58, 59 }  }, _palettes[16]) },
-            {KeyItemType.SandCoin,    new SpriteDefinition(_itemData, new byte[2,2]{ { 40, 41 },{ 56, 57 }  }, _palettes[17]) },
-            {KeyItemType.MobiusCrest, new SpriteDefinition(_itemData, new byte[2,2]{ { 38, 39 },{ 54, 55 }  }, _palettes[17]) },
-            {KeyItemType.GeminiCrest, new SpriteDefinition(_itemData, new byte[2,2]{ { 36, 37 },{ 52, 53 }  }, _palettes[17]) },
-            {KeyItemType.LibraCrest,  new SpriteDefinition(_itemData, new byte[2,2]{ { 34, 35 },{ 50, 51 }  }, _palettes[17]) },
-            {KeyItemType.CapitansCap, new SpriteDefinition(_itemData, new byte[2,2]{ { 32, 33 },{ 48, 49 }  }, _palettes[17]) },
+            {KeyItemType.ThunderRock,     new SpriteDefinition(_itemData, new byte[2,2]{ { 14, 15 },{ 30, 31 }  }, _palettes[17]) },
+            {KeyItemType.MagicMirror,     new SpriteDefinition(_itemData, new byte[2,2]{ { 12, 13 },{ 28, 29 }  }, _palettes[16]) },
+            {KeyItemType.GasMask,         new SpriteDefinition(_itemData, new byte[2,2]{ { 10, 11 },{ 26, 27 }  }, _palettes[19]) },
+            {KeyItemType.MultiKey,        new SpriteDefinition(_itemData, new byte[2,2]{ {  8,  9 },{ 24, 25 }  }, _palettes[16]) },
+            {KeyItemType.VenusKey,        new SpriteDefinition(_itemData, new byte[2,2]{ {  6,  7 },{ 22, 23 }  }, _palettes[17]) },
+            {KeyItemType.WakeWater,       new SpriteDefinition(_itemData, new byte[2,2]{ {  4,  5 },{ 20, 21 }  }, _palettes[17]) },
+            {KeyItemType.TreeWither,      new SpriteDefinition(_itemData, new byte[2,2]{ {  2,  3 },{ 18, 19 }  }, _palettes[17]) },
+            {KeyItemType.Elixer,          new SpriteDefinition(_itemData, new byte[2,2]{ {  0,  1 },{ 16, 17 }  }, _palettes[18]) },
+            {KeyItemType.CompleteSkyCoin, new SpriteDefinition(_skyCoin,  new byte[2,2]{ {  0,  1 },{  2,  3 }  }, _palettes[16]) },
+            {KeyItemType.SkyCoin,         new SpriteDefinition(_itemData, new byte[2,2]{ { 46, 47 },{ 62, 63 }  }, _palettes[16]) },
+            {KeyItemType.SunCoin,         new SpriteDefinition(_itemData, new byte[2,2]{ { 44, 45 },{ 60, 61 }  }, _palettes[19]) },
+            {KeyItemType.RiverCoin,       new SpriteDefinition(_itemData, new byte[2,2]{ { 42, 43 },{ 58, 59 }  }, _palettes[16]) },
+            {KeyItemType.SandCoin,        new SpriteDefinition(_itemData, new byte[2,2]{ { 40, 41 },{ 56, 57 }  }, _palettes[17]) },
+            {KeyItemType.MobiusCrest,     new SpriteDefinition(_itemData, new byte[2,2]{ { 38, 39 },{ 54, 55 }  }, _palettes[17]) },
+            {KeyItemType.GeminiCrest,     new SpriteDefinition(_itemData, new byte[2,2]{ { 36, 37 },{ 52, 53 }  }, _palettes[17]) },
+            {KeyItemType.LibraCrest,      new SpriteDefinition(_itemData, new byte[2,2]{ { 34, 35 },{ 50, 51 }  }, _palettes[17]) },
+            {KeyItemType.CapitansCap,     new SpriteDefinition(_itemData, new byte[2,2]{ { 32, 33 },{ 48, 49 }  }, _palettes[17]) },
         };
 
         _spellBuilders = new Dictionary<SpellType, SpriteDefinition>
@@ -141,11 +152,11 @@ internal class Sprites : IDisposable
 
     internal Bitmap GetKeyItem(KeyItemType keyItemType, bool isFound) => _keyItemBuilders[keyItemType].Render(!isFound);
 
-    internal IReadableBitmapData GetKeyItemData(KeyItemType keyItemType) => _keyItemBuilders[keyItemType].RenderData();
+    internal IReadableBitmapData GetKeyItemData(KeyItemType keyItemType, bool isFound = true) => _keyItemBuilders[keyItemType].RenderData(!isFound);
 
     internal Bitmap GetSpell(SpellType spellType, bool isFound = true) => _spellBuilders[spellType].Render(!isFound);
 
-    internal IReadableBitmapData GetSpellData(SpellType spellType) => _spellBuilders[spellType].RenderData();
+    internal IReadableBitmapData GetSpellData(SpellType spellType, bool isFound = true) => _spellBuilders[spellType].RenderData(!isFound);
 
     protected virtual void Dispose(bool disposing)
     {

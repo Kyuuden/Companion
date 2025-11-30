@@ -301,7 +301,7 @@ internal class Locations
             RewardSlot.ForgeItem => _flags.KForge && _flags.KChar,
             RewardSlot.PinkTradeItem => false,
             _ => false
-        };
+        } && !_flags.CWishes;
 
     public bool CanHaveKeyItem(RewardSlot slot)
         => slot switch

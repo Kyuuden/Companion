@@ -91,6 +91,7 @@ internal class Descriptors(IFlags? flags) : Companion.FreeEnterprise.Descriptors
             RewardSlot.PinkTradeItem => "Pink Tail trade item",
             RewardSlot.FixedCrystal => "Objective completion",
             RewardSlot.GatedObjective => "Gated requirements completion",
-            _ => throw new InvalidOperationException()
+            RewardSlot.DwarfHospitalItem => "Cid/Dwarf Hospital item",
+            _ => $"UNKNOWN ({slot:x2})"
         };
 }

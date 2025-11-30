@@ -1,5 +1,6 @@
 ﻿using FF.Rando.Companion.Extensions;
 using FF.Rando.Companion.MysticQuestRandomizer.Settings;
+using KGySoft.CoreLibraries;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -25,13 +26,15 @@ internal partial class EquipmentPanel : FlowPanel<EquipmentSettings>
         _keyItems = Game.KeyItems.Select(a => new KeyItemControl(Game, Settings, a)).ToList();
         _skyShards = new SkyShardsStats(Game, Settings);
 
-        return Enumerable.Empty<Control>()
+        var controls = Enumerable.Empty<Control>()
             .Concat(_weapons)
             .Concat(_armors)
             .Concat(_spells)
             .Concat(_keyItems)
             .Concat(_skyShards.Yield())
             .ToArray();
+
+        return controls;
     }
 
     protected override int GetItemWidth(ControlCollection controlCollection)
@@ -52,7 +55,7 @@ internal partial class EquipmentPanel : FlowPanel<EquipmentSettings>
             int leftCount = 0;
             int rightCount = 0;
 
-            for (int i = 0; i < controlCollection.Count-1; i++)
+            for (int i = 0; i < controlCollection.Count - 1; i++)
             {
                 if (i % 8 < 4)
                     controlCollection.SetChildIndex(left[leftCount++], i);
@@ -61,7 +64,14 @@ internal partial class EquipmentPanel : FlowPanel<EquipmentSettings>
             }
         }
         else
-            base.SortControls(controlCollection, columns);
+        {
+            var i = 0;
+            foreach (var control in Enumerable.Empty<Control>().Concat(_weapons).Concat(_armors).Concat(_spells).Concat(_keyItems).Concat(_skyShards.Yield()))
+            {
+                controlCollection.SetChildIndex(control, i++);
+            }
+        }
+
     }
 
     private List<WeaponControl> _weapons = [];

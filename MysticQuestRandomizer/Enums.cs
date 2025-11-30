@@ -35,7 +35,9 @@ public enum KeyItemType : byte
     MobiusCrest,
     GeminiCrest,
     LibraCrest,
-    CapitansCap
+    CapitansCap,
+
+    CompleteSkyCoin
 }
 
 public enum ArmorType : byte

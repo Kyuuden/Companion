@@ -19,4 +19,13 @@ internal class EquipmentSettings(JToken parentData) : PanelSettings(parentData)
         get => GetSetting(1);
         set => SaveSetting(value);
     }
+
+    [DisplayName("Check Used KeyItems")]
+    [Description("Add a checkmark when key items have been used. (BETA)")]
+    [DefaultValue(false)]
+    public bool ShowUsedKeyItems
+    {
+        get => GetSetting(false);
+        set => SaveSetting(value);
+    }
 }

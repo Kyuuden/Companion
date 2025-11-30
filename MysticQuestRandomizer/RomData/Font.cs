@@ -103,8 +103,8 @@ internal class Font : IDisposable
 
             var colorOffset = i switch
             {
-                (0 or 1 or 2 or 3 or 12 or 13 or 14 or 15 or 16) => 6,
-                _ => 14
+                (0 or 1 or 2 or 3 or 12 or 13 or 14 or 15 or 16) => 10,
+                _ => 18
             };
 
             if (i is 4 or 5 or 6)

@@ -12,10 +12,10 @@ public class Weapon : Equipment<WeaponType>
 
 internal class Weapons(Sprites sprites) : Equipments<Weapon, WeaponType>(
     [
-            new Weapon([WeaponType.SteelSword, WeaponType.KnightSword, WeaponType.Excalibur], EquipmentType.Sword, sprites),
-            new Weapon([WeaponType.Axe, WeaponType.BattleAxe, WeaponType.GiantsAxe], EquipmentType.Axe, sprites),
-            new Weapon([WeaponType.Bomb, WeaponType.JumboBomb, WeaponType.MegaGrenade], EquipmentType.Bomb, sprites),
-            new Weapon([WeaponType.CatClaw, WeaponType.CharmClaw, WeaponType.DragonClaw], EquipmentType.Claw, sprites),
+        new Weapon([WeaponType.SteelSword, WeaponType.KnightSword, WeaponType.Excalibur], EquipmentType.Sword, sprites),
+        new Weapon([WeaponType.Axe, WeaponType.BattleAxe, WeaponType.GiantsAxe], EquipmentType.Axe, sprites),
+        new Weapon([WeaponType.CatClaw, WeaponType.CharmClaw, WeaponType.DragonClaw], EquipmentType.Claw, sprites),
+        new Weapon([WeaponType.Bomb, WeaponType.JumboBomb, WeaponType.MegaGrenade], EquipmentType.Bomb, sprites),
     ])
 {
 }

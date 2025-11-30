@@ -30,9 +30,9 @@ internal class Addresses
 
         public static readonly Range<long> WramRegion = 0x0e00L.WithLength(0x280);
 
-        public static readonly System.Range CheckedQuests = new(0xA8, 0xC8);
-        public static readonly System.Range CheckedLocations = new(0xC8, 0xE8);
-        public static readonly System.Range CheckedBattlefieldBits = new(0x1d4, 0x1d7);
+        public static readonly System.Range StateFlags = new(0xA8, 0xC8);
+        public static readonly System.Range Chests = new(0xC8, 0xE8);
+        public static readonly System.Range Battlefields = new(0x1d4, 0x1e8);
 
         public static readonly System.Range FoundShards = new(0x93, 0x94);
         public static readonly System.Range FoundKeyItemBits = new(0xa6, 0xa8);

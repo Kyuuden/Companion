@@ -21,6 +21,9 @@
 		<BIZHAWK_DATA_HOME>$(BIZHAWK_HOME)</BIZHAWK_DATA_HOME>
 		<!-- ignore this; on NixOS these are different dirs -->
 	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Publish|AnyCPU'">
+	  <Optimize>True</Optimize>
+	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.43">
 		  <PrivateAssets>all</PrivateAssets>
@@ -203,6 +206,7 @@
 	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-9BaronKey-Color.png" />
 	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-9BaronKey-Gray.png" />
 	  <None Remove="FreeEnterprise\Resources\SMB3_item_Anchor.png" />
+	  <None Remove="Resources\Check.png" />
 	  <None Remove="Resources\Crystal.png" />
 	</ItemGroup>
 	
@@ -335,6 +339,7 @@
 	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-9BaronKey-Color.png" />
 	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-9BaronKey-Gray.png" />
 	  <EmbeddedResource Include="FreeEnterprise\Resources\SMB3_item_Anchor.png" />
+	  <EmbeddedResource Include="Resources\Check.png" />
 	  <EmbeddedResource Include="Resources\Crystal.png" />
 	</ItemGroup>
 	

@@ -9,7 +9,6 @@ using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 
@@ -113,6 +112,10 @@ public class Seed : IGame
 
     public IEnumerable<Companion> Companions => _gameinfo.Companions;
 
+    public GameState StateFlags { get; } = new GameState();
+
+    public Battlefields Battlefields { get; } = new Battlefields();
+
     public int? RequiredSkyFragmentCount => _gameinfo.RequiredSkyFragmentCount;
 
     public int CollectedSkyFragments
@@ -141,6 +144,8 @@ public class Seed : IGame
         Sprites.Dispose();
     }
 
+    private byte[]? lastLocations;
+
     public void OnNewFrame()
     {
         var pressed = ImmutableHashSet.CreateRange(MQRContainer.Input.GetPressedButtons());
@@ -162,19 +167,35 @@ public class Seed : IGame
         if (Started && MQRContainer.Emulation.FrameCount() % MQRContainer.RootSettings.TrackingInterval == 0)
         {
             ReadOnlySpan<byte> wramData = Container.Wram.ReadBytes(Addresses.WRAM.WramRegion).AsSpan();
-            //var checkedBattlefields = wramData.Slice(Addresses.WRAM.CheckedBattlefieldBits);
-            //var checkedLocations = wramData[Addresses.WRAM.GameStateFlags].ToArray();
+            var checkedBattlefields = wramData.Slice(Addresses.WRAM.Battlefields);
+            var checkedLocations = wramData[Addresses.WRAM.Chests];
 
             if (RequiredSkyFragmentCount.HasValue)
                 CollectedSkyFragments = wramData.Slice(Addresses.WRAM.FoundShards).Read<byte>(0);
 
-            var keyItemsFound = wramData.Slice(Addresses.WRAM.FoundKeyItemBits);
+            bool? skycoinComplete = RequiredSkyFragmentCount.HasValue ? CollectedSkyFragments >= RequiredSkyFragmentCount : null;
+
+            var keyItemsFound = wramData[Addresses.WRAM.FoundKeyItemBits];
             var weapons = wramData[Addresses.WRAM.FoundWeaponBits];
             var armors = wramData[Addresses.WRAM.FoundArmorBits];
             var spells = wramData[Addresses.WRAM.FoundSpellBits];
-            var quests = wramData[Addresses.WRAM.CheckedQuests];
+            var stateFlags = wramData[Addresses.WRAM.StateFlags];
 
-            if (_gameinfo.UpdateQuests(Elapsed, quests))
+            if (lastLocations == null || checkedLocations.SequenceCompareTo(lastLocations) != 0)
+            {
+                Debug.WriteLine("Locations Changed.");
+                lastLocations = checkedLocations.ToArray();
+            }
+
+            if (Battlefields.Update(checkedBattlefields))
+                NotifyPropertyChanged(nameof(Battlefields));
+
+            var flagsUpdated = StateFlags.Update(Elapsed, stateFlags);
+
+            if (flagsUpdated)
+                NotifyPropertyChanged(nameof(StateFlags));
+
+            if (_gameinfo.UpdateQuests(Elapsed, stateFlags))
                 NotifyPropertyChanged(nameof(Companions));
 
             if (_weapons.Update(Elapsed, weapons))
@@ -186,7 +207,7 @@ public class Seed : IGame
             if (_spells.Update(Elapsed, spells))
                 NotifyPropertyChanged(nameof(Spells));
 
-            if (_keyitems.Update(Elapsed, keyItemsFound))
+            if (_keyitems.Update(Elapsed, keyItemsFound, skycoinComplete) | (Settings.Equipment.ShowUsedKeyItems && flagsUpdated && _keyitems.UpdateUsed(Elapsed, StateFlags)))
                 NotifyPropertyChanged(nameof(KeyItems));
         }
     }
