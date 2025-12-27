@@ -1,4 +1,5 @@
-﻿using FF.Rando.Companion.MysticQuestRandomizer.Settings;
+﻿using BizHawk.Common.ReflectionExtensions;
+using FF.Rando.Companion.MysticQuestRandomizer.Settings;
 using FF.Rando.Companion.View;
 using KGySoft.Drawing.Imaging;
 using System;
@@ -68,6 +69,7 @@ public class Element : IImageTracker
         => _settings.ElementsStyle switch
         {
             ElementsStyle.Icons => $"[{elementType}]",
+            ElementsStyle.Abbreviations => elementType.GetDescription(),
             ElementsStyle.Text => $"{elementType}",
             _ => elementType.ToString()
         };

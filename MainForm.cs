@@ -294,7 +294,7 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
 
         var dialog = new SettingsDialog(_settings)
         {
-            Owner = MainForm as Form,
+            Owner = this as Form,
             StartPosition = FormStartPosition.CenterParent
         };
 

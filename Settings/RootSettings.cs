@@ -18,16 +18,23 @@ namespace FF.Rando.Companion.Settings;
 public class RootSettings : ISettings
 {
     private static readonly string FileName = "FF.Rando.Companion.Settings.json";
+    private readonly string _settingsFile;
 
     private readonly Dictionary<string, GameSettings> _gameSettings = [];
 
-    private readonly JObject _settingsFile;
+    private readonly JObject _settings;
 
     private readonly TypeConverter _fontConverter = TypeDescriptor.GetConverter(typeof(Font));
 
     public RootSettings()
     {
-        _settingsFile = (File.Exists(FileName) ? JObject.Parse(File.ReadAllText(FileName)) : []) ?? [];
+        _settingsFile = Path.Combine(Path.GetDirectoryName(typeof(MainForm).Assembly.Location), FileName);
+        _settings = (File.Exists(_settingsFile)
+            ? JObject.Parse(File.ReadAllText(_settingsFile))
+            : File.Exists(FileName)
+                ? JObject.Parse(File.ReadAllText(FileName))
+                : []) ?? [];
+
         var gameSettingsType = typeof(GameSettings);
         var gameSettings = AppDomain.CurrentDomain.GetAssemblies()
             .SelectMany(s => s.GetTypes())
@@ -35,13 +42,13 @@ public class RootSettings : ISettings
 
         foreach (var game in gameSettings)
         {
-            var settings = (GameSettings)Activator.CreateInstance(game, _settingsFile);
+            var settings = (GameSettings)Activator.CreateInstance(game, _settings);
             _gameSettings.Add(settings.Name, settings);
         }
     }
 
     [Browsable(false)]
-    public JObject Source => _settingsFile;
+    public JObject Source => _settings;
 
     [Category("Window")]
     [DisplayName("Window Style")]
@@ -186,38 +193,38 @@ public class RootSettings : ISettings
 
     protected void SaveStringSetting(string value, [CallerMemberName] string propertyName = "") 
     {
-        if (value.Equals(_settingsFile[propertyName.ToSnakeCase()]?.ToString()))
+        if (value.Equals(_settings[propertyName.ToSnakeCase()]?.ToString()))
             return;
 
-        _settingsFile[propertyName.ToSnakeCase()] = JToken.FromObject(value!);
+        _settings[propertyName.ToSnakeCase()] = JToken.FromObject(value!);
         NotifyPropertyChanged(propertyName);
     }
 
     protected string GetStringSetting(string defaultValue, [CallerMemberName] string propertyName = "")
     {
-        return _settingsFile[propertyName.ToSnakeCase()]?.ToString() ?? defaultValue;
+        return _settings[propertyName.ToSnakeCase()]?.ToString() ?? defaultValue;
     }
 
     protected void SaveSetting<T>(T value, [CallerMemberName] string propertyName = "") where T : struct
     {
-        if (value.Equals(_settingsFile[propertyName.ToSnakeCase()]?.ToObject<T>()))
+        if (value.Equals(_settings[propertyName.ToSnakeCase()]?.ToObject<T>()))
             return;
 
-        _settingsFile[propertyName.ToSnakeCase()] = JToken.FromObject(value!);
+        _settings[propertyName.ToSnakeCase()] = JToken.FromObject(value!);
         NotifyPropertyChanged(propertyName);
     }
 
     protected T GetSetting<T>(T defaultValue, [CallerMemberName] string propertyName = "") where T : struct
     {
-        return _settingsFile[propertyName.ToSnakeCase()]?.ToObject<T>() ?? defaultValue;
+        return _settings[propertyName.ToSnakeCase()]?.ToObject<T>() ?? defaultValue;
     }
 
     public void SaveToFile()
     {
-        using var file = File.CreateText(FileName);
+        using var file = File.CreateText(_settingsFile);
         using var writer = new JsonTextWriter(file);
         writer.Formatting = Formatting.Indented;
-        _settingsFile.WriteTo(writer);
+        _settings.WriteTo(writer);
     }
 }
 

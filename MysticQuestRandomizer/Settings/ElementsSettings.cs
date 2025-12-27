@@ -13,7 +13,7 @@ internal class ElementsSettings(JToken parentData) : PanelSettings(parentData)
     [DefaultValue(3.0f)]
     public override float ScaleFactor { get => base.ScaleFactor; set => base.ScaleFactor = value; }
 
-    [Description("How to show key items, either icons (like the game info menu) or text.")]
+    [Description("How to show elements, either icons (like the game info menu), text, or abbreviations.")]
     [DefaultValue(ElementsStyle.Icons)]
     public ElementsStyle ElementsStyle
     {
