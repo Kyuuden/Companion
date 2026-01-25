@@ -51,7 +51,7 @@ public abstract class StatisticControl<T, TGame> : PictureBox, IScalableControl 
         UpdateImage();
     }
 
-    private void UpdateImage()
+    protected void UpdateImage()
     {
         Image?.Dispose();
         Image = null;

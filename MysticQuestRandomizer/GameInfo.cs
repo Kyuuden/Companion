@@ -165,6 +165,9 @@ internal class GameInfo
 
         spellsStart += spells.Count * 7 + 2; //skip second line of sprites;
 
+        if (spells.Count >= 10)
+            spellsStart -= 2;
+
         for (var i = 0; i < spells.Count; i++)
         {
             var levelString = textConverter.SpanToText(characterBuffer[spellsStart..(spellsStart + 2)]);
@@ -176,7 +179,33 @@ internal class GameInfo
 
         if (spells.Count >= 10)
         {
-            // todo do it again.
+            spells.Clear();
+            do
+            {
+                if (spellsStart + 6 > characterBuffer.Length)
+                    break;
+
+                currentSpell = ParseSpell(characterBuffer.Read<ulong>(spellsStart * 8, 48));
+                if (currentSpell != null)
+                {
+                    spells.Add(currentSpell.Value);
+                    spellsStart += 7;
+                }
+            } while (currentSpell.HasValue);
+
+            spellsStart += spells.Count * 7 + 2; //skip second line of sprites;
+
+            if (spells.Count >= 10)
+                spellsStart -= 2;
+
+            for (var i = 0; i < spells.Count; i++)
+            {
+                var levelString = textConverter.SpanToText(characterBuffer[spellsStart..(spellsStart + 2)]);
+                if (byte.TryParse(levelString, out var level))
+                    c.AddSpell(level, spells[i]);
+
+                spellsStart += 3;
+            }
         }
 
         var quests = Search(characterBuffer, textConverter.TextToByte("Quests\n\n"));

@@ -19,7 +19,9 @@ internal class CompanionsPanel : ScrollablePanel<Seed, CompanionsSettings>
     {
         base.InitializeDataSources(game, settings);
 
-        _maxNameWidth = Game!.Companions.Max(c => c.Type.ToString().Length + 1);
+        _maxNameWidth = Game!.Companions.Any()
+             ? Game!.Companions.Max(c => c.Type.ToString().Length + 1)
+             : 0;
 
         _arrows.Clear();
         _arrows[Arrow.Right] = Game!.Font.RenderText(">");

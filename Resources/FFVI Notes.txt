@@ -1,0 +1,310 @@
+Character portraits: 2d1d00 (does not include esper terra, merchant, or kefka)
+
+palettes:
+Terra:	2d5860
+Locke: 2d5880
+Cyan: 2d58A0
+Shadow: 2d58C0
+Edgar: 2d58e0
+Sabin: 2d5900
+Celes: 2d5920
+Strago: 2d5940
+Relm: 2d5960
+Setzer: 2d5980
+Mog: 2d59a0
+Gau: 2d59c0
+Gogo: 2d59e0
+Umaro: 2d5a00
+Soldier: 2d5a20
+Imp: 2d5a40
+General Leo: 2d5a60
+Banon: 2d5a80
+Ghost 2d5aa0
+
+battle sprites start: 150000
+battle/town palettes start at 2d6300 and 268000
+
+
+battle palettes: 
+Terra:	2d6340
+Locke: 2d6320
+Cyan: 2d6380
+Shadow: 2d6380
+Edgar: 2d6300
+Sabin: 2d6300
+Celes: 2d6300
+Strago: 2d6360
+Relm: 2d6360
+Setzer: 2d6380
+Mog: 2d63A0
+Gau: 2d6360
+Gogo: 2d6360
+Umaro: 2d63A0
+
+Character Tiles: (start, end, length, tile count, palette address)
+
+Terra		0x150000	0x1516a0	0x16A0	181	268040
+Locke		0x1516a0	0x152d40	0x16A0	181	268200
+Cyan		0x152d40	0x1543e0	0x16A0	181	268080
+Shadow		0x1543e0	0x155a80	0x16A0	181	268080
+Edgar		0x155a80	0x157120	0x16A0	181	268000
+Sabin		0x157120	0x1587c0	0x16A0	181	268000
+Celes		0x1587c0	0x159e60	0x16A0	181	268000
+Strago		0x159e60	0x15b500	0x16A0	181	268060
+Relm		0x15b500	0x15cba0	0x16A0	181	268060
+Setzer		0x15cba0	0x15e240	0x16A0	181	268080
+Mog			0x15e240	0x15f8e0	0x16A0	181	2680a0
+Gau			0x15f8e0	0x160f80	0x16A0	181	268060
+Gogo		0x160f80	0x162620	0x16A0	181	268060
+Umaro		0x162620	0x163cc0	0x16A0	181	2680a0
+Soldier		0x163cc0	0x165360	0x16A0	181	268200
+Imp			0x165360	0x166a00	0x16A0	181	268000
+Leo			0x166a00	0x167f60	0x1560	171	268000
+Banon		0x167f60	0x1694c0	0x1560	171	268060(Bannon), 268020(Duncan)
+TerraEsper	0x1694c0	0x16aa20	0x1560	171	268100
+Sentry		0x16aa20	0x16bf80	0x1560	171	268000, 268020, 268040
+Ghost		0x16bf80	0x16d4e0	0x1560	171	268120
+Kefka		0x16d4e0	0x16ea40	0x1560	171	268060
+
+Poses:
+WalkAway1
+WalkAway2
+StandAway
+WalkTowards1
+WalkTowards2
+Stand
+WalkLeft1
+WalkLeft2
+StandLeft
+SaluteAway
+SaluteToward
+RightHandUpAway
+RightHandUpTowards
+LeftHandUpAway
+LeftHandUpTowards
+BothHandsUpAway
+BothHandsUpTowards
+Tisk1
+Tisk2
+Laugh1
+Laugh2
+Wink
+Blink
+LookLeft
+LookRight
+SadTowards
+SadLeft
+SadAway
+BlinkLeft
+Threaten
+Timid? (terra only?)
+Surprised
+Dead
+Sleep
+Jump1
+Jump2
+Tent
+Hit
+Cast1
+Cast2
+Ready
+Celebrate1
+Celebrate2
+CombatStandLeft
+CombatWalkLeft
+Kneel
+
+Pose				Stencil				TileIndexes
+WalkAway1			C0 C0 C0			12 13 14 15 16 17
+WalkAway2			C0 C0 C0			12 13 22 23 -17 -16
+StandAway			C0 C0 C0			12 13 18 19 20 21
+WalkTowards1		C0 C0 C0			0 1 2 3 4 5
+WalkTowards2		C0 C0 C0			0 1 10 11 -5 -4
+Stand				C0 C0 C0			0 1 6 7 8 9
+WalkLeft1			C0 C0 C0			24 25 26 27 28 29
+WalkLeft2			C0 C0 C0			24 25 36 37 38 39
+StandLeft			C0 C0 C0			30 31 32 33 34 35
+SaluteAway			C0 C0 C0			? 132 ? 133 ? ?
+SaluteToward		C0 C0 C0			130 ? 131 ? ? ?
+HandsUpAway			C0 C0 C0			112 113 114 115 116 117
+HandsUpTowards		C0 C0 C0			106 107 108 109 110 111
+Tisk1				C0 C0 C0			? ? 152 153 154 155
+Tisk2				C0 C0 C0			? ? 156 153 154 155
+Laugh1				C0 C0 C0			96 97 98 99 100 101
+Laugh2				C0 C0 C0			102 103 104 105 100 101
+Wink				C0 C0 C0			0 1 6 95 8 9
+Blink				C0 C0 C0			0 1 93 94 8 9
+LookLeft			C0 C0 C0			146 147 148 149 8 9 
+LookRight			C0 C0 C0			-147 -146 -149 -148 8 9
+SadTowards			C0 C0 C0			134 135 136 137 8 9
+SadLeft				C0 C0 C0			142 143 144 145 34 35 
+SadAway				C0 C0 C0			138 139 140 141 20 21
+BlinkLeft			C0 C0 C0			150 31 151 32 33 34 35
+Threaten			C0 C0 C0			118 119 120 121 122 123
+Special	(terra)		C0 C0 C0			157 158 159 160 161 162
+Surprised			C0 C0 C0			124 125 126 127 128 129
+Dead				C0 C0 C0			81 82 83 84 85 86
+Sleep				E0 E0				87 88 89 90 91 92
+JumpRide1			C0 C0 C0			171 172 173 174 175 176
+JumpRide2			C0 C0 C0			177 178 179 180 175 176
+Tent				C0 C0 C0			165 166 167 168 169 170
+Hit					C0 C0 C0			68 69 70 71 72 73
+Cast1				C0 C0 C0			74 75 76 77 78 79
+Cast2				C0 C0 C0			74 75 80 77 78 79
+Ready				C0 C0 C0			62 63 64 65 66 67
+Celebrate1			C0 C0 C0			24 46 47 48 49 50
+Celebrate2			C0 C0 C0			30 51 52 53 54 55
+CombatStandLeft		C0 C0 C0			30 31 40 41 42 43
+CombatWalkLeft		C0 C0 C0			24 25 44 27 45 29
+Kneel				C0 C0 C0			56 57 58 59 60 61
+
+
+GauJerky:
+ShadowYump:
+
+Menu border: 2d0000, palette: 2d1c00. 16 blank tiles, then 12 tiles for a 4x4 box border.
+Additional border styles afterwards
+
+Large icons (hand, vs, statuses): 2d5ac0. possible palette at 29824
+
+NPCs:
+				start	end		length	tiles	Palettes
+Gestahl			16ea40	16f120	6E0				268060
+Old Man			16f120	16f800	6E0				268000 (Gau's father) 268020(red) 268060(Blue) 268080(green)
+Generic Male	16f800	16FEE0	6e0				268000 (Blue Vest) 268020(Red vest) 268060(Auctioneer)
+Interceptor		16FEE0	1705C0  6e0				268080
+Maria			1705c0	170cc0	700				268000
+Opera Singer	170cc0	1713c0  700 			268020, 268040
+Draco			1713c0	171AC0	700				268080
+Arvis			171ac0	172080	5C0				268080
+Returner		172080	172640	5C0				268020, 268060
+Ultros			172640	172c00	5C0				2680a0
+My Fair Gau		172c00	1731c0	5C0				268060
+Dancer?			1731c0	173780  5c0				268000, 268040
+Chancellor		173780	173D40	5c0				268040
+Clyde			173D40	174300	5c0				268020
+Old Woman		174300	1748C0	5c0				268060, 268080
+Aisha			1748C0	174E80	5c0				268000(Aisha)
+Kid (boy)		174E80	175440	5c0				268000, 268040, 268060
+Kid (girl)		175440	175a00	5c0				268020
+Bird			175a00	175FC0	5c0				268080
+Rachel			175FC0	176580	5c0				268000
+Katarin			176580	176B40	5c0				268080
+Impresario		176B40	177100	5c0				268080
+Esper Elder		177100	1776C0	5c0				268080
+Yura			1776C0	177C80	5c0				268080
+Siegfried		177C80	178240	5c0				268080
+Cid				178240	178800	5c0				268060
+Maduin 			178800	178DC0	5c0				268040
+Thief			178DC0	1792c0	500				268000(Baram), 268060(TzenThief)
+Vargas/Dadaluma	1792c0	1797C0	500				268080(Vargas) 268320(Dadaluma)
+Wolf Esper		1797c0	179CC0	500				268040 / 268080
+Narshe Guard	179CC0	17A1C0	500				268000 / 268020
+Train Conductor	17A1C0	17A6C0	500				268000 / 268080
+Shopkeeper		17A6C0	17ABC0	500				268020
+Fairy			17ABC0	17B0C0	500				268040
+Lone Wolf		17B0C0	17B5C0	500				268080 (Lone Wolf) 268040
+Dragon			17B5C0	17BAC0	500				268000(Storm) 268040(Red, gold, dirt, white) 268060(blue, ice) 268080(skull)
+Fish			17BAC0	17BFC0	500				268080
+Figaro Guard	17BFC0	17C4C0	500				268020(Opera guard), 268040
+Darill			17C4C0	17C9C0	500				268040
+Hidon			17C9C0	17CEC0	500				268000, 2680a0 (Chupon)
+Imperial Elite	17CEC0	17D3C0	500				268040 (Imperial Elite), 268080(cultist), 268100 (Wrexsoul)
+Ramuh			17D3C0	17d520	160				268080
+Figaro Rider	17d520	17d660	140				268020, 268040
+Chained Celes	17d660	17d720	C0				268000
+Gau Specials	17d720	17d8a0	180				268060
+Dead Doma King	17d8a0	17d960					268040
+Inferno			17d960	17da20					268080
+Enemy Odin 		17da20	17daa0					268080 (Top half)
+Umaro Skull		17dae0	17dba0					268080
+Ifrit			17dba0	17dc60					268060
+Phantom			17dc60	17dd20					268080
+Shiva			17dd20	17dde0					268000
+Unicorn			17dde0	17dea0					268060
+Bismarck		17dea0	17df60					268080
+Carbuncle		17df60	17e020					268040
+Shoat	 		17e020	17e0e0					268040
+Owzer			17e0e0	17e260					268060
+Blackjack		17e260	17e320					268080
+Dead Figaro grd	17e320	17e3e0					268020, 268040
+Number 024		17e3e0	17e4a0					2680a0
+Chest			17e4a0	17e520					268220
+Enemy Odin 		17e5a0	17e620					268080 (bottom half)
+Atma Weapon		17e620	17e6e0					268060
+Warring triad	17e700	17e780					268060 
+Boquet			17e7a0	17e820					268060
+Envelope		17e880	17e8c0					268000
+Plant			17e8e0	17e960					268000
+Magicite		17e980	17ea00					268040
+Book			17ea20	17eaa0					268080
+Swaddled Baby	17eac0	17eb20					268040
+Question Mark	17eb60	17ebe0					2680c0
+Exclamation Pt	17ec00	17ec80	
+Circlet			17eca0	17ece0					268080
+Weight			17ed40	17edc0					268080
+Bird			17ede0	17f280					268080
+
+Stunner			17f720	17f820					268060, 268080
+Turtle			17f840	17f940					2680e0
+Fire			17fca0	17fea0					2680c0	
+Dive Helm		180a80	180b00					268060
+Guardian		180b00	180e60					2681a0
+
+Mech?			180f00	181100					268140
+Sealed Gate		181100	1813e0					2681c0
+Spitfire		181400	181480					268080
+Sword			181480	181500					268080
+
+Crane			181700	181a00					2681e0
+Painting		181a00	181d00					268240
+Falcon			181d00	182000					268280
+Tritoch			182100	182300					268040
+Odin			182300	182500					2682a0
+Statue 1 (top)	182500	182700					268200 (goddess)
+Statue 2 (top)	182700	182900					268200 (fiend / doom)
+Statue 3 (top)	182900	182b00					268200 (demon / Poltrgeist)
+Statue 1 (bot)	182b00	182c00					268200
+Statue 2/3 bot	182c00	182d00					268200
+
+Terra Flowing	182d00	182f00					268040
+
+Raft			183000	183400					268160
+Chocobos		183400	184000					2680e0
+Magitechs		184000	185000					2680e0
+
+
+Tile Set Region: 1fda00 - 25f400
+Tile set Palettes: 2dc480 - 2df480 (384 palettes)
+Open Chest 1	213060	213080	213260	213280 - 2dcde0(75)
+Closed Chest 1	213100	213120	213300	213320 - 2dcde0	(75)
+Open Chest 1	22cc20, 22cc40, 22ce20, 22ce40, 22d020, 22d040 - 268220/2dcde0(75)
+Closed Chest 2	22cc60, 22cc80, 22ce60, 22ce80, 22d060, 22d080 - 268220/2dcde0(75)
+Weapon logo		209ca0	209cc0	20a2a0	20adc0 - 2dd0e0 (99)
+Roses - Darills	25f0a0	25f0c0	25ee00	25ee20	25f000	25f020 - 2ded00(324) (More tiles exist for entire gravestone)
+Roses - Pot		21fb00	21fb20	21fd00	21fd20	21ff00	21ff20 - 2df340(374)
+Throne			2108c0	-2108c0	210ac0	-210ac0	210cc0	-210cc0	210ec0	-210ec0	- 2dcac0(32)
+Engine			211f80	- 2dcaa0? (49)
+
+
+
+Tile sets. Start address: 1fda00
+weapon shop logo, 4 tiles: 
+Open Chest t: 2739,2740,2755,2756
+Closed Chest t: 2744, 2745, 2760, 2761
+Chest palette: 268220
+
+Portrait tile pattern:
+
+0	1	2	3	8
+16	17	18	19	9
+4	5	6	7	10
+20	21	22	23	11
+13	14	15	24	12
+
+Large icons (hand, vs, statuses): 2d5ac0. possible palette at 29824
+47fc0	48fc0	Fixed Width font
+18E800	18E89F	Menu Text Palettes (40 palettes, 4 colors each)
+18E8A0	18E8B7	Grayscale Character Sprite Palette (12 colors)
+18E8B8	18E8BF	Menu Cursor Palettes (4 colors)
+18E8C0	18E8C7	Menu Icon Palettes (4 colors)
