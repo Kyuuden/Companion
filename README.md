@@ -1,8 +1,7 @@
 ﻿# Final Fantasy Rando Companion
 [![(latest) release | GitHub](https://img.shields.io/github/release/Kyuuden/Companion.svg?logo=github&logoColor=333333&style=popout)](https://github.com/Kyuuden/Companion/releases/latest)
 
-An auto-tracker (currently) for [Free Enterprise, a Final Fantasy IV randomizer](https://ff4fe.com/) and [Mystic Quest Randomizer](https://www.ffmqrando.net/).
-Plans exist to extend its support to be able to track [Worlds Collide](https://ff6worldscollide.com/).
+An auto-tracker for [Free Enterprise, a Final Fantasy IV randomizer](https://ff4fe.com/), [Mystic Quest Randomizer](https://www.ffmqrando.net/) and [Worlds Collide](https://ff6worldscollide.com/).
 
 ## Installation
 This tool requires [the latest BizHawk version](https://github.com/TASEmulators/BizHawk/releases/latest).
@@ -33,7 +32,6 @@ To check if a new version is available, open the about dialog. If there is a new
 
 Upcoming features (not in order):
 - Livesplit integration
-- Final Fantasy VI Worlds Collide tracking
 - Completely customizable layouts (drag and drop, reszing etc)
 - Save different layouts based on game flagset
 
@@ -44,3 +42,4 @@ Upcoming features (not in order):
 * [SimpleLatestReleaseUpdater](https://github.com/TalicZealot/SimpleLatestReleaseUpdater) - self explanitory.
 * [SotRandoTools](https://github.com/TalicZealot/SotnRandoTools) - Used as examples for how to do auto updates, better about screen, and more detailed readme.
 * [KGy SOFT Drawing Libraries](https://github.com/koszeggy/KGySoft.Drawing) - Easier to use, and better performant bitmap manipulation.
+* [Peroquenariz](https://github.com/peroquenariz/FF6WCTools) - Worlds Collide tracking data.

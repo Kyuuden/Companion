@@ -48,6 +48,7 @@
 	<Target Name="PublishPostBuild" AfterTargets="ILRepacker" Condition="'$(Configuration)|$(Platform)'=='Publish|AnyCPU'">
 		<ItemGroup>
 			<FilesToDelete Include="$(BIZHAWK_DATA_HOME)ExternalTools/KGySoft*.dll" />
+			<FilesToDelete Include="$(BIZHAWK_DATA_HOME)ExternalTools/*.json" />
 		</ItemGroup>
 		<Delete Files="@(FilesToDelete)">
 			<Output TaskParameter="DeletedFiles" ItemName="FilesDeleted" />
@@ -60,6 +61,7 @@
 	<Target Name="ReleasePostBuild" AfterTargets="ILRepacker" Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<ItemGroup>
 			<FilesToDelete Include="$(BIZHAWK_DATA_HOME)ExternalTools/KGySoft*.dll" />
+			<FilesToDelete Include="$(BIZHAWK_DATA_HOME)ExternalTools/*.json" />
 		</ItemGroup>
 		<Delete Files="@(FilesToDelete)">
 			<Output TaskParameter="DeletedFiles" ItemName="FilesDeleted" />
