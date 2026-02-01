@@ -14,6 +14,11 @@ public abstract class ScrollablePanel<TGame, TSettings> : PictureBox, IPanel, IS
     protected TGame? Game { get; private set; }
     protected TSettings? Settings { get; private set; }
 
+    protected ScrollablePanel()
+    {
+        BackgroundImageLayout = ImageLayout.Stretch;
+    }
+
     private bool _scrollingEnabled;
 
     private int _scrollOffset;
@@ -54,6 +59,7 @@ public abstract class ScrollablePanel<TGame, TSettings> : PictureBox, IPanel, IS
 
         Settings.PropertyChanged += PropertyChanged;
         Game.PropertyChanged += PropertyChanged;
+        Game.Settings.BorderSettings.PropertyChanged += PropertyChanged;
 
         BackColor = Game.BackgroundColor;
         Visible = Settings.Enabled;
@@ -67,8 +73,12 @@ public abstract class ScrollablePanel<TGame, TSettings> : PictureBox, IPanel, IS
 
     protected void RenderImage()
     {
-        if (Settings == null || _pageBitmapData.Count == 0)
+        if (Settings == null || _pageBitmapData.Count == 0 || Game == null)
             return;
+
+        Padding = Game.Settings.BorderSettings.BordersEnabled
+            ? new Padding(Game.Settings.BorderSettings.BorderScaleFactor.TileSize())
+            : Padding.Empty;
 
         if (CombinePages)
             RenderImage(_pageBitmapData.SelectMany(d => d));
@@ -91,7 +101,16 @@ public abstract class ScrollablePanel<TGame, TSettings> : PictureBox, IPanel, IS
 
         try
         {
-            var unscaledSize = Size.Unscale(Settings.ScaleFactor);
+            BackgroundImage?.Dispose();
+            BackgroundImage = null;
+            if (Game.Settings.BorderSettings.BordersEnabled)
+                BackgroundImage = GenerateBackgroundImage(Size.Unscale(Game.Settings.BorderSettings.BorderScaleFactor)).ToBitmap();
+
+            var effectiveSize = Game.Settings.BorderSettings.BordersEnabled
+                ? new Size(Size.Width - Padding.Horizontal, Size.Height - Padding.Vertical)
+                : Size;
+
+            var unscaledSize = effectiveSize.Unscale(Settings.ScaleFactor);
             unscaledSize = new Size((unscaledSize.Width / 8) * 8, (unscaledSize.Height / 8) * 8);
             var y = 8;
 
@@ -103,8 +122,7 @@ public abstract class ScrollablePanel<TGame, TSettings> : PictureBox, IPanel, IS
 
             Image?.Dispose();
             Image = null;
-
-            var baseImage = GenerateBackgroundImage(unscaledSize);
+            var baseImage = BitmapDataFactory.CreateBitmapData(unscaledSize);
 
             _canScrollDown = false;
             foreach (var line in data.Skip(_scrollOffset))
@@ -148,7 +166,7 @@ public abstract class ScrollablePanel<TGame, TSettings> : PictureBox, IPanel, IS
 
     protected virtual void PropertyChanged(object sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(PanelSettings.ScaleFactor))
+        if (e.PropertyName == nameof(PanelSettings.ScaleFactor) || e.PropertyName == nameof(BorderSettings.BorderScaleFactor))
             RegerateData();
         if (e.PropertyName == nameof(ISeed.BackgroundColor))
             BackColor = Game?.BackgroundColor ?? BackColor;
@@ -169,7 +187,6 @@ public abstract class ScrollablePanel<TGame, TSettings> : PictureBox, IPanel, IS
         _canScrollUp = false;
         _canScrollDown = false;
         _scrollOffset = 0;
-
 
         if (Size.Height > 0 && Size.Width > 0 && IsHandleCreated)
             BeginInvoke(() => RegerateData());

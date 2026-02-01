@@ -56,6 +56,15 @@ public abstract partial class FlowPanelEx<TGame, TSettings> : FlowLayoutPanel, I
         PerformLayout();
     }
 
+    protected override void OnHandleCreated(EventArgs e)
+    {
+        base.OnHandleCreated(e);
+        if (Game == null || Settings == null || !IsHandleCreated)
+            return;
+
+        BeginInvoke(() => Arrange());
+    }
+
     private void Control_VisibleChanged(object sender, EventArgs e)
     {
         Arrange();

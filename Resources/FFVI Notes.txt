@@ -323,7 +323,8 @@ toilet - 2de420
 11254 - 11254
 
 Waterfall bg around 9945
-2dd800
+2ddc00?
+2df400?
 
 Portrait tile pattern:
 
@@ -344,10 +345,18 @@ Whelk gate
 mobliz attack
 south figaro
 Phoenix cave
-Barren Falls
 phantom train
 veldt
 
 Narshe shop 2
 Lone wolf 2
 
+
+blue 64 96
+dirt	56	64
+gold	88	64
+ice	88	64
+red	96	96
+skull	64	64
+storm	64	48
+ice 32	32

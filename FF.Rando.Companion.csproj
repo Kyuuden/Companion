@@ -5,7 +5,7 @@
 	  <Nullable>enable</Nullable>
 	  <TargetFramework>net48</TargetFramework>
 	  <UseWindowsForms>True</UseWindowsForms>
-	  <Version>2.0.10</Version>
+	  <Version>2.1.0</Version>
 	  <Description>Auto-Tracker for Final Fantasy Randomizers.</Description>
 	  <Copyright>2025 Kyuuden</Copyright>
 	  <AssemblyVersion></AssemblyVersion>
@@ -387,9 +387,6 @@
 	    <DependentUpon>Resources.resx</DependentUpon>
 	  </Compile>
 	  <Compile Update="View\FlowPanelEx.cs">
-	    <SubType>UserControl</SubType>
-	  </Compile>
-	  <Compile Update="View\FlowPanel.cs">
 	    <SubType>UserControl</SubType>
 	  </Compile>
 	  <Compile Update="View\StatisticControl.cs">

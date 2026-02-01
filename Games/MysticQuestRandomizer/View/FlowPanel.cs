@@ -1,11 +1,10 @@
-﻿using FF.Rando.Companion.Games.MysticQuestRandomizer;
-using FF.Rando.Companion.Settings;
+﻿using FF.Rando.Companion.Settings;
 using FF.Rando.Companion.View;
 using KGySoft.Drawing.Imaging;
 using System.Drawing;
 
 namespace FF.Rando.Companion.Games.MysticQuestRandomizer.View;
-internal abstract class FlowPanel<TSettings> : FlowPanel<Seed, TSettings> where TSettings : PanelSettings
+internal abstract class FlowPanel<TSettings> : FlowPanelEx<Seed, TSettings> where TSettings : PanelSettings
 {
     protected FlowPanel()
         : base()

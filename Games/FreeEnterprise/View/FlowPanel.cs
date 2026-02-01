@@ -6,7 +6,7 @@ using System.Drawing;
 
 namespace FF.Rando.Companion.Games.FreeEnterprise.View;
 
-public abstract class FlowPanel<TSettings> : FlowPanel<ISeed, TSettings> where TSettings : PanelSettings
+public abstract class FlowPanel<TSettings> : FlowPanelEx<ISeed, TSettings> where TSettings : PanelSettings
 {
     protected override Bitmap? GenerateBackgroundImage(Size unscaledSize)
     {
