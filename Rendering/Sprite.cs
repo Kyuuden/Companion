@@ -12,7 +12,7 @@ public abstract class Sprite(Palette palette) : ISprite, IDisposable
     private IReadableBitmapData? _cachedGreyScaleData;
     private bool disposedValue;
 
-    protected Palette Palette { get; } = palette;
+    public Palette Palette { get; } = palette;
 
     public virtual Size Size
     {
@@ -34,18 +34,22 @@ public abstract class Sprite(Palette palette) : ISprite, IDisposable
         if (!greyscale && _cachedData != null)
             return _cachedData;
 
-        var data = _cachedData ?? RenderColorData();
-        _cachedData = data;
-
         if (greyscale)
         {
-            var tmp = data.ToGrayscale();
-            tmp.AdjustBrightness(-0.5f);
-            _cachedGreyScaleData = tmp;
+            _cachedGreyScaleData = RenderGreyscaleData();
             return _cachedGreyScaleData;
         }
-        
-        return data;
+
+        _cachedData = RenderColorData();
+        return _cachedData;
+    }
+
+    protected virtual IReadableBitmapData RenderGreyscaleData()
+    {
+        using var tmp = RenderColorData();
+        var greyscale = tmp.ToGrayscale();
+        greyscale.AdjustBrightness(-0.25f);
+        return greyscale;
     }
 
     protected abstract IReadableBitmapData RenderColorData();

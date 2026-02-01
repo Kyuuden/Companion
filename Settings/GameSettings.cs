@@ -7,6 +7,8 @@ namespace FF.Rando.Companion.Settings;
 
 public abstract class GameSettings : INotifyPropertyChanged
 {
+    protected virtual float DefaultBorderScaleFactor => 1.75f;
+
     [Browsable(false)]
     public abstract string Name { get; }
     [Browsable(false)]
@@ -22,7 +24,12 @@ public abstract class GameSettings : INotifyPropertyChanged
         }
 
         SettingsData = parentData[Name]!;
+        BorderSettings = new BorderSettings(SettingsData);
     }
+
+    [TypeConverter(typeof(ExpandableObjectConverter))]
+    [DisplayName("Borders")]
+    public virtual BorderSettings BorderSettings { get; }
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

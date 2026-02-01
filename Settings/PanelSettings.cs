@@ -1,7 +1,6 @@
 ﻿using FF.Rando.Companion.Extensions;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel;
-using System.Drawing;
 using System.Runtime.CompilerServices;
 
 namespace FF.Rando.Companion.Settings;
@@ -43,18 +42,6 @@ public abstract class PanelSettings : INotifyPropertyChanged
 
     [Description("Determines the order of the panels in the tracker.")]
     public abstract int Priority { get; set; }
-
-    [Browsable(false)]
-    public int TileSize => (int)(8 * ScaleFactor);
-    public Size Scale(Size size) => Size.Truncate(Scale((SizeF)size));
-    public SizeF Scale(SizeF size) => new(size.Width * ScaleFactor, size.Height * ScaleFactor);
-    public Point Scale(Point point) => Point.Truncate(Scale((PointF)point));
-    public PointF Scale(PointF point) => new(point.X * ScaleFactor, point.Y * ScaleFactor);
-
-    public Size Unscale(Size size) => Size.Truncate(Unscale((SizeF)size));
-    public SizeF Unscale(SizeF size) => new(size.Width / ScaleFactor, size.Height / ScaleFactor);
-    public Point Unscale(Point point) => Point.Truncate(Unscale((PointF)point));
-    public PointF Unscale(PointF point) => new(point.X / ScaleFactor, point.Y / ScaleFactor);
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

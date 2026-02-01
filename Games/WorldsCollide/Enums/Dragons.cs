@@ -1,0 +1,13 @@
+﻿namespace FF.Rando.Companion.Games.WorldsCollide.Enums;
+
+public enum Dragons : uint
+{
+    ICE_DRAGON_DEFEATED = 0x090,
+    STORM_DRAGON_DEFEATED = 0x091,
+    DIRT_DRAGON_DEFEATED = 0x092,
+    GOLD_DRAGON_DEFEATED = 0x093,
+    SKULL_DRAGON_DEFEATED = 0x094,
+    BLUE_DRAGON_DEFEATED = 0x095,
+    RED_DRAGON_DEFEATED = 0x096,
+    WHITE_DRAGON_DEFEATED = 0x097,
+}

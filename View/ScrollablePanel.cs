@@ -1,4 +1,4 @@
-﻿using FF.Rando.Companion.FreeEnterprise;
+﻿using FF.Rando.Companion.Games.FreeEnterprise;
 using FF.Rando.Companion.Settings;
 using KGySoft.Drawing.Imaging;
 using System;
@@ -91,7 +91,7 @@ public abstract class ScrollablePanel<TGame, TSettings> : PictureBox, IPanel, IS
 
         try
         {
-            var unscaledSize = Settings.Unscale(Size);
+            var unscaledSize = Size.Unscale(Settings.ScaleFactor);
             unscaledSize = new Size((unscaledSize.Width / 8) * 8, (unscaledSize.Height / 8) * 8);
             var y = 8;
 

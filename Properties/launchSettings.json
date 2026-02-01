@@ -3,6 +3,7 @@
     "BizHawk 2.10": {
       "commandName": "Executable",
       "executablePath": "C:\\Users\\kuren\\source\\repos\\BizHawk\\EmuHawk.exe",
+      "commandLineArgs": "--open-ext-tool-dll=FF.Rando.Companion.dll",
       "workingDirectory": "C:\\Users\\kuren\\source\\repos\\BizHawk\\"
     }
   }

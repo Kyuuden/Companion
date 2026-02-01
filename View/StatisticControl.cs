@@ -1,6 +1,7 @@
 ﻿using FF.Rando.Companion.Settings;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace FF.Rando.Companion.View;
@@ -15,7 +16,7 @@ public abstract class StatisticControl<T, TGame> : PictureBox, IScalableControl 
     protected abstract string PropertyName { get; }
 
 
-    public StatisticControl(TGame game, PanelSettings settings)
+    public StatisticControl(TGame game, PanelSettings settings, Size minimumSize)
     {
         Game = game ?? throw new ArgumentNullException();
         Settings = settings ?? throw new ArgumentNullException();
@@ -23,6 +24,7 @@ public abstract class StatisticControl<T, TGame> : PictureBox, IScalableControl 
         ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
         SuspendLayout();
         Size = new System.Drawing.Size(56, 16);
+        MinimumSize = minimumSize;
         DoubleBuffered = true;
         BackColor = Game.BackgroundColor;
         Margin = new Padding(4);
@@ -36,7 +38,7 @@ public abstract class StatisticControl<T, TGame> : PictureBox, IScalableControl 
         Game.PropertyChanged += Seed_PropertyChanged;
     }
 
-    private void Seed_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    protected virtual void Seed_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(IGame.BackgroundColor))
             BackColor = Game.BackgroundColor;
@@ -56,14 +58,14 @@ public abstract class StatisticControl<T, TGame> : PictureBox, IScalableControl 
         Image?.Dispose();
         Image = null;
         Image = Render();
-        Size = Settings.Scale(Image.Size);
+        Size = Image.Size.Scale(Settings.ScaleFactor);
     }
 
     protected abstract System.Drawing.Image Render();
 
     public void Rescale()
     {
-        Size = Settings.Scale(Image.Size);
+        Size = Image.Size.Scale(Settings.ScaleFactor);
     }
 
     protected override void Dispose(bool disposing)

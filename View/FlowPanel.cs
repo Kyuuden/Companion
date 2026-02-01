@@ -93,6 +93,12 @@ public abstract partial class FlowPanel<TGame, TSettings> : UserControl, IPanel 
         }
     }
 
+    protected void SetBackColor(Color color)
+    {
+        BackColor = color;
+        flowLayoutPanel1.BackColor = color;
+    }
+
     protected override void OnLoad(EventArgs e)
     {
         base.OnLoad(e);
@@ -132,7 +138,7 @@ public abstract partial class FlowPanel<TGame, TSettings> : UserControl, IPanel 
         if (Game == null || Settings == null || flowLayoutPanel1.Controls.Count == 0)
             return;
 
-        var unscaledSize = Settings.Unscale(Size);
+        var unscaledSize = Size.Unscale(Settings.ScaleFactor);
 
         if (unscaledSize.Height < 8 || unscaledSize.Width < 8)
             return;
@@ -140,7 +146,7 @@ public abstract partial class FlowPanel<TGame, TSettings> : UserControl, IPanel 
         if (!Visible) 
             return;
 
-        Padding = new Padding(Settings.TileSize);
+        Padding = new Padding(Settings.ScaleFactor.TileSize());
 
         switch (SpacingMode)
         {
@@ -196,7 +202,7 @@ public abstract partial class FlowPanel<TGame, TSettings> : UserControl, IPanel 
 
                 break;
             case SpacingMode.None:
-                Padding = new Padding(Settings.TileSize);
+                Padding = new Padding(Settings.ScaleFactor.TileSize());
                 break;
         }
 
@@ -232,7 +238,7 @@ public abstract partial class FlowPanel<TGame, TSettings> : UserControl, IPanel 
             }
         }
 
-        unscaledSize = Settings.Unscale(Size);
+        unscaledSize = Size.Unscale(Settings.ScaleFactor);
         BackgroundImage?.Dispose();
         BackgroundImage = null;
         BackgroundImage = GenerateBackgroundImage(unscaledSize);

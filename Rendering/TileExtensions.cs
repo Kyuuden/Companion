@@ -21,8 +21,8 @@ public static class TileExtensions
                 var sourceX = x;
                 var sourceY = y;
 
-                if (flipHorizontal) x = 7 - x;
-                if (flipVertical) y = 7 - y;
+                if (flipHorizontal) sourceX = 7 - sourceX;
+                if (flipVertical) sourceX = 7 - sourceX;
 
                 data.SetColorIndex(destinationX + x, destinationY + y, tile[sourceX, sourceY]);
             }

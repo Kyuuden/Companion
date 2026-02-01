@@ -179,7 +179,7 @@ public static class ByteArrayExtensions
     private static byte GetPixel(this byte spriteRow, int x)
         => (byte)((spriteRow >> (7 - x)) & 0x01);
 
-    public static Palette DecodePalette(this byte[] paletteData, Color32? colorZero = null)
+    public static Palette DecodePalette(this byte[] paletteData, Color32? colorZero = null, byte maxColors = byte.MaxValue)
     {
         bool first = true;
         List<Color32> colors = [];
@@ -195,7 +195,7 @@ public static class ByteArrayExtensions
                 colors.Add(color.ToColor());
             }
         }
-        return new Palette(colors);
+        return new Palette(colors.Take(maxColors));
     }
 
     private static byte[] SignExtend(this byte[] b, uint valueWidth, ByteOrder? order)

@@ -1,11 +1,12 @@
 ﻿using FF.Rando.Companion.Settings;
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace FF.Rando.Companion.View;
 public class ImageControl<TGame, TImageSource> : PictureBox, IScalableControl where TGame : IGame where TImageSource : IImageTracker
 {
-    protected TImageSource Value { get; }
+    public TImageSource Value { get; }
     protected TGame Game { get; }
     protected PanelSettings Settings { get; }
 
@@ -47,16 +48,24 @@ public class ImageControl<TGame, TImageSource> : PictureBox, IScalableControl wh
         }
     }
 
+    protected virtual Size ImageSize => Value.Image.Size;
+
     protected virtual void UpdateImage()
     {
-        MinimumSize = Value.Image.Size;
+        if (Value.Image == null)
+            return;
+
+        MinimumSize = ImageSize;
         Image = Value.Image;
-        Size = Settings.Scale(Value.Image.Size);
+        Size = ImageSize.Scale(Settings.ScaleFactor);
     }
 
     public virtual void Rescale()
     {
-        Size = Settings.Scale(Image.Size);
+        if (Value.Image == null)
+            return;
+
+        Size = ImageSize.Scale(Settings.ScaleFactor);
     }
 
     protected override void Dispose(bool disposing)

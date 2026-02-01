@@ -273,8 +273,8 @@ Raft			183000	183400					268160
 Chocobos		183400	184000					2680e0
 Magitechs		184000	185000					2680e0
 
-
-Tile Set Region: 1fda00 - 25f400
+ 
+Tile Set Region: 1fda00 - 25f400 (400000)
 Tile set Palettes: 2dc480 - 2df480 (384 palettes)
 Open Chest 1	213060	213080	213260	213280 - 2dcde0(75)
 Closed Chest 1	213100	213120	213300	213320 - 2dcde0	(75)
@@ -283,9 +283,19 @@ Closed Chest 2	22cc60, 22cc80, 22ce60, 22ce80, 22d060, 22d080 - 268220/2dcde0(75
 Weapon logo		209ca0	209cc0	20a2a0	20adc0 - 2dd0e0 (99)
 Roses - Darills	25f0a0	25f0c0	25ee00	25ee20	25f000	25f020 - 2ded00(324) (More tiles exist for entire gravestone)
 Roses - Pot		21fb00	21fb20	21fd00	21fd20	21ff00	21ff20 - 2df340(374)
-Throne			2108c0	-2108c0	210ac0	-210ac0	210cc0	-210cc0	210ec0	-210ec0	- 2dcac0(32)
+Throne			2108c0	-2108c0	210ac0	-210ac0	210cc0	-210cc0	210ec0	-210ec0	- 2dcac0(50)
 Engine			211f80	- 2dcaa0? (49)
+Trees			starting at tile 998, palette 2dc5e0
+Fanatics tower starting around 6922, no palette yet at 2dd040
 
+stairs: palette close at 2dd540, 2ddbc0, 2deec0
+
+bottom landing
+7194 7195 7196
+7197 7198 7199
+top landing
+7186 7187
+7201 7202
 
 
 Tile sets. Start address: 1fda00
@@ -293,6 +303,27 @@ weapon shop logo, 4 tiles:
 Open Chest t: 2739,2740,2755,2756
 Closed Chest t: 2744, 2745, 2760, 2761
 Chest palette: 268220
+
+cafe chairs/table start at 2727, palette is close at 2dcb20
+
+2dcde0 - continued until 2de300 for rug, 2de8c0!!!
+rug close calls: 2dc5c0 
+
+rug tiles: 4147-4153
+
+sink - 2de420
+11224 11225
+11240 11241
+      11257
+	  
+toilet - 2de420
+11206 - 11206
+11222 - 11222
+11238 - 11238
+11254 - 11254
+
+Waterfall bg around 9945
+2dd800
 
 Portrait tile pattern:
 
@@ -308,3 +339,15 @@ Large icons (hand, vs, statuses): 2d5ac0. possible palette at 29824
 18E8A0	18E8B7	Grayscale Character Sprite Palette (12 colors)
 18E8B8	18E8BF	Menu Cursor Palettes (4 colors)
 18E8C0	18E8C7	Menu Icon Palettes (4 colors)
+
+Whelk gate
+mobliz attack
+south figaro
+Phoenix cave
+Barren Falls
+phantom train
+veldt
+
+Narshe shop 2
+Lone wolf 2
+

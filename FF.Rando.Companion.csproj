@@ -5,7 +5,7 @@
 	  <Nullable>enable</Nullable>
 	  <TargetFramework>net48</TargetFramework>
 	  <UseWindowsForms>True</UseWindowsForms>
-	  <Version>2.0.9</Version>
+	  <Version>2.0.10</Version>
 	  <Description>Auto-Tracker for Final Fantasy Randomizers.</Description>
 	  <Copyright>2025 Kyuuden</Copyright>
 	  <AssemblyVersion></AssemblyVersion>
@@ -78,305 +78,305 @@
 	</Target>
 	
 	<ItemGroup>
-	  <None Remove="FreeEnterprise\Resources\Crystal.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-10DKCecil-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-10DKCecil-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-11Guards-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-11Guards-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-12Yang-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-12Yang-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-13Baigan-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-13Baigan-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-14Kainazzo-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-14Kainazzo-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-15DElf-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-15DElf-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-16MagusSis-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-16MagusSis-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-17Valvalis-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-17Valvalis-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-18Calcabrina-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-18Calcabrina-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-19Golbez-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-19Golbez-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-1MistD-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-1MistD-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-20Lugae-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-20Lugae-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-21Eblan-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-21Eblan-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-22Rubicante-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-22Rubicante-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-23EvilWall-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-23EvilWall-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-24Fiends-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-24Fiends-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-25CPU-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-25CPU-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-26Odin-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-26Odin-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-27Asura-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-27Asura-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-28Leviath-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-28Leviath-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-29Bahamut-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-29Bahamut-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-2Soldier-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-2Soldier-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-30PaleDim-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-30PaleDim-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-31LunarD-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-31LunarD-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-32Plague-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-32Plague-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-33Ogopogo-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-33Ogopogo-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-34Wyvern-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-34Wyvern-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-35DarkImps-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-35DarkImps-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-36Zeromus-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-36Zeromus-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-3Octo-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-3Octo-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-4Antlion-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-4Antlion-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-5WHag-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-5WHag-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-6Mombomb-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-6Mombomb-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-7Gauntlet-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-7Gauntlet-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-8Milon-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-8Milon-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-9MilonZ-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Bosses-9MilonZ-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-10MagmaKey-Check.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-10MagmaKey-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-10MagmaKey-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-11TowerKey-Check.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-11TowerKey-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-11TowerKey-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-12LucaKey-Check.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-12LucaKey-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-12LucaKey-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-13Adamant-Check.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-13Adamant-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-13Adamant-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-14LegendSword-Check.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-14LegendSword-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-14LegendSword-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-15Pan-Check.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-15Pan-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-15Pan-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-16Spoon-Check.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-16Spoon-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-16Spoon-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-17RatTail-Check.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-17RatTail-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-17RatTail-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-18PinkTail-Check.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-18PinkTail-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-18PinkTail-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-1THECrystal-Check.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-1THECrystal-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-1THECrystal-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-2Pass-Check.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-2Pass-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-2Pass-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-3Hook-Check.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-3Hook-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-3Hook-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-4DarkCrystal-Check.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-4DarkCrystal-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-4DarkCrystal-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-5EarthCrystal-Check.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-5EarthCrystal-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-5EarthCrystal-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-6TwinHarp-Check.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-6TwinHarp-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-6TwinHarp-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-7Package-Check.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-7Package-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-7Package-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-8SandRuby-Check.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-8SandRuby-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-8SandRuby-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-9BaronKey-Check.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-9BaronKey-Color.png" />
-	  <None Remove="FreeEnterprise\Resources\FFIVFE-Icons-9BaronKey-Gray.png" />
-	  <None Remove="FreeEnterprise\Resources\SMB3_item_Anchor.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\Crystal.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-10DKCecil-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-10DKCecil-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-11Guards-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-11Guards-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-12Yang-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-12Yang-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-13Baigan-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-13Baigan-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-14Kainazzo-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-14Kainazzo-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-15DElf-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-15DElf-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-16MagusSis-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-16MagusSis-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-17Valvalis-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-17Valvalis-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-18Calcabrina-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-18Calcabrina-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-19Golbez-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-19Golbez-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-1MistD-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-1MistD-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-20Lugae-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-20Lugae-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-21Eblan-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-21Eblan-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-22Rubicante-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-22Rubicante-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-23EvilWall-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-23EvilWall-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-24Fiends-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-24Fiends-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-25CPU-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-25CPU-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-26Odin-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-26Odin-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-27Asura-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-27Asura-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-28Leviath-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-28Leviath-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-29Bahamut-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-29Bahamut-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-2Soldier-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-2Soldier-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-30PaleDim-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-30PaleDim-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-31LunarD-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-31LunarD-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-32Plague-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-32Plague-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-33Ogopogo-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-33Ogopogo-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-34Wyvern-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-34Wyvern-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-35DarkImps-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-35DarkImps-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-36Zeromus-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-36Zeromus-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-3Octo-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-3Octo-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-4Antlion-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-4Antlion-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-5WHag-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-5WHag-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-6Mombomb-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-6Mombomb-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-7Gauntlet-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-7Gauntlet-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-8Milon-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-8Milon-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-9MilonZ-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Bosses-9MilonZ-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-10MagmaKey-Check.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-10MagmaKey-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-10MagmaKey-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-11TowerKey-Check.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-11TowerKey-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-11TowerKey-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-12LucaKey-Check.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-12LucaKey-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-12LucaKey-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-13Adamant-Check.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-13Adamant-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-13Adamant-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-14LegendSword-Check.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-14LegendSword-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-14LegendSword-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-15Pan-Check.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-15Pan-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-15Pan-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-16Spoon-Check.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-16Spoon-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-16Spoon-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-17RatTail-Check.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-17RatTail-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-17RatTail-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-18PinkTail-Check.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-18PinkTail-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-18PinkTail-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-1THECrystal-Check.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-1THECrystal-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-1THECrystal-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-2Pass-Check.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-2Pass-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-2Pass-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-3Hook-Check.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-3Hook-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-3Hook-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-4DarkCrystal-Check.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-4DarkCrystal-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-4DarkCrystal-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-5EarthCrystal-Check.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-5EarthCrystal-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-5EarthCrystal-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-6TwinHarp-Check.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-6TwinHarp-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-6TwinHarp-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-7Package-Check.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-7Package-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-7Package-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-8SandRuby-Check.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-8SandRuby-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-8SandRuby-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-9BaronKey-Check.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-9BaronKey-Color.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\FFIVFE-Icons-9BaronKey-Gray.png" />
+	  <None Remove="Games\FreeEnterprise\Resources\SMB3_item_Anchor.png" />
 	  <None Remove="Resources\Check.png" />
 	  <None Remove="Resources\Crystal.png" />
 	</ItemGroup>
 	
 	<ItemGroup>
-	  <EmbeddedResource Include="FreeEnterprise\Resources\Crystal.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-10DKCecil-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-10DKCecil-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-11Guards-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-11Guards-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-12Yang-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-12Yang-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-13Baigan-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-13Baigan-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-14Kainazzo-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-14Kainazzo-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-15DElf-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-15DElf-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-16MagusSis-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-16MagusSis-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-17Valvalis-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-17Valvalis-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-18Calcabrina-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-18Calcabrina-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-19Golbez-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-19Golbez-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-1MistD-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-1MistD-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-20Lugae-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-20Lugae-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-21Eblan-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-21Eblan-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-22Rubicante-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-22Rubicante-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-23EvilWall-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-23EvilWall-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-24Fiends-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-24Fiends-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-25CPU-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-25CPU-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-26Odin-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-26Odin-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-27Asura-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-27Asura-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-28Leviath-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-28Leviath-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-29Bahamut-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-29Bahamut-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-2Soldier-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-2Soldier-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-30PaleDim-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-30PaleDim-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-31LunarD-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-31LunarD-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-32Plague-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-32Plague-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-33Ogopogo-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-33Ogopogo-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-34Wyvern-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-34Wyvern-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-35DarkImps-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-35DarkImps-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-36Zeromus-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-36Zeromus-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-3Octo-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-3Octo-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-4Antlion-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-4Antlion-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-5WHag-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-5WHag-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-6Mombomb-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-6Mombomb-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-7Gauntlet-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-7Gauntlet-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-8Milon-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-8Milon-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-9MilonZ-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Bosses-9MilonZ-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-10MagmaKey-Check.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-10MagmaKey-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-10MagmaKey-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-11TowerKey-Check.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-11TowerKey-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-11TowerKey-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-12LucaKey-Check.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-12LucaKey-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-12LucaKey-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-13Adamant-Check.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-13Adamant-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-13Adamant-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-14LegendSword-Check.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-14LegendSword-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-14LegendSword-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-15Pan-Check.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-15Pan-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-15Pan-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-16Spoon-Check.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-16Spoon-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-16Spoon-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-17RatTail-Check.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-17RatTail-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-17RatTail-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-18PinkTail-Check.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-18PinkTail-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-18PinkTail-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-1THECrystal-Check.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-1THECrystal-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-1THECrystal-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-2Pass-Check.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-2Pass-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-2Pass-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-3Hook-Check.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-3Hook-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-3Hook-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-4DarkCrystal-Check.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-4DarkCrystal-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-4DarkCrystal-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-5EarthCrystal-Check.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-5EarthCrystal-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-5EarthCrystal-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-6TwinHarp-Check.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-6TwinHarp-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-6TwinHarp-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-7Package-Check.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-7Package-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-7Package-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-8SandRuby-Check.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-8SandRuby-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-8SandRuby-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-9BaronKey-Check.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-9BaronKey-Color.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\FFIVFE-Icons-9BaronKey-Gray.png" />
-	  <EmbeddedResource Include="FreeEnterprise\Resources\SMB3_item_Anchor.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\Crystal.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-10DKCecil-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-10DKCecil-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-11Guards-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-11Guards-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-12Yang-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-12Yang-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-13Baigan-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-13Baigan-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-14Kainazzo-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-14Kainazzo-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-15DElf-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-15DElf-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-16MagusSis-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-16MagusSis-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-17Valvalis-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-17Valvalis-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-18Calcabrina-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-18Calcabrina-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-19Golbez-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-19Golbez-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-1MistD-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-1MistD-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-20Lugae-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-20Lugae-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-21Eblan-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-21Eblan-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-22Rubicante-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-22Rubicante-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-23EvilWall-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-23EvilWall-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-24Fiends-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-24Fiends-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-25CPU-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-25CPU-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-26Odin-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-26Odin-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-27Asura-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-27Asura-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-28Leviath-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-28Leviath-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-29Bahamut-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-29Bahamut-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-2Soldier-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-2Soldier-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-30PaleDim-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-30PaleDim-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-31LunarD-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-31LunarD-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-32Plague-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-32Plague-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-33Ogopogo-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-33Ogopogo-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-34Wyvern-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-34Wyvern-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-35DarkImps-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-35DarkImps-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-36Zeromus-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-36Zeromus-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-3Octo-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-3Octo-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-4Antlion-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-4Antlion-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-5WHag-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-5WHag-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-6Mombomb-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-6Mombomb-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-7Gauntlet-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-7Gauntlet-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-8Milon-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-8Milon-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-9MilonZ-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Bosses-9MilonZ-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-10MagmaKey-Check.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-10MagmaKey-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-10MagmaKey-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-11TowerKey-Check.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-11TowerKey-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-11TowerKey-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-12LucaKey-Check.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-12LucaKey-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-12LucaKey-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-13Adamant-Check.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-13Adamant-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-13Adamant-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-14LegendSword-Check.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-14LegendSword-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-14LegendSword-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-15Pan-Check.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-15Pan-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-15Pan-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-16Spoon-Check.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-16Spoon-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-16Spoon-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-17RatTail-Check.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-17RatTail-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-17RatTail-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-18PinkTail-Check.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-18PinkTail-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-18PinkTail-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-1THECrystal-Check.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-1THECrystal-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-1THECrystal-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-2Pass-Check.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-2Pass-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-2Pass-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-3Hook-Check.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-3Hook-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-3Hook-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-4DarkCrystal-Check.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-4DarkCrystal-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-4DarkCrystal-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-5EarthCrystal-Check.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-5EarthCrystal-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-5EarthCrystal-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-6TwinHarp-Check.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-6TwinHarp-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-6TwinHarp-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-7Package-Check.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-7Package-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-7Package-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-8SandRuby-Check.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-8SandRuby-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-8SandRuby-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-9BaronKey-Check.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-9BaronKey-Color.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\FFIVFE-Icons-9BaronKey-Gray.png" />
+	  <EmbeddedResource Include="Games\FreeEnterprise\Resources\SMB3_item_Anchor.png" />
 	  <EmbeddedResource Include="Resources\Check.png" />
 	  <EmbeddedResource Include="Resources\Crystal.png" />
 	</ItemGroup>
 	
 	<ItemGroup>
-	  <Compile Update="FreeEnterprise\FreeEnterprise.Designer.cs">
+	  <Compile Update="Games\FreeEnterprise\FreeEnterprise.Designer.cs">
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>FreeEnterprise.resx</DependentUpon>
 	  </Compile>
-	  <Compile Update="FreeEnterprise\View\LocationsPanel.cs" />
-	  <Compile Update="FreeEnterprise\View\XpStatsControl.cs">
+	  <Compile Update="Games\FreeEnterprise\View\LocationsPanel.cs" />
+	  <Compile Update="Games\FreeEnterprise\View\XpStatsControl.cs">
 	    <SubType>Component</SubType>
 	  </Compile>
-	  <Compile Update="FreeEnterprise\View\TreasureStatsControl.cs" />
-	  <Compile Update="FreeEnterprise\View\KeyItemControl.cs" />
-	  <Compile Update="FreeEnterprise\View\BossControl.cs">
+	  <Compile Update="Games\FreeEnterprise\View\TreasureStatsControl.cs" />
+	  <Compile Update="Games\FreeEnterprise\View\KeyItemControl.cs" />
+	  <Compile Update="Games\FreeEnterprise\View\BossControl.cs">
 	    <SubType>UserControl</SubType>
 	  </Compile>
-	  <Compile Update="FreeEnterprise\View\BossesPanel.cs" />
-	  <Compile Update="FreeEnterprise\View\BossStatsControl.cs">
+	  <Compile Update="Games\FreeEnterprise\View\BossesPanel.cs" />
+	  <Compile Update="Games\FreeEnterprise\View\BossStatsControl.cs">
 	    <SubType>Component</SubType>
 	  </Compile>
-	  <Compile Update="MysticQuestRandomizer\MysticQuest.Designer.cs">
+	  <Compile Update="Games\MysticQuestRandomizer\MysticQuest.Designer.cs">
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>MysticQuest.resx</DependentUpon>
 	  </Compile>
-	  <Compile Update="MysticQuestRandomizer\View\ElementsPanel.cs">
+	  <Compile Update="Games\MysticQuestRandomizer\View\ElementsPanel.cs">
 	    <SubType>UserControl</SubType>
 	  </Compile>
-	  <Compile Update="MysticQuestRandomizer\View\EquipmentPanel.cs">
+	  <Compile Update="Games\MysticQuestRandomizer\View\EquipmentPanel.cs">
 	    <SubType>UserControl</SubType>
 	  </Compile>
-	  <Compile Update="MysticQuestRandomizer\View\MysticQuestRandomizerControl.cs">
+	  <Compile Update="Games\MysticQuestRandomizer\View\MysticQuestRandomizerControl.cs">
 	    <SubType>UserControl</SubType>
 	  </Compile>
-	  <Compile Update="MysticQuestRandomizer\View\StatsPanel.cs">
+	  <Compile Update="Games\MysticQuestRandomizer\View\StatsPanel.cs">
 	    <SubType>UserControl</SubType>
 	  </Compile>
 	  <Compile Update="Properties\Resources.Designer.cs">
@@ -384,20 +384,29 @@
 	    <AutoGen>True</AutoGen>
 	    <DependentUpon>Resources.resx</DependentUpon>
 	  </Compile>
+	  <Compile Update="View\FlowPanelEx.cs">
+	    <SubType>UserControl</SubType>
+	  </Compile>
 	  <Compile Update="View\FlowPanel.cs">
 	    <SubType>UserControl</SubType>
 	  </Compile>
 	  <Compile Update="View\StatisticControl.cs">
 	    <SubType>Component</SubType>
 	  </Compile>
+	  <Compile Update="Games\WorldsCollide\View\CharacterControl.cs">
+	    <SubType>Component</SubType>
+	  </Compile>
+	  <Compile Update="Games\WorldsCollide\View\WorldsCollideControl.cs">
+	    <SubType>UserControl</SubType>
+	  </Compile>
 	</ItemGroup>
 	
 	<ItemGroup>
-	  <EmbeddedResource Update="FreeEnterprise\FreeEnterprise.resx">
+	  <EmbeddedResource Update="Games\FreeEnterprise\FreeEnterprise.resx">
 	    <Generator>ResXFileCodeGenerator</Generator>
 	    <LastGenOutput>FreeEnterprise.Designer.cs</LastGenOutput>
 	  </EmbeddedResource>
-	  <EmbeddedResource Update="MysticQuestRandomizer\MysticQuest.resx">
+	  <EmbeddedResource Update="Games\MysticQuestRandomizer\MysticQuest.resx">
 	    <Generator>ResXFileCodeGenerator</Generator>
 	    <LastGenOutput>MysticQuest.Designer.cs</LastGenOutput>
 	  </EmbeddedResource>
