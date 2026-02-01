@@ -16,6 +16,8 @@ public class WorldsCollideSettings : GameSettings
         Stats = new StatsSettings(SettingsData);
         Checks = new CheckSettings(SettingsData);
         Characters = new CharacterSettings(SettingsData);
+        Dragons = new DragonSettings(SettingsData);
+        DragonLocations = new DragonLocationSettings(SettingsData);
     }
 
     [TypeConverter(typeof(ExpandableObjectConverter))]
@@ -35,11 +37,20 @@ public class WorldsCollideSettings : GameSettings
     [Description("Tracking of characters")]
     public CharacterSettings Characters { get; }
 
+    [TypeConverter(typeof(ExpandableObjectConverter))]
+    [Description("Tracking of dragons")]
+    public DragonSettings Dragons { get; }
+
+    [TypeConverter(typeof(ExpandableObjectConverter))]
+    [Description("Tracking of dragon locations")]
+    [DisplayName("Dragon Locations")]
+    public DragonLocationSettings DragonLocations { get; }
+
     [DefaultValue(SpriteSetType.Locations)]
     [TypeConverter(typeof(EnumDescriptionConverter))]
-    [DisplayName("Check Icons")]
-    [Description("Which set of icons should be used for checks.")]
-    public SpriteSetType CheckIcons
+    [DisplayName("Icons")]
+    [Description("Which set of icons should be used for characters, checks, dragons, dragon locations, and statistics.")]
+    public SpriteSetType Icons
     {
         get => GetSetting(SpriteSetType.Locations);
         set => SaveSetting(value);
@@ -48,47 +59,80 @@ public class WorldsCollideSettings : GameSettings
 
 public class StatsSettings(JToken jToken) : PanelSettings(jToken)
 {
-    protected override float DefaultScaleFactor => 1f;
+    protected override float DefaultScaleFactor => 2f;
 
     public override string Name => "Stats";
 
-    [DefaultValue(1.0f)]
+    [DefaultValue(2.0f)]
     [Category("Statistics")]
     public override float ScaleFactor { get => base.ScaleFactor; set => base.ScaleFactor = value; }
 
-    [DefaultValue(3)]
-    [Category("Statistics")]
+    [DefaultValue(5)]
     public override int Priority
     {
         get => GetSetting(5);
+        set => SaveSetting(value);
+    }
+}
+
+public class DragonLocationSettings(JToken jToken) : PanelSettings(jToken)
+{
+    protected override float DefaultScaleFactor => 1.75f;
+
+    public override string Name => "DragonLocations";
+
+    [DefaultValue(1.75f)]
+    public override float ScaleFactor { get => base.ScaleFactor; set => base.ScaleFactor = value; }
+
+    [DefaultValue(4)]
+    public override int Priority
+    {
+        get => GetSetting(4);
+        set => SaveSetting(value);
+    }
+}
+
+public class DragonSettings(JToken jToken) : PanelSettings(jToken)
+{
+    protected override float DefaultScaleFactor => 1.75f;
+
+    public override string Name => "Dragons";
+
+    [DefaultValue(1.75f)]
+    public override float ScaleFactor { get => base.ScaleFactor; set => base.ScaleFactor = value; }
+
+    [DefaultValue(3)]
+    public override int Priority
+    {
+        get => GetSetting(3);
         set => SaveSetting(value);
     }
 }
 
 public class CheckSettings(JToken jToken) : PanelSettings(jToken)
 {
-    protected override float DefaultScaleFactor => 1f;
+    protected override float DefaultScaleFactor => 1.75f;
 
     public override string Name => "Checks";
 
-    [DefaultValue(1.0f)]
+    [DefaultValue(1.75f)]
     public override float ScaleFactor { get => base.ScaleFactor; set => base.ScaleFactor = value; }
 
     [DefaultValue(2)]
     public override int Priority
     {
-        get => GetSetting(5);
+        get => GetSetting(2);
         set => SaveSetting(value);
     }
 }
 
 public class CharacterSettings(JToken jToken) : PanelSettings(jToken)
 {
-    protected override float DefaultScaleFactor => 1f;
+    protected override float DefaultScaleFactor => 2f;
 
     public override string Name => "Characters";
 
-    [DefaultValue(1.0f)]
+    [DefaultValue(2.0f)]
     public override float ScaleFactor { get => base.ScaleFactor; set => base.ScaleFactor = value; }
 
     [DefaultValue(1)]

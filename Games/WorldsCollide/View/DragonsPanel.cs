@@ -5,15 +5,15 @@ using System.Windows.Forms;
 
 namespace FF.Rando.Companion.Games.WorldsCollide.View;
 
-public partial class CharactersPanel : FlowPanelEx<CharacterSettings>
+public class DragonsPanel : FlowPanelEx<DragonSettings>
 {
-    public CharactersPanel() : base()
-    {
-        SpacingMode = SpacingMode.Columns;
+    public DragonsPanel() : base() 
+    { 
+        SpacingMode = SpacingMode.Columns; 
     }
 
     public override DockStyle DefaultDockStyle => DockStyle.Top;
 
     protected override Control[] GenerateControls(Seed seed)
-        => (Game?.Characters ?? []).Select(ch => new CharacterControl(seed, Settings!, ch)).ToArray();
+        => (Game?.Dragons ?? []).Select(d => new DragonControl(seed, Settings!, d)).ToArray();
 }

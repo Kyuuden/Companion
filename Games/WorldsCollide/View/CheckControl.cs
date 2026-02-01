@@ -29,10 +29,7 @@ public partial class CheckControl : ImageControl<Seed, Check>
         base.Value_PropertyChanged(sender, e);
         if (e.PropertyName == nameof(Check.IsVisible))
         {
-            //if (InvokeRequired)
-                BeginInvoke(() => Visible = Value.IsVisible);
-            //else
-            //    Visible = Value.IsVisible;
+            BeginInvoke(() => Visible = Value.IsVisible);
         }
     }
 

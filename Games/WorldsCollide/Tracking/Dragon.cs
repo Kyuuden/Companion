@@ -1,5 +1,4 @@
-﻿using FF.Rando.Companion.Games.WorldsCollide;
-using FF.Rando.Companion.View;
+﻿using FF.Rando.Companion.View;
 using System;
 using System.ComponentModel;
 using System.Drawing;

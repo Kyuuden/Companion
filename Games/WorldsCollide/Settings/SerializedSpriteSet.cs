@@ -138,12 +138,13 @@ internal class SerializedSpriteSet : ISpriteSet, IDisposable
         List<Func<ISprite, ISprite>> transformFuncs = [];
         spriteGetter = spriteDefinition.Source switch
         {
-            SpriteSource.Character => () => _sprites.Character.Get((CharacterEx)spriteDefinition.Id, (Pose)spriteDefinition.SubId),
-            SpriteSource.Portrait => () => _sprites.Portrait.Get((Character)spriteDefinition.Id),
-            SpriteSource.Other => () => _sprites.Other.Get((Item)spriteDefinition.Id),
+            SpriteSource.Character => () => _sprites.Characters.Get((CharacterEx)spriteDefinition.Id, (Pose)spriteDefinition.SubId),
+            SpriteSource.Portrait => () => _sprites.Portraits.Get((Character)spriteDefinition.Id),
+            SpriteSource.Background => () => _sprites.Backgrounds.Get((TileSet)spriteDefinition.Id),
+            SpriteSource.Item => () => _sprites.Items.Get((Item)spriteDefinition.Id),
             SpriteSource.Monster => () => _sprites.Combat.Get((Monster)spriteDefinition.Id),
             SpriteSource.Boss => () => spriteDefinition.Id == (int)Boss.GhostTrain
-                    ? _sprites.Other.Get(Item.GhostTrain)
+                    ? _sprites.Backgrounds.Get(TileSet.GhostTrain)
                     : _sprites.Combat.Get((Boss)spriteDefinition.Id),
             SpriteSource.Esper => () => _sprites.Combat.Get((Esper)spriteDefinition.Id),
             _ => () => null

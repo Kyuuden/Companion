@@ -26,15 +26,16 @@ public partial class WorldsCollideControl : UserControl
     public void InitializeDataSources(Seed seed)
     {
         _seed = seed ?? throw new ArgumentNullException(nameof(seed));
-
-        //_equipment.InitializeDataSources(seed, seed.Settings.Equipment);
+        
         _characters.InitializeDataSources(seed, seed.Settings.Characters);
         _checks.InitializeDataSources(seed, seed.Settings.Checks);
+        _dragons.InitializeDataSources(seed, seed.Settings.Dragons);
         _statistics.InitializeDataSources(seed, seed.Settings.Stats);
 
         _seed.PropertyChanged += Seed_PropertyChanged;
         seed.Settings.Checks.PropertyChanged += Seed_PropertyChanged;
         seed.Settings.Characters.PropertyChanged += Seed_PropertyChanged;
+        seed.Settings.Dragons.PropertyChanged += Seed_PropertyChanged;
         seed.Settings.Stats.PropertyChanged += Seed_PropertyChanged;
 
         //seed.ButtonPressed += Seed_ButtonPressed;
@@ -61,7 +62,7 @@ public partial class WorldsCollideControl : UserControl
     {
         SuspendLayout();
 
-        List<IPanel> panels = [_characters, _checks, _statistics];
+        List<IPanel> panels = [_characters, _checks, _dragons, _statistics];
         panels.Sort((x, y) => x.Priority > y.Priority ? 1 : -1);
 
         while (Controls.Count > 0)

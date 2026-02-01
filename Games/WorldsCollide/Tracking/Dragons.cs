@@ -1,5 +1,4 @@
 ﻿using FF.Rando.Companion.Extensions;
-using FF.Rando.Companion.Games.WorldsCollide;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +10,7 @@ internal class Dragons(Seed seed)
     private readonly IReadOnlyList<Dragon> _values = Enum.GetValues(typeof(Enums.Dragons))
         .OfType<Enums.Dragons>()
         .Distinct()
+        .OrderBy(d => d.ToString())
         .Select(c => new Dragon(seed, c))
         .ToList();
 

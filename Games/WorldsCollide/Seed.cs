@@ -51,9 +51,9 @@ public class Seed : IGame
         Backgrounds = new RomData.Backgrounds(container.Rom);
         Sprites = new RomData.Sprites(container.Rom);
 
-        Icon = Sprites.Other.Get(Item.Magicite).Render();
+        Icon = Sprites.Items.Get(Item.Magicite).Render();
 
-        _spriteSet = GetSpriteSet(Settings.CheckIcons);
+        _spriteSet = GetSpriteSet(Settings.Icons);
         _characters = new Tracking.Checks(this, e => e.IsCharacter());
         _checks = new Tracking.Checks(this, e => e.IsCheck());
         _dragons = new Tracking.Dragons(this);
@@ -66,8 +66,8 @@ public class Seed : IGame
 
     private void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(WorldsCollideSettings.CheckIcons))
-            SpriteSet = GetSpriteSet(Settings.CheckIcons);
+        if (e.PropertyName == nameof(WorldsCollideSettings.Icons))
+            SpriteSet = GetSpriteSet(Settings.Icons);
     }
 
     private List<Palette> GetBackgroundPalettes(ReadOnlySpan<byte> configData)

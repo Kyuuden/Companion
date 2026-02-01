@@ -13,7 +13,7 @@ public class StatsPanel : FlowPanelEx<StatsSettings>
         WrapContents = false;
     }
 
-    public override DockStyle DefaultDockStyle => DockStyle.Bottom;
+    public override DockStyle DefaultDockStyle => DockStyle.Top;
 
     protected override Control[] GenerateControls(Seed seed)
         =>
