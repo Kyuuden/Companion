@@ -1,4 +1,5 @@
-﻿using FF.Rando.Companion.Settings;
+﻿using FF.Rando.Companion.Games.WorldsCollide.Settings;
+using FF.Rando.Companion.Settings;
 using FF.Rando.Companion.View;
 using System.ComponentModel;
 using System.Drawing;
@@ -15,6 +16,7 @@ public abstract class FlowPanelEx<TSettings> : FlowPanelEx<Seed, TSettings> wher
         {
             case nameof(Seed.SelectedBackground):
             case nameof(Seed.BackgroundPalettes):
+            case nameof(WorldsCollideBorderSettings.BackgroundsEnabled):
                 ReplaceBackgroundImage(true);
                 break;
             case nameof(Seed.SpriteSet):
@@ -25,6 +27,12 @@ public abstract class FlowPanelEx<TSettings> : FlowPanelEx<Seed, TSettings> wher
 
     protected override Bitmap? GenerateBackgroundImage(Size unscaledSize)
     {
-        return Game?.Backgrounds.Render(Game?.SelectedBackground ?? 0, unscaledSize);
+        if (Game == null) return null;
+
+        return Game?.Backgrounds.Render(
+            Game.SelectedBackground, 
+            unscaledSize, 
+            Game.Settings.BorderSettings.BordersEnabled,
+            ((WorldsCollideBorderSettings)Game.Settings.BorderSettings).BackgroundsEnabled);
     }
 }

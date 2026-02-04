@@ -79,18 +79,19 @@ public abstract partial class FlowPanelEx<TGame, TSettings> : FlowLayoutPanel, I
         switch (e.PropertyName)
         {
             case nameof(PanelSettings.ScaleFactor):
-            case nameof(BorderSettings.BorderScaleFactor):
                 SuspendLayout();
                 foreach (var sc in Controls.OfType<IScalableControl>())
                 {
                     (sc as Control)?.SuspendLayout();
                     sc.Rescale();
+                    (sc as Control)?.ResumeLayout();
                 }
                 ResumeLayout(false);
                 PerformLayout();
                 Arrange();
                 break;
             case nameof(BorderSettings.BordersEnabled):
+            case nameof(BorderSettings.BorderScaleFactor):
                 Arrange();
                 break;
             case nameof(PanelSettings.Enabled):

@@ -38,10 +38,12 @@ public class Seed : IGame
     private int _checkCount;
     private int _chestCount;
 
-    private readonly Tracking.Checks _characters;
+    private readonly Tracking.Characters _characters;
     private readonly Tracking.Checks _checks;
     private readonly Tracking.Dragons _dragons;
-    private readonly Tracking.Checks _dragonLocations;
+    private readonly Tracking.DragonLocations _dragonLocations;
+
+    private readonly HashSet<Esper> _foundEspers = [];
 
     internal Seed(string hash, Container container)
     {
@@ -54,10 +56,10 @@ public class Seed : IGame
         Icon = Sprites.Items.Get(Item.Magicite).Render();
 
         _spriteSet = GetSpriteSet(Settings.Icons);
-        _characters = new Tracking.Checks(this, e => e.IsCharacter());
-        _checks = new Tracking.Checks(this, e => e.IsCheck());
+        _characters = new Tracking.Characters(this);
+        _checks = new Tracking.Checks(this);
         _dragons = new Tracking.Dragons(this);
-        _dragonLocations = new Tracking.Checks(this, e => e.IsDragonLocation());
+        _dragonLocations = new Tracking.DragonLocations(this);
 
         _checks.UpdateRelatedChecks();
 
@@ -95,7 +97,7 @@ public class Seed : IGame
 
     public Bitmap Icon { get; }
 
-    public Color BackgroundColor => /*_selectedBackground < _backgroundPalettes.Count ? _backgroundPalettes[SelectedBackground][0] :*/ Color.Black;
+    public Color BackgroundColor => Color.Black;
 
     public Color32 PrimaryFontColor
     {
@@ -209,6 +211,8 @@ public class Seed : IGame
         Sprites.Dispose();
     }
 
+    private Reward? _currentReward = default(Reward?);
+
     public void OnNewFrame()
     {
         if (!Started)
@@ -225,37 +229,62 @@ public class Seed : IGame
             var mapId = BinaryPrimitives.ReadUInt16LittleEndian(Container.Wram.ReadBytes(RomData.Addresses.WRAM.MapIndex)) & 0x1FF;
             if (mapId == 0x164)
             {
-
-                var inKefkaFight = BinaryPrimitives.ReadUInt16LittleEndian(Container.Wram.ReadBytes(RomData.Addresses.WRAM.MapIndex)) & 0x3FF;
+                var inKefkaFight = (BinaryPrimitives.ReadUInt16LittleEndian(Container.Wram.ReadBytes(RomData.Addresses.WRAM.BattleIndex)) & 0x3FF) == 0x0202;
                 var thunderclap = Container.Wram.ReadByte(0xE9E9) == 0xE3;
-                //var isKefkaDead = Container.Wram.ReadByte(RomData.Addresses.WRAM.KefkaCrumbleAnimation) == 0x01;
-                Victory = inKefkaFight == 0x0202 && thunderclap;// isKefkaDead;
+                var isKefkaDead = Container.Wram.ReadByte(RomData.Addresses.WRAM.KefkaCrumbleAnimation) == 0x01;
+                Victory = inKefkaFight && (thunderclap || isKefkaDead);
             }
         }
 
         if (WorldsCollideContainer.Emulation.FrameCount() % WorldsCollideContainer.RootSettings.TrackingInterval == 0)
         {
             var configData = Container.Wram.ReadBytes(RomData.Addresses.WRAM.ConfigData).AsSpan();
-            PrimaryFontColor = BinaryPrimitives.ReadUInt16LittleEndian(configData.Slice(8, 2)).ToColor();
-            BackgroundPalettes = GetBackgroundPalettes(configData);
-            SelectedBackground = configData[1] & 0x7;
+            if ((configData[2] & 0xF0) == 0)
+            {
+                PrimaryFontColor = BinaryPrimitives.ReadUInt16LittleEndian(configData.Slice(8, 2)).ToColor();
+                BackgroundPalettes = GetBackgroundPalettes(configData);
+                SelectedBackground = configData[1] & 0x7;
+            }
 
             if (Started)
             {
                 var eventState = Container.Wram.ReadBytes(RomData.Addresses.WRAM.State).AsSpan();
                 var dragonState = Container.Wram.ReadBytes(RomData.Addresses.WRAM.Dragons).AsSpan();
                 var chests = Container.Wram.ReadBytes(RomData.Addresses.WRAM.Chests);
+                var espers = Container.Wram.ReadBytes(RomData.Addresses.WRAM.KnownEspers);
+                var newEspers = new HashSet<Esper>();
+                
+                for (int i = 0; i < espers.Length * 8; i ++)
+                {
+                    if (((espers[i / 8] >> (i % 8)) & 0x01) == 1)
+                        newEspers.Add(Esper.Ramuh + i);
+                }
 
-                if (_checks.Update(Elapsed, eventState))
-                    NotifyPropertyChanged(nameof(Checks));
+                var latestEspers = newEspers.Except(_foundEspers).ToList();
+
+                _foundEspers.Clear();
+                _foundEspers.UnionWith(newEspers);
+
+                var previousFoundCharacters = Characters.Where(c => c.IsFound).Select(c => c.Event).ToHashSet();
 
                 if (_characters.Update(Elapsed, eventState))
                     NotifyPropertyChanged(nameof(Characters));
 
+                var newcharacters = Characters.Where(c => c.IsFound).Select(c => c.Event).ToHashSet();
+                newcharacters.ExceptWith(previousFoundCharacters);
+
+                if ((latestEspers.Count + newcharacters.Count) == 1)
+                {
+                    _currentReward = latestEspers.Any() ? latestEspers.First().ToReward() : newcharacters.First().ToReward();
+                }
+
+                if (_checks.Update(Elapsed, eventState, ref _currentReward))
+                    NotifyPropertyChanged(nameof(Checks));
+
                 if (_dragonLocations.Update(Elapsed, eventState))
                     NotifyPropertyChanged(nameof(DragonLocations));
 
-                if (_dragons.Update(Elapsed, dragonState))
+                if (_dragons.Update(Elapsed, dragonState, ref _currentReward))
                     NotifyPropertyChanged(nameof(Dragons));
 
                 var characterCountData = Container.Wram.ReadBytes(RomData.Addresses.WRAM.CHARACTER_COUNT);
@@ -366,10 +395,23 @@ public class Seed : IGame
         }
     }
 
-    internal IEnumerable<Tracking.Check> Characters => _characters.Values;
+    public HashSet<Esper> Espers
+    {
+        get => _foundEspers;
+        set
+        {
+            if (_foundEspers.Equals(value))
+                return;
+
+            _foundEspers.IntersectWith(value);
+            NotifyPropertyChanged();
+        }
+    }
+
+    internal IEnumerable<Tracking.Character> Characters => _characters.Values;
     internal IEnumerable<Tracking.Check> Checks => _checks.Values;
     internal IEnumerable<Tracking.Dragon> Dragons => _dragons.Values;
-    internal IEnumerable<Tracking.Check> DragonLocations => _dragonLocations.Values;
+    internal IEnumerable<Tracking.DragonLocation> DragonLocations => _dragonLocations.Values;
 
     public ISpriteSet SpriteSet
     {
@@ -381,9 +423,7 @@ public class Seed : IGame
 
             _spriteSet?.Dispose();
             _spriteSet = value;
-
-            if (_checks.UpdateRelatedChecks(true))
-                NotifyPropertyChanged(nameof(Checks));
+            _checks.UpdateRelatedChecks();
 
             NotifyPropertyChanged();
         }

@@ -4,6 +4,54 @@ using FF.Rando.Companion.Games.WorldsCollide.Enums;
 namespace FF.Rando.Companion.Games.WorldsCollide;
 public class Descriptors
 {
+    public string GetDescription(Reward reward)
+        => reward switch
+        {
+            Reward.Terra => "Terra",
+            Reward.Locke => "Locke",
+            Reward.Cyan => "Cyan",
+            Reward.Shadow => "Shadow",
+            Reward.Edgar => "Edgar",
+            Reward.Sabin => "Sabin",
+            Reward.Celes => "Celes",
+            Reward.Strago => "Strago",
+            Reward.Relm => "Relm",
+            Reward.Setzer => "Setzer",
+            Reward.Mog => "Mog",
+            Reward.Gau => "Gau",
+            Reward.Gogo => "Gogo",
+            Reward.Umaro => "Umaro",
+            Reward.Ramuh => "Ramuh Esper",
+            Reward.Ifrit => "Ifrit Esper",
+            Reward.Shiva => "Shiva Esper",
+            Reward.Siren => "Siren Esper",
+            Reward.Terrato => "Terrato Esper",
+            Reward.Shoat => "Shoat Esper",
+            Reward.Maduin => "Maduin Esper",
+            Reward.Bismark => "Bismark Esper",
+            Reward.Stray => "Stray Esper",
+            Reward.Palidor => "Palidor Esper",
+            Reward.Tritoch => "Tritoch Esper",
+            Reward.Odin => "Odin Esper",
+            Reward.Raiden => "Raiden Esper",
+            Reward.Bahamut => "Bahamut Esper",
+            Reward.Alexandr => "Alexandr Esper",
+            Reward.Crusader => "Crusader Esper",
+            Reward.Ragnarok => "Ragnarok Esper",
+            Reward.Kirin => "Kirin Esper",
+            Reward.ZoneSeek => "ZoneSeek Esper",
+            Reward.Carbunkl => "Carbunkl Esper",
+            Reward.Phantom => "Phantom Esper",
+            Reward.Sraphim => "Sraphim Esper",
+            Reward.Golem => "Golem Esper",
+            Reward.Unicorn => "Unicorn Esper",
+            Reward.Fenrir => "Fenrir Esper",
+            Reward.Starlet => "Starlet Esper",
+            Reward.Phoenix => "Phoenix Esper",
+            Reward.Item => "An Item",
+            _ => "Unknown"
+        };
+
     public string GetDescription(Events @event)
         => @event switch
         {

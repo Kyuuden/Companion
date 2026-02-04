@@ -8,8 +8,8 @@ namespace FF.Rando.Companion.Games.FreeEnterprise;
 
 internal abstract class LegacySeed : SeedBase
 {
-    private const int ZeromusDeathAnimation = 0x03F591;
-    private const int MenuSaveNewGame = 0x019914;
+    private const uint ZeromusDeathAnimation = 0x03F591;
+    private const uint MenuSaveNewGame = 0x019914;
     //private const int MenuLoadSaveGame = 0x0198AD;
 
     private enum RunState
@@ -51,19 +51,21 @@ internal abstract class LegacySeed : SeedBase
         CreateCallbacks();
     }
 
-    private void StartNewGame(uint address, uint value, uint flags)
+    private uint? StartNewGame(uint address, uint value, uint flags)
     {
         RemoveCallbacks();
         _state = RunState.RunStarted;
         Started = true;
         CreateCallbacks();
+        return null;
     }
 
-    private void Flash(uint address, uint value, uint flags)
+    private uint? Flash(uint address, uint value, uint flags)
     {
         RemoveCallbacks();
         Victory = true;
         _state = RunState.RunFinished;
+        return null;
     }
 
     private void CreateCallbacks()

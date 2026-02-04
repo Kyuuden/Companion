@@ -4,6 +4,28 @@ using Newtonsoft.Json.Linq;
 using System.ComponentModel;
 
 namespace FF.Rando.Companion.Games.WorldsCollide.Settings;
+
+public class WorldsCollideBorderSettings : BorderSettings
+{
+    public WorldsCollideBorderSettings(JToken parentData) : base(parentData)
+    { }
+
+    [DefaultValue(true)]
+    [Description("If not enabled, backgrounds will be not rendered.")]
+    [DisplayName("Backgrounds Enabled")]
+    public virtual bool BackgroundsEnabled
+    {
+        get => GetSetting(true);
+        set => SaveSetting(value);
+    }
+
+    [DefaultValue(true)]
+    [Description("If not enabled, borders will be not rendered.")]
+    [DisplayName("Borders Enabled")]
+    public override bool BordersEnabled { get => base.BordersEnabled; set => base.BordersEnabled = value; }
+}
+
+
 public class WorldsCollideSettings : GameSettings
 {
     public override string Name => "WorldsCollide";
@@ -13,6 +35,7 @@ public class WorldsCollideSettings : GameSettings
     public WorldsCollideSettings(JObject parent)
         : base(parent)
     {
+        BorderSettings = new WorldsCollideBorderSettings(SettingsData);
         Stats = new StatsSettings(SettingsData);
         Checks = new CheckSettings(SettingsData);
         Characters = new CharacterSettings(SettingsData);
@@ -22,7 +45,7 @@ public class WorldsCollideSettings : GameSettings
 
     [TypeConverter(typeof(ExpandableObjectConverter))]
     [DisplayName("Borders and Backgrounds")]
-    public override BorderSettings BorderSettings => base.BorderSettings;
+    public override BorderSettings BorderSettings { get; }
 
     [TypeConverter(typeof(ExpandableObjectConverter))]
     [Description("Tracking of general statistics")]

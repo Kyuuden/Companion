@@ -19,11 +19,35 @@ internal class SerializedSpriteSet : ISpriteSet, IDisposable
     private readonly Dictionary<Events, ISprite?> _checkSprites = [];
     private readonly List<List<Events>> _relatedEvents = [];
 
+    private readonly Func<ISprite?> _clearedCheckOverlayGetter;
+    private readonly Func<ISprite?> _defeatedDragonOverlayGetter;
+
+    private ISprite? _clearedCheckOverlay;
+    private ISprite? _defeatedDragonOverlay;
+
     private readonly Sprites _sprites;
     private readonly Font _font;
     private bool disposedValue;
 
     public IEnumerable<IEnumerable<Events>> RelatedEvents => _relatedEvents;
+
+    public ISprite? ClearedCheckOverlay
+    {
+        get
+        {
+            _clearedCheckOverlay ??= _clearedCheckOverlayGetter?.Invoke();
+            return _clearedCheckOverlay;
+        }
+    }
+
+    public ISprite? DefeatedDragonOverlay
+    {
+        get
+        {
+            _defeatedDragonOverlay ??= _defeatedDragonOverlayGetter?.Invoke();
+            return _defeatedDragonOverlay;
+        }
+    }
 
     public SerializedSpriteSet(Sprites sprites, Font font, SpriteSetDefinition spriteSetDefinition)
     {
@@ -53,6 +77,7 @@ internal class SerializedSpriteSet : ISpriteSet, IDisposable
         _checkSpritesGetters[Events.RELM_IN_PARTY] = GetSprite(spriteSetDefinition.Relm);
         _checkSpritesGetters[Events.GOGO_IN_PARTY] = GetSprite(spriteSetDefinition.Gogo);
         _checkSpritesGetters[Events.UMARO_IN_PARTY] = GetSprite(spriteSetDefinition.Umaro);
+
         _checkSpritesGetters[Events.DEFEATED_WHELK] = GetSprite(spriteSetDefinition.WhelkGate);
         _checkSpritesGetters[Events.RODE_RAFT_LETE_RIVER] = GetSprite(spriteSetDefinition.LeteRiver);
         _checkSpritesGetters[Events.BLOCK_SEALED_GATE] = GetSprite(spriteSetDefinition.SealedGate);
@@ -107,6 +132,7 @@ internal class SerializedSpriteSet : ISpriteSet, IDisposable
         _checkSpritesGetters[Events.AUCTION_BOUGHT_ESPER1] = GetSprite(spriteSetDefinition.JidoorAuctionHouse1);
         _checkSpritesGetters[Events.AUCTION_BOUGHT_ESPER2] = GetSprite(spriteSetDefinition.JidoorAuctionHouse2);
         _checkSpritesGetters[Events.DEFEATED_ATMA] = GetSprite(spriteSetDefinition.KefkasTowerCellBeast);
+
         _checkSpritesGetters[Events.DEFEATED_PHOENIX_CAVE_DRAGON] = GetSprite(spriteSetDefinition.PhoenixCaveDragon);
         _checkSpritesGetters[Events.DEFEATED_ANCIENT_CASTLE_DRAGON] = GetSprite(spriteSetDefinition.AncientCasteDragon);
         _checkSpritesGetters[Events.DEFEATED_MT_ZOZO_DRAGON] = GetSprite(spriteSetDefinition.MtZozoDragon);
@@ -122,6 +148,9 @@ internal class SerializedSpriteSet : ISpriteSet, IDisposable
         _statisticSpritesGetters[Statistic.Boss] = GetSprite(spriteSetDefinition.BossCount);
         _statisticSpritesGetters[Statistic.Check] = GetSprite(spriteSetDefinition.CheckCount);
         _statisticSpritesGetters[Statistic.Chest] = GetSprite(spriteSetDefinition.ChestCount);
+
+        _clearedCheckOverlayGetter = GetSprite(spriteSetDefinition.ClearedCheckOverlay);
+        _defeatedDragonOverlayGetter = GetSprite(spriteSetDefinition.DefeatedDragonOverlay);
 
         _relatedEvents = spriteSetDefinition.RelatedEvents;
     }
@@ -147,6 +176,7 @@ internal class SerializedSpriteSet : ISpriteSet, IDisposable
                     ? _sprites.Backgrounds.Get(TileSet.GhostTrain)
                     : _sprites.Combat.Get((Boss)spriteDefinition.Id),
             SpriteSource.Esper => () => _sprites.Combat.Get((Esper)spriteDefinition.Id),
+            SpriteSource.Effect => () => _sprites.Effects.Get((Effect)spriteDefinition.Id),
             _ => () => null
         };
 
@@ -154,10 +184,10 @@ internal class SerializedSpriteSet : ISpriteSet, IDisposable
         {
             switch (transform)
             {
-                case SpriteSet.Crop crop:
+                case Crop crop:
                     transformFuncs.Add(source => source.Crop(crop.GetRectangle()));
                     break;
-                case SpriteSet.Overlay overlay:
+                case Overlay overlay:
                     transformFuncs.Add(source =>
                     {
                         var o = GetSprite(overlay.OverlayedSprite)();
@@ -166,7 +196,7 @@ internal class SerializedSpriteSet : ISpriteSet, IDisposable
                         return source.Overlay(o, overlay.GetDestination());
                     });
                     break;
-                case SpriteSet.Resize resize:
+                case Resize resize:
                     transformFuncs.Add(source => source.Resize(resize.GetSize()));
                     break;
                 case Pad pad:
@@ -266,7 +296,6 @@ internal class SerializedSpriteSet : ISpriteSet, IDisposable
 
     public void Dispose()
     {
-        // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
         Dispose(disposing: true);
         GC.SuppressFinalize(this);
     }

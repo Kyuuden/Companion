@@ -46,9 +46,9 @@ public abstract class Sprite(Palette palette) : ISprite, IDisposable
 
     protected virtual IReadableBitmapData RenderGreyscaleData()
     {
-        using var tmp = RenderColorData();
+        var tmp = _cachedData ??= RenderColorData();
         var greyscale = tmp.ToGrayscale();
-        greyscale.AdjustBrightness(-0.25f);
+        greyscale.AdjustBrightness(-0.66f);
         return greyscale;
     }
 

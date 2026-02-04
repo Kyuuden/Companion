@@ -30,6 +30,9 @@ internal class Addresses
 
         public static readonly Range<long> TilesetData = 0x1fda00L.WithLength(0x61A00);
         public static readonly Range<long> TilesetPaletteData = 0x2dc480L.WithLength(0x3000);
+
+        public static readonly Range<long> EffectsTileData = 0x130000L.WithLength(0x1CA00);
+        public static readonly Range<long> EffectPaletteData = 0x126000L.WithLength(0xF00);
     }
 
     internal static class WRAM
@@ -45,6 +48,8 @@ internal class Addresses
         public static uint MenuType = 0x0200;
         public static uint CurrentSaveGameSlot = 0x224;
         public static uint KefkaCrumbleAnimation = 0x9a;
+
+        public static readonly Range<long> KnownEspers = 0x1A69L.WithLength(4);
 
         public static readonly Range<long> Statistics = 0x1fc2L.WithLength(64);
         public static readonly Range<long> State = 0x1e80L.WithLength(150);

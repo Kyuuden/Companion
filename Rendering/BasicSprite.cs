@@ -1,9 +1,10 @@
-﻿using KGySoft.Drawing.Imaging;
+﻿using FF.Rando.Companion.Rendering.Transforms;
+using KGySoft.Drawing.Imaging;
 using System.Drawing;
 
 namespace FF.Rando.Companion.Rendering;
 
-public class BasicSprite(IReadableBitmapData bitmapData) : Sprite(bitmapData.Palette!)
+public class BasicSprite(IReadableBitmapData bitmapData) : Sprite(bitmapData.Palette!), ITemporarySprite
 {
     private readonly IReadableBitmapData _bitmapData = bitmapData;
 

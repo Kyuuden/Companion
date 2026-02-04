@@ -1,4 +1,5 @@
 ﻿using FF.Rando.Companion.Extensions;
+using FF.Rando.Companion.Games.WorldsCollide.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ internal class Dragons(Seed seed)
 
     internal IReadOnlyList<Dragon> Values => _values;
 
-    public bool Update(TimeSpan time, ReadOnlySpan<byte> events)
+    public bool Update(TimeSpan time, ReadOnlySpan<byte> events, ref Reward? currentReward)
     {
         var updated = false;
         foreach (var check in _values)
@@ -28,6 +29,12 @@ internal class Dragons(Seed seed)
                 updated = true;
                 check.WhenDefeated = time;
                 check.IsDefeated = isDefeated;
+
+                if (!check.Reward.HasValue)
+                {
+                    check.Reward = currentReward ?? Reward.Item;
+                    currentReward = null;
+                }
             }
         }
 

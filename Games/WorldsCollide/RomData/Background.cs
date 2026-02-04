@@ -82,45 +82,51 @@ internal class Background : IDisposable
         destination.FillRectangle(texture, new Rectangle(new Point(0, 0), destination.Size));
     }
 
-    public Bitmap Render(Size size)
+    public Bitmap Render(Size size, bool drawborders, bool drawBackground)
     {
         using var bmp = BitmapDataFactory.CreateBitmapData(size, KnownPixelFormat.Format8bppIndexed, Palette);
 
-        var bgX = _left.Width;
-        var bgY = _top.Height;
-
-        while (size.Width > bgX)
+        if (drawBackground)
         {
-            while (size.Height > bgY)
+            var bgX = drawborders ? _left.Width : 0;
+            var bgY = drawborders ? _top.Height : 0;
+
+            while (size.Width > bgX)
             {
-                _background.CopyTo(bmp, new Point(bgX, bgY));
-                bgY += _background.Height;
+                while (size.Height > bgY)
+                {
+                    _background.CopyTo(bmp, new Point(bgX, bgY));
+                    bgY += _background.Height;
+                }
+
+                bgX += _background.Width;
+                bgY = drawborders ? _top.Height : 0;
+            }
+        }
+
+        if (drawborders)
+        {
+            var borderX = _topLeft.Width;
+            while (size.Width > borderX)
+            {
+                _top.CopyTo(bmp, new Point(borderX, 0));
+                _bottom.CopyTo(bmp, new Point(borderX, size.Height - _bottom.Height));
+                borderX += _top.Width;
             }
 
-            bgX += _background.Width;
-            bgY = _top.Height;
-        }
+            var borderY = _topLeft.Height;
+            while (size.Height > borderY)
+            {
+                _left.CopyTo(bmp, new Point(0, borderY));
+                _right.CopyTo(bmp, new Point(size.Width - _right.Width, borderY));
+                borderY += _left.Width;
+            }
 
-        var borderX = _topLeft.Width;
-        while (size.Width > borderX)
-        {
-            _top.CopyTo(bmp, new Point(borderX, 0));
-            _bottom.CopyTo(bmp, new Point(borderX, size.Height - _bottom.Height));
-            borderX += _top.Width;
+            _topLeft.CopyTo(bmp);
+            _topRight.CopyTo(bmp, new Point(size.Width - _topRight.Width, 0));
+            _bottomLeft.CopyTo(bmp, new Point(0, size.Height - _bottomLeft.Height));
+            _bottomRight.CopyTo(bmp, new Point(size.Width - _topRight.Width, size.Height - _bottomLeft.Height));
         }
-
-        var borderY = _topLeft.Height;
-        while (size.Height > borderY)
-        {
-            _left.CopyTo(bmp, new Point(0, borderY));
-            _right.CopyTo(bmp, new Point(size.Width - _right.Width, borderY));
-            borderY += _left.Width;
-        }
-
-        _topLeft.CopyTo(bmp);
-        _topRight.CopyTo(bmp, new Point(size.Width - _topRight.Width, 0));
-        _bottomLeft.CopyTo(bmp, new Point(0, size.Height - _bottomLeft.Height));
-        _bottomRight.CopyTo(bmp, new Point(size.Width - _topRight.Width, size.Height - _bottomLeft.Height));
 
         return bmp.ToBitmap();
     }

@@ -3,7 +3,7 @@ using System;
 
 namespace FF.Rando.Companion.Games.WorldsCollide.RomData;
 
-public class TileSetSprites(byte[] tileData, byte[] paletteData) : OtherSprites<TileSet>(tileData, paletteData)
+public class TileSetSprites(byte[] tileData, byte[] paletteData) : OtherSprites<TileSet>(tileData, paletteData, 4)
 {
     protected override SpriteInfo GetInfo(TileSet item)
         => item switch

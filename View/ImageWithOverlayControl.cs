@@ -1,16 +1,16 @@
 ﻿using FF.Rando.Companion.Settings;
 using System;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace FF.Rando.Companion.View;
-public class ImageControl<TGame, TImageSource> : PictureBox, IScalableControl where TGame : IGame where TImageSource : IImageTracker
+
+public class ImageWithOverlayControl<TGame, TImageSource> : PictureBox, IScalableControl where TGame : IGame where TImageSource : IImageWithOverlay
 {
     public TImageSource Value { get; }
     protected TGame Game { get; }
     protected PanelSettings Settings { get; }
 
-    public ImageControl(TGame seed, PanelSettings settings, TImageSource item)
+    public ImageWithOverlayControl(TGame seed, PanelSettings settings, TImageSource item)
     {
         Game = seed ?? throw new ArgumentNullException();
         Value = item ?? throw new ArgumentNullException();
@@ -18,29 +18,31 @@ public class ImageControl<TGame, TImageSource> : PictureBox, IScalableControl wh
 
         ((System.ComponentModel.ISupportInitialize)this).BeginInit();
         SuspendLayout();
-        Size = new Size(32, 32);
+        MinimumSize = Size = Value.DefaultSize;
         DoubleBuffered = true;
         BackColor = Game.BackgroundColor;
         Margin = new Padding(4);
+        BackgroundImageLayout = ImageLayout.Zoom;
         SizeMode = PictureBoxSizeMode.Zoom;
-        Value.PropertyChanged += Value_PropertyChanged;
-        Game.PropertyChanged += Value_PropertyChanged;
-        Settings.PropertyChanged += Value_PropertyChanged;
+        Value.PropertyChanged += PropertyChanged;
+        Game.PropertyChanged += PropertyChanged;
+        Settings.PropertyChanged += PropertyChanged;
         Name = "ImageControl";
-        UpdateImage();
+        UpdateImages();
         ((System.ComponentModel.ISupportInitialize)this).EndInit();
         ResumeLayout(false);
     }
 
-    protected virtual void Value_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    protected virtual void PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
         if (Value == null)
             return;
 
         switch (e.PropertyName)
         {
-            case nameof(IImageTracker.Image):
-                UpdateImage();
+            case nameof(IImageWithOverlay.Image):
+            case nameof(IImageWithOverlay.Overlay):
+                UpdateImages();
                 break;
             case nameof(IGame.BackgroundColor):
                 BackColor = Game.BackgroundColor;
@@ -48,24 +50,16 @@ public class ImageControl<TGame, TImageSource> : PictureBox, IScalableControl wh
         }
     }
 
-    protected virtual Size ImageSize => Value.Image.Size;
-
-    protected virtual void UpdateImage()
+    protected virtual void UpdateImages()
     {
-        if (Value.Image == null)
-            return;
-
-        MinimumSize = ImageSize;
-        Image = Value.Image;
-        Size = ImageSize.Scale(Settings.ScaleFactor);
+        BackgroundImage = Value.Image;
+        Image = Value.Overlay;
+        Size = Value.DefaultSize.Scale(Settings.ScaleFactor);
     }
 
     public virtual void Rescale()
     {
-        if (Value.Image == null)
-            return;
-
-        Size = ImageSize.Scale(Settings.ScaleFactor);
+        Size = Value.DefaultSize.Scale(Settings.ScaleFactor);
     }
 
     protected override void Dispose(bool disposing)
@@ -73,13 +67,13 @@ public class ImageControl<TGame, TImageSource> : PictureBox, IScalableControl wh
         if (disposing)
         {
             if (Value != null)
-                Value.PropertyChanged -= Value_PropertyChanged;
-            
+                Value.PropertyChanged -= PropertyChanged;
+
             if (Game != null)
-                Game.PropertyChanged -= Value_PropertyChanged;
-            
+                Game.PropertyChanged -= PropertyChanged;
+
             if (Settings != null)
-                Settings.PropertyChanged -= Value_PropertyChanged;
+                Settings.PropertyChanged -= PropertyChanged;
         }
 
         base.Dispose(disposing);

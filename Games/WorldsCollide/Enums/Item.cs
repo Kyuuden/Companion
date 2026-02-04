@@ -1,5 +1,13 @@
 ﻿namespace FF.Rando.Companion.Games.WorldsCollide.Enums;
 
+public enum Effect
+{
+    AtmaWeapon,
+    Illumina,
+    Ragnarock,
+    Condemmed
+}
+
 public enum Item
 {
     UmaroSkull,

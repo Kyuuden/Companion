@@ -3,13 +3,13 @@ using System;
 
 namespace FF.Rando.Companion.Games.WorldsCollide.RomData;
 
-public class ItemSprites(byte[] tileData, byte[] paletteData) : OtherSprites<Item>(tileData, paletteData)
+public class ItemSprites(byte[] tileData, byte[] paletteData) : OtherSprites<Item>(tileData, paletteData, 4)
 {
     protected override SpriteInfo GetInfo(Item item)
         => item switch
         {
             Item.UmaroSkull => new SpriteInfo([5847, 5848, 5849, 5850, 5851, 5852], 4, 2, 3),
-            Item.Chest => new SpriteInfo([5925, 5926, 5927, 5928, 5929, 5930], 17, 2, 2),
+            Item.Chest => new SpriteInfo([5925, 5926, 5927, 5928], 17, 2, 2),
             Item.WarringTriad => new SpriteInfo([5944, 5945, 5946, 5947], 3, 2, 2),
             Item.Boquet => new SpriteInfo([5949, 5950, 5951, 5952], 3, 2, 2),
             Item.Envelope => new SpriteInfo([5956, 5957], 3, 2, 1),

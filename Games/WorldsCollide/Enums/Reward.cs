@@ -1,8 +1,23 @@
 ﻿namespace FF.Rando.Companion.Games.WorldsCollide.Enums;
 
-public enum Esper
+public enum Reward
 {
-    Ramuh = 384,
+    Terra,
+    Locke,
+    Cyan,
+    Shadow,
+    Edgar,
+    Sabin,
+    Celes,
+    Strago,
+    Relm,
+    Setzer,
+    Mog,
+    Gau,
+    Gogo,
+    Umaro,
+
+    Ramuh,
     Ifrit,
     Shiva,
     Siren,
@@ -28,5 +43,7 @@ public enum Esper
     Unicorn,
     Fenrir,
     Starlet,
-    Phoenix
+    Phoenix,
+
+    Item
 }

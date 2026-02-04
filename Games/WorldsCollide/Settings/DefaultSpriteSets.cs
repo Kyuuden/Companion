@@ -181,6 +181,9 @@ internal static class DefaultSpriteSets
         CheckCount = new SpriteDefinition { Source = SpriteSource.Character, Id = (int)CharacterEx.Imp, SubId = (int)Pose.HandsUp },
         ChestCount = new SpriteDefinition { Source = SpriteSource.Background, Id = (int)TileSet.LargeOpenChest },
 
+        ClearedCheckOverlay = new SpriteDefinition { Source = SpriteSource.Item, Id = (int)Item.ExclamationPoint },
+        DefeatedDragonOverlay = new SpriteDefinition { Source = SpriteSource.Item, Id = (int)Item.QuestionMark },
+
         RelatedEvents =
         [
             [Events.GOT_RAGNAROK, Events.GOT_BOTH_REWARDS_WEAPON_SHOP],
@@ -235,22 +238,7 @@ internal static class DefaultSpriteSets
                 new Overlay { X = 16, Y = 16,  OverlayedSprite = new SpriteDefinition { Source = SpriteSource.Background, Id = (int)TileSet.NarsheCobble } },
                 new Overlay { X = 0, Y = 16,  OverlayedSprite = new SpriteDefinition { Source = SpriteSource.Background, Id = (int)TileSet.NarsheCobble } },
                 new Overlay { X = 8, Y = 8,  OverlayedSprite = new SpriteDefinition { Source = SpriteSource.Background, Id = (int)TileSet.WeaponShopSign } },
-                new TextOverlay(24, 24, "1"),
                 new Pad(40,40),
-                new AlternateDisabledSprite(new SpriteDefinition
-                {
-                    Source = SpriteSource.Background,
-                    Id = (int)TileSet.NarsheCobble,
-                    Transforms =
-                    [
-                        new Pad { Height = 32, Width = 32, HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Top },
-                        new Overlay { X = 16, Y = 0, OverlayedSprite = new SpriteDefinition { Source = SpriteSource.Background, Id = (int)TileSet.NarsheCobble } },
-                        new Overlay { X = 16, Y = 16,  OverlayedSprite = new SpriteDefinition { Source = SpriteSource.Background, Id = (int)TileSet.NarsheCobble } },
-                        new Overlay { X = 0, Y = 16,  OverlayedSprite = new SpriteDefinition { Source = SpriteSource.Background, Id = (int)TileSet.NarsheCobble } },
-                        new Overlay { X = 8, Y = 8,  OverlayedSprite = new SpriteDefinition { Source = SpriteSource.Background, Id = (int)TileSet.WeaponShopSign } },
-                        new Pad(40,40)
-                    ]
-                })
             ]
         },
         NarsheWeaponShopMines = new SpriteDefinition
@@ -264,7 +252,6 @@ internal static class DefaultSpriteSets
                 new Overlay { X = 16, Y = 16,  OverlayedSprite = new SpriteDefinition { Source = SpriteSource.Background, Id = (int)TileSet.NarsheCobble } },
                 new Overlay { X = 0, Y = 16,  OverlayedSprite = new SpriteDefinition { Source = SpriteSource.Background, Id = (int)TileSet.NarsheCobble } },
                 new Overlay { X = 8, Y = 8,  OverlayedSprite = new SpriteDefinition { Source = SpriteSource.Background, Id = (int)TileSet.WeaponShopSign } },
-                new TextOverlay(24, 24, "2"),
                 new Pad(40,40)
             ]
         },
@@ -279,7 +266,7 @@ internal static class DefaultSpriteSets
                     {
                         OverlayedSprite = new SpriteDefinition
                         {
-                            Source = SpriteSource.Character, Id = (int)CharacterEx.FigaroChancellor, SubId = (int)Pose.Stand,
+                            Source = SpriteSource.Character, Id = (int)CharacterEx.FigaroGuard, SubId = (int)Pose.Stand,
                         },
                         Y = 7
                     }
@@ -401,34 +388,8 @@ internal static class DefaultSpriteSets
             ]
         },
         DarylsTomb = new SpriteDefinition { Source = SpriteSource.Background, Id = (int)TileSet.DarylsTomb, Transforms = [new Crop { X = 8, Width = 40, Height = 40 }] },
-        LoneWolfChase = new SpriteDefinition
-        {
-            Source = SpriteSource.Character,
-            Id = (int)CharacterEx.LoneWolf,
-            SubId = (int)Pose.Stand,
-            Transforms =
-            [
-                new Resize(32,48),
-                new TextOverlay(24,40, "1"),
-                new AlternateDisabledSprite(new SpriteDefinition{
-                    Source = SpriteSource.Character,
-                    Id = (int)CharacterEx.LoneWolf,
-                    SubId = (int)Pose.Stand,
-                    Transforms = [new Resize(32, 48)]
-                })
-            ]
-        },
-        LoneWolfMoogleRoom = new SpriteDefinition
-        {
-            Source = SpriteSource.Character,
-            Id = (int)CharacterEx.LoneWolf,
-            SubId = (int)Pose.Stand,
-            Transforms =
-            [
-                new Resize(32,48),
-                new TextOverlay(24,40, "2")
-            ]
-        },
+        LoneWolfChase = new SpriteDefinition { Source = SpriteSource.Character, Id = (int)CharacterEx.LoneWolf, SubId = (int)Pose.Stand, Transforms = [new Resize(32, 48),] },
+        LoneWolfMoogleRoom = new SpriteDefinition { Source = SpriteSource.Character, Id = (int)CharacterEx.LoneWolf, SubId = (int)Pose.Stand, Transforms = [new Resize(32, 48),] },
         MoogleDefense = new SpriteDefinition
         {
             Source = SpriteSource.Character,
@@ -514,42 +475,8 @@ internal static class DefaultSpriteSets
         },
         SearchTheSkies = new SpriteDefinition { Source = SpriteSource.Item, Id = (int)Item.Falcon },
         TritochCliff = new SpriteDefinition { Source = SpriteSource.Character, Id = (int)CharacterEx.Tritoch, SubId = (int)Pose.Stand },
-        JidoorAuctionHouse1 = new SpriteDefinition
-        {
-            Source = SpriteSource.Character,
-            Id = (int)CharacterEx.Auctioneer,
-            SubId = (int)Pose.Stand,
-            Transforms =
-            [
-                new Pad { Width = 24, Height = 24 },
-                new Overlay { X= 12, Y= 8, OverlayedSprite = new SpriteDefinition { Source = SpriteSource.Item, Id = (int)Item.Magicite}},
-                new Resize { Width = 48, Height = 48 },
-                new AlternateDisabledSprite(new SpriteDefinition
-                {
-                    Source = SpriteSource.Character,
-                    Id = (int)CharacterEx.Auctioneer,
-                    SubId = (int)Pose.Stand,
-                    Transforms =
-                    [
-                        new Pad { Width = 24, Height = 24 },
-                        new Resize { Width = 48, Height = 48 }
-                    ]
-                })
-            ]
-        },
-        JidoorAuctionHouse2 = new SpriteDefinition
-        {
-            Source = SpriteSource.Character,
-            Id = (int)CharacterEx.Auctioneer,
-            SubId = (int)Pose.Stand,
-            Transforms =
-            [
-                new Pad { Width = 24, Height = 24 },
-                new Overlay { X= 12, Y= 8, OverlayedSprite = new SpriteDefinition { Source = SpriteSource.Item, Id = (int)Item.Magicite}},
-                new Overlay { X= -4, Y= 8, OverlayedSprite = new SpriteDefinition { Source = SpriteSource.Item, Id = (int)Item.Magicite}},
-                new Resize { Width = 48, Height = 48 }
-            ]
-        },
+        JidoorAuctionHouse1 = new SpriteDefinition(SpriteSource.Character, (int)CharacterEx.Auctioneer, (int)Pose.Stand, [new Resize(32, 48)]),
+        JidoorAuctionHouse2 = new SpriteDefinition(SpriteSource.Character, (int)CharacterEx.Auctioneer, (int)Pose.Stand, [new Resize(32, 48)]),
         KefkasTowerCellBeast = new SpriteDefinition
         {
             Source = SpriteSource.Background,
@@ -601,6 +528,9 @@ internal static class DefaultSpriteSets
         BossCount = new SpriteDefinition { Source = SpriteSource.Character, Id = (int)CharacterEx.Ultros, SubId = (int)Pose.Surprised },
         CheckCount = new SpriteDefinition { Source = SpriteSource.Character, Id = (int)CharacterEx.Imp, SubId = (int)Pose.HandsUp },
         ChestCount = new SpriteDefinition { Source = SpriteSource.Background, Id = (int)TileSet.LargeOpenChest },
+
+        ClearedCheckOverlay = new SpriteDefinition { Source = SpriteSource.Effect, Id = (int)Effect.Illumina },
+        DefeatedDragonOverlay = new SpriteDefinition { Source = SpriteSource.Item, Id = (int)Item.QuestionMark },
 
         RelatedEvents =
         [

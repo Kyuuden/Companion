@@ -13,5 +13,9 @@ public interface ISpriteSet : IDisposable
 
     ISprite? Get(Dragons dragons);
 
+    ISprite? ClearedCheckOverlay { get; }
+
+    ISprite? DefeatedDragonOverlay { get; }
+
     IEnumerable<IEnumerable<Events>> RelatedEvents { get; }
 }

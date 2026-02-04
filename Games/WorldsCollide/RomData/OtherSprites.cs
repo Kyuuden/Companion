@@ -8,10 +8,24 @@ using System.Linq;
 
 namespace FF.Rando.Companion.Games.WorldsCollide.RomData;
 
-public abstract class OtherSprites<T>(byte[] tileData, byte[] paletteData) : IDisposable where T : Enum
+public abstract class OtherSprites<T>(byte[] tileData, byte[] paletteData, int bpp) : IDisposable where T : Enum
 {
-    private readonly List<Palette> _palettes = paletteData.ReadMany<byte[]>(8 * 0x20).Select(p => p.DecodePalette(new Color32())).ToList();
+    private readonly List<Palette> _palettes = paletteData.ReadMany<byte[]>(8 * PaletteSize(bpp)).Select(p => p.DecodePalette(new Color32())).ToList();
     private readonly Dictionary<T, OtherSprite> _spriteCache = [];
+
+    private static uint PaletteSize(int bpp) => bpp switch
+    {
+        3 => 0x10,
+        4 => 0x20,
+        _ => throw new NotSupportedException()
+    };
+
+    private static int TileSize(int bpp) => bpp switch
+    {
+        3 => 0x18,
+        4 => 0x20,
+        _ => throw new NotSupportedException()
+    };
 
     public ISprite Get(T item)
     {
@@ -34,7 +48,7 @@ public abstract class OtherSprites<T>(byte[] tileData, byte[] paletteData) : IDi
             var tile = info.TileIndicies[i];
             if (tile == null) continue;
 
-            tileData.Slice(Math.Abs(tile.Value) * 0x20, 0x20).ToArray().DecodeTile(4).DrawInto(bmp, i % info.HorizontalTileCount * 8, i / info.HorizontalTileCount * 8, tile < 0);
+            tileData.Slice(Math.Abs(tile.Value) * TileSize(bpp), TileSize(bpp)).ToArray().DecodeTile(bpp).DrawInto(bmp, i % info.HorizontalTileCount * 8, i / info.HorizontalTileCount * 8, tile < 0);
         }
 
         return new OtherSprite(bmp);

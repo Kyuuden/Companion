@@ -2,8 +2,114 @@
 
 namespace FF.Rando.Companion.Games.WorldsCollide.Enums;
 
-public static class EventExtensions
+public static class EnumExtensions
 {
+    public static Reward? ToReward(this Events @event)
+        => @event switch
+        {
+            Events.TERRA_IN_PARTY => Reward.Terra,
+            Events.LOCKE_IN_PARTY => Reward.Locke,
+            Events.CYAN_IN_PARTY => Reward.Cyan,
+            Events.SHADOW_IN_PARTY => Reward.Shadow,
+            Events.EDGAR_IN_PARTY => Reward.Edgar,
+            Events.SABIN_IN_PARTY => Reward.Sabin,
+            Events.CELES_IN_PARTY => Reward.Celes,
+            Events.STRAGO_IN_PARTY => Reward.Strago,
+            Events.RELM_IN_PARTY => Reward.Relm,
+            Events.SETZER_IN_PARTY => Reward.Setzer,
+            Events.MOG_IN_PARTY => Reward.Mog,
+            Events.GAU_IN_PARTY => Reward.Gau,
+            Events.GOGO_IN_PARTY => Reward.Gogo,
+            Events.UMARO_IN_PARTY => Reward.Umaro,
+            _ => null
+        };
+
+    public static CharacterEx? ToCharacter(this Reward? reward)
+        => reward switch
+        {
+            Reward.Terra => CharacterEx.Terra,
+            Reward.Locke => CharacterEx.Locke,
+            Reward.Cyan => CharacterEx.Cyan,
+            Reward.Shadow => CharacterEx.Shadow,
+            Reward.Edgar => CharacterEx.Edgar,
+            Reward.Sabin => CharacterEx.Sabin,
+            Reward.Celes => CharacterEx.Celes,
+            Reward.Strago => CharacterEx.Strago,
+            Reward.Relm => CharacterEx.Relm,
+            Reward.Setzer => CharacterEx.Setzer,
+            Reward.Mog => CharacterEx.Mog,
+            Reward.Gau => CharacterEx.Gau,
+            Reward.Gogo => CharacterEx.Gogo,
+            Reward.Umaro => CharacterEx.Umaro,
+            _ => null
+        };
+
+    public static Reward? ToReward(this Esper esper)
+        => esper switch
+        {
+            Esper.Ramuh => Reward.Ramuh,
+            Esper.Ifrit => Reward.Ifrit,
+            Esper.Shiva => Reward.Shiva,
+            Esper.Siren => Reward.Siren,
+            Esper.Terrato => Reward.Terrato,
+            Esper.Shoat => Reward.Shoat,
+            Esper.Maduin => Reward.Maduin,
+            Esper.Bismark => Reward.Bismark,
+            Esper.Stray => Reward.Stray,
+            Esper.Palidor => Reward.Palidor,
+            Esper.Tritoch => Reward.Tritoch,
+            Esper.Odin => Reward.Odin,
+            Esper.Raiden => Reward.Raiden,
+            Esper.Bahamut => Reward.Bahamut,
+            Esper.Alexandr => Reward.Alexandr,
+            Esper.Crusader => Reward.Crusader,
+            Esper.Ragnarok => Reward.Ragnarok,
+            Esper.Kirin => Reward.Kirin,
+            Esper.ZoneSeek => Reward.ZoneSeek,
+            Esper.Carbunkl => Reward.Carbunkl,
+            Esper.Phantom => Reward.Phantom,
+            Esper.Sraphim => Reward.Sraphim,
+            Esper.Golem => Reward.Golem,
+            Esper.Unicorn => Reward.Unicorn,
+            Esper.Fenrir => Reward.Fenrir,
+            Esper.Starlet => Reward.Starlet,
+            Esper.Phoenix => Reward.Phoenix,
+            _ => null
+        };
+
+    public static Esper? ToEsper(this Reward? reward)
+        => reward switch
+        {
+            Reward.Ramuh => Esper.Ramuh,
+            Reward.Ifrit => Esper.Ifrit,
+            Reward.Shiva => Esper.Shiva,
+            Reward.Siren => Esper.Siren,
+            Reward.Terrato => Esper.Terrato,
+            Reward.Shoat => Esper.Shoat,
+            Reward.Maduin => Esper.Maduin,
+            Reward.Bismark => Esper.Bismark,
+            Reward.Stray => Esper.Stray,
+            Reward.Palidor => Esper.Palidor,
+            Reward.Tritoch => Esper.Tritoch,
+            Reward.Odin => Esper.Odin,
+            Reward.Raiden => Esper.Raiden,
+            Reward.Bahamut => Esper.Bahamut,
+            Reward.Alexandr => Esper.Alexandr,
+            Reward.Crusader => Esper.Crusader,
+            Reward.Ragnarok => Esper.Ragnarok,
+            Reward.Kirin => Esper.Kirin,
+            Reward.ZoneSeek => Esper.ZoneSeek,
+            Reward.Carbunkl => Esper.Carbunkl,
+            Reward.Phantom => Esper.Phantom,
+            Reward.Sraphim => Esper.Sraphim,
+            Reward.Golem => Esper.Golem,
+            Reward.Unicorn => Esper.Unicorn,
+            Reward.Fenrir => Esper.Fenrir,
+            Reward.Starlet => Esper.Starlet,
+            Reward.Phoenix => Esper.Phoenix,
+            _ => null
+        };
+
     public static bool IsCheck(this Events eventBitIndex)
         => eventBitIndex switch
         {

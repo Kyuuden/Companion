@@ -1,14 +1,10 @@
-﻿using BizHawk.Client.Common;
-using BizHawk.Common;
+﻿using FF.Rando.Companion.Extensions;
 using FF.Rando.Companion.MemoryManagement;
-using FF.Rando.Companion.Extensions;
 using KGySoft.Drawing.Imaging;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FF.Rando.Companion.Games.WorldsCollide.RomData;
 internal class Backgrounds : IDisposable
@@ -38,9 +34,9 @@ internal class Backgrounds : IDisposable
         return _backgrounds[backgroundId].RenderBox(size);
     }
 
-    public Bitmap Render(int backgroundId, Size size)
+    public Bitmap Render(int backgroundId, Size size, bool drawBorder, bool drawBg)
     {
-        return _backgrounds[backgroundId].Render(size);
+        return _backgrounds[backgroundId].Render(size, drawBorder, drawBg);
     }
 
     public void UpdatePalettes(IList<Palette> palettes)

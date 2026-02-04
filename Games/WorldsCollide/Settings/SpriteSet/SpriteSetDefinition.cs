@@ -132,6 +132,10 @@ internal class SpriteSetDefinition
     public SpriteDefinition? CheckCount { get; set; }
     public SpriteDefinition? ChestCount { get; set; }
 
+    // Overlays
+    public SpriteDefinition? ClearedCheckOverlay { get; set; }
+    public SpriteDefinition? DefeatedDragonOverlay { get; set; }
+
     // Related Events
     public List<List<Events>> RelatedEvents { get; set; } = [];
 }

@@ -15,7 +15,6 @@ namespace FF.Rando.Companion.Games.WorldsCollide.RomData;
 public class CombatSprite : Sprite
 {
     private readonly int _tileCount;
-    private readonly CombatSpriteTemplate _template;
     private readonly byte[] _stencil;
     private readonly List<byte[,]> _tiles;
     private readonly int _id;
@@ -29,7 +28,6 @@ public class CombatSprite : Sprite
         : base(paletteData.Slice(template.PaletteOffset, template.PaletteSize).DecodePalette(new Color32()))
     {
         _id = id;
-        _template = template;
         _stencil = stencilData.Slice(template.StencilOffset, template.StencilSize).ToArray();
         _tileCount = _stencil.CountBits();
         _tiles = tileData
@@ -38,11 +36,6 @@ public class CombatSprite : Sprite
             .ReadMany<byte[]>(0, (uint)template.TileSize * 8, _tileCount)
             .Select(data => data.DecodeTile(template.BitsPerPixel))
             .ToList();
-
-
-
-
-
     }
 
     private bool SmallStencil => _stencil.Length == 8;
@@ -150,40 +143,5 @@ public class CombatSprite : Sprite
         }
 
         return data.Clone(new Rectangle(0, 0, width, height));
-    }
-
-    private int HorizontalTileCount(ushort stencilWord)
-    {
-        var right = HorizontalTileCount((byte)(stencilWord & 0xFF));
-        if (right > 0) return right + 8;
-
-        return HorizontalTileCount((byte)(stencilWord >> 8));
-    }
-
-    private int HorizontalTileCount(byte stencilByte)
-    {
-        return (stencilByte & 0x0F) switch
-        {
-            0x0 => (stencilByte >> 4) switch
-            {
-                0x0 => 0,
-                0x2 => 3,
-                0x4 => 2,
-                0x6 => 3,
-                0x8 => 1,
-                0xA => 3,
-                0xC => 2,
-                0xE => 3,
-                _ => 4
-            },
-            0x2 => 7,
-            0x4 => 6,
-            0x6 => 7,
-            0x8 => 5,
-            0xA => 7,
-            0xC => 6,
-            0xE => 7,
-            _ => 8
-        };
     }
 }

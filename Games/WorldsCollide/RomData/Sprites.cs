@@ -13,12 +13,11 @@ public class Sprites : IDisposable
 
         var actorTileData = memorySpace.ReadBytes(Addresses.ROM.ActorSpriteData);
         var actorPaletteData = memorySpace.ReadBytes(Addresses.ROM.ActorPaletteData);
-        var tilesetData = memorySpace.ReadBytes(Addresses.ROM.TilesetData);
-        var tilesetPaletteData = memorySpace.ReadBytes(Addresses.ROM.TilesetPaletteData);
 
         Characters = new CharacterSprites(actorTileData, actorPaletteData);
         Items = new ItemSprites(actorTileData, actorPaletteData);
-        Backgrounds = new TileSetSprites(tilesetData, tilesetPaletteData);
+        Backgrounds = new TileSetSprites(memorySpace.ReadBytes(Addresses.ROM.TilesetData), memorySpace.ReadBytes(Addresses.ROM.TilesetPaletteData));
+        Effects = new EffectSprites(memorySpace.ReadBytes(Addresses.ROM.EffectsTileData), memorySpace.ReadBytes(Addresses.ROM.EffectPaletteData));
     }
 
     public CombatSprites Combat { get; }
@@ -26,6 +25,7 @@ public class Sprites : IDisposable
     public CharacterSprites Characters { get; }
     public ItemSprites Items { get; }
     public TileSetSprites Backgrounds { get; }
+    public EffectSprites Effects { get; }
 
     public void Dispose()
     {
