@@ -107,8 +107,8 @@ public class Descriptors
             Events.DEFEATED_WHELK => "Whelk Gate",
             Events.RECRUITED_GOGO_WOR => "Zone Eater",
             Events.GOT_ZOZO_REWARD => "Zozo Tower",
-            Events.AUCTION_BOUGHT_ESPER1 => "Auction House Esper 1",
-            Events.AUCTION_BOUGHT_ESPER2 => "Auction House Esper 2",
+            Events.AUCTION_BOUGHT_ESPER1 => "Auction 1",
+            Events.AUCTION_BOUGHT_ESPER2 => "Auction 2",
             Events.TERRA_IN_PARTY => "Terra",
             Events.LOCKE_IN_PARTY => "Locke",
             Events.CYAN_IN_PARTY => "Cyan",
@@ -123,6 +123,16 @@ public class Descriptors
             Events.GAU_IN_PARTY => "Gau",
             Events.GOGO_IN_PARTY => "Gogo",
             Events.UMARO_IN_PARTY => "Umaro",
+
+
+            Events.DEFEATED_ANCIENT_CASTLE_DRAGON => "Ancient Castle Dragon",
+            Events.DEFEATED_FANATICS_TOWER_DRAGON => "Fanatics' Tower Dragon",
+            Events.DEFEATED_KEFKA_TOWER_DRAGON_G => "Kefka's Tower Dragon G",
+            Events.DEFEATED_KEFKA_TOWER_DRAGON_S => "Kefka's Tower Dragon S",
+            Events.DEFEATED_MT_ZOZO_DRAGON => "Mt. Zozo Dragon",
+            Events.DEFEATED_NARSHE_DRAGON => "Narshe Dragon",
+            Events.DEFEATED_OPERA_HOUSE_DRAGON => "Opera House Dragon",
+            Events.DEFEATED_PHOENIX_CAVE_DRAGON => "Phoenix Cave Dragon",
             _ => string.Empty
         };
 

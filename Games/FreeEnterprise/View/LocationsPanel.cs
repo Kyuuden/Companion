@@ -48,7 +48,7 @@ public class LocationsPanel : ScrollablePanel<LocationsSettings>
         if (Game == null || Settings == null)
             yield break;
 
-        var unscaledSize = Size.Unscale(Settings.ScaleFactor);
+        var unscaledSize = EffectiveSize.Unscale(Settings.ScaleFactor);
         var charWidth = unscaledSize.Width / 8 - 2;
         if (charWidth < 4)
             yield break;

@@ -6,6 +6,7 @@ using FF.Rando.Companion.View;
 using KGySoft.Drawing.Imaging;
 using KGySoft.Drawing.Shapes;
 using System;
+using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
@@ -144,7 +145,8 @@ public class Dragon : IDisposable, INotifyPropertyChanged, IImageWithOverlay
 
         if (IsDefeated && Reward.HasValue)
         {
-            ISprite? overlay = null;
+            ISprite? overlay;
+            ISprite? overlaySprite = null;
             var characterReward = Reward.ToCharacter();
             var esper = Reward.ToEsper();
 
@@ -155,17 +157,19 @@ public class Dragon : IDisposable, INotifyPropertyChanged, IImageWithOverlay
             else
                 overlay = _seed.Sprites.Items.Get(Item.Chest);
 
+            if (overlay != null)
+            {
+                var bmpData = BitmapDataFactory.CreateBitmapData(32, 32);
+                bmpData.FillRectangle(new Color32(96, 0, 0, 0), new Rectangle(Point.Empty, bmpData.Size));
 
-            var bmpData = BitmapDataFactory.CreateBitmapData(32, 32);
-            bmpData.FillRectangle(new Color32(96, 0, 0, 0), new Rectangle(Point.Empty, bmpData.Size));
-
-            ISprite overlaysprite = new BasicSprite(bmpData);
-            overlaysprite = overlaysprite.Overlay(overlay, new Point(bmpData.Width - overlay.Size.Width, bmpData.Height - overlay.Size.Height));
+                overlaySprite = new BasicSprite(bmpData);
+                overlaySprite = overlaySprite.Overlay(overlay, new Point(bmpData.Width - overlay.Size.Width, bmpData.Height - overlay.Size.Height));
+            }
 
             if (_overlaySprite is ITemporarySprite)
                 _overlaySprite.Dispose();
 
-            _overlaySprite = overlaysprite;
+            _overlaySprite = overlaySprite;
 
             Overlay = _overlaySprite?.Render();
         }

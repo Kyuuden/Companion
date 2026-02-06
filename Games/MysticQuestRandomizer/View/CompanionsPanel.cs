@@ -51,9 +51,9 @@ internal class CompanionsPanel : ScrollablePanel<Seed, CompanionsSettings>
         return _arrows[direction];
     }
 
-    protected override IReadWriteBitmapData GenerateBackgroundImage(Size unscaledSize)
+    protected override Bitmap? GenerateBackgroundImage(Size unscaledSize)
     {
-        return Game?.Font.RenderBox(unscaledSize.Width / 8, unscaledSize.Height / 8)!;
+        return Game?.Font.RenderBox(unscaledSize.Width / 8, unscaledSize.Height / 8)?.ToBitmap();
     }
 
     protected override IReadableBitmapData GeneragePageCounter(int current, int total)
@@ -75,7 +75,7 @@ internal class CompanionsPanel : ScrollablePanel<Seed, CompanionsSettings>
         if (Game == null || Settings == null)
             yield break;
 
-        var unscaledSize = Size.Unscale(Settings.ScaleFactor);
+        var unscaledSize = EffectiveSize.Unscale(Settings.ScaleFactor);
         var charWidth = unscaledSize.Width / 8 - 2;
         if (charWidth < 4)
             yield break;

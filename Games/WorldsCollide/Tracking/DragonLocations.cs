@@ -39,15 +39,8 @@ internal class DragonLocations(Seed seed)
 
             if (!check.IsCompleted)
             {
-                var req = check.Event.GetRequirements();
-                bool isAvailable = true;
-
-                foreach (var e in req)
-                {
-                    isAvailable &= events.Read<bool>((int)e);
-                }
-
-                if (isAvailable != check.IsCompleted)
+                bool isAvailable = check.Event.IsAvailable(events);
+                if (isAvailable != check.IsAvailable)
                 {
                     updated = true;
                     check.IsAvailable = isAvailable;

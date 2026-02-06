@@ -28,11 +28,14 @@ partial class WorldsCollideControl
             _seed.Settings.Characters.PropertyChanged -= Seed_PropertyChanged;
             _seed.Settings.Dragons.PropertyChanged -= Seed_PropertyChanged;
             _seed.Settings.Stats.PropertyChanged -= Seed_PropertyChanged;
+            _seed.Settings.TextChecks.PropertyChanged -= Seed_PropertyChanged;
+            _seed.ButtonPressed -= Seed_ButtonPressed;
 
             _characters.Dispose();
             _checks.Dispose();
             _dragons.Dispose();
             _statistics.Dispose();
+            _textChecks.Dispose();
         }
 
         base.Dispose(disposing);
@@ -49,6 +52,7 @@ partial class WorldsCollideControl
         this._characters = new FF.Rando.Companion.Games.WorldsCollide.View.CharactersPanel();
         this._checks = new FF.Rando.Companion.Games.WorldsCollide.View.ChecksPanel();
         this._dragons = new FF.Rando.Companion.Games.WorldsCollide.View.DragonsPanel();
+        this._textChecks = new FF.Rando.Companion.Games.WorldsCollide.View.TextChecksPanel();
         this._statistics = new FF.Rando.Companion.Games.WorldsCollide.View.StatsPanel();
         this.SuspendLayout();
         // 
@@ -99,6 +103,20 @@ partial class WorldsCollideControl
         this._dragons.Size = new System.Drawing.Size(410, 40);
         this._dragons.TabIndex = 5;
         this._dragons.WrapContents = true;
+        //
+        // _textChecks
+        //
+        this._textChecks.BackColor = Color.FromArgb(0, 0, 99);
+        this._textChecks.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+        this._textChecks.Dock = System.Windows.Forms.DockStyle.Fill;
+        this._textChecks.Location = new System.Drawing.Point(0, 320);
+        this._textChecks.Margin = new System.Windows.Forms.Padding(0);
+        this._textChecks.Name = "_companions";
+        this._textChecks.Size = new System.Drawing.Size(410, 253);
+        this._textChecks.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+        this._textChecks.TabIndex = 6;
+        this._textChecks.TabStop = false;
+        this._textChecks.CanScrollChanged += CanScrollChanged;
         // 
         // _statistics
         // 
@@ -133,4 +151,5 @@ partial class WorldsCollideControl
     private DragonsPanel _dragons;
     private ChecksPanel _checks;
     private CharactersPanel _characters;
+    private TextChecksPanel _textChecks;
 }

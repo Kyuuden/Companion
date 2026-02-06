@@ -1,12 +1,13 @@
 ﻿using FF.Rando.Companion.Extensions;
 using FF.Rando.Companion.Games.WorldsCollide.Enums;
 using FF.Rando.Companion.Games.WorldsCollide.Settings;
-using FF.Rando.Companion.Settings;
 using FF.Rando.Companion.Games.WorldsCollide.View;
+using FF.Rando.Companion.Settings;
 using KGySoft.Drawing.Imaging;
 using System;
 using System.Buffers.Binary;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -14,7 +15,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using System.Collections.Immutable;
 
 namespace FF.Rando.Companion.Games.WorldsCollide;
 public class Seed : IGame
@@ -194,6 +194,10 @@ public class Seed : IGame
 
     GameSettings IGame.Settings => Settings;
 
+    public event Action<string>? ButtonPressed;
+
+    private ImmutableHashSet<string> _lastPressedButtons = [];
+
     public event PropertyChangedEventHandler? PropertyChanged;
 
     public Control CreateControls()
@@ -211,10 +215,17 @@ public class Seed : IGame
         Sprites.Dispose();
     }
 
-    private Reward? _currentReward = default(Reward?);
+    private Reward? _currentReward = default;
 
     public void OnNewFrame()
     {
+        var pressed = ImmutableHashSet.CreateRange(WorldsCollideContainer.Input.GetPressedButtons());
+        foreach (var b in pressed.Except(_lastPressedButtons))
+        {
+            ButtonPressed?.Invoke(b);
+        }
+        _lastPressedButtons = pressed;
+
         if (!Started)
         {
             var mapId = BinaryPrimitives.ReadUInt16LittleEndian(Container.Wram.ReadBytes(RomData.Addresses.WRAM.MapIndex)) & 0x1FF;

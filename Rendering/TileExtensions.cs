@@ -22,9 +22,15 @@ public static class TileExtensions
                 var sourceY = y;
 
                 if (flipHorizontal) sourceX = 7 - sourceX;
-                if (flipVertical) sourceX = 7 - sourceX;
+                if (flipVertical) sourceY = 7 - sourceY;
 
                 data.SetColorIndex(destinationX + x, destinationY + y, tile[sourceX, sourceY]);
             }
+    }
+
+    public static IReadWriteBitmapData DrawTile(this IReadWriteBitmapData data, byte[,] tile, int destinationX = 0, int destinationY = 0, bool flipHorizontal = false, bool flipVertical = false)
+    {
+        tile.DrawInto(data, destinationX, destinationY, flipHorizontal, flipVertical);
+        return data;
     }
 }

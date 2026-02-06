@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using FF.Rando.Companion.Extensions;
 
 namespace FF.Rando.Companion.Games.WorldsCollide.Enums;
 
@@ -195,7 +198,7 @@ public static class EnumExtensions
         {
             Events.DEFEATED_ANCIENT_CASTLE_DRAGON => true,
             Events.DEFEATED_FANATICS_TOWER_DRAGON => true,
-            Events.DEFEATED_KEFKA_TOWER_DRAGON_G => true,
+            Events.DEFEATED_KEFKA_TOWER_DRAGON_G => true, 
             Events.DEFEATED_KEFKA_TOWER_DRAGON_S => true,
             Events.DEFEATED_MT_ZOZO_DRAGON => true,
             Events.DEFEATED_NARSHE_DRAGON => true,
@@ -204,13 +207,126 @@ public static class EnumExtensions
             _ => false,
         };
 
+    public static bool IsAvailable(this Events eventBit, ReadOnlySpan<byte> setEvents)
+    {
+        if (eventBit.IsCharacter())
+            return true;
+
+        if (eventBit.IsDragonLocation())
+            return eventBit switch
+            {
+                Events.DEFEATED_ANCIENT_CASTLE_DRAGON => setEvents.Read<bool>((int)Events.EDGAR_IN_PARTY),
+                Events.DEFEATED_MT_ZOZO_DRAGON => setEvents.Read<bool>((int)Events.CYAN_IN_PARTY),
+                Events.DEFEATED_KEFKA_TOWER_DRAGON_G => AvailableCharacterCount(setEvents) >= 3,
+                Events.DEFEATED_KEFKA_TOWER_DRAGON_S => AvailableCharacterCount(setEvents) >= 3,
+                _ => true
+            };
+
+        if (!eventBit.IsCheck())
+            return false;
+
+        return eventBit switch
+        {
+            Events.GOT_RAIDEN => setEvents.Read<bool>((int)Events.EDGAR_IN_PARTY),
+            Events.NAMED_GAU => setEvents.Read<bool>((int)Events.SABIN_IN_PARTY),
+            Events.DEFEATED_FLAME_EATER => setEvents.Read<bool>((int)Events.STRAGO_IN_PARTY),
+            Events.FINISHED_COLLAPSING_HOUSE => setEvents.Read<bool>((int)Events.SABIN_IN_PARTY),
+            Events.DEFEATED_DULLAHAN => setEvents.Read<bool>((int)Events.SETZER_IN_PARTY),
+            Events.FINISHED_DOMA_WOB => setEvents.Read<bool>((int)Events.CYAN_IN_PARTY),
+            Events.DEFEATED_STOOGES => setEvents.Read<bool>((int)Events.CYAN_IN_PARTY),
+            Events.FINISHED_DOMA_WOR => setEvents.Read<bool>((int)Events.CYAN_IN_PARTY) && setEvents.Read<bool>((int)Events.DEFEATED_STOOGES),
+            Events.GOT_ALEXANDR => setEvents.Read<bool>((int)Events.CYAN_IN_PARTY) && setEvents.Read<bool>((int)Events.FINISHED_DOMA_WOR) && setEvents.Read<bool>((int)Events.DEFEATED_STOOGES),
+            Events.DEFEATED_HIDON => setEvents.Read<bool>((int)Events.STRAGO_IN_PARTY),
+            Events.DEFEATED_ULTROS_ESPER_MOUNTAIN => setEvents.Read<bool>((int)Events.RELM_IN_PARTY),
+            Events.RECRUITED_STRAGO_FANATICS_TOWER => setEvents.Read<bool>((int)Events.STRAGO_IN_PARTY),
+            Events.DEFEATED_MAGIMASTER => true,
+            Events.NAMED_EDGAR => setEvents.Read<bool>((int)Events.EDGAR_IN_PARTY),
+            Events.DEFEATED_TENTACLES_FIGARO => setEvents.Read<bool>((int)Events.EDGAR_IN_PARTY),
+            Events.RECRUITED_SHADOW_FLOATING_CONTINENT => setEvents.Read<bool>((int)Events.SHADOW_IN_PARTY),
+            Events.DEFEATED_ATMAWEAPON => setEvents.Read<bool>((int)Events.SHADOW_IN_PARTY) && setEvents.Read<bool>((int)Events.RECRUITED_SHADOW_FLOATING_CONTINENT),
+            Events.FINISHED_FLOATING_CONTINENT => setEvents.Read<bool>((int)Events.SHADOW_IN_PARTY) && setEvents.Read<bool>((int)Events.DEFEATED_ATMAWEAPON) && setEvents.Read<bool>((int)Events.RECRUITED_SHADOW_FLOATING_CONTINENT),
+            Events.RECRUITED_SHADOW_GAU_FATHER_HOUSE => setEvents.Read<bool>((int)Events.SHADOW_IN_PARTY),
+            Events.FINISHED_IMPERIAL_CAMP => setEvents.Read<bool>((int)Events.SABIN_IN_PARTY),
+            Events.DEFEATED_ATMA => AvailableCharacterCount(setEvents) >= 3,
+            Events.RECRUITED_SHADOW_KOHLINGEN => setEvents.Read<bool>((int)Events.SETZER_IN_PARTY),
+            Events.RODE_RAFT_LETE_RIVER => setEvents.Read<bool>((int)Events.TERRA_IN_PARTY),
+            Events.CHASING_LONE_WOLF7 => setEvents.Read<bool>((int)Events.MOG_IN_PARTY),
+            Events.GOT_BOTH_REWARDS_LONE_WOLF => setEvents.Read<bool>((int)Events.MOG_IN_PARTY),
+            Events.GOT_IFRIT_SHIVA => setEvents.Read<bool>((int)Events.CELES_IN_PARTY),
+            Events.DEFEATED_NUMBER_024 => setEvents.Read<bool>((int)Events.CELES_IN_PARTY) && setEvents.Read<bool>((int)Events.GOT_IFRIT_SHIVA),
+            Events.DEFEATED_CRANES => setEvents.Read<bool>((int)Events.CELES_IN_PARTY) && setEvents.Read<bool>((int)Events.DEFEATED_NUMBER_024) && setEvents.Read<bool>((int)Events.GOT_IFRIT_SHIVA),
+            Events.RECRUITED_TERRA_MOBLIZ => setEvents.Read<bool>((int)Events.TERRA_IN_PARTY),
+            Events.COMPLETED_MOOGLE_DEFENSE => setEvents.Read<bool>((int)Events.MOG_IN_PARTY),
+            Events.DEFEATED_VARGAS => setEvents.Read<bool>((int)Events.SABIN_IN_PARTY),
+            Events.FINISHED_MT_ZOZO => setEvents.Read<bool>((int)Events.CYAN_IN_PARTY),
+            Events.FINISHED_NARSHE_BATTLE => true,
+            Events.GOT_RAGNAROK => setEvents.Read<bool>((int)Events.LOCKE_IN_PARTY),
+            Events.GOT_BOTH_REWARDS_WEAPON_SHOP => setEvents.Read<bool>((int)Events.LOCKE_IN_PARTY),
+            Events.FINISHED_OPERA_DISRUPTION => setEvents.Read<bool>((int)Events.CELES_IN_PARTY),
+            Events.DEFEATED_CHADARNOOK => setEvents.Read<bool>((int)Events.RELM_IN_PARTY),
+            Events.GOT_PHANTOM_TRAIN_REWARD => setEvents.Read<bool>((int)Events.SABIN_IN_PARTY),
+            Events.RECRUITED_LOCKE_PHOENIX_CAVE => setEvents.Read<bool>((int)Events.LOCKE_IN_PARTY),
+            Events.BLOCK_SEALED_GATE => setEvents.Read<bool>((int)Events.TERRA_IN_PARTY),
+            Events.DEFEATED_DOOM_GAZE => setEvents.Read<bool>((int)Events.SETZER_IN_PARTY),
+            Events.GOT_SERPENT_TRENCH_REWARD => setEvents.Read<bool>((int)Events.GAU_IN_PARTY),
+            Events.FREED_CELES => setEvents.Read<bool>((int)Events.CELES_IN_PARTY),
+            Events.DEFEATED_TUNNEL_ARMOR => setEvents.Read<bool>((int)Events.LOCKE_IN_PARTY),
+            Events.GOT_TRITOCH => true,
+            Events.BOUGHT_ESPER_TZEN => true,
+            Events.RECRUITED_UMARO_WOR => setEvents.Read<bool>((int)Events.UMARO_IN_PARTY),
+            Events.VELDT_REWARD_OBTAINED => setEvents.Read<bool>((int)Events.GAU_IN_PARTY),
+            Events.DEFEATED_SR_BEHEMOTH => setEvents.Read<bool>((int)Events.SHADOW_IN_PARTY),
+            Events.DEFEATED_WHELK => setEvents.Read<bool>((int)Events.TERRA_IN_PARTY),
+            Events.RECRUITED_GOGO_WOR => setEvents.Read<bool>((int)Events.GOGO_IN_PARTY),
+            Events.GOT_ZOZO_REWARD => setEvents.Read<bool>((int)Events.TERRA_IN_PARTY),
+            Events.AUCTION_BOUGHT_ESPER1 => true,
+            Events.AUCTION_BOUGHT_ESPER2 => true,
+            _ => false
+        };
+    }
+
+    private static int AvailableCharacterCount(ReadOnlySpan<byte> setEvents)
+    {
+        List<Events> characterBits =
+        [
+            Events.TERRA_IN_PARTY,
+            Events.LOCKE_IN_PARTY ,
+            Events.CYAN_IN_PARTY,
+            Events.SHADOW_IN_PARTY,
+            Events.EDGAR_IN_PARTY ,
+            Events.SABIN_IN_PARTY ,
+            Events.CELES_IN_PARTY ,
+            Events.STRAGO_IN_PARTY,
+            Events.RELM_IN_PARTY ,
+            Events.SETZER_IN_PARTY,
+            Events.MOG_IN_PARTY ,
+            Events.GAU_IN_PARTY ,
+            Events.GOGO_IN_PARTY,
+            Events.UMARO_IN_PARTY
+        ];
+
+        var characterCount = 0;
+        foreach (var character in characterBits)
+        {
+            if (setEvents.Read<bool>((int)character))
+                characterCount++;
+        }
+
+        return characterCount;
+    }
+
     public static IList<Events> GetRequirements(this Events eventBit)
     {
         if (eventBit.IsCharacter())
             return [];
 
         if (eventBit.IsDragonLocation())
-            return [];
+            return eventBit switch
+            {
+                Events.DEFEATED_ANCIENT_CASTLE_DRAGON => [Events.EDGAR_IN_PARTY],
+                Events.DEFEATED_MT_ZOZO_DRAGON => [Events.CYAN_IN_PARTY],
+                _ => []
+            };
 
         if (!eventBit.IsCheck())
             return [];
@@ -229,7 +345,7 @@ public static class EnumExtensions
             Events.DEFEATED_HIDON => [Events.STRAGO_IN_PARTY],
             Events.DEFEATED_ULTROS_ESPER_MOUNTAIN => [Events.RELM_IN_PARTY],
             Events.RECRUITED_STRAGO_FANATICS_TOWER => [Events.STRAGO_IN_PARTY],
-            Events.DEFEATED_MAGIMASTER => [Events.STRAGO_IN_PARTY, Events.RECRUITED_STRAGO_FANATICS_TOWER],
+            Events.DEFEATED_MAGIMASTER => [],
             Events.NAMED_EDGAR => [Events.EDGAR_IN_PARTY],
             Events.DEFEATED_TENTACLES_FIGARO => [Events.EDGAR_IN_PARTY],
             Events.RECRUITED_SHADOW_FLOATING_CONTINENT => [Events.SHADOW_IN_PARTY],
@@ -241,7 +357,7 @@ public static class EnumExtensions
             Events.RECRUITED_SHADOW_KOHLINGEN => [Events.SETZER_IN_PARTY],
             Events.RODE_RAFT_LETE_RIVER => [Events.TERRA_IN_PARTY],
             Events.CHASING_LONE_WOLF7 => [Events.MOG_IN_PARTY],
-            Events.GOT_BOTH_REWARDS_LONE_WOLF => [Events.MOG_IN_PARTY, Events.CHASING_LONE_WOLF7],
+            Events.GOT_BOTH_REWARDS_LONE_WOLF => [Events.MOG_IN_PARTY],
             Events.GOT_IFRIT_SHIVA => [Events.CELES_IN_PARTY],
             Events.DEFEATED_NUMBER_024 => [Events.CELES_IN_PARTY, Events.GOT_IFRIT_SHIVA],
             Events.DEFEATED_CRANES => [Events.CELES_IN_PARTY, Events.DEFEATED_NUMBER_024, Events.GOT_IFRIT_SHIVA],
@@ -251,26 +367,26 @@ public static class EnumExtensions
             Events.FINISHED_MT_ZOZO => [Events.CYAN_IN_PARTY],
             Events.FINISHED_NARSHE_BATTLE => [],
             Events.GOT_RAGNAROK => [Events.LOCKE_IN_PARTY],
-            Events.GOT_BOTH_REWARDS_WEAPON_SHOP => [Events.LOCKE_IN_PARTY, Events.GOT_RAGNAROK],
+            Events.GOT_BOTH_REWARDS_WEAPON_SHOP => [Events.LOCKE_IN_PARTY],
             Events.FINISHED_OPERA_DISRUPTION => [Events.CELES_IN_PARTY],
             Events.DEFEATED_CHADARNOOK => [Events.RELM_IN_PARTY],
             Events.GOT_PHANTOM_TRAIN_REWARD => [Events.SABIN_IN_PARTY],
             Events.RECRUITED_LOCKE_PHOENIX_CAVE => [Events.LOCKE_IN_PARTY],
             Events.BLOCK_SEALED_GATE => [Events.TERRA_IN_PARTY],
-            Events.DEFEATED_DOOM_GAZE => [],
+            Events.DEFEATED_DOOM_GAZE => [Events.SETZER_IN_PARTY],
             Events.GOT_SERPENT_TRENCH_REWARD => [Events.GAU_IN_PARTY],
             Events.FREED_CELES => [Events.CELES_IN_PARTY],
             Events.DEFEATED_TUNNEL_ARMOR => [Events.LOCKE_IN_PARTY],
             Events.GOT_TRITOCH => [],
             Events.BOUGHT_ESPER_TZEN => [],
             Events.RECRUITED_UMARO_WOR => [Events.UMARO_IN_PARTY],
-            Events.VELDT_REWARD_OBTAINED => [],
+            Events.VELDT_REWARD_OBTAINED => [Events.GAU_IN_PARTY],
             Events.DEFEATED_SR_BEHEMOTH => [Events.SHADOW_IN_PARTY],
             Events.DEFEATED_WHELK => [Events.TERRA_IN_PARTY],
             Events.RECRUITED_GOGO_WOR => [Events.GOGO_IN_PARTY],
             Events.GOT_ZOZO_REWARD => [Events.TERRA_IN_PARTY],
             Events.AUCTION_BOUGHT_ESPER1 => [],
-            Events.AUCTION_BOUGHT_ESPER2 => [Events.AUCTION_BOUGHT_ESPER1],
+            Events.AUCTION_BOUGHT_ESPER2 => [],
             _ => []
         };
     }

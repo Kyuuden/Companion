@@ -26,7 +26,7 @@ public abstract class PanelSettings : INotifyPropertyChanged
 
     [DefaultValue(true)]
     [Description("If not enabled, tracking panel will be hidden.")]
-    public bool Enabled
+    public virtual bool Enabled
     {
         get => GetSetting(true);
         set => SaveSetting(value);

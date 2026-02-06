@@ -13,9 +13,9 @@ public abstract class ScrollablePanel<TSettings> : ScrollablePanel<ISeed, TSetti
         return Game?.Sprites.GetArrow(direction)!;
     }
 
-    protected override IReadWriteBitmapData GenerateBackgroundImage(Size unscaledSize)
+    protected override Bitmap? GenerateBackgroundImage(Size unscaledSize)
     {
-        return Game?.Font.RenderBox(unscaledSize.Width / 8, unscaledSize.Height / 8, Game.Sprites.GreyScaleStickerPalette)!;
+        return Game?.Font.RenderBox(unscaledSize.Width / 8, unscaledSize.Height / 8, Game.Sprites.GreyScaleStickerPalette)?.ToBitmap();
     }
 
     protected override IReadableBitmapData GeneragePageCounter(int current, int total)

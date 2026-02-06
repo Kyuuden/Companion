@@ -10,6 +10,8 @@ internal class Addresses
 
         public static readonly Range<long> Font = 0x47FC0L.WithLength(0x1000);
         public static readonly Range<long> FontPalettes = 0x18E800L.WithLength(0xA0);
+        public static readonly Range<long> IconsAndCursors = 0x2d5ac0L.WithLength(0x800);
+        public static readonly Range<long> IconsAndCursorsPalette = 0x18e8a0L.WithLength(0x20);
 
         public static readonly Range<long> Backgrounds = 0x2d0000L.WithLength(0x1c00);
         public static readonly Range<long> BackgroundPalettes = 0x2d1c00L.WithLength(0x100);

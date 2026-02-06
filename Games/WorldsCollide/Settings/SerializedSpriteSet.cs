@@ -217,7 +217,7 @@ internal class SerializedSpriteSet : ISpriteSet, IDisposable
                 case TextOverlay textOverlay:
                     transformFuncs.Add(source =>
                     {
-                        var text = _font.RenderText(textOverlay.Text);
+                        var text = _font.RenderText(textOverlay.Text, Companion.View.TextMode.Normal);
                         return source.Overlay(new BasicSprite(text), textOverlay.GetDestination());
                     });
                     break;

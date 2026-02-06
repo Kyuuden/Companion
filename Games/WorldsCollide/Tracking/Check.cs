@@ -33,7 +33,7 @@ public class Check : IDisposable, INotifyPropertyChanged, IImageWithOverlay
     {
         _seed = seed;
         Event = @event;
-        CharacterGate = Event.GetRequirements().FirstOrDefault(r => r.IsCharacter());
+        CharacterGate = Event.GetRequirements().OfType<Events?>().FirstOrDefault(r => r.HasValue && r.Value.IsCharacter());
         seed.PropertyChanged += Settings_PropertyChanged;
         Description = CreateDescription();
         SetImage();
