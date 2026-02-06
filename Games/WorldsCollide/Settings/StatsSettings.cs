@@ -14,10 +14,10 @@ public class StatsSettings(JToken jToken) : PanelSettings(jToken)
     [Category("Statistics")]
     public override float ScaleFactor { get => base.ScaleFactor; set => base.ScaleFactor = value; }
 
-    [DefaultValue(5)]
+    [DefaultValue(6)]
     public override int Priority
     {
-        get => GetSetting(5);
+        get => GetSetting(6);
         set => SaveSetting(value);
     }
 }

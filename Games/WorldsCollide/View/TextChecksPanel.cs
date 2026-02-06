@@ -18,8 +18,14 @@ internal class TextChecksPanel : ScrollablePanel<TextChecksSettings>
     {
         base.PropertyChanged(sender, e);
 
-        if (e.PropertyName == nameof(Seed.Checks) || e.PropertyName == nameof(Seed.DragonLocations))
-            RegerateData();
+        switch (e.PropertyName)
+        {
+            case nameof(Seed.Checks):
+            case nameof(Seed.DragonLocations):
+            case nameof(TextChecksSettings.CompletedChecks):
+                RegerateData();
+                break;
+        }
     }
 
     protected override IEnumerable<List<IReadableBitmapData>> GeneratePageBitmaps()
@@ -35,7 +41,7 @@ internal class TextChecksPanel : ScrollablePanel<TextChecksSettings>
 
         foreach (var check in Game.Checks.Concat(Game.DragonLocations))
         {
-            if (!check.IsAvailable)
+            if (!check.IsAvailable || (check.IsCompleted && Settings.CompletedChecks == CompletedChecks.Hidden))
                 continue;
 
             if (check.CharacterGate.HasValue)
