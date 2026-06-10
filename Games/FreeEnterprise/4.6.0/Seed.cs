@@ -1,6 +1,5 @@
 ﻿using BizHawk.Common.CollectionExtensions;
 using FF.Rando.Companion.Extensions;
-using FF.Rando.Companion.Games.FreeEnterprise;
 using FF.Rando.Companion.Games.FreeEnterprise.RomData;
 using FF.Rando.Companion.Games.FreeEnterprise.Shared;
 using System;
@@ -13,7 +12,6 @@ namespace FF.Rando.Companion.Games.FreeEnterprise._4._6._0;
 internal class Seed : LegacySeed
 {
     private readonly IFlags _flags;
-    private readonly Descriptors _descriptors;
     private readonly KeyItems _keyItems;
     private readonly Party _party;
     private readonly Objectives _objectives;
@@ -39,11 +37,11 @@ internal class Seed : LegacySeed
         if (Flags.Binary != null)
             XpRate = 1;
 
-        _descriptors = new Descriptors();
-        _keyItems = new KeyItems(container.Settings.KeyItems, Font, _descriptors);
+        Descriptors = new Descriptors();
+        _keyItems = new KeyItems(this);
         _party = new Party(container.Settings.Party, Sprites, _flags.VanillaAgility, _flags.CHero);
-        _objectives = new Objectives(metadata.Objectives!, _flags.NumRequiredObjectives, _flags.OWinGame == true, _flags.OWinCrystal == true);
-        _locations = new Locations(_descriptors, _flags);
+        _objectives = new Objectives(this, metadata.Objectives!, _flags.NumRequiredObjectives, _flags.OWinGame == true, _flags.OWinCrystal == true);
+        _locations = new Locations(Descriptors, _flags);
     }
 
     public override void OnNewFrame()
@@ -56,7 +54,7 @@ internal class Seed : LegacySeed
         if (Game.Emulation.FrameCount() % Game.RootSettings.TrackingInterval == 0)
         {
             var partyData = Game.Wram.ReadBytes(Addresses.WRAM.PartyRegion);
-            ReadOnlySpan<byte> wramData = Game.Wram.ReadBytes(Addresses.WRAM.WramRegion).AsSpan();
+            var wramData = Game.Wram.ReadBytes(Addresses.WRAM.WramRegion).AsReadOnlySpan();
             var keyItemLocations = Game.Sram.ReadBytes(Addresses.SRAM.KeyItemLocations);
             var keyItemsFound = wramData.Slice(Addresses.WRAM.KeyItemFoundBits);
             var keyItemUsed = wramData.Slice(Addresses.WRAM.KeyItemUsedBits);
@@ -67,9 +65,7 @@ internal class Seed : LegacySeed
             var teasureCount = Game.Wram.ReadBytes(Games.FreeEnterprise.Shared.Addresses.WRAM.TreasureBits);
             TreasureCount = teasureCount.CountBits();
 
-            var time = Elapsed;
-
-            if (_keyItems.Update(time, keyItemsFound, keyItemUsed, keyItemLocations, inventory))
+            if (_keyItems.Update(keyItemsFound, keyItemUsed, keyItemLocations, inventory))
             {
                 NotifyPropertyChanged(nameof(KeyItems));
 
@@ -77,13 +73,13 @@ internal class Seed : LegacySeed
                     ? 2m : 1m;
             }
 
-            if (_party.Update(time, partyData))
+            if (_party.Update(partyData))
                 NotifyPropertyChanged(nameof(Party));
 
-            if (_objectives.Update(time, objectiveCompletion))
+            if (_objectives.Update(objectiveCompletion))
                 NotifyPropertyChanged(nameof(Objectives));
 
-            if (_locations.Update(time, locationsChecked, _keyItems.Items.Where(ki => ki.IsFound).Select(ki => (KeyItemType)ki.Id).ToImmutableHashSet()))
+            if (_locations.Update(locationsChecked, _keyItems.Items.Where(ki => ki.IsFound).Select(ki => (KeyItemType)ki.Id).ToImmutableHashSet()))
                 NotifyPropertyChanged(nameof(AvailableLocations));
 
             DefeatedEncounters = defeatedBosses;
@@ -92,4 +88,10 @@ internal class Seed : LegacySeed
     }
 
     protected override bool OWinGame => _flags.OWinGame;
+
+    public Descriptors Descriptors { get; }
+
+    public override IKeyItemDescriptor KeyItemDescriptor => Descriptors;
+
+    public override IBossDescriptor BossDescriptor => Descriptors;
 }

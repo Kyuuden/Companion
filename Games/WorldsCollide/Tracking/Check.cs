@@ -21,9 +21,9 @@ public class Check : IDisposable, INotifyPropertyChanged, IImageWithOverlay
     private Bitmap? _image;
     private Bitmap? _overlay;
     private ISprite? _overlaySprite;
-    private TimeSpan? _whenCompleted;
     private Reward? _reward;
     private bool _isCompleted;
+    private bool _hasBeenCompleted;
     private bool _isAvailable;
     private bool _isVisible = true;
     private List<Check> _linkedChecks = [];
@@ -83,10 +83,10 @@ public class Check : IDisposable, INotifyPropertyChanged, IImageWithOverlay
             description += string.Join("\n", req.Select(_seed.Descriptors.GetDescription));
         }
 
-        if (Reward.HasValue && WhenCompleted.HasValue)
+        if (Reward.HasValue)
         {
             description += "\n\nRewards:\n";
-            description += $"{_seed.Descriptors.GetDescription(Reward.Value)} at {WhenCompleted.Value:hh':'mm':'ss'.'ff}\n";
+            description += $"{_seed.Descriptors.GetDescription(Reward.Value)}\n";
         }
 
         foreach (var check in _linkedChecks)
@@ -136,6 +136,12 @@ public class Check : IDisposable, INotifyPropertyChanged, IImageWithOverlay
             _isCompleted = value;
             NotifyPropertyChanged();
             SetImage();
+
+            if (_isCompleted && !_hasBeenCompleted)
+            {
+                _hasBeenCompleted = true;
+                _seed.Container.Timer.Info($"Completed {_seed.Descriptors.GetDescription(Event)}");
+            }
         }
     }
 
@@ -162,19 +168,6 @@ public class Check : IDisposable, INotifyPropertyChanged, IImageWithOverlay
                 return;
 
             _isVisible = value;
-            NotifyPropertyChanged();
-        }
-    }
-
-    public TimeSpan? WhenCompleted
-    {
-        get => _whenCompleted;
-        set
-        {
-            if (_whenCompleted == value || _whenCompleted.HasValue)
-                return;
-
-            _whenCompleted = value;
             NotifyPropertyChanged();
         }
     }

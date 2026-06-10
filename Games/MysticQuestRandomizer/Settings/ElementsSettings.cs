@@ -1,5 +1,4 @@
-﻿using FF.Rando.Companion.Games.MysticQuestRandomizer;
-using FF.Rando.Companion.Settings;
+﻿using FF.Rando.Companion.Settings;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel;
 

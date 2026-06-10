@@ -1,7 +1,7 @@
 ﻿using BizHawk.Common;
 using FF.Rando.Companion.Extensions;
 
-namespace FF.Rando.Companion.Games.MysticQuestRandomizer;
+namespace FF.Rando.Companion.Games.MysticQuestRandomizer.RomData;
 internal class Addresses
 {
     internal static class ROM
@@ -9,13 +9,16 @@ internal class Addresses
         public static readonly Range<long> Items = 0x20000L.WithLength(0x1800);
         public static readonly Range<long> Resitstances = 0x21840L.WithLength(0x180);
         public static readonly Range<long> AlternateResitances = 0x80F00L.WithLength(0x48);
-        public static readonly Range<long> Characters = 0x21A20L.WithLength(0x1C80);
-        public static readonly Range<long> Palettes = 0x3D7F4L.WithLength(0x140);
+        public static readonly Range<long> Characters = 0x21A20L.WithLength(0x64e0);
+        public static readonly Range<long> Palettes = 0x3D7F4L.WithLength(0x300);
 
         public static readonly Range<long> Indentifier = 0x60EDDL.WithLength(14);
         public static readonly Range<long> Version = 0x60EEBL.WithLength(8);
 
         public static readonly Range<long> Font = 0x38430L.WithLength(3072);
+
+        public static readonly Range<long> GameInfo = 0x81200L.RangeTo(0x82000L);
+        public static readonly Range<long> SaveCrystalsScript = 0x94160L.WithLength(32);
     }
 
     internal static class WRAM

@@ -11,6 +11,7 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace FF.Rando.Companion.Settings;
@@ -45,6 +46,8 @@ public class RootSettings : ISettings
             var settings = (GameSettings)Activator.CreateInstance(game, _settings);
             _gameSettings.Add(settings.Name, settings);
         }
+
+        SetVisibleTimerSettings();
     }
 
     [Browsable(false)]
@@ -75,7 +78,47 @@ public class RootSettings : ISettings
     [DefaultValue(60)]
     public int TrackingInterval { get => GetSetting(60); set => SaveSetting(value); }
 
-    [Category("Timer")]
+    [Category("Timing")]
+    [DisplayName("Timing Mode")]
+    [Description("Internal timer, or a supported splitter.\nEXPERIMENTAL FEATURE")]
+    [DefaultValue(TimerMode.Internal)]
+    public TimerMode TimerMode
+    { 
+        get => GetSetting(TimerMode.Internal); 
+        set 
+        {
+            SaveSetting(value);
+            SetVisibleTimerSettings();
+        }
+    }
+
+    private void SetVisibleTimerSettings()
+    {
+        switch (TimerMode)
+        {
+            case TimerMode.Internal:
+                SetBrowsableProperty(nameof(Font), true);
+                SetBrowsableProperty(nameof(TextColor), true);
+                break;
+            case TimerMode.LiveSplit:
+                SetBrowsableProperty(nameof(Font), false);
+                SetBrowsableProperty(nameof(TextColor), false);
+                break;
+            //case TimerMode.OpenSplit:
+            //    SetBrowsableProperty(nameof(Font), false);
+            //    SetBrowsableProperty(nameof(TextColor), false);
+            //    break;
+        }
+    }
+
+    [Category("Timing")]
+    [DisplayName("Auto Pause")]
+    [Description("Pause timer when emulation is paused.")]
+    [DefaultValue(true)]
+    public bool AutoPauseTimer { get => GetSetting(true); set => SaveSetting(value); }
+
+    [Browsable(true)]
+    [Category("Internal Timer")]
     public Font Font
     {
         get
@@ -95,7 +138,8 @@ public class RootSettings : ISettings
         }
     }
 
-    [Category("Timer")]
+    [Browsable(true)]
+    [Category("Internal Timer")]
     public Color TextColor
     {
         get
@@ -107,12 +151,6 @@ public class RootSettings : ISettings
             SaveSetting(value.ToArgb());
         }
     }
-
-    [Category("Timer")]
-    [DisplayName("Auto Pause")]
-    [Description("Pause timer when emulation is paused.")]
-    [DefaultValue(true)]
-    public bool AutoPauseTimer { get => GetSetting(true); set => SaveSetting(value); }
     
     [DisplayName("Next Panel")]
     [DefaultValue("X1 Back")]
@@ -166,6 +204,17 @@ public class RootSettings : ISettings
     public string ScrollUpButton
     {
         get => GetStringSetting("X1 RStickUp");
+        set => SaveStringSetting(value);
+    }
+
+    [DisplayName("Start / Stop Timer")]
+    [DefaultValue("")]
+    [Category("Buttons")]
+    [Editor(typeof(ButtonAssignmentEditor), typeof(UITypeEditor))]
+    [TypeConverter(typeof(ButtonAssignmentConverter))]
+    public string ToggleTimerButton
+    {
+        get => GetStringSetting("");
         set => SaveStringSetting(value);
     }
 
@@ -225,6 +274,19 @@ public class RootSettings : ISettings
         using var writer = new JsonTextWriter(file);
         writer.Formatting = Formatting.Indented;
         _settings.WriteTo(writer);
+    }
+
+    private void SetBrowsableProperty(string strPropertyName, bool bIsBrowsable)
+    {
+        // Get the Descriptor's Properties
+        PropertyDescriptor theDescriptor = TypeDescriptor.GetProperties(GetType())[strPropertyName];
+
+        // Get the Descriptor's "Browsable" Attribute
+        BrowsableAttribute theDescriptorBrowsableAttribute = (BrowsableAttribute)theDescriptor.Attributes[typeof(BrowsableAttribute)];
+        FieldInfo isBrowsable = theDescriptorBrowsableAttribute.GetType().GetField("Browsable", BindingFlags.IgnoreCase | BindingFlags.NonPublic | BindingFlags.Instance);
+
+        // Set the Descriptor's "Browsable" Attribute
+        isBrowsable.SetValue(theDescriptorBrowsableAttribute, bIsBrowsable);
     }
 }
 

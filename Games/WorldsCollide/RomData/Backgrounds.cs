@@ -14,7 +14,7 @@ internal class Backgrounds : IDisposable
 
     public Backgrounds(IMemorySpace rom)
     {
-        var backgroundData = rom.ReadBytes(Addresses.ROM.Backgrounds).AsSpan();
+        var backgroundData = rom.ReadBytes(Addresses.ROM.Backgrounds).AsReadOnlySpan();
         var palettes = rom.ReadBytes(Addresses.ROM.BackgroundPalettes).ReadMany<byte[]>(0, 8 * 0x20, 8).Select(p => p.DecodePalette(new Color32(), 8)).ToList();
 
         for (var i = 0; i < 8; i++)

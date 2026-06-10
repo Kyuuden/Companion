@@ -39,7 +39,13 @@ public enum KeyItemType : byte
     LibraCrest,
     CapitansCap,
 
-    CompleteSkyCoin
+    CompleteSkyCoin,
+
+    EarthCrystal, //Flamerus Rex
+    WaterCrystal, //Ice Golem
+    FireCrystal, //Dualhead Hydra
+    WindCrystal //Pazuzu
+
 }
 
 public enum ArmorType : byte

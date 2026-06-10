@@ -5,12 +5,12 @@
 	  <Nullable>enable</Nullable>
 	  <TargetFramework>net48</TargetFramework>
 	  <UseWindowsForms>True</UseWindowsForms>
-	  <Version>2.1.2</Version>
+	  <Version>2.1.3</Version>
 	  <Description>Auto-Tracker for Final Fantasy Randomizers.</Description>
 	  <Copyright>2025 Kyuuden</Copyright>
 	  <AssemblyVersion></AssemblyVersion>
 	  <FileVersion></FileVersion>
-	  <Configurations>Debug;Release;Publish</Configurations>
+	  <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
 	<PropertyGroup Condition=" '$(BIZHAWK_HOME)' == '' ">
@@ -21,9 +21,6 @@
 		<BIZHAWK_DATA_HOME>$(BIZHAWK_HOME)</BIZHAWK_DATA_HOME>
 		<!-- ignore this; on NixOS these are different dirs -->
 	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Publish|AnyCPU'">
-	  <Optimize>True</Optimize>
-	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.43">
 		  <PrivateAssets>all</PrivateAssets>
@@ -32,6 +29,7 @@
 		<PackageReference Include="KGySoft.Drawing" Version="9.2.0" />
 		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="SharpZipLib.NETStandard" Version="1.0.7" />
 		<PackageReference Include="System.Collections.Immutable" Version="9.0.7" />
 		<PackageReference Include="System.Memory" Version="4.6.3" />
 		<Reference Include="System.Net.Http">
@@ -44,38 +42,33 @@
 		<Reference Include="BizHawk.Emulation.Common" HintPath="$(BIZHAWK_HOME)dll/BizHawk.Emulation.Common.dll" />
 		<Reference Include="BizHawk.WinForms.Controls" HintPath="$(BIZHAWK_HOME)dll/BizHawk.WinForms.Controls.dll" />
 	</ItemGroup>
-
-	<Target Name="PublishPostBuild" AfterTargets="ILRepacker" Condition="'$(Configuration)|$(Platform)'=='Publish|AnyCPU'">
-		<ItemGroup>
-			<FilesToDelete Include="$(BIZHAWK_DATA_HOME)ExternalTools/KGySoft*.dll" />
-			<FilesToDelete Include="$(BIZHAWK_DATA_HOME)ExternalTools/*.json" />
-		</ItemGroup>
-		<Delete Files="@(FilesToDelete)">
-			<Output TaskParameter="DeletedFiles" ItemName="FilesDeleted" />
-		</Delete>
-		<Message Text="Files deleted: @(FilesDeleted)" Importance="high" />
-		<Copy SourceFiles="$(OutputPath)$(MSBuildProjectName).dll" DestinationFolder="$(BIZHAWK_DATA_HOME)ExternalTools" />
-		<ZipDirectory Overwrite="true" SourceDirectory="$(BIZHAWK_DATA_HOME)ExternalTools" DestinationFile="$(OutputPath)$(MSBuildProjectName)-$(Version).zip" />
-	</Target>
 	
 	<Target Name="ReleasePostBuild" AfterTargets="ILRepacker" Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<ItemGroup>
 			<FilesToDelete Include="$(BIZHAWK_DATA_HOME)ExternalTools/KGySoft*.dll" />
+			<FilesToDelete Include="$(BIZHAWK_DATA_HOME)ExternalTools/ICSharpCode.SharpZipLib.dll" />
 			<FilesToDelete Include="$(BIZHAWK_DATA_HOME)ExternalTools/*.json" />
 		</ItemGroup>
 		<Delete Files="@(FilesToDelete)">
 			<Output TaskParameter="DeletedFiles" ItemName="FilesDeleted" />
 		</Delete>
 		<Message Text="Files deleted: @(FilesDeleted)" Importance="high" />
+		
+		
+		
+		
+		
+		
 		<Copy SourceFiles="$(OutputPath)$(MSBuildProjectName).dll" DestinationFolder="$(BIZHAWK_DATA_HOME)ExternalTools" />
 	</Target>
 
 	<Target Name="DebugPostBuild" AfterTargets="Build" Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<ItemGroup>
-			<KGySoftFiles Include="$(OutputPath)KGySoft*.dll" />
+			<RequiredDlls Include="$(OutputPath)KGySoft*.dll" />
+			<RequiredDlls Include="$(OutputPath)ICSharpCode.SharpZipLib.dll" />
 		</ItemGroup>
 		
-		<Copy SourceFiles="@(KGySoftFiles)" DestinationFolder="$(BIZHAWK_DATA_HOME)ExternalTools/" />
+		<Copy SourceFiles="@(RequiredDlls)" DestinationFolder="$(BIZHAWK_DATA_HOME)ExternalTools/" />
 		<Copy SourceFiles="$(OutputPath)$(MSBuildProjectName).dll" DestinationFolder="$(BIZHAWK_DATA_HOME)ExternalTools" />
 	</Target>
 	

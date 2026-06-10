@@ -1,7 +1,5 @@
 ﻿using FF.Rando.Companion.Extensions;
-using FF.Rando.Companion.Games.MysticQuestRandomizer;
 using FF.Rando.Companion.Games.MysticQuestRandomizer.Settings;
-using FF.Rando.Companion.Games.MysticQuestRandomizer.View;
 using KGySoft.CoreLibraries;
 using System.Collections.Generic;
 using System.Linq;

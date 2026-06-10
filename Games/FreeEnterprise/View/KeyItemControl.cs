@@ -1,6 +1,4 @@
-﻿using FF.Rando.Companion.Games.FreeEnterprise.RomData;
-using FF.Rando.Companion.Games.FreeEnterprise;
-using FF.Rando.Companion.Games.FreeEnterprise.Settings;
+﻿using FF.Rando.Companion.Games.FreeEnterprise.Settings;
 using FF.Rando.Companion.View;
 using KGySoft.Drawing.Imaging;
 using KGySoft.Drawing.Shapes;

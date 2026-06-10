@@ -1,5 +1,4 @@
 ﻿using FF.Rando.Companion.Extensions;
-using FF.Rando.Companion.Games.WorldsCollide;
 using FF.Rando.Companion.Games.WorldsCollide.Enums;
 using FF.Rando.Companion.Settings;
 using FF.Rando.Companion.View;

@@ -4,9 +4,9 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace FF.Rando.Companion;
+namespace FF.Rando.Companion.Games;
 
-public interface IGame: INotifyPropertyChanged, IDisposable
+public interface IGame : INotifyPropertyChanged, IDisposable
 {
     string Hash { get; }
 
@@ -16,16 +16,9 @@ public interface IGame: INotifyPropertyChanged, IDisposable
 
     void OnNewFrame();
 
-    bool Started { get; }
-
-    TimeSpan Elapsed { get; }
-
     Control CreateControls();
 
     bool RequiresMemoryEvents { get; }
-
-    void Pause();
-    void Unpause();
 
     IEmulationContainer Container { get; }
 

@@ -1,5 +1,5 @@
-﻿using FF.Rando.Companion.Settings;
-using Newtonsoft.Json.Linq;
+﻿using FF.Rando.Companion.Games;
+using FF.Rando.Companion.Settings;
 using System;
 using System.Drawing;
 using System.Windows.Forms;

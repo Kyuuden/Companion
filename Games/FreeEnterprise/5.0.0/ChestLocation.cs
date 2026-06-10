@@ -1,5 +1,4 @@
-﻿using FF.Rando.Companion.Games.FreeEnterprise;
-using FF.Rando.Companion.Games.FreeEnterprise.Shared;
+﻿using FF.Rando.Companion.Games.FreeEnterprise.Shared;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 

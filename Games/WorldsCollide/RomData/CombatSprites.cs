@@ -1,6 +1,5 @@
 ﻿using FF.Rando.Companion.Extensions;
 using FF.Rando.Companion.Games.WorldsCollide.Enums;
-using FF.Rando.Companion.Games.WorldsCollide.RomData;
 using FF.Rando.Companion.MemoryManagement;
 using FF.Rando.Companion.Rendering;
 using System;

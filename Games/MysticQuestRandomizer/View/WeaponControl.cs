@@ -1,6 +1,6 @@
 ﻿using FF.Rando.Companion.View;
-using FF.Rando.Companion.Games.MysticQuestRandomizer;
 using FF.Rando.Companion.Games.MysticQuestRandomizer.Settings;
+using FF.Rando.Companion.Games.MysticQuestRandomizer.Tracking;
 
 namespace FF.Rando.Companion.Games.MysticQuestRandomizer.View;
 

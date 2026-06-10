@@ -1,5 +1,4 @@
 ﻿using FF.Rando.Companion.Extensions;
-using FF.Rando.Companion.Games.FreeEnterprise;
 using FF.Rando.Companion.Games.FreeEnterprise.Shared;
 using System;
 using System.Collections.Generic;
@@ -11,19 +10,19 @@ internal class Bosses
 {
     private readonly Dictionary<BossType, Boss> _bosses;
 
-    public Bosses(IBossDescriptor descriptors)
+    public Bosses(Seed seed)
     {
         _bosses = Enum.GetValues(typeof(BossType))
             .OfType<BossType>()
             .Where(t => t != BossType.Altgauntlet)
-            .ToDictionary(t => t, t => new Boss(descriptors, t));
+            .ToDictionary(t => t, t => new Boss(seed, t));
 
         _bosses[BossType.Altgauntlet] = _bosses[BossType.FabulGauntlet];
     }
 
     public IReadOnlyList<Boss> Items => _bosses.Where(v => v.Key != BossType.Altgauntlet).Select(v=> v.Value).ToList();
 
-    public bool Update(TimeSpan time, ReadOnlySpan<byte> locations, ReadOnlySpan<byte> bossLocationsDefeated)
+    public bool Update(ReadOnlySpan<byte> locations, ReadOnlySpan<byte> bossLocationsDefeated)
     {
         var updated = false;
 
@@ -38,9 +37,9 @@ internal class Bosses
 
             if (_bosses.TryGetValue((BossType)bossId, out var boss))
             {
-                updated |= boss.AddEncounter((BossLocationType)i, time);
+                updated |= boss.AddEncounter((BossLocationType)i);
                 if (bossLocationsDefeated.Read<bool>(i))
-                    updated |= boss.DefeatEncounter((BossLocationType)i, time);
+                    updated |= boss.DefeatEncounter((BossLocationType)i);
             }
         }
 

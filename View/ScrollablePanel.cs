@@ -1,4 +1,5 @@
-﻿using FF.Rando.Companion.Games.FreeEnterprise;
+﻿using FF.Rando.Companion.Games;
+using FF.Rando.Companion.Games.FreeEnterprise;
 using FF.Rando.Companion.Settings;
 using KGySoft.Drawing.Imaging;
 using System;
@@ -92,12 +93,11 @@ public abstract class ScrollablePanel<TGame, TSettings> : PictureBox, IPanel, IS
 
     protected abstract IReadableBitmapData GenerateArrow(Arrow direction);
 
-    protected abstract IReadableBitmapData GeneragePageCounter(int current, int total);
+    protected abstract IReadableBitmapData? GeneragePageCounter(int current, int total);
 
     protected Size EffectiveSize => Game?.Settings.BorderSettings.BordersEnabled == true
                 ? new Size(Size.Width - Padding.Horizontal, Size.Height - Padding.Vertical)
                 : Size;
-
 
     protected virtual void HandleArrows(bool showUp, bool showDown, int currentLine, int maxLines, IReadWriteBitmapData data)
     {
@@ -110,7 +110,6 @@ public abstract class ScrollablePanel<TGame, TSettings> : PictureBox, IPanel, IS
             arrow.DrawInto(data, new Point(data.Width - 16, 16 - arrow.Height));
         }
     }
-
 
     private void RenderImage(IList<IReadableBitmapData> data)
     {

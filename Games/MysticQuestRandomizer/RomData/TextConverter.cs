@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace FF.Rando.Companion.Games.MysticQuestRandomizer;
+namespace FF.Rando.Companion.Games.MysticQuestRandomizer.RomData;
 internal class TextConverter
 {
     private readonly List<(string, int)> _textDTE =

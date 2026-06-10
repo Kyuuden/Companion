@@ -5,7 +5,6 @@ using FF.Rando.Companion.Rendering;
 using KGySoft.Drawing.Imaging;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 
@@ -33,7 +32,7 @@ public partial class CharacterSprites : IDisposable
                     throw new InvalidOperationException($"{actorPose} is invalid;");
                 
                 if (!_actorPoses.TryGetValue(actor, out var poseDict))
-                    _actorPoses[actor] = new Dictionary<Pose, CharacterPose>();
+                    _actorPoses[actor] = [];
 
                 _actorPoses[actor][actorPose.Pose] = actorPose;
             }
@@ -85,7 +84,7 @@ public partial class CharacterSprites : IDisposable
         }
 
         var bitmapData = BitmapDataFactory.CreateBitmapData(8, 8, KnownPixelFormat.Format8bppIndexed, _palettes[palette]);
-        _tileData.AsSpan(index * 0x20, 0x20).DecodeTile(4).DrawInto(bitmapData, flipHorizontal: index < 0);
+        new ReadOnlySpan<byte>(_tileData, index * 0x20, 0x20).DecodeTile(4).DrawInto(bitmapData, flipHorizontal: index < 0);
         tile = new Tile(bitmapData, palette, i => _palettes[i]);
         _tileCache[index] = tile;
         return bitmapData;

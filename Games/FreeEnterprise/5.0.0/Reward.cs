@@ -1,6 +1,4 @@
-﻿using FF.Rando.Companion.Games.FreeEnterprise;
-
-namespace FF.Rando.Companion.Games.FreeEnterprise._5._0._0;
+﻿namespace FF.Rando.Companion.Games.FreeEnterprise._5._0._0;
 
 internal class Reward : IReward
 {

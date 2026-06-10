@@ -4,9 +4,7 @@ using FF.Rando.Companion.Games.FreeEnterprise.Settings;
 using FF.Rando.Companion.Settings;
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -17,12 +15,14 @@ namespace FF.Rando.Companion.Games.FreeEnterprise;
 internal abstract class SeedBase : ISeed
 {
     private Color _backgroundColor = Color.FromArgb(0, 0, 99);
-    private readonly Stopwatch _stopwatch = new();
     private bool _started = false;
     private bool _victory = false;
     private decimal? _xpRate = null;
     private int _defeatedEncounters = 0;
     private int? _treasureCount;
+
+    public abstract IKeyItemDescriptor KeyItemDescriptor { get; }
+    public abstract IBossDescriptor BossDescriptor { get; }
 
     public RomData.Font Font { get; }
     public Sprites Sprites { get; }
@@ -39,7 +39,9 @@ internal abstract class SeedBase : ISeed
                 _started = true;
                 NotifyPropertyChanged();
                 if (_started)
-                    _stopwatch.Start();
+                {
+                    Container.Timer.Start();
+                }
             }
         }
     }
@@ -54,7 +56,9 @@ internal abstract class SeedBase : ISeed
                 _victory = true;
                 NotifyPropertyChanged();
                 if (_victory)
-                    _stopwatch.Stop();
+                {
+                    Container.Timer.Stop();
+                }
             }
         }
     }
@@ -95,7 +99,7 @@ internal abstract class SeedBase : ISeed
 
     public int TreasureCount
     {
-        get => _treasureCount ?? 0 - _treasureOffset ?? 0;
+        get => Math.Max(0, (_treasureCount ?? 0) - (_treasureOffset ?? 0));
         protected set
         {
             if (_treasureCount != value)
@@ -134,20 +138,10 @@ internal abstract class SeedBase : ISeed
         }
     }
 
-    public event Action<string>? ButtonPressed;
-
-    private ImmutableHashSet<string> _lastPressedButtons = [];
-
-    public TimeSpan Elapsed { get => _stopwatch.Elapsed; }
     public abstract IEnumerable<ILocation> AvailableLocations { get; }
+
     public virtual void OnNewFrame()
     {
-        var pressed = ImmutableHashSet.CreateRange(Game.Input.GetPressedButtons());
-        foreach (var b in pressed.Except(_lastPressedButtons))
-        {
-            ButtonPressed?.Invoke(b);
-        }
-        _lastPressedButtons = pressed;
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -233,18 +227,6 @@ internal abstract class SeedBase : ISeed
         var control = new FreeEnterpriseControl();
         control.InitializeDataSources(this);
         return control;
-    }
-
-    public void Pause()
-    {
-        if (Started && _stopwatch.IsRunning)
-            _stopwatch.Stop();
-    }
-
-    public void Unpause()
-    {
-        if (Started && !Victory && !_stopwatch.IsRunning)
-            _stopwatch.Start();
     }
 
     public void Dispose()

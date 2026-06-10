@@ -29,7 +29,7 @@ partial class WorldsCollideControl
             _seed.Settings.Dragons.PropertyChanged -= Seed_PropertyChanged;
             _seed.Settings.Stats.PropertyChanged -= Seed_PropertyChanged;
             _seed.Settings.TextChecks.PropertyChanged -= Seed_PropertyChanged;
-            _seed.ButtonPressed -= Seed_ButtonPressed;
+            _seed.Container.ButtonPressed -= Seed_ButtonPressed;
 
             _characters.Dispose();
             _checks.Dispose();

@@ -1,5 +1,4 @@
 ﻿using FF.Rando.Companion.Extensions;
-using FF.Rando.Companion.Games.FreeEnterprise;
 using FF.Rando.Companion.Games.FreeEnterprise.Shared;
 using System;
 using System.Collections.Generic;
@@ -12,7 +11,7 @@ namespace FF.Rando.Companion.Games.FreeEnterprise._5._0._0;
 internal class Locations
 {
     private readonly Descriptors _descriptors;
-    private readonly IFlags _flags;
+    private readonly IFlags? _flags;
 
     private readonly Dictionary<RewardSlot, RewardSlotLocation> _rewardSlots;
     private readonly Dictionary<BossLocationType, BossLocation> _bossLocations;
@@ -25,7 +24,7 @@ internal class Locations
         .Concat(_shopLocations.Values)
         .Concat(_chests.Values);
 
-    public Locations(Descriptors descriptors, IFlags flags)
+    public Locations(Descriptors descriptors, IFlags? flags)
     {
         _descriptors = descriptors;
         _flags = flags;
@@ -51,7 +50,6 @@ internal class Locations
     }
 
     public bool Update(
-        TimeSpan time,
         ReadOnlySpan<byte> checkedRewardSlots,
         ReadOnlySpan<byte> checkedShops,
         ReadOnlySpan<byte> checkedChests,
@@ -251,7 +249,7 @@ internal class Locations
         };
 
     public bool CanHaveCharcater(RewardSlot slot)
-        => slot switch
+        => _flags != null && slot switch
         {
             RewardSlot.None => false,
             RewardSlot.StartingCharacter => false,
@@ -305,11 +303,11 @@ internal class Locations
         } && !_flags.CWishes;
 
     public bool CanHaveKeyItem(RewardSlot slot)
-        => slot switch
+        => _flags != null && slot switch
         {
             RewardSlot.None => false,
             RewardSlot.StartingCharacter => false,
-            RewardSlot.StartingPartnerCharacter => _flags.KChar && !_flags.CNoPartner,
+            RewardSlot.StartingPartnerCharacter => _flags.KChar && !_flags.CNoPartner && !_flags.CPartnerChar,
             RewardSlot.MistCharacter => _flags.KChar && !_flags.CNoEarned,
             RewardSlot.WateryPassCharacter => false,
             RewardSlot.DamcyanCharacter => false,
@@ -435,7 +433,7 @@ internal class Locations
         };
 
     public bool CanHaveCharcater(ChestSlot slot)
-        => _flags.KChar && slot switch
+        => _flags != null && _flags.KChar && slot switch
         {
             ChestSlot.Feymarch => _flags.KMain,
             ChestSlot.RibbonRoom1 => _flags.KMoon,
@@ -473,7 +471,7 @@ internal class Locations
         };
 
     public bool CanHaveKeyItem(ChestSlot slot)
-        => slot switch
+        => _flags != null && slot switch
         {
             ChestSlot.Feymarch => _flags.KMain,
             ChestSlot.RibbonRoom1 => _flags.KMoon,

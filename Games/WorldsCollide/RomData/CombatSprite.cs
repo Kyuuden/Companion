@@ -2,13 +2,11 @@
 using FF.Rando.Companion.Games.WorldsCollide.Enums;
 using FF.Rando.Companion.Rendering;
 using KGySoft.Drawing.Imaging;
-using KGySoft.Drawing.Shapes;
 using System;
 using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Runtime.InteropServices;
 
 namespace FF.Rando.Companion.Games.WorldsCollide.RomData;
 

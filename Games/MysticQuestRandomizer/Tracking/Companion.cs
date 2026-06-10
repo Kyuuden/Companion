@@ -1,8 +1,7 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace FF.Rando.Companion.Games.MysticQuestRandomizer;
-public class Companion(CompanionType companion)
+namespace FF.Rando.Companion.Games.MysticQuestRandomizer.Tracking;
+public class Companion(Seed seed, CompanionType companion)
 {
     private readonly List<CharacterSpell> _spells = [];
     private readonly List<CharacterQuest> _quests = [];
@@ -14,7 +13,7 @@ public class Companion(CompanionType companion)
     public bool ExistsInSeed => _quests.Count > 0 || _spells.Count > 0;
 
     public void AddQuest(byte flag, string description)
-        => _quests.Add(new CharacterQuest(flag, description.Trim().Replace("\n", "")));
+        => _quests.Add(new CharacterQuest(seed, flag, description.Trim().Replace("\n", "")));
 
     public void AddSpell(byte level, SpellType type)
         => _spells.Add(new CharacterSpell(level, type));

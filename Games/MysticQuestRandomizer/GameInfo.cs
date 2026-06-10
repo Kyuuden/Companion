@@ -1,30 +1,36 @@
-﻿using BizHawk.Common;
+﻿using BizHawk.Common.BufferExtensions;
 using FF.Rando.Companion.Extensions;
-using FF.Rando.Companion.Games.MysticQuestRandomizer.Settings;
+using FF.Rando.Companion.Games.MysticQuestRandomizer.RomData;
+using FF.Rando.Companion.Games.MysticQuestRandomizer.Tracking;
 using FF.Rando.Companion.MemoryManagement;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace FF.Rando.Companion.Games.MysticQuestRandomizer;
+
 internal class GameInfo
 {
     private readonly List<Element> _elements = [];
-    private readonly List<Companion> _companions = [];
+    private readonly List<Tracking.Companion> _companions = [];
 
     public int? RequiredSkyFragmentCount { get; private set; }
+
+    public bool SaveTheCrystals { get; private set; }
 
     public bool? RandomizedPazuzu { get; private set; }
 
     public IReadOnlyList<Element> Elements => _elements;
 
-    public IReadOnlyList<Companion> Companions => _companions;
+    public IReadOnlyList<Tracking.Companion> Companions => _companions;
 
-    public static GameInfo Parse(IMemorySpace rom, MysticQuestRandomizerSettings settings, RomData.Font font)
+    public static GameInfo Parse(Seed seed, IMemorySpace rom)
     {
         var _textConverter = new TextConverter();
         var info = new GameInfo();
-        ReadOnlySpan<byte> data = rom.ReadBytes(0x81200L.RangeTo(0x82000L)).AsSpan();
+        var data = rom.ReadBytes(Addresses.ROM.GameInfo).AsReadOnlySpan();
+        var saveCrystalsScript = rom.ReadBytes(Addresses.ROM.SaveCrystalsScript).BytesToHexString();
+        info.SaveTheCrystals = saveCrystalsScript.Equals("2F050C0F80C1050B0180C1050B1280C1050B0380C1050B0580C10D5F010F0162", StringComparison.OrdinalIgnoreCase);
 
         if (Search(data, _textConverter.TextToByte("No info available.")).HasValue)
             return info;
@@ -59,7 +65,7 @@ internal class GameInfo
                 {
                     var originalElement = ParseElement(data.Read<uint>(0, 24));
                     var newElement = ParseElement(data.Read<uint>(32, 24));
-                    info._elements.Add(new Element(originalElement, newElement, settings.Elements, font));
+                    info._elements.Add(new Element(originalElement, newElement, seed.Settings.Elements, seed.Font));
 
                     data = data[8..];
                 }
@@ -72,7 +78,7 @@ internal class GameInfo
 
         foreach (CompanionType c in Enum.GetValues(typeof(CompanionType)))
         {
-            var companion = ParseCharcter(_textConverter, c, data);
+            var companion = ParseCharcter(seed, _textConverter, c, data);
             if (companion?.ExistsInSeed == true)
             {
                 info._companions.Add(companion);
@@ -132,7 +138,7 @@ internal class GameInfo
             _ => null
         };
 
-    private static Companion? ParseCharcter(TextConverter textConverter, CompanionType character, ReadOnlySpan<byte> buffer)
+    private static Tracking.Companion? ParseCharcter(Seed seed, TextConverter textConverter, CompanionType character, ReadOnlySpan<byte> buffer)
     {
         var characterEndMarker = new byte[] { 0x25, 0x0C, 0x15, 0x19, 0x15, 0x19 };
         var nameBytes = textConverter.TextToByte(character.ToString());
@@ -144,7 +150,7 @@ internal class GameInfo
         if (end == -1) return null;
 
         var characterBuffer = buffer.Slice(start, end);
-        var c = new Companion(character);
+        var c = new Tracking.Companion(seed, character);
 
         var spellsStart = nameBytes.Length + 12 + textConverter.TextToByte("Spells").Length + 4;
 
@@ -230,12 +236,12 @@ internal class GameInfo
         return c;
     }
 
-    internal bool UpdateQuests(TimeSpan elapsed, ReadOnlySpan<byte> quests)
+    internal bool UpdateQuests(ReadOnlySpan<byte> quests)
     {
         var updated = false;
         foreach (var quest in Companions.SelectMany(c => c.Quests))
         {
-            updated |= quest.Update(elapsed, quests);
+            updated |= quest.Update(quests);
         }
 
         return updated;

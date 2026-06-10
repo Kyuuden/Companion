@@ -1,26 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using FF.Rando.Companion.Games.FreeEnterprise;
 using FF.Rando.Companion.Games.FreeEnterprise.RomData;
 
 namespace FF.Rando.Companion.Games.FreeEnterprise._5._0._0;
-internal class Objectives(Descriptors descriptors, IEnumerable<GroupObjectives> groups)
+internal class Objectives(Seed seed, IEnumerable<GroupObjectives> groups)
 {
-    private readonly IList<ObjectiveGroup> _groups = groups.Select(g => new ObjectiveGroup(descriptors, g, groups)).ToList();
+    private readonly IList<ObjectiveGroup> _groups = groups.Select(g => new ObjectiveGroup(seed, g, groups)).ToList();
 
     public IEnumerable<IObjectiveGroup> Groups => _groups;
 
     public int NumCompleted { get; private set; }
 
-    public bool Update(TimeSpan time, ReadOnlySpan<byte> taskProgress, ReadOnlySpan<byte> groupProgress)
+    public bool Update(ReadOnlySpan<byte> taskProgress, ReadOnlySpan<byte> groupProgress)
     {
         var updated = false;
         var offset = 0;
 
         foreach (var item in _groups.SelectMany(g => g.Tasks).OfType<Task>())
         {
-            updated |= item.Update(time, taskProgress.Slice(offset++, 1));
+            updated |= item.Update(taskProgress.Slice(offset++, 1));
         }
 
         offset = 0;

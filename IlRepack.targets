@@ -1,10 +1,11 @@
 <Project>
-	<Target Name="ILRepacker" AfterTargets="Build" Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU' Or '$(Configuration)|$(Platform)'=='Publish|AnyCPU'">
+	<Target Name="ILRepacker" AfterTargets="Build" Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<ItemGroup>
 			<InputAssemblies Include="$(OutputPath)\FF.Rando.Companion.dll" />
 			<InputAssemblies Include="$(OutputPath)\KGySoft.CoreLibraries.dll" />
 			<InputAssemblies Include="$(OutputPath)\KGySoft.Drawing.Core.dll" />
 			<InputAssemblies Include="$(OutputPath)\KGySoft.Drawing.dll" />
+			<InputAssemblies Include="$(OutputPath)\ICSharpCode.SharpZipLib.dll" />
 		</ItemGroup>
 		<Message Text="MERGING" />
 		<ILRepack

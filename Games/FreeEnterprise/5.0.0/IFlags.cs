@@ -7,6 +7,7 @@ internal interface IFlags
     bool CNoFree { get; }
     bool CNoGiant { get; }
     bool CNoPartner { get; }
+    bool CPartnerChar { get; }
     bool CWishes { get; }
     bool KChar { get; }
     bool KForge { get; }
@@ -26,5 +27,6 @@ internal interface IFlags
     KeyItemCheckXpBonus XKeyItemCheckBonus { get; }
     KeyItemZonkXpBonus XKeyItemZonkXpBonus { get; }
     MaxXpRate XMaxXpRate { get; }
+    BaseXpRate XBaseXpRate { get; }
     XPBonusMode XPBonusMode { get; }
 }

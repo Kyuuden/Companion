@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace FF.Rando.Companion.Games.FreeEnterprise.GaleswiftFork;
+﻿namespace FF.Rando.Companion.Games.FreeEnterprise.GaleswiftFork;
 internal class Descriptors(IFlags? flags) : Games.FreeEnterprise.Descriptors
 {
     private readonly IFlags? _flags = flags;

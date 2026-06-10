@@ -3,13 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FF.Rando.Companion.Games.MysticQuestRandomizer;
+namespace FF.Rando.Companion.Games.MysticQuestRandomizer.Tracking;
 
 internal abstract class Equipments<T, TEnum>(List<T> items) where T : Equipment<TEnum> where TEnum : struct
 {
     internal IReadOnlyList<T> Items => items;
 
-    public bool Update(TimeSpan time, ReadOnlySpan<byte> found)
+    public bool Update(ReadOnlySpan<byte> found)
     {
         var updated = false;
 

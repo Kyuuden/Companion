@@ -1,7 +1,9 @@
 ﻿using BizHawk.Client.Common;
 using BizHawk.Client.EmuHawk;
 using BizHawk.Emulation.Common;
+using FF.Rando.Companion.Games;
 using FF.Rando.Companion.Settings;
+using FF.Rando.Companion.Timing;
 using FF.Rando.Companion.Utils;
 using System;
 using System.ComponentModel;
@@ -16,7 +18,7 @@ namespace FF.Rando.Companion;
 
 [ExternalToolEmbeddedIcon("FF.Rando.Companion.Resources.Crystal.png")]
 [ExternalTool("Final Fantasy Rando Companion", 
-    Description = "An autotracker for Free Enterprise (A Final Fantasy IV randomizer) and Final Fantasy Mystic Quest Randomizer. ")]
+    Description = "An autotracker for Final Fantasy IV: Free Enterprise, Final Fantasy Mystic Quest Randomizer, and Final Fantasy VI: Worlds Collide.")]
 public partial class MainForm : ToolFormBase, IExternalToolForm
 {
     protected override string WindowTitleStatic => "Final Fantasy Rando Companion";
@@ -34,6 +36,7 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
 
     private readonly GameViewModel _viewModel;
     private IGame? _game;
+    private ITimer _timer = new InternalTimer();
 
     public MainForm() 
     {
@@ -47,11 +50,30 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
         StopWatchLabel.Font = _settings.Font;
         StopWatchLabel.ForeColor = _settings.TextColor;
         StopWatchLabel.Height = StopWatchLabel.PreferredHeight;
+
+        CreateTimer();
+    }
+
+    private void CreateTimer()
+    {
+        _timer?.Dispose();
+
+        _timer = _settings.TimerMode switch
+        {
+            TimerMode.Internal => new InternalTimer(),
+            TimerMode.LiveSplit => new LiveSplit(),
+            //TimerMode.OpenSplit => new OpenSplit(),
+            _ => throw new NotSupportedException(),
+        };
+
+        _timer.Initialize();
+        StopWatchLabel.Visible = _timer.ShowLocally == true;
+        _viewModel.Timer = _timer;
     }
 
     public override bool BlocksInputWhenFocused => false;
 
-    private void PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void PropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         switch (e.PropertyName)
         {
@@ -67,8 +89,17 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
             case nameof(ISettings.TextColor):
                 StopWatchLabel.ForeColor = _settings.TextColor;
                 break;
+            case nameof(ISettings.TimerMode):
+                if (_timer.Status == TimerStatus.Running)
+                {
+                    MessageBox.Show("Cannot change the timer mode while a run is in progress", "Settings Error");
+                }
+                else
+                {
+                    CreateTimer();
+                }
+                break;
             case nameof(GameViewModel.Game) when _viewModel.Game != null:
-
                 if (_viewModel.Game.RequiresMemoryEvents && APIs.MemoryEvents == null) 
                 {
                     MessageBox.Show("Automatic timing of runs is not supported on the Snes9x core. Please use the BSNES or BSNESv115+ core to have this feature.", "Timing unavailable");
@@ -91,7 +122,8 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
                     _game.Dispose();
                 }
 
-                StopWatchLabel.Visible = true;
+                StopWatchLabel.Visible = _timer.ShowLocally == true;
+                _timer.Initialize();
                 _game = _viewModel.Game;
                 _viewModel.Game.PropertyChanged += Game_PropertyChanged;
                 TrackerPanel.Controls.Add(_viewModel.Game.CreateControls());
@@ -101,20 +133,23 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
         }
     }
 
-    private void Game_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void Game_PropertyChanged(object sender, PropertyChangedEventArgs e)
     {
-        switch (e.PropertyName)
-        {
-            case nameof(IGame.Started):
-                break;
-        }
+
     }
 
     private bool _docking = false;
 
+    private BizHawk.Client.EmuHawk.MainForm? GetBizHawkForm()
+    {
+        return GetType()
+            .GetProperty("MainForm", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
+            .GetValue(this, null) as BizHawk.Client.EmuHawk.MainForm;
+    }
+
     private void DockToScreen()
     {
-        var main = (BizHawk.Client.EmuHawk.MainForm)MainForm;
+        var main = GetBizHawkForm();
         if (main == null)
             return;
 
@@ -205,10 +240,10 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
     }
     protected override void OnClosed(EventArgs e)
     {
-        if (_parentFormLinked)
+        if (_parentFormLinked && GetBizHawkForm() is { } mainForm)
         {
-            ((BizHawk.Client.EmuHawk.MainForm)MainForm).Move -= OwnerMoved;
-            ((BizHawk.Client.EmuHawk.MainForm)MainForm).Resize -= OwnerResized;
+            mainForm.Move -= OwnerMoved;
+            mainForm.Resize -= OwnerResized;
             _parentFormLinked = false;
         }
     }
@@ -225,10 +260,10 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
         _viewModel.MemoryDomains = MemoryDomains;
 
         DockToScreen();
-        if (!_parentFormLinked)
+        if (!_parentFormLinked && GetBizHawkForm() is { } mainForm)
         {
-            ((BizHawk.Client.EmuHawk.MainForm)MainForm).Move += OwnerMoved;
-            ((BizHawk.Client.EmuHawk.MainForm)MainForm).Resize += OwnerResized;
+            mainForm.Move += OwnerMoved;
+            mainForm.Resize += OwnerResized;
             _parentFormLinked = true;
 
             if (_settings.WindowStyle == WindowStyle.Custom)
@@ -244,8 +279,6 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
         }
     }
 
-    private bool _paused = false;
-
     protected override void UpdateAfter()
     {
         if (Game.IsNullInstance() || Game == null)
@@ -258,20 +291,30 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
         }
         catch { } // If i've done something wrong, don't crash bizhawk.
 
-        StopWatchLabel.Text = _game?.Elapsed.ToString("hh':'mm':'ss'.'ff");
+        if (_timer.ShowLocally == true)
+        {
+            StopWatchLabel.Text = _timer.Elapsed?.ToString("hh':'mm':'ss'.'ff");
+        }
+        else if (_timer.Status == TimerStatus.Error)
+        {
+            StopWatchLabel.Visible = true;
+            StopWatchLabel.Text = $"{_timer.GetType().Name} Error";
+        }
+        else
+        {
+            StopWatchLabel.Visible = false;
+        }
     }
 
     protected override void GeneralUpdate()
     {
-        if (!_paused && APIs.EmuClient.IsPaused() && _settings.AutoPauseTimer)
+        if (_settings.AutoPauseTimer && APIs.EmuClient.IsPaused() && _timer.Status == TimerStatus.Running)
         {
-            _paused = true;
-            _viewModel.Game?.Pause();
+            _timer.Pause();
         }
-        else if (_paused && !APIs.EmuClient.IsPaused())
+        else if (_settings.AutoPauseTimer && !APIs.EmuClient.IsPaused() && _timer.Status == TimerStatus.Paused)
         {
-            _paused = false;
-            _viewModel.Game?.Unpause();
+            _timer.Resume();
         }
     }
 
@@ -282,7 +325,7 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
         _viewModel.Initialize(Game);
     }
 
-    private void DisplayToolStripMenuItem_Click(object sender, System.EventArgs e)
+    private void DisplayToolStripMenuItem_Click(object sender, EventArgs e)
     {
         var existing = OwnedForms.OfType<SettingsDialog>().FirstOrDefault();
 
@@ -302,7 +345,7 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
         dialog.Show();
     }
 
-    private void AboutToolStripMenuItem_Click(object sender, System.EventArgs e)
+    private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
     {
         using var about = new AboutDialog() { Owner = this, StartPosition = FormStartPosition.CenterParent };
         var result = about.ShowDialog();

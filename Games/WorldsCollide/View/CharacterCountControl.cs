@@ -1,7 +1,5 @@
-﻿using FF.Rando.Companion.Games.WorldsCollide;
-using FF.Rando.Companion.Games.WorldsCollide.Enums;
+﻿using FF.Rando.Companion.Games.WorldsCollide.Enums;
 using FF.Rando.Companion.Settings;
-using KGySoft.Drawing.Imaging;
 
 namespace FF.Rando.Companion.Games.WorldsCollide.View;
 

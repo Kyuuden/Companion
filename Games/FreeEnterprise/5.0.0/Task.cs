@@ -1,5 +1,4 @@
 ﻿using BizHawk.Common;
-using FF.Rando.Companion.Games.FreeEnterprise;
 using FF.Rando.Companion.Games.FreeEnterprise.RomData;
 using System;
 using System.Collections.Generic;
@@ -16,11 +15,13 @@ internal class Task : ITask
     private int _current = 0;
 
     private readonly string _baseDescription;
+    private readonly Seed _seed;
     private TimeSpan? _completedAt;
 
-    internal Task(Descriptors descriptors, Games.FreeEnterprise.RomData.Task task, IEnumerable<GroupObjectives> groups)
+    internal Task(Seed seed, RomData.Task task, IEnumerable<GroupObjectives> groups)
     {
-        _baseDescription = descriptors.GetTaskDescription(task);
+        _seed = seed;
+        _baseDescription = _seed.Descriptors.GetTaskDescription(task);
 
         switch (task)
         {
@@ -44,17 +45,13 @@ internal class Task : ITask
         }
     }
 
-    public bool Update(TimeSpan time, ReadOnlySpan<byte> data)
+    public bool Update(ReadOnlySpan<byte> data)
     {
         var status = data[0];
         if (status != _current)
         {
             _current = status;
             IsCompleted = _current >= _required;
-
-            if (IsCompleted)
-                CompletedAt = time;
-
             return true;
         }
 
@@ -92,6 +89,9 @@ internal class Task : ITask
 
             _completed = value;
             NotifyPropertyChanged();
+
+            if (IsCompleted && !CompletedAt.HasValue)
+                CompletedAt = _seed.Container.Timer.Elapsed;
         }
     }
 

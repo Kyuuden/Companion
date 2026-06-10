@@ -1,5 +1,4 @@
-﻿using FF.Rando.Companion.Games.FreeEnterprise;
-using FF.Rando.Companion.Games.FreeEnterprise.RomData;
+﻿using FF.Rando.Companion.Games.FreeEnterprise.RomData;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,7 +18,7 @@ internal class Objectives : IObjectiveGroup
 
     public IEnumerable<IReward> Rewards => _rewards;
 
-    public Objectives(IEnumerable<Objective> objectives, IFlags? flags)
+    public Objectives(Seed seed, IEnumerable<Objective> objectives, IFlags? flags)
     {
         if (flags == null)
         {
@@ -28,7 +27,7 @@ internal class Objectives : IObjectiveGroup
                 if (objective is not BasicObjective basicObjective)
                     throw new InvalidOperationException("Unsupported objectives");
 
-                _tasks.Add(new Task(basicObjective));
+                _tasks.Add(new Task(seed, basicObjective));
             }
         }
         else
@@ -42,7 +41,7 @@ internal class Objectives : IObjectiveGroup
 
                 var hardReq = flags.IsHardRequired(objNum++);
                 hardreqCnt += hardReq ? 1 : 0;
-                _tasks.Add(new Task($"{basicObjective.Description}{(hardReq ? " [crystal]" : "")}", hardReq));
+                _tasks.Add(new Task(seed, $"{basicObjective.Description}{(hardReq ? " [crystal]" : "")}", hardReq));
             }
 
             if (flags.NumRequiredObjectives == -1)
@@ -68,14 +67,14 @@ internal class Objectives : IObjectiveGroup
         }
     }
 
-    public bool Update(TimeSpan time, ReadOnlySpan<byte> taskProgress)
+    public bool Update(ReadOnlySpan<byte> taskProgress)
     {
         var updated = false;
         var offset = 0;
 
         foreach (var item in _tasks)
         {
-            updated |= item.Update(time, taskProgress.Slice(offset++, 1));
+            updated |= item.Update(taskProgress.Slice(offset++, 1));
         }
 
         return updated;
@@ -84,19 +83,21 @@ internal class Objectives : IObjectiveGroup
 
 internal class Task : ITask
 {
+    private readonly Seed _seed;
     private bool _completed = false;
     private readonly int? _required;
     private int _current = 0;
     private readonly string _baseDescription;
     private TimeSpan? _completedAt;
 
-    internal Task(BasicObjective basicObjective)
-        : this(basicObjective.Description ?? "UNKNOWN OBJECTIVE", false)
+    internal Task(Seed seed, BasicObjective basicObjective)
+        : this(seed, basicObjective.Description ?? "UNKNOWN OBJECTIVE", false)
     {
     }
 
-    internal Task(string description, bool isHardRequired)
+    internal Task(Seed seed, string description, bool isHardRequired)
     {
+        _seed = seed;
         _baseDescription = description;
         IsHardRequired = isHardRequired;
         _required = 1;
@@ -108,17 +109,13 @@ internal class Task : ITask
         }
     }
 
-    public bool Update(TimeSpan time, ReadOnlySpan<byte> data)
+    public bool Update(ReadOnlySpan<byte> data)
     {
         var status = data[0];
         if (status != _current)
         {
             _current = status;
             IsCompleted = _current >= _required;
-
-            if (IsCompleted)
-                CompletedAt = time;
-
             return true;
         }
 
@@ -156,6 +153,9 @@ internal class Task : ITask
 
             _completed = value;
             NotifyPropertyChanged();
+
+            if (IsCompleted && !CompletedAt.HasValue)
+                CompletedAt = _seed.Container.Timer.Elapsed;
         }
     }
 

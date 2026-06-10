@@ -1,10 +1,8 @@
-﻿using FF.Rando.Companion.Games.WorldsCollide;
-using FF.Rando.Companion.Games.WorldsCollide.Enums;
+﻿using FF.Rando.Companion.Games.WorldsCollide.Enums;
 using FF.Rando.Companion.View;
 using System;
 using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
 using System.Runtime.CompilerServices;
 
 namespace FF.Rando.Companion.Games.WorldsCollide.Tracking;
@@ -12,10 +10,9 @@ namespace FF.Rando.Companion.Games.WorldsCollide.Tracking;
 public class Character : IDisposable, INotifyPropertyChanged, IImageTracker
 {
     private readonly Seed _seed;
-
     private Bitmap? _image;
-    private TimeSpan? _whenFound;
     private bool _isFound;
+    private bool _hasBeenFound;
 
     public Character(Seed seed, Events @event)
     {
@@ -47,19 +44,12 @@ public class Character : IDisposable, INotifyPropertyChanged, IImageTracker
             _isFound = value;
             NotifyPropertyChanged();
             SetImage();
-        }
-    }
 
-    public TimeSpan? WhenFound
-    {
-        get => _whenFound;
-        set
-        {
-            if (_whenFound == value || _whenFound.HasValue)
-                return;
-
-            _whenFound = value;
-            NotifyPropertyChanged();
+            if (_isFound && !_hasBeenFound)
+            {
+                _hasBeenFound = true;
+                _seed.Container.Timer.Info($"Found {_seed.Descriptors.GetDescription(Event)}");
+            }
         }
     }
 

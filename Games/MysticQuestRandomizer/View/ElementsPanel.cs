@@ -1,6 +1,4 @@
-﻿using FF.Rando.Companion.Games.MysticQuestRandomizer;
-using FF.Rando.Companion.Games.MysticQuestRandomizer.Settings;
-using FF.Rando.Companion.Games.MysticQuestRandomizer.View;
+﻿using FF.Rando.Companion.Games.MysticQuestRandomizer.Settings;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;

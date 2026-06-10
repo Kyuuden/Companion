@@ -24,7 +24,7 @@ internal class Locations
             .ToDictionary(t => t, t => new Location(t, GetWorld(t), _descriptors.GetRewardSlotName(t), CanHaveKeyItem(t), CanHaveCharcater(t)));
     }
 
-    public bool Update(TimeSpan time, ReadOnlySpan<byte> checkedLocations, ImmutableHashSet<KeyItemType> foundKeyItems)
+    public bool Update(ReadOnlySpan<byte> checkedLocations, ImmutableHashSet<KeyItemType> foundKeyItems)
     {
         var updated = false;
 

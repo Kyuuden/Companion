@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using FF.Rando.Companion.Extensions;
 
 namespace FF.Rando.Companion.Games.WorldsCollide.Enums;

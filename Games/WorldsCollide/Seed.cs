@@ -7,9 +7,7 @@ using KGySoft.Drawing.Imaging;
 using System;
 using System.Buffers.Binary;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -22,7 +20,6 @@ public class Seed : IGame
     internal readonly RomData.Font Font;
     internal readonly RomData.Backgrounds Backgrounds;
     internal readonly RomData.Sprites Sprites;
-    private readonly Stopwatch _stopwatch = new();
 
     private bool _started = false;
     private bool _victory = false;
@@ -61,9 +58,23 @@ public class Seed : IGame
         _dragons = new Tracking.Dragons(this);
         _dragonLocations = new Tracking.DragonLocations(this);
 
+
         _checks.UpdateRelatedChecks();
+        Reward? reward = null;
+        _checks.Update(new byte[(int)RomData.Addresses.WRAM.State.Length()], ref reward);
+        _dragonLocations.Update(new byte[(int)RomData.Addresses.WRAM.State.Length()]);
 
         Settings.PropertyChanged += Settings_PropertyChanged;
+        container.ButtonPressed += Container_ButtonPressed;
+    }
+
+    private void Container_ButtonPressed(InputAction action)
+    {
+        if (action != InputAction.ToggleTimer)
+            return;
+
+        if (!Started)
+            Started = true;
     }
 
     private void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -160,7 +171,7 @@ public class Seed : IGame
                 _started = true;
                 NotifyPropertyChanged();
                 if (_started)
-                    _stopwatch.Start();
+                    Container.Timer.Start();
             }
         }
     }
@@ -175,12 +186,75 @@ public class Seed : IGame
                 _victory = true;
                 NotifyPropertyChanged();
                 if (_victory)
-                    _stopwatch.Stop();
+                    Container.Timer.Stop();
             }
         }
     }
 
-    public TimeSpan Elapsed { get => _stopwatch.Elapsed; }
+    public bool KefkaTowerUnlocked
+    {
+        get => _kefkaTowerUnlocked;
+        protected set
+        {
+            if (_kefkaTowerSkipUnlocked == value)
+                return;
+
+            _kefkaTowerUnlocked = value;
+            NotifyPropertyChanged();
+        }
+    }
+
+    public bool KefkaTowerSkipUnlocked
+    {
+        get => _kefkaTowerSkipUnlocked; 
+        protected set
+        {
+            if (_kefkaTowerSkipUnlocked = value)
+                return;
+
+            _kefkaTowerSkipUnlocked = value;
+            NotifyPropertyChanged();
+        }
+    }
+
+    public bool KefkaTowerStatueOneDefeated
+    {
+        get => _kefkaTowerStatueOneDefeated;
+        protected set
+        {
+            if (value == _kefkaTowerStatueOneDefeated)
+                return;
+
+            _kefkaTowerStatueOneDefeated = value;
+            NotifyPropertyChanged();
+        }
+    }
+
+    public bool KefkaTowerStatueTwoDefeated
+    {
+        get => _kefkaTowerStatueTwoDefeated;
+        protected set
+        {
+            if (value == _kefkaTowerStatueTwoDefeated)
+                return;
+
+            _kefkaTowerStatueTwoDefeated = value;
+            NotifyPropertyChanged();
+        }
+    }
+
+    public bool KefkaTowerStatueThreeDefeated
+    {
+        get => _kefkaTowerStatueThreeDefeated;
+        protected set
+        {
+            if (value == _kefkaTowerStatueThreeDefeated)
+                return;
+
+            _kefkaTowerStatueThreeDefeated = value;
+            NotifyPropertyChanged();
+        }
+    }
 
     public bool RequiresMemoryEvents => false;
 
@@ -194,10 +268,6 @@ public class Seed : IGame
 
     GameSettings IGame.Settings => Settings;
 
-    public event Action<string>? ButtonPressed;
-
-    private ImmutableHashSet<string> _lastPressedButtons = [];
-
     public event PropertyChangedEventHandler? PropertyChanged;
 
     public Control CreateControls()
@@ -210,22 +280,21 @@ public class Seed : IGame
     public void Dispose()
     {
         Settings.PropertyChanged -= Settings_PropertyChanged;
+        Container.ButtonPressed -= Container_ButtonPressed;
         Font.Dispose();
         Backgrounds.Dispose();
         Sprites.Dispose();
     }
 
-    private Reward? _currentReward = default;
+    private Reward? _currentReward;
+    private bool _kefkaTowerUnlocked;
+    private bool _kefkaTowerSkipUnlocked;
+    private bool _kefkaTowerStatueOneDefeated;
+    private bool _kefkaTowerStatueTwoDefeated;
+    private bool _kefkaTowerStatueThreeDefeated;
 
     public void OnNewFrame()
     {
-        var pressed = ImmutableHashSet.CreateRange(WorldsCollideContainer.Input.GetPressedButtons());
-        foreach (var b in pressed.Except(_lastPressedButtons))
-        {
-            ButtonPressed?.Invoke(b);
-        }
-        _lastPressedButtons = pressed;
-
         if (!Started)
         {
             var mapId = BinaryPrimitives.ReadUInt16LittleEndian(Container.Wram.ReadBytes(RomData.Addresses.WRAM.MapIndex)) & 0x1FF;
@@ -259,8 +328,8 @@ public class Seed : IGame
 
             if (Started)
             {
-                var eventState = Container.Wram.ReadBytes(RomData.Addresses.WRAM.State).AsSpan();
-                var dragonState = Container.Wram.ReadBytes(RomData.Addresses.WRAM.Dragons).AsSpan();
+                var eventState = Container.Wram.ReadBytes(RomData.Addresses.WRAM.State).AsReadOnlySpan();
+                var dragonState = Container.Wram.ReadBytes(RomData.Addresses.WRAM.Dragons).AsReadOnlySpan();
                 var chests = Container.Wram.ReadBytes(RomData.Addresses.WRAM.Chests);
                 var espers = Container.Wram.ReadBytes(RomData.Addresses.WRAM.KnownEspers);
                 var newEspers = new HashSet<Esper>();
@@ -278,7 +347,7 @@ public class Seed : IGame
 
                 var previousFoundCharacters = Characters.Where(c => c.IsFound).Select(c => c.Event).ToHashSet();
 
-                if (_characters.Update(Elapsed, eventState))
+                if (_characters.Update(eventState))
                     NotifyPropertyChanged(nameof(Characters));
 
                 var newcharacters = Characters.Where(c => c.IsFound).Select(c => c.Event).ToHashSet();
@@ -289,13 +358,13 @@ public class Seed : IGame
                     _currentReward = latestEspers.Any() ? latestEspers.First().ToReward() : newcharacters.First().ToReward();
                 }
 
-                if (_checks.Update(Elapsed, eventState, ref _currentReward))
+                if (_checks.Update(eventState, ref _currentReward))
                     NotifyPropertyChanged(nameof(Checks));
 
-                if (_dragonLocations.Update(Elapsed, eventState))
+                if (_dragonLocations.Update(eventState))
                     NotifyPropertyChanged(nameof(DragonLocations));
 
-                if (_dragons.Update(Elapsed, dragonState, ref _currentReward))
+                if (_dragons.Update(dragonState, ref _currentReward))
                     NotifyPropertyChanged(nameof(Dragons));
 
                 var characterCountData = Container.Wram.ReadBytes(RomData.Addresses.WRAM.CHARACTER_COUNT);
@@ -307,20 +376,14 @@ public class Seed : IGame
                 DragonCount = Container.Wram.ReadByte(RomData.Addresses.WRAM.DRAGON_COUNT);
                 CheckCount = Container.Wram.ReadByte(RomData.Addresses.WRAM.CHECK_COUNT);
                 ChestCount = chests.CountBits();
+
+                KefkaTowerUnlocked = eventState.Read<bool>((int)Events.UNLOCKED_FINAL_KEFKA);
+                KefkaTowerSkipUnlocked = eventState.Read<bool>((int)Events.UNLOCKED_KT_SKIP);
+                KefkaTowerStatueOneDefeated = eventState.Read<bool>((int)Events.DOOM_STATUE_KEFKA_TOWER);
+                KefkaTowerStatueTwoDefeated = eventState.Read<bool>((int)Events.GODDESS_STATUE_KEFKA_TOWER);
+                KefkaTowerStatueThreeDefeated = eventState.Read<bool>((int)Events.POLTRGEIST_STATUE_KEFKA_TOWER);
             }
         }
-    }
-
-    public void Pause()
-    {
-        if (Started && _stopwatch.IsRunning)
-            _stopwatch.Stop();
-    }
-
-    public void Unpause()
-    {
-        if (Started && !Victory && !_stopwatch.IsRunning)
-            _stopwatch.Start();
     }
 
     protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")

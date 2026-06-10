@@ -18,6 +18,7 @@ public interface ISettings : INotifyPropertyChanged
     System.Drawing.Font Font { get; }
     System.Drawing.Color TextColor { get; }
     public bool AutoPauseTimer { get; }
+    TimerMode TimerMode { get; }
     JObject Source { get; }
     Dictionary<string, GameSettings> GameSettings { get; }
 
@@ -26,6 +27,7 @@ public interface ISettings : INotifyPropertyChanged
     string PreviousPageButton { get; }
     string ScrollDownButton { get; }
     string ScrollUpButton { get; }
+    public string ToggleTimerButton { get; }
 
     void SaveToFile();
 }

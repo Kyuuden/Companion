@@ -30,7 +30,7 @@ internal static class Addresses
         public readonly static System.Range VictoryIndicator = new(0x1F, 0x20);
         public readonly static System.Range RewardSlotCheckedBits = new(0x20, 0x30);
         public readonly static System.Range ObjectiveTaskProgress = new(0x30, 0x50);
-        public readonly static System.Range ObjectiveGroupProress = new(0x50, 0x60);
+        public readonly static System.Range ObjectiveGroupProgress = new(0x50, 0x60);
         public readonly static System.Index KeyItemCheckCount = new(0x76);
         public readonly static System.Index KeyItemZonkCount = new(0x77);
     }

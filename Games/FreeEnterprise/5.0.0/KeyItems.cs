@@ -1,6 +1,4 @@
 ﻿using FF.Rando.Companion.Extensions;
-using FF.Rando.Companion.Games.FreeEnterprise.RomData;
-using FF.Rando.Companion.Games.FreeEnterprise.Settings;
 using FF.Rando.Companion.Games.FreeEnterprise.Shared;
 using System;
 using System.Collections.Generic;
@@ -8,23 +6,17 @@ using System.Linq;
 
 namespace FF.Rando.Companion.Games.FreeEnterprise._5._0._0;
 
-internal class KeyItems
+internal class KeyItems(Seed seed)
 {
-    private readonly IReadOnlyList<KeyItem> _items;
-    private readonly Descriptors _descriptors;
+    private readonly IReadOnlyList<KeyItem> _items = Enum.GetValues(typeof(KeyItemType)).OfType<KeyItemType>().Select(t => new KeyItem(seed, t)).ToList();
+    private readonly Descriptors _descriptors = seed.Descriptors;
 
     public int NumFound { get; private set; }
     public int NumUsed { get; private set; }
 
     internal IReadOnlyList<KeyItem> Items => _items;
 
-    public KeyItems(KeyItemSettings settings, Font font, Descriptors descriptors)
-    {
-        _descriptors = descriptors;
-        _items = Enum.GetValues(typeof(KeyItemType)).OfType<KeyItemType>().Select(t => new KeyItem(settings, font, _descriptors, t)).ToList();
-    }
-
-    public bool Update(TimeSpan time, ReadOnlySpan<byte> found, ReadOnlySpan<byte> used, ReadOnlySpan<byte> locations)
+    public bool Update(ReadOnlySpan<byte> found, ReadOnlySpan<byte> used, ReadOnlySpan<byte> locations)
     {
         var updated = false;
         var numFound = 0;
@@ -39,7 +31,6 @@ internal class KeyItems
                 updated = true;
                 var slot = (int)locations.Read<uint>(keyitem.Id * 16, 16);
                 var slotDescription = _descriptors.GetRewardSlotDescription(slot);
-                keyitem.WhenFound = time;
                 keyitem.WhereFound = slotDescription;
                 keyitem.IsFound = isfound;
             }
@@ -48,7 +39,6 @@ internal class KeyItems
             {
                 updated = true;
                 keyitem.IsUsed = isUsed;
-                keyitem.WhenUsed = time;
             }
 
             if (keyitem.IsFound) numFound++;

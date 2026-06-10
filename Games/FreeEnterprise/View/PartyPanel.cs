@@ -1,5 +1,4 @@
-﻿using FF.Rando.Companion.Games.FreeEnterprise;
-using FF.Rando.Companion.Games.FreeEnterprise.Settings;
+﻿using FF.Rando.Companion.Games.FreeEnterprise.Settings;
 using System.Linq;
 using System.Windows.Forms;
 

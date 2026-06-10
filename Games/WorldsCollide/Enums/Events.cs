@@ -1,11 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FF.Rando.Companion.Games.WorldsCollide.Enums;
+﻿namespace FF.Rando.Companion.Games.WorldsCollide.Enums;
 
 
 // Based on https://github.com/kielbasiago/ultima/blob/main/packages/ff6-types/

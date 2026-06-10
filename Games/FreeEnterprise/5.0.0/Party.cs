@@ -20,7 +20,7 @@ internal class Party(PartySettings settings, Sprites sprites, bool? vanillaAgili
 
     internal IReadOnlyList<Character> Characters => _characters;
 
-    public bool Update(TimeSpan time, ReadOnlySpan<byte> currentParty, ReadOnlySpan<byte> axtorData)
+    public bool Update(ReadOnlySpan<byte> currentParty, ReadOnlySpan<byte> axtorData)
     {
         var updated = false;
 

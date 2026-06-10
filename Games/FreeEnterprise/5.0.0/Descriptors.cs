@@ -150,6 +150,8 @@ internal class Descriptors : Games.FreeEnterprise.Descriptors
             "quest_tradepan" => "Return the Pan to Yang's wife",
             "quest_tradepink" => "Trade away the Pink Tail",
             "quest_pass" => "Unlock the Pass door in Toroia",
+            "quest_kaipoinn" => "Bring the Mist Village survivor to Kaipo",
+            { Length: > 0 } s => s,
             _ => "UNKNOWN TASK"
         };
 
@@ -157,10 +159,12 @@ internal class Descriptors : Games.FreeEnterprise.Descriptors
         => thresholdTask.Objective switch
         {
             "internal_dkmatter" => $"Bring {thresholdTask.Threshold} DkMatter{(thresholdTask.Threshold > 1 ? "s" : string.Empty)} to Kory in Agart",
-            "internal_keyitem" => $"Obtain any {thresholdTask.Threshold} key item{(thresholdTask.Threshold > 1 ? "s" : string.Empty)}",
-            "internal_bossfight" => $"Defeat any {thresholdTask.Threshold} boss{(thresholdTask.Threshold > 1 ? "es" : string.Empty)}",
-            "internal_character" => $"Find any {thresholdTask.Threshold} character{(thresholdTask.Threshold > 1 ? "s" : string.Empty)}",
-            _ => "UNKNOWN TASK"
+            "internal_keyitem" => $"Obtain {thresholdTask.Threshold} key item{(thresholdTask.Threshold > 1 ? "s" : string.Empty)}",
+            "internal_bossfight" => $"Defeat {thresholdTask.Threshold} boss{(thresholdTask.Threshold > 1 ? "es" : string.Empty)}",
+            "internal_character" => $"Find {thresholdTask.Threshold} character{(thresholdTask.Threshold > 1 ? "s" : string.Empty)}",
+            "internal_chest" => $"Open {thresholdTask.Threshold} chest{(thresholdTask.Threshold > 1 ? "s" : string.Empty)}",
+            "internal_gp" => $"Bring {thresholdTask.Threshold} GP to Tory in Agart",
+            _ => $"Do {thresholdTask.Objective} {thresholdTask.Threshold} times."
         };
 
     private string GetDescription(GroupTask groupTask)

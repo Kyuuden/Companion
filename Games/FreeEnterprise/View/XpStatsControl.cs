@@ -1,5 +1,4 @@
-﻿using FF.Rando.Companion.Games.FreeEnterprise;
-using FF.Rando.Companion.Settings;
+﻿using FF.Rando.Companion.Settings;
 using KGySoft.Drawing.Imaging;
 
 namespace FF.Rando.Companion.Games.FreeEnterprise.View;
@@ -12,5 +11,5 @@ public class XpStatsControl(ISeed seed, PanelSettings settings) : StatisticContr
 
     protected override decimal GetStat() => Game.XpRate ?? 1;
 
-    protected override string GetStatText() => $"{Stat:F2}x";
+    protected override string GetStatText() => Game.XpRate.HasValue ? $"{Stat:F2}x" : " ??  ";
 }

@@ -23,7 +23,7 @@ internal class Locations
             .ToDictionary(t => t, t => new Location(t, _descriptors.GetLocationName(t)));
     }
 
-    public bool Update(TimeSpan time, ReadOnlySpan<byte> checkedLocations, ImmutableHashSet<KeyItemType> foundKeyItems)
+    public bool Update(ReadOnlySpan<byte> checkedLocations, ImmutableHashSet<KeyItemType> foundKeyItems)
     {
         var updated = false;
 

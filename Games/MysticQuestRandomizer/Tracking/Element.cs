@@ -2,13 +2,11 @@
 using FF.Rando.Companion.Games.MysticQuestRandomizer.Settings;
 using FF.Rando.Companion.View;
 using KGySoft.Drawing.Imaging;
-using System;
 using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
 using System.Runtime.CompilerServices;
 
-namespace FF.Rando.Companion.Games.MysticQuestRandomizer;
+namespace FF.Rando.Companion.Games.MysticQuestRandomizer.Tracking;
 public class Element : IImageTracker
 {
     private readonly ElementsType _original;

@@ -70,7 +70,7 @@ internal class CompanionsPanel : ScrollablePanel<Seed, CompanionsSettings>
             yield return GenerateCompanion(companion).ToList();
     }
 
-    private IEnumerable<IReadableBitmapData> GenerateCompanion(Companion companion)
+    private IEnumerable<IReadableBitmapData> GenerateCompanion(Tracking.Companion companion)
     {
         if (Game == null || Settings == null)
             yield break;

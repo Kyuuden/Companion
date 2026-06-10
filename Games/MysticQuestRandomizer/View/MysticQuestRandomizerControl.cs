@@ -1,5 +1,4 @@
-﻿using FF.Rando.Companion.Games.MysticQuestRandomizer;
-using FF.Rando.Companion.Settings;
+﻿using FF.Rando.Companion.Settings;
 using FF.Rando.Companion.View;
 using KGySoft.CoreLibraries;
 using System;
@@ -39,36 +38,34 @@ public partial class MysticQuestRandomizerControl : UserControl
         seed.Settings.Companions.PropertyChanged += Seed_PropertyChanged;
        // seed.Settings.Stats.PropertyChanged += Seed_PropertyChanged;
 
-        seed.ButtonPressed += Seed_ButtonPressed;
+        seed.Container.ButtonPressed += Seed_ButtonPressed;
         ArrangePanels();
     }
 
-    private void Seed_ButtonPressed(string obj)
+    private void Seed_ButtonPressed(InputAction action)
     {
         if (_seed?.RootSettings == null || _scrollables.Count == 0 || !_scrollables.TryGetElementAt(_scrollIndex, out var target))
             return;
 
-        if (target.CanScroll && obj.Equals(_seed.RootSettings.NextPageButton, StringComparison.InvariantCultureIgnoreCase))
+        switch (action)
         {
-            target.ScrollRight();
-        }
-        else if (target.CanScroll && obj.Equals(_seed.RootSettings.PreviousPageButton, StringComparison.InvariantCultureIgnoreCase))
-        {
-            target.ScrollLeft();
-        }
-        else if (target.CanScroll && obj.Equals(_seed.RootSettings.ScrollDownButton, StringComparison.InvariantCultureIgnoreCase))
-        {
-            target.ScrollDown();
-        }
-        else if (target.CanScroll && obj.Equals(_seed.RootSettings.ScrollUpButton, StringComparison.InvariantCultureIgnoreCase))
-        {
-            target.ScrollUp();
-        }
-        else if (obj.Equals(_seed.RootSettings.NextPanelButton, StringComparison.InvariantCultureIgnoreCase))
-        {
-            target.IsEnabledForScrolling = false;
-            _scrollIndex = (_scrollIndex + 1) % _scrollables.Count;
-            _scrollables[_scrollIndex].IsEnabledForScrolling = true;
+            case InputAction.NextPanel:
+                target.IsEnabledForScrolling = false;
+                _scrollIndex = (_scrollIndex + 1) % _scrollables.Count;
+                _scrollables[_scrollIndex].IsEnabledForScrolling = true;
+                break;
+            case InputAction.NextPage:
+                target.ScrollRight();
+                break;
+            case InputAction.PreviousPage:
+                target.ScrollLeft();
+                break;
+            case InputAction.ScrollDown:
+                target.ScrollDown();
+                break;
+            case InputAction.ScrollUp:
+                target.ScrollUp();
+                break;
         }
     }
 

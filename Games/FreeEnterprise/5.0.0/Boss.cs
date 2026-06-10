@@ -1,6 +1,4 @@
-﻿using FF.Rando.Companion.Games.FreeEnterprise;
-using FF.Rando.Companion.Games.FreeEnterprise.Shared;
-using System;
+﻿using FF.Rando.Companion.Games.FreeEnterprise.Shared;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -14,14 +12,14 @@ internal class Boss : IBoss
     private Bitmap? _image;
 
     private readonly Dictionary<BossLocationType, Encounter> _encounters = [];
-    private readonly IBossDescriptor _descriptors;
+    private readonly Seed _seed;
 
-    public Boss(IBossDescriptor descriptors, BossType type)
+    public Boss(Seed seed, BossType type)
     {
+        _seed = seed;
         Id = (int)type;
-        Name = descriptors.GetName(type);
+        Name = _seed.BossDescriptor.GetName(type);
         SetImage();
-        _descriptors = descriptors;
     }
 
     public int Id { get; }
@@ -41,12 +39,12 @@ internal class Boss : IBoss
         }
     }
 
-    public bool AddEncounter(BossLocationType loc, TimeSpan when)
+    public bool AddEncounter(BossLocationType loc)
     {
         if (!_encounters.ContainsKey(loc))
         {
-            var description = _descriptors.GetLocationName(loc) ?? "UNKNOWN LOCATION";
-            _encounters.Add(loc, new Encounter(description, when));
+            var description = _seed.BossDescriptor.GetLocationName(loc) ?? "UNKNOWN LOCATION";
+            _encounters.Add(loc, new Encounter(description, _seed.Container.Timer.Elapsed));
             NotifyPropertyChanged(nameof(Encounters));
             SetImage();
             return true;
@@ -55,14 +53,14 @@ internal class Boss : IBoss
         return false;
     }
 
-    public bool DefeatEncounter(BossLocationType loc, TimeSpan when)
+    public bool DefeatEncounter(BossLocationType loc)
     {
         if (_encounters.TryGetValue(loc, out var encounter))
         {
             if (!encounter.IsDefeated)
             {
                 encounter.IsDefeated = true;
-                encounter.WhenDefeated = when;
+                encounter.WhenDefeated = _seed.Container.Timer.Elapsed;
                 NotifyPropertyChanged(nameof(Encounters));
                 SetImage();
                 return true;

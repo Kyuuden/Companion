@@ -2,7 +2,6 @@
 using FF.Rando.Companion.Games.WorldsCollide.Enums;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace FF.Rando.Companion.Games.WorldsCollide.Tracking;
 
@@ -23,7 +22,7 @@ internal class DragonLocations(Seed seed)
     internal IReadOnlyList<DragonLocation> Values => _values;
 
 
-    public bool Update(TimeSpan time, ReadOnlySpan<byte> events)
+    public bool Update(ReadOnlySpan<byte> events)
     {
         var updated = false;
         foreach (var check in _values)
@@ -33,7 +32,6 @@ internal class DragonLocations(Seed seed)
             if (isComplete != check.IsCompleted)
             {
                 updated = true;
-                check.WhenCompleted = time;
                 check.IsCompleted = isComplete;
             }
 

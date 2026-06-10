@@ -4,15 +4,17 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 
-namespace FF.Rando.Companion.Games.MysticQuestRandomizer;
+namespace FF.Rando.Companion.Games.MysticQuestRandomizer.Tracking;
 
 public class CharacterQuest : INotifyPropertyChanged
 {
+    private readonly Seed _seed;
     private bool _completed = false;
-    private TimeSpan? _completedAt;
+    private bool _hasBeenCompleted = false;
 
-    public CharacterQuest(byte flag, string description)
+    public CharacterQuest(Seed seed, byte flag, string description)
     {
+        _seed = seed;
         var index = flag / 8;
         var offset = flag % 8;
         Flag = (byte)(index * 8 + 7 - offset);
@@ -22,19 +24,6 @@ public class CharacterQuest : INotifyPropertyChanged
 
     public byte Flag { get; }
     public string Description { get; }
-
-    public TimeSpan? CompletedAt
-    {
-        get => _completedAt;
-        private set
-        {
-            if (value == _completedAt || _completedAt.HasValue)
-                return;
-
-            _completedAt = value;
-            NotifyPropertyChanged();
-        }
-    }
 
     public bool IsCompleted
     {
@@ -49,14 +38,17 @@ public class CharacterQuest : INotifyPropertyChanged
         }
     }
 
-    public bool Update(TimeSpan time, ReadOnlySpan<byte> data)
+    public bool Update(ReadOnlySpan<byte> data)
     {
         var isCompleted = data.Read<bool>(Flag);
         if (isCompleted != IsCompleted)
         {
             IsCompleted = isCompleted;
-            if (IsCompleted)
-                CompletedAt = time;
+            if (IsCompleted && !_hasBeenCompleted)
+            {
+                _hasBeenCompleted = true;
+                _seed.Container.Timer.Info(Description);
+            }
 
             return true;
         }

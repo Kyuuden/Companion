@@ -1,5 +1,4 @@
-﻿using FF.Rando.Companion.Games.FreeEnterprise;
-using FF.Rando.Companion.Games.FreeEnterprise.Settings;
+﻿using FF.Rando.Companion.Games.FreeEnterprise.Settings;
 using FF.Rando.Companion.View;
 using KGySoft.Drawing.Imaging;
 using System;
@@ -85,7 +84,9 @@ public class ObjectivesPanel : ScrollablePanel<ObjectivesSettings>
             yield return taskData;
         }
 
-        yield return Game.Font.RenderText("-- REWARDS --", TextMode.Normal);
+        if (group.Rewards.Any())
+            yield return Game.Font.RenderText("-- REWARDS --", TextMode.Normal);
+
         foreach (var reward in group.Rewards)
         {
             var textmode = TextMode.Normal;
@@ -106,5 +107,10 @@ public class ObjectivesPanel : ScrollablePanel<ObjectivesSettings>
 
             yield return Game.Font.RenderText(reward.Description, textmode, charWidth);
         }
+    }
+
+    protected override IReadableBitmapData? GeneragePageCounter(int current, int total)
+    {
+        return null;
     }
 }

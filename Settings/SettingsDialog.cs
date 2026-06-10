@@ -26,7 +26,7 @@ public partial class SettingsDialog : FormBase
         if (buttons != null)
             buttons.Expanded = true;
 
-        foreach (var game in settings.GameSettings)
+        foreach (var game in settings.GameSettings.OrderBy(s => s.Value.Name))
         {
             var gameTab = new TabPage
             {
@@ -39,7 +39,8 @@ public partial class SettingsDialog : FormBase
                 SelectedObject = game.Value,
                 Dock = DockStyle.Fill,
                 PropertySort = PropertySort.Alphabetical,
-                ToolbarVisible = false
+                ToolbarVisible = false,
+                LargeButtons = true
             };
 
             gamePropertyGrid.ExpandAllGridItems();
@@ -54,5 +55,9 @@ public partial class SettingsDialog : FormBase
     private void PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
     {
         _settings?.SaveToFile();
+        if (e.ChangedItem.PropertyDescriptor.Name == nameof(RootSettings.TimerMode))
+        {
+            (s as PropertyGrid)?.Refresh();
+        }
     }
 }

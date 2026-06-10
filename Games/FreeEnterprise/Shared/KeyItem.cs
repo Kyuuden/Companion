@@ -1,5 +1,4 @@
-﻿using FF.Rando.Companion.Games.FreeEnterprise;
-using FF.Rando.Companion.Games.FreeEnterprise.Settings;
+﻿using FF.Rando.Companion.Games.FreeEnterprise.Settings;
 using FF.Rando.Companion.View;
 using KGySoft.Drawing.Imaging;
 using System;
@@ -17,17 +16,15 @@ internal class KeyItem : IKeyItem, IDisposable
     private bool isUsed;
     private bool isFound;
     private string whereFound = string.Empty;
-    private readonly KeyItemSettings _settings;
-    private readonly RomData.Font _font;
+    private readonly SeedBase _seed;
 
-    public KeyItem(KeyItemSettings settings, RomData.Font font, IKeyItemDescriptor descriptors, KeyItemType type, bool isTrackable = true)
+    public KeyItem(SeedBase seed, KeyItemType type, bool isTrackable = true)
     {
-        _settings = settings;
-        _font = font;
+        _seed = seed;
         Id = (int)type;
-        Name = descriptors.GetName(type);
-        Description = descriptors.GetDescription(type);
-        _settings.PropertyChanged += SettingsChanged;
+        Name = seed.KeyItemDescriptor.GetName(type);
+        Description = seed.KeyItemDescriptor.GetDescription(type);
+        _seed.Settings.KeyItems.PropertyChanged += SettingsChanged;
         SetImage();
         IsTrackable = isTrackable;
     }
@@ -68,6 +65,9 @@ internal class KeyItem : IKeyItem, IDisposable
             isFound = value;
             NotifyPropertyChanged();
             SetImage();
+
+            if (IsFound)
+                WhenFound = _seed.Container.Timer.Elapsed;
         }
     }
 
@@ -82,13 +82,16 @@ internal class KeyItem : IKeyItem, IDisposable
             isUsed = value;
             NotifyPropertyChanged();
             SetImage();
+
+            if (IsUsed)
+                whenUsed = _seed.Container.Timer.Elapsed;
         }
     }
 
     public TimeSpan? WhenFound
     {
         get => whenFound;
-        set
+        private set
         {
             if (whenFound == value || whenFound.HasValue)
                 return;
@@ -101,7 +104,7 @@ internal class KeyItem : IKeyItem, IDisposable
     public TimeSpan? WhenUsed
     {
         get => whenUsed;
-        set
+        private set
         {
             if (whenUsed == value || whenUsed.HasValue)
                 return;
@@ -126,10 +129,10 @@ internal class KeyItem : IKeyItem, IDisposable
 
     private void SetImage()
     {
-        Image = _settings.KeyItemStyle switch
+        Image = _seed.Settings.KeyItems.KeyItemStyle switch
         {
             KeyItemStyle.Icons => ResourceLookup.GetKeyItemIcon((KeyItemType)Id, IsFound, IsUsed),
-            KeyItemStyle.Text => _font.RenderText(Name, IsUsed ? TextMode.Normal : IsFound ? TextMode.Highlighted : TextMode.Disabled, null).ToBitmap(),
+            KeyItemStyle.Text => _seed.Font.RenderText(Name, IsUsed ? TextMode.Normal : IsFound ? TextMode.Highlighted : TextMode.Disabled, null).ToBitmap(),
             _ => throw new InvalidOperationException()
         };
     }
@@ -143,6 +146,6 @@ internal class KeyItem : IKeyItem, IDisposable
 
     public void Dispose()
     {
-        _settings.PropertyChanged -= SettingsChanged;
+        _seed.Settings.KeyItems.PropertyChanged -= SettingsChanged;
     }
 }

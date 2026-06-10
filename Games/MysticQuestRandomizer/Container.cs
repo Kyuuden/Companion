@@ -2,6 +2,7 @@
 using BizHawk.Emulation.Common;
 using FF.Rando.Companion.Games.MysticQuestRandomizer.Settings;
 using FF.Rando.Companion.Settings;
+using FF.Rando.Companion.Timing;
 using System;
 
 namespace FF.Rando.Companion.Games.MysticQuestRandomizer;
@@ -10,8 +11,8 @@ internal class Container : EmulationContainerBase
     public MysticQuestRandomizerSettings Settings { get; }
     public ISettings RootSettings { get; }
 
-    public Container(ApiContainer container, IMemoryDomains domains, ISettings baseSettings)
-        : base(container, domains)
+    public Container(ApiContainer container, IMemoryDomains domains, ISettings baseSettings, ITimer timer)
+        : base(container, domains, timer)
     {
         RootSettings = baseSettings;
 

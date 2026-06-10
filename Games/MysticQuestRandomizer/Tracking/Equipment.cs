@@ -1,4 +1,4 @@
-﻿using FF.Rando.Companion.Games.MysticQuestRandomizer.RomData;
+﻿using FF.Rando.Companion.Extensions;
 using FF.Rando.Companion.View;
 using System;
 using System.Collections.Generic;
@@ -8,21 +8,22 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
 
-namespace FF.Rando.Companion.Games.MysticQuestRandomizer;
+namespace FF.Rando.Companion.Games.MysticQuestRandomizer.Tracking;
 
-public abstract class Equipment<TType> : IImageTracker
+public abstract class Equipment<TType> : IImageTracker where TType : struct
 {
     private readonly IList<TType> _order;
-    private readonly Sprites _sprites;
+    private readonly Seed _seed;
     private ImmutableHashSet<TType> _found = [];
+    private readonly HashSet<TType> _notified = [];
     private Bitmap? _image;
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    internal Equipment(IList<TType> order, EquipmentType equipmentType, Sprites sprites)
+    internal Equipment(Seed seed, IList<TType> order, EquipmentType equipmentType)
     {
+        _seed = seed;
         _order = order;
-        _sprites = sprites;
         Desired = [.. order];
         EquipmentType = equipmentType;
 
@@ -41,9 +42,17 @@ public abstract class Equipment<TType> : IImageTracker
             if (_found.SetEquals(value))
                 return;
 
+            var newlyFound = value.Except(_found);
+
             _found = value;
             NotifyPropertyChanged();
             SetImage();
+
+            foreach (var item in newlyFound)
+            {
+                if (_notified.Add(item))
+                    _seed.Container.Timer.Info($"Found {item.GetDescription()}");
+            }
         }
     }
 
@@ -68,8 +77,8 @@ public abstract class Equipment<TType> : IImageTracker
     private void SetImage()
     {
         if (Found.Count == 0)
-            Image = _sprites.GetDefault(EquipmentType);
+            Image = _seed.Sprites.GetDefault(EquipmentType);
         else
-            Image = _sprites.GetEquipment(Found.OrderBy(_order.IndexOf).Last());
+            Image = _seed.Sprites.GetEquipment(Found.OrderBy(_order.IndexOf).Last());
     }
 }

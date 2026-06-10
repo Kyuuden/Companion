@@ -1,5 +1,4 @@
-﻿using FF.Rando.Companion.Games.FreeEnterprise;
-using FF.Rando.Companion.Games.FreeEnterprise.RomData;
+﻿using FF.Rando.Companion.Games.FreeEnterprise.RomData;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,14 +16,14 @@ internal class Objectives : IObjectiveGroup
 
     public IEnumerable<IReward> Rewards => _rewards;
 
-    public Objectives(IEnumerable<Objective> objectives, int? required, bool winGame, bool winCrystal)
+    public Objectives(SeedBase seed, IEnumerable<Objective> objectives, int? required, bool winGame, bool winCrystal)
     {
         foreach (var objective in objectives)
         {
             if (objective is not BasicObjective basicObjective)
                 throw new InvalidOperationException("Unsupported objectives");
 
-            _tasks.Add(new Task(basicObjective));
+            _tasks.Add(new Task(seed, basicObjective));
         }
 
         var reqstring = !required.HasValue
@@ -40,14 +39,14 @@ internal class Objectives : IObjectiveGroup
             _rewards.Add(new Reward($"Complete {reqstring} objective{(required != 1 ? "s" : string.Empty)} to win the game", required));
     }
 
-    public bool Update(TimeSpan time, ReadOnlySpan<byte> taskProgress)
+    public bool Update(ReadOnlySpan<byte> taskProgress)
     {
         var updated = false;
         var offset = 0;
 
         foreach (var item in _tasks)
         {
-            updated |= item.Update(time, taskProgress.Slice(offset++, 1));
+            updated |= item.Update(taskProgress.Slice(offset++, 1));
         }
 
         return updated;
@@ -58,22 +57,20 @@ internal class Task : ITask
 {
     private bool _completed = false;
     private TimeSpan? _completedAt;
+    private readonly SeedBase _seed;
 
-    internal Task(BasicObjective basicObjective)
+    internal Task(SeedBase seed, BasicObjective basicObjective)
     {
+        _seed = seed;
         Description = basicObjective.Description ?? "UNKNOWN OBJECTIVE";
     }
 
-    public bool Update(TimeSpan time, ReadOnlySpan<byte> data)
+    public bool Update(ReadOnlySpan<byte> data)
     {
         var completed = data[0] != 0;
         if (completed != IsCompleted)
         {
             IsCompleted = completed;
-
-            if (IsCompleted)
-                CompletedAt = time;
-
             return true;
         }
 
@@ -105,6 +102,9 @@ internal class Task : ITask
 
             _completed = value;
             NotifyPropertyChanged();
+
+            if (IsCompleted && !CompletedAt.HasValue)
+                CompletedAt = _seed.Container.Timer.Elapsed;
         }
     }
 

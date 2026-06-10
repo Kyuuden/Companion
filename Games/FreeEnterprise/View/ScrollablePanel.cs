@@ -1,5 +1,4 @@
-﻿using FF.Rando.Companion.Games.FreeEnterprise;
-using FF.Rando.Companion.Settings;
+﻿using FF.Rando.Companion.Settings;
 using FF.Rando.Companion.View;
 using KGySoft.Drawing.Imaging;
 using System.Drawing;
@@ -18,7 +17,7 @@ public abstract class ScrollablePanel<TSettings> : ScrollablePanel<ISeed, TSetti
         return Game?.Font.RenderBox(unscaledSize.Width / 8, unscaledSize.Height / 8, Game.Sprites.GreyScaleStickerPalette)?.ToBitmap();
     }
 
-    protected override IReadableBitmapData GeneragePageCounter(int current, int total)
+    protected override IReadableBitmapData? GeneragePageCounter(int current, int total)
     {
         return Game?.Font.RenderText($"{current}/{total}", TextMode.Normal)!;
     }

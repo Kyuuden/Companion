@@ -1,7 +1,6 @@
 ﻿using FF.Rando.Companion.Games.FreeEnterprise.RomData;
 using FF.Rando.Companion.Games.FreeEnterprise.Settings;
 using FF.Rando.Companion.Settings;
-using System;
 using System.Collections.Generic;
 
 namespace FF.Rando.Companion.Games.FreeEnterprise;
@@ -23,5 +22,4 @@ public interface ISeed : IGame
     Font Font { get; }
     Sprites Sprites { get; }
     bool CanTackBosses { get; }
-    event Action<string>? ButtonPressed;
 }

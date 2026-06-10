@@ -5,7 +5,7 @@ using System.Drawing;
 
 namespace FF.Rando.Companion.Games.MysticQuestRandomizer.RomData;
 
-internal class SpriteDefinition(List<byte[,]> tileData, byte[,] tileIndexes, Palette palette) : IDisposable
+internal class SpriteDefinition(List<byte[,]> tileData, int[,] tileIndexes, Palette palette) : IDisposable
 {
     private Bitmap? _cached;
     private Bitmap? _cachedGreyScale;

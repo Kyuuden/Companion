@@ -1,5 +1,4 @@
-﻿using BizHawk.Common.ReflectionExtensions;
-using FF.Rando.Companion.Games.WorldsCollide.Enums;
+﻿using FF.Rando.Companion.Games.WorldsCollide.Enums;
 
 namespace FF.Rando.Companion.Games.WorldsCollide;
 public class Descriptors

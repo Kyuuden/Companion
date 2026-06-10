@@ -133,60 +133,68 @@ public enum Shops : byte
 public enum ObjectiveXpBonus : ushort
 {
     None = 0,
-    _2Percent = 1,
-    _3Percent = 2,
-    _5Percent = 4,
-    _8Percent = 8,
-    _10Percent = 16,
-    _12Percent = 32,
-    _14Percent = 64,
-    _16Percent = 128,
-    _20Percent = 256,
-    _25Percent = 512,
-    _33Percent = 1024,
+    _2Percent,
+    _3Percent,
+    _5Percent,
+    _8Percent,
+    _10Percent,
+    _12Percent,
+    _14Percent,
+    _16Percent,
+    _20Percent,
+    _25Percent,
+    _33Percent,
 }
 
 
 public enum KeyItemCheckXpBonus : byte
 {
     None = 0,
-    _1Percent = 1,
-    _2Percent = 2,
-    _3Percent = 4,
-    _4Percent = 8,
-    _5Percent = 16,
-    _8Percent = 32,
-    _10Percent = 64,
+    _1Percent,
+    _2Percent,
+    _3Percent,
+    _4Percent,
+    _5Percent,
+    _8Percent,
+    _10Percent,
 }
 
 public enum KeyItemZonkXpBonus : byte
 {
     None = 0,
-    _1Percent = 1,
-    _2Percent = 2,
-    _3Percent = 4,
-    _4Percent = 8,
-    _5Percent = 16,
-    _8Percent = 32,
-    _10Percent = 64,
+    _1Percent,
+    _2Percent,
+    _3Percent,
+    _4Percent,
+    _5Percent,
+    _8Percent,
+    _10Percent,
+}
+
+public enum BaseXpRate : byte
+{
+    _100Percent,
+    _50Percent,
+    _75Percent,
+    _150Percent,
+    _200Percent,
 }
 
 public enum MaxXpRate : ushort
 {
     Unlimited = 0,
-    _50Percent = 1,
-    _75Percent = 2,
-    _100Percent = 4,
-    _150Percent = 8,
-    _200Percent = 16,
-    _250Percent = 32,
-    _300Percent = 64,
-    _400Percent = 128,
-    _500Percent = 256,
-    _600Percent = 512,
-    _700Percent = 1024,
-    _800Percent = 2048,
-    _1000Percent = 4096,
+    _50Percent,
+    _75Percent,
+    _100Percent,
+    _150Percent,
+    _200Percent,
+    _250Percent,
+    _300Percent,
+    _400Percent,
+    _500Percent,
+    _600Percent,
+    _800Percent,
+    _1000Percent
 }
 
 public enum XPBonusMode : byte

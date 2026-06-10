@@ -1,4 +1,5 @@
-﻿using FF.Rando.Companion.Settings;
+﻿using FF.Rando.Companion.Games;
+using FF.Rando.Companion.Settings;
 using System;
 using System.Windows.Forms;
 

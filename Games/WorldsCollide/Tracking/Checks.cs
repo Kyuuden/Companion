@@ -102,7 +102,7 @@ internal class Checks
         }
     }
 
-    public bool Update(TimeSpan time, ReadOnlySpan<byte> events, ref Reward? currentReward)
+    public bool Update(ReadOnlySpan<byte> events, ref Reward? currentReward)
     {
         var updated = false;
         foreach (var check in _values)
@@ -113,7 +113,6 @@ internal class Checks
             {
                 updated = true;
                 check.IsCompleted = isComplete;
-                check.WhenCompleted = time;
                 if (!check.Reward.HasValue)
                 {
                     check.Reward = currentReward ?? Reward.Item;

@@ -44,88 +44,36 @@ grescale palettes:
 3da34
 3dac4
 
+Crystals:
 
 
-        /*
+0x3D7F4L
+Tiles = 0x2682 - 26940
+Yellow palette: 3d934, or 3da44 (14)  bit 6?
+Green: 3d964 or 3da54 or 3da74 (17)
+Blue: 3d974 (18)
+purple: 3da64 (27) - fire
 
-        var skyFragmentsMarker = ;
-        var pazuzuMarker = ;
-        var resistsMarker = ;
-        var kaeiliMarker = _textConverter.TextToByte("Kaeli", true);
-        var tristamMarker = _textConverter.TextToByte("Tristam", true);
-        var phoebeMarker = _textConverter.TextToByte("Phoebe", true);
-        var reubenMarker = _textConverter.TextToByte("Reuben", true);
+sun coin is 101
 
+Uknown Flag # 3 changed from False to True
+Uknown Flag # 199 changed from True to False
+Uknown Flag # 204 changed from False to True
 
-        int? skyfragmentsPos = null;
-        int? pazuzuPos = null;
-        int? resistsPos = null;
-        int? kaeiliPos = null;
-        int? tristamPos = null;
-        int? phoebePos = null;
-        int? reubenPos = null;
+thunder rock? Uknown Flag # 220 changed from False to True
 
-        for (var i = 0; i < gameinfo.Length; i++)
-        {
-            if (skyfragmentsPos == null &&
-                i + skyFragmentsMarker.Length < gameinfo.Length &&
-                gameinfo[i..(i + skyFragmentsMarker.Length)].SequenceEqual(skyFragmentsMarker))
-                skyfragmentsPos = i + skyFragmentsMarker.Length + 4 + 13;
+water crystal, white:
 
-            if (pazuzuPos == null &&
-                i + pazuzuMarker.Length < gameinfo.Length &&
-                gameinfo[i..(i + pazuzuMarker.Length)].SequenceEqual(pazuzuMarker))
-                pazuzuPos = i;
+Uknown Flag # 7 changed from True to False
+Uknown Flag # 80 changed from True to False
+Uknown Flag # 205 changed from False to True
 
-            if (resistsPos == null &&
-                i + resistsMarker.Length < gameinfo.Length &&
-                gameinfo[i..(i + resistsMarker.Length)].SequenceEqual(resistsMarker))
-                resistsPos = i + resistsMarker.Length + 4;
+Wind crystal, green:
 
-            if (kaeiliPos == null &&
-                i + kaeiliMarker.Length < gameinfo.Length &&
-                gameinfo[i..(i + kaeiliMarker.Length)].SequenceEqual(kaeiliMarker))
-                kaeiliPos = i + kaeiliMarker.Length + 4;
-
-            if (tristamPos == null &&
-                i + tristamMarker.Length < gameinfo.Length &&
-                gameinfo[i..(i + tristamMarker.Length)].SequenceEqual(tristamMarker))
-                tristamPos = i + tristamMarker.Length + 4;
-
-            if (phoebePos == null &&
-                i + phoebeMarker.Length < gameinfo.Length &&
-                gameinfo[i..(i + phoebeMarker.Length)].SequenceEqual(phoebeMarker))
-                phoebePos = i + phoebeMarker.Length + 4;
-
-            if (reubenPos == null &&
-                i + reubenMarker.Length < gameinfo.Length &&
-                gameinfo[i..(i + reubenMarker.Length)].SequenceEqual(reubenMarker))
-                reubenPos = i + reubenMarker.Length + 4;
-        }
-
-
-
-        if (pazuzuPos.HasValue)
-            _randomizedPazuzu = true;
-
-        if (resistsPos.HasValue)
-        {
-            var currentPosition = resistsPos.Value;
-
-            while (gameinfo[currentPosition + 3] == 0xDC)
-            {
-                try
-                {
-                    var originalElement = GetElement(gameinfo.Read<uint>(currentPosition * 8, 24));
-                    var newElement = GetElement(gameinfo.Read<uint>((currentPosition + 4) * 8, 24));
-
-                    _elements.Add(originalElement, newElement);
-
-                    currentPosition += 8;
-                }
-                catch
-                {
-                    break;
-                }
-            }
-        }*/
+Uknown Flag # 62 changed from True to False
+Uknown Flag # 63 changed from False to True
+Uknown Flag # 9 changed from True to False
+Uknown Flag # 229 changed from False to True
+Uknown Flag # 243 changed from False to True
+Uknown Flag # 243 changed from True to False
+Uknown Flag # 5 changed from False to True

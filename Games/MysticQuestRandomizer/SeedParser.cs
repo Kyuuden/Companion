@@ -1,18 +1,20 @@
 ﻿using BizHawk.Client.Common;
 using BizHawk.Common.BufferExtensions;
 using BizHawk.Emulation.Common;
+using FF.Rando.Companion.Games.MysticQuestRandomizer.RomData;
 using FF.Rando.Companion.Settings;
+using FF.Rando.Companion.Timing;
 using System;
 
 namespace FF.Rando.Companion.Games.MysticQuestRandomizer;
 public class SeedParser : IGameParser
 {
-    public bool TryParseGameInfo(ApiContainer apiContainer, IMemoryDomains memoryDomains, ISettings rootSettings, IGameInfo gameInfo, out IGame? game)
+    public bool TryParseGameInfo(ApiContainer apiContainer, IMemoryDomains memoryDomains, ISettings rootSettings, IGameInfo gameInfo, ITimer timer, out IGame? game)
     {
         game = null;
         try
         {
-            var mqContainer = new Container(apiContainer, memoryDomains, rootSettings);
+            var mqContainer = new Container(apiContainer, memoryDomains, rootSettings, timer);
             var indentifier = mqContainer.Rom.ReadBytes(Addresses.ROM.Indentifier).BytesToHexString();
 
             if (!indentifier.Equals("9f9fa6aaabb4c1b7c2c0bccdb8c5", StringComparison.OrdinalIgnoreCase))

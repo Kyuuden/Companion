@@ -1,14 +1,12 @@
 ﻿using BizHawk.Common.CollectionExtensions;
 using FF.Rando.Companion.Extensions;
 using FF.Rando.Companion.Games.MysticQuestRandomizer.RomData;
-using FF.Rando.Companion.Games.MysticQuestRandomizer;
+using FF.Rando.Companion.Games.MysticQuestRandomizer.Tracking;
 using FF.Rando.Companion.Games.MysticQuestRandomizer.View;
 using FF.Rando.Companion.Settings;
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
@@ -19,7 +17,6 @@ public class Seed : IGame
     private int _collectedSkyFragments;
     private bool _started = false;
     private bool _victory = false;
-    private readonly Stopwatch _stopwatch = new();
     private readonly Weapons _weapons;
     private readonly Armors _armors;
     private readonly Spells _spells;
@@ -38,11 +35,21 @@ public class Seed : IGame
         Sprites = new Sprites(MQRContainer.Rom);
         Font = new RomData.Font(MQRContainer.Rom);
 
-        _gameinfo = GameInfo.Parse(MQRContainer.Rom, Settings, Font);
-        _weapons = new Weapons(Sprites);
-        _armors = new Armors(Sprites);
-        _spells = new Spells(Sprites);
-        _keyitems = new KeyItems(Sprites, _gameinfo.RequiredSkyFragmentCount.HasValue);
+        _gameinfo = GameInfo.Parse(this, MQRContainer.Rom);
+        _weapons = new Weapons(this);
+        _armors = new Armors(this);
+        _spells = new Spells(this);
+        _keyitems = new KeyItems(this, _gameinfo.RequiredSkyFragmentCount.HasValue);
+        container.ButtonPressed += Container_ButtonPressed;
+    }
+
+    private void Container_ButtonPressed(InputAction action)
+    {
+        if (action != InputAction.ToggleTimer)
+            return;
+
+        if (!Started)
+            Started = true;
     }
 
     public string Hash { get; }
@@ -61,7 +68,9 @@ public class Seed : IGame
                 _started = true;
                 NotifyPropertyChanged();
                 if (_started)
-                    _stopwatch.Start();
+                {
+                    Container.Timer.Start();
+                }
             }
         }
     }
@@ -76,12 +85,12 @@ public class Seed : IGame
                 _victory = true;
                 NotifyPropertyChanged();
                 if (_victory)
-                    _stopwatch.Stop();
+                {
+                    Container.Timer.Stop();
+                }
             }
         }
     }
-
-    public TimeSpan Elapsed { get => _stopwatch.Elapsed; }
 
     public bool RequiresMemoryEvents => false;
 
@@ -95,9 +104,6 @@ public class Seed : IGame
 
     GameSettings IGame.Settings => Settings;
 
-    public event Action<string>? ButtonPressed;
-
-    private ImmutableHashSet<string> _lastPressedButtons = [];
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -111,7 +117,7 @@ public class Seed : IGame
 
     public IEnumerable<Element> Elements => _gameinfo.Elements;
 
-    public IEnumerable<Companion> Companions => _gameinfo.Companions;
+    public IEnumerable<Tracking.Companion> Companions => _gameinfo.Companions;
 
     public GameState StateFlags { get; } = new GameState();
 
@@ -143,19 +149,13 @@ public class Seed : IGame
     {
         Font.Dispose();
         Sprites.Dispose();
+        Container.ButtonPressed -= Container_ButtonPressed;
     }
 
     private byte[]? lastLocations;
 
     public void OnNewFrame()
     {
-        var pressed = ImmutableHashSet.CreateRange(MQRContainer.Input.GetPressedButtons());
-        foreach (var b in pressed.Except(_lastPressedButtons))
-        {
-            ButtonPressed?.Invoke(b);
-        }
-        _lastPressedButtons = pressed;
-
         if (!Started)
             Started = MQRContainer.Wram.ReadByte(Addresses.WRAM.GameStateIndicator) == 1;
 
@@ -167,7 +167,7 @@ public class Seed : IGame
 
         if (Started && MQRContainer.Emulation.FrameCount() % MQRContainer.RootSettings.TrackingInterval == 0)
         {
-            ReadOnlySpan<byte> wramData = Container.Wram.ReadBytes(Addresses.WRAM.WramRegion).AsSpan();
+            var wramData = Container.Wram.ReadBytes(Addresses.WRAM.WramRegion).AsReadOnlySpan();
             var checkedBattlefields = wramData.Slice(Addresses.WRAM.Battlefields);
             var checkedLocations = wramData[Addresses.WRAM.Chests];
 
@@ -183,46 +183,31 @@ public class Seed : IGame
             var stateFlags = wramData[Addresses.WRAM.StateFlags];
 
             if (lastLocations == null || checkedLocations.SequenceCompareTo(lastLocations) != 0)
-            {
-                Debug.WriteLine("Locations Changed.");
                 lastLocations = checkedLocations.ToArray();
-            }
 
             if (Battlefields.Update(checkedBattlefields))
                 NotifyPropertyChanged(nameof(Battlefields));
 
-            var flagsUpdated = StateFlags.Update(Elapsed, stateFlags);
+            var flagsUpdated = StateFlags.Update(stateFlags);
 
             if (flagsUpdated)
                 NotifyPropertyChanged(nameof(StateFlags));
 
-            if (_gameinfo.UpdateQuests(Elapsed, stateFlags))
+            if (_gameinfo.UpdateQuests(stateFlags))
                 NotifyPropertyChanged(nameof(Companions));
 
-            if (_weapons.Update(Elapsed, weapons))
+            if (_weapons.Update(weapons))
                 NotifyPropertyChanged(nameof(Weapons));
 
-            if (_armors.Update(Elapsed, armors))
+            if (_armors.Update(armors))
                 NotifyPropertyChanged(nameof(Armors));
 
-            if (_spells.Update(Elapsed, spells))
+            if (_spells.Update(spells))
                 NotifyPropertyChanged(nameof(Spells));
 
-            if (_keyitems.Update(Elapsed, keyItemsFound, skycoinComplete) | (Settings.Equipment.ShowUsedKeyItems && flagsUpdated && _keyitems.UpdateUsed(Elapsed, StateFlags)))
+            if (_keyitems.Update(keyItemsFound, skycoinComplete) | (Settings.Equipment.ShowUsedKeyItems && flagsUpdated && _keyitems.UpdateUsed(StateFlags)))
                 NotifyPropertyChanged(nameof(KeyItems));
         }
-    }
-
-    public void Pause()
-    {
-        if (Started && _stopwatch.IsRunning)
-            _stopwatch.Stop();
-    }
-
-    public void Unpause()
-    {
-        if (Started && !Victory && !_stopwatch.IsRunning)
-            _stopwatch.Start();
     }
 
     protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")

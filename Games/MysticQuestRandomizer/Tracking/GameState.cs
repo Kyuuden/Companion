@@ -3,27 +3,36 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace FF.Rando.Companion.Games.MysticQuestRandomizer;
+namespace FF.Rando.Companion.Games.MysticQuestRandomizer.Tracking;
 public class GameState
 {
     private byte[]? _state;
-    private readonly byte[] _knownFlags = [0x01, 0x02, 0x12, 0x13, 0x14, 0x1D, 0x1E, 0x1F, 0x20, 0x21, 0x22, 0x23, 0x2B, 0x34, 0x35, 0x36, 0x3A, 0x3D, 0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4D, 0x4E, 0x4F, 0x53, 0x5A, 0x5B, 0x5C, 0x5D, 0x5D, 0x5F, 0x62, 0x63, 0x64, 0x68, 0x6C, 0x6D, 0x6E, 0x70, 0x73, 0x74, 0x7D, 0x7E, 0xA9, 0xAA, 0xAB, 0xAC, 0xAD, 0xAE, 0xAF, 0xB0, 0xB1, 0xB2, 0xB3, 0xB4, 0xB5, 0xB6, 0xB7, 0xB8, 0xB9, 0xBA, 0xBB, 0xBC, 0xBD, 0xBE, 0xBF, 0xC0, 0xC1, 0xC2, 0xC3, 0xC4, 0xC5, 0xC9, 0xCF, 0xD0, 0xD1, 0xD2, 0xE0, 0xE3, 0xE8, 0xE9, 0xEA, 0xEB, 0xEC, 0xED, 0xEE, 0xEF, 0xF0, 0xF9];
-    private readonly byte[] _unknownFlags;
+    private readonly List<byte> _knownFlags = [];
+    private readonly List<byte> _unknownFlags = [];
 
     public GameState()
     {
-        _unknownFlags = Enumerable
-            .Range(0, 255)
-            .Select(i => ReversedBitOrderIndex((byte)i))
-            .Except(_knownFlags.Select(ReversedBitOrderIndex))
-            .ToArray();
+        var properties = GetType().GetProperties().Where(p=>p.CanRead && p.PropertyType == typeof(bool));
+        _state = new byte[32];
+        for (byte i = 0; i < 255; i++)
+        {
+            var index = ReversedBitOrderIndex(i);
+            if (i > 0)
+                _state.Write(false, ReversedBitOrderIndex((byte)(i - 1)));
+
+            _state.Write(true, index);
+
+            if (properties.Any(p => (bool)p.GetValue(this)))
+                _knownFlags.Add(i);
+            else
+                _unknownFlags.Add(i);
+        }
+        _state = null;
     }
 
 
-    public bool Update(TimeSpan time, ReadOnlySpan<byte> found)
+    public bool Update(ReadOnlySpan<byte> found)
     {
         if (_state == null || !found.SequenceEqual(_state))
         {
@@ -145,4 +154,8 @@ public class GameState
     public bool SpencerItemGiven => _state != null && _state.Read<bool>(ReversedBitOrderIndex(0xEF));
     public bool ShowFigureForHP => _state != null && _state.Read<bool>(ReversedBitOrderIndex(0xF0));
     public bool ShowEnemies => _state != null && _state.Read<bool>(ReversedBitOrderIndex(0xF9));
+
+    public bool DualHeadHydraDefeated => _state != null && _state.Read<bool>(ReversedBitOrderIndex(0x03));
+    public bool PazuzuDefeated => _state != null && _state.Read<bool>(ReversedBitOrderIndex(0x05));
+    public bool SunCoinUsed => _state != null && _state.Read<bool>(ReversedBitOrderIndex(0x65));
 }

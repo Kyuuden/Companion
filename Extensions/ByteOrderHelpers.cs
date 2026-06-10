@@ -12,7 +12,7 @@ public static class ByteOrderHelpers
         }
     }
 
-    public static UInt32 ToByteOrder(this UInt32 v, ByteOrder order)
+    public static uint ToByteOrder(this uint v, ByteOrder order)
     {
         if ((order == ByteOrder.LittleEndian) == BitConverter.IsLittleEndian)
             return v;
@@ -20,7 +20,7 @@ public static class ByteOrderHelpers
             return v.ReverseByteOrder();
     }
 
-    public static UInt16 ToByteOrder(this UInt16 v, ByteOrder order)
+    public static ushort ToByteOrder(this ushort v, ByteOrder order)
     {
         if ((order == ByteOrder.LittleEndian) == BitConverter.IsLittleEndian)
             return v;
@@ -28,7 +28,7 @@ public static class ByteOrderHelpers
             return v.ReverseByteOrder();
     }
 
-    public static UInt32 ReverseByteOrder(this UInt32 v)
+    public static uint ReverseByteOrder(this uint v)
     {
         return ((v & 0x000000FF) << 24) |
                ((v & 0x0000FF00) << 8) |
@@ -36,9 +36,9 @@ public static class ByteOrderHelpers
                ((v & 0xFF000000) >> 24);
     }
 
-    public static UInt16 ReverseByteOrder(this UInt16 v)
+    public static ushort ReverseByteOrder(this ushort v)
     {
-        return (UInt16)(
+        return (ushort)(
                ((v & 0x00FF) << 8) |
                ((v & 0xFF00) >> 8));
     }

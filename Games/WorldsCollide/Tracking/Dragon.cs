@@ -1,17 +1,13 @@
 ﻿using FF.Rando.Companion.Games.WorldsCollide.Enums;
-using FF.Rando.Companion.Games.WorldsCollide.Settings.SpriteSet;
 using FF.Rando.Companion.Rendering;
 using FF.Rando.Companion.Rendering.Transforms;
 using FF.Rando.Companion.View;
 using KGySoft.Drawing.Imaging;
 using KGySoft.Drawing.Shapes;
 using System;
-using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using static BizHawk.Common.XlibImports;
 
 namespace FF.Rando.Companion.Games.WorldsCollide.Tracking;
 
@@ -23,8 +19,8 @@ public class Dragon : IDisposable, INotifyPropertyChanged, IImageWithOverlay
     private Bitmap? _overlay;
     private ISprite? _overlaySprite;
     private Reward? _reward;
-    private TimeSpan? _whenDefeated;
     private bool _isDefeated;
+    private bool _hasBeenDefeated;
     private string _description = "";
 
     public Dragon(Seed seed, Enums.Dragons dragon)
@@ -73,19 +69,12 @@ public class Dragon : IDisposable, INotifyPropertyChanged, IImageWithOverlay
             _isDefeated = value;
             NotifyPropertyChanged();
             SetImage();
-        }
-    }
 
-    public TimeSpan? WhenDefeated
-    {
-        get => _whenDefeated;
-        set
-        {
-            if (_whenDefeated == value || _whenDefeated.HasValue)
-                return;
-
-            _whenDefeated = value;
-            NotifyPropertyChanged();
+            if (IsDefeated && !_hasBeenDefeated)
+            {
+                _hasBeenDefeated = true;
+                _seed.Container.Timer.Info($"Defeated {_seed.Descriptors.GetDescription(DragonType)}");
+            }
         }
     }
 
@@ -187,10 +176,10 @@ public class Dragon : IDisposable, INotifyPropertyChanged, IImageWithOverlay
     {
         var description = $"{_seed.Descriptors.GetDescription(DragonType)}\n";
 
-        if (Reward.HasValue && WhenDefeated.HasValue)
+        if (Reward.HasValue)
         {
             description += "\n\nRewards:\n";
-            description += $"{_seed.Descriptors.GetDescription(Reward.Value)} at {WhenDefeated.Value:hh':'mm':'ss'.'ff}\n";
+            description += $"{_seed.Descriptors.GetDescription(Reward.Value)}\n";
         }
 
         return description;

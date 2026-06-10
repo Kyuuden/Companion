@@ -26,7 +26,7 @@ internal class Characters(Seed seed)
 
     internal IReadOnlyList<Character> Values => _values;
 
-    public bool Update(TimeSpan time, ReadOnlySpan<byte> events)
+    public bool Update(ReadOnlySpan<byte> events)
     {
         var updated = false;
         foreach (var check in _values)
@@ -36,7 +36,6 @@ internal class Characters(Seed seed)
             if (isFound != check.IsFound)
             {
                 updated = true;
-                check.WhenFound = time;
                 check.IsFound = isFound;
             }
         }
