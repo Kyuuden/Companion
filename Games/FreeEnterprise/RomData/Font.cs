@@ -124,13 +124,16 @@ public class Font : IDisposable
         return data;
     }
 
-    public IReadWriteBitmapData RenderBox(int width, int height, Palette? additionalColors = null)
+    public IReadWriteBitmapData? RenderBox(int width, int height, Palette? additionalColors = null)
     {
         var palette = _palette;
         if (additionalColors != null)
         {
             palette = new Palette(_palette.GetEntries().Concat(additionalColors.GetEntries()));
         }
+
+        if (width <= 0 || height <= 0)
+            return null;
 
         var data = BitmapDataFactory.CreateBitmapData(new Size(width * 8, height * 8), KnownPixelFormat.Format8bppIndexed, palette);
 

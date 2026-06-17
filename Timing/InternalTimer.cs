@@ -52,6 +52,7 @@ internal class InternalTimer : ITimer
         if (!_isRunning || _isPaused)
             return;
 
+        _isPaused = true;
         _stopwatch.Stop();
     }
 
@@ -60,6 +61,7 @@ internal class InternalTimer : ITimer
         if (!_isRunning || !_isPaused)
             return;
 
+        _isPaused = false;
         _stopwatch.Start();
     }
 

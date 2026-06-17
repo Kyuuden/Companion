@@ -54,7 +54,7 @@ public partial class BossControl : ImageControl<ISeed, IBoss>
         toolTipImage.FillRectangle(Game.BackgroundColor, new Rectangle(default, toolTipImage.Size));
 
         var border = Game.Font.RenderBox(38, toolTipImage.Height / 8);
-        border.DrawInto(toolTipImage);
+        border?.DrawInto(toolTipImage);
 
         description.DrawInto(toolTipImage, new Point(8, 8));
         var y = 24;

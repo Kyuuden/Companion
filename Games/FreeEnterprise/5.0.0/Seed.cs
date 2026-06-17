@@ -99,7 +99,7 @@ internal class Seed : SeedBase
             var keyItemCheckCount = wramData[Addresses.WRAM.KeyItemCheckCount];
             var keyItemZonkCount = wramData[Addresses.WRAM.KeyItemZonkCount];
 
-            var teasureCount = Game.Wram.ReadBytes(Games.FreeEnterprise.Shared.Addresses.WRAM.TreasureBits);
+            var teasureCount = Game.Wram.ReadBytes(Shared.Addresses.WRAM.TreasureBits);
             TreasureCount = teasureCount.CountBits();
 
             if(_keyItems.Update(keyItemsFound, keyItemUsed, keyItemLocations))

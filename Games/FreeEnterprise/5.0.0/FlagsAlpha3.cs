@@ -7,9 +7,9 @@ internal class FlagsAlpha3 : IFlags
 
     public FlagsAlpha3(byte[] binaryFlags)
     {
-        if (binaryFlags.Length < 131)
+        if (binaryFlags.Length < 132)
         {
-            _binaryFlags = new byte[131];
+            _binaryFlags = new byte[132];
             binaryFlags.CopyTo(_binaryFlags, 0);
         }
         else

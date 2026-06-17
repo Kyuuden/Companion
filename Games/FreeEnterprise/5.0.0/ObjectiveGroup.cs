@@ -1,13 +1,12 @@
-﻿using System;
+﻿using FF.Rando.Companion.Games.FreeEnterprise.RomData;
 using System.Collections.Generic;
 using System.Linq;
-using FF.Rando.Companion.Games.FreeEnterprise.RomData;
 
 namespace FF.Rando.Companion.Games.FreeEnterprise._5._0._0;
 
 internal class ObjectiveGroup : IObjectiveGroup
 {
-    private readonly IList<Task> _tasks;
+    private readonly IList<ITask> _tasks;
     private readonly IList<Reward> _rewards;
 
     public int NumCompleted { get; private set; }
@@ -15,15 +14,32 @@ internal class ObjectiveGroup : IObjectiveGroup
     internal ObjectiveGroup(Seed seed, GroupObjectives groupObjectives, IEnumerable<GroupObjectives> allgroups)
     {
         Name = groupObjectives.Name ?? "";
-        _tasks = groupObjectives.Tasks.Select(t => new Task(seed, t, allgroups)).ToList();
+
+        _tasks = [];
+        foreach (var task in groupObjectives.Tasks ?? [])
+        {
+            switch (task)
+            {
+                case BasicTask:
+                    _tasks.Add(new Task(seed, task, 1));
+                    break;
+                case ThresholdTask threshold:
+                    _tasks.Add(new Task(seed, task, threshold.Threshold));
+                    break;
+                case GroupTask groupTask:
+                    _tasks.Add(new GroupProgressTask(seed, groupTask, allgroups.ToList()));
+                    break;
+            }
+        }
+
         _rewards = groupObjectives.Rewards.Select(r => new Reward(r)).ToList();
     }
 
-    public bool Update(ReadOnlySpan<byte> data)
+    public bool Update(ref readonly byte data)
     {
-        if (data[0] != NumCompleted)
+        if (data != NumCompleted)
         {
-            NumCompleted = data[0];
+            NumCompleted = data;
             return true;
         }
 

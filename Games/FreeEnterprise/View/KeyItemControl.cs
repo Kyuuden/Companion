@@ -58,7 +58,7 @@ public partial class KeyItemControl : ImageControl<ISeed, IKeyItem>
         var border = Value.IsUsed && Value.WhenUsed > TimeSpan.Zero
             ? Game.Font.RenderBox(30, 10)
             : Game.Font.RenderBox(30, 8);
-        border.DrawInto(toolTipImage);
+        border?.DrawInto(toolTipImage);
 
         description.DrawInto(toolTipImage, new Point(8, 8));
         found?.DrawInto(toolTipImage, new Point(8, 40));

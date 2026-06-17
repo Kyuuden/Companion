@@ -4,9 +4,18 @@ using System.Linq;
 using FF.Rando.Companion.Games.FreeEnterprise.RomData;
 
 namespace FF.Rando.Companion.Games.FreeEnterprise._5._0._0;
-internal class Objectives(Seed seed, IEnumerable<GroupObjectives> groups)
+internal class Objectives
 {
-    private readonly IList<ObjectiveGroup> _groups = groups.Select(g => new ObjectiveGroup(seed, g, groups)).ToList();
+    private readonly IList<ObjectiveGroup> _groups;
+    private readonly IList<Task> _tasks;
+    private readonly IList<GroupProgressTask> _groupProgressTasks;
+
+    public Objectives(Seed seed, IEnumerable<GroupObjectives> groups)
+    {
+        _groups = groups.Select(g => new ObjectiveGroup(seed, g, groups)).ToList();
+        _tasks = _groups.SelectMany(g => g.Tasks).OfType<Task>().ToList();
+        _groupProgressTasks = _groups.SelectMany(g => g.Tasks).OfType<GroupProgressTask>().ToList();
+    }
 
     public IEnumerable<IObjectiveGroup> Groups => _groups;
 
@@ -15,19 +24,15 @@ internal class Objectives(Seed seed, IEnumerable<GroupObjectives> groups)
     public bool Update(ReadOnlySpan<byte> taskProgress, ReadOnlySpan<byte> groupProgress)
     {
         var updated = false;
-        var offset = 0;
 
-        foreach (var item in _groups.SelectMany(g => g.Tasks).OfType<Task>())
-        {
-            updated |= item.Update(taskProgress.Slice(offset++, 1));
-        }
+        for (var i = 0; i < _tasks.Count; i++)
+            updated |= _tasks[i].Update(in taskProgress[i]);
 
-        offset = 0;
+        foreach (var gTask in _groupProgressTasks)
+            updated |= gTask.Update(groupProgress);
 
-        foreach (var item in _groups.OfType<ObjectiveGroup>())
-        {
-            updated |= item.Update(groupProgress.Slice(offset++, 1));
-        }
+        for (var i = 0; i < _groups.Count; i++)
+            updated |= _groups[i].Update(in  groupProgress[i]);
 
         if (updated)
             NumCompleted = _groups.Sum(g => g.NumCompleted);
