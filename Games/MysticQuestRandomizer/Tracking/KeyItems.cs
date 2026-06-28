@@ -4,9 +4,15 @@ using System.Collections.Generic;
 
 namespace FF.Rando.Companion.Games.MysticQuestRandomizer.Tracking;
 
-internal class KeyItems(Seed seed, bool shatteredSkyCoin)
+internal class KeyItems
 {
-    private readonly IReadOnlyList<KeyItem> _items =
+    private readonly IReadOnlyList<KeyItem> _items;
+
+    private readonly Seed _seed;
+
+    public KeyItems(Seed seed, bool shatteredSkyCoin)
+    {
+        List<KeyItem> keyItems =
         [
             new KeyItem(seed, KeyItemType.Elixer, s => s.KaeliCured),
             new KeyItem(seed, KeyItemType.TreeWither, s=> s.MinotaurDefeated),
@@ -26,15 +32,35 @@ internal class KeyItems(Seed seed, bool shatteredSkyCoin)
             new KeyItem(seed, KeyItemType.SkyCoin, s=> false, shatteredSkyCoin, KeyItemType.CompleteSkyCoin),
         ];
 
+        if (seed.SkyCoinMode == SkyCoinMode.SaveTheCrystals)
+        {
+            keyItems.Add(new KeyItem(seed, KeyItemType.EarthCrystal, s => false));
+            keyItems.Add(new KeyItem(seed, KeyItemType.WaterCrystal, s => false));
+            keyItems.Add(new KeyItem(seed, KeyItemType.FireCrystal, s => false));
+            keyItems.Add(new KeyItem(seed, KeyItemType.WindCrystal, s => false));
+        }
+
+        _items = keyItems;
+        _seed = seed;
+    }
+
     public IReadOnlyList<KeyItem> Items => _items;
 
-    public bool Update(ReadOnlySpan<byte> found, bool? skyCoinComplete)
+    public bool Update(ReadOnlySpan<byte> found, GameState flags, bool? skyCoinComplete)
     {
         var updated = false;
 
         foreach (var keyitem in _items)
         {
-            var isfound = found.Read<bool>(keyitem.Id);
+            bool isfound = keyitem.Type switch
+            {
+                KeyItemType.EarthCrystal => flags.FlamerusRexDefeated,
+                KeyItemType.WaterCrystal => flags.IceGolemDefeated,
+                KeyItemType.FireCrystal => flags.DualHeadHydraDefeated,
+                KeyItemType.WindCrystal => flags.PazuzuDefeated,
+                _ => found.Read<bool>(keyitem.Id)
+            };
+
             if (keyitem.Type == KeyItemType.SkyCoin && skyCoinComplete.HasValue)
             {
                 if (skyCoinComplete.Value != keyitem.IsFound)
@@ -50,10 +76,13 @@ internal class KeyItems(Seed seed, bool shatteredSkyCoin)
             }
         }
 
+        if (_seed.Settings.Equipment.ShowUsedKeyItems)
+            updated |= UpdateUsed(flags);
+
         return updated;
     }
 
-    public bool UpdateUsed(GameState flags)
+    private bool UpdateUsed(GameState flags)
     {
         var updated = false;
 

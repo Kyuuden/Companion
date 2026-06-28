@@ -143,3 +143,11 @@ public enum CompanionType
     Phoebe,
     Reuben
 }
+
+public enum SkyCoinMode
+{
+    Standard,
+    StartWith,
+    SaveTheCrystals,
+    Shattered
+}

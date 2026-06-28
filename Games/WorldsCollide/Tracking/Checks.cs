@@ -107,7 +107,14 @@ internal class Checks
         var updated = false;
         foreach (var check in _values)
         {
+            var isAvailable = check.Event.IsAvailable(events);
             var isComplete = events.Read<bool>(check.Id);
+
+            if (isAvailable != check.IsAvailable)
+            {
+                updated = true;
+                check.IsAvailable = isAvailable;
+            }
 
             if (isComplete != check.IsCompleted)
             {
@@ -117,16 +124,6 @@ internal class Checks
                 {
                     check.Reward = currentReward ?? Reward.Item;
                     currentReward = null;
-                }
-            }
-
-            if (!check.IsCompleted)
-            {
-                bool isAvailable = check.Event.IsAvailable(events);
-                if (isAvailable != check.IsAvailable)
-                {
-                    updated = true;
-                    check.IsAvailable = isAvailable;
                 }
             }
         }

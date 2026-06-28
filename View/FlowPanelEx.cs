@@ -151,10 +151,13 @@ public abstract partial class FlowPanelEx<TGame, TSettings> : FlowLayoutPanel, I
                 break;
             case SpacingMode.Columns:
                 var elementsize = GetItemWidth(Controls);
-                var columns = Math.Min(WrapAfter, Math.Min(Controls.OfType<Control>().Where(c => c.Visible).Count(), paddedWidth / elementsize));
+                var columns = WrapContents
+                    ? Math.Min(WrapAfter, Math.Min(Controls.OfType<Control>().Where(c => c.Visible).Count(), paddedWidth / elementsize))
+                    : Controls.OfType<Control>().Where(c => c.Visible).Count();
+
                 var extra = paddedWidth - (elementsize * columns);
                 var divisions = columns > 1 ? (columns - 1) * 2 : 2;
-                var margin = extra / divisions;
+                var margin = Math.Max(0, extra / divisions);
 
                 if (columns <= 0)
                     break;

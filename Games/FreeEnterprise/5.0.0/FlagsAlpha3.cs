@@ -45,7 +45,7 @@ internal class FlagsAlpha3 : IFlags
     public ObjectiveXpBonus XObjBonus => _binaryFlags.Read<ObjectiveXpBonus>(1006, 4);
     public KeyItemCheckXpBonus XKeyItemCheckBonus  => _binaryFlags.Read<KeyItemCheckXpBonus>(1010, 3);
     public KeyItemZonkXpBonus XKeyItemZonkXpBonus => _binaryFlags.Read<KeyItemZonkXpBonus>(1013, 3);
-    public MaxXpRate XMaxXpRate => _binaryFlags.Read<MaxXpRate>(976, 4);
+    public MaxXpRate XMaxXpRate => _binaryFlags.Read<MaxXpRate>(1016, 4);
     public BaseXpRate XBaseXpRate => BaseXpRate._100Percent;
     public XPBonusMode XPBonusMode => _binaryFlags.Read<XPBonusMode>(1020, 2);
 

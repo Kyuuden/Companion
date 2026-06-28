@@ -125,6 +125,20 @@ public class Seed : IGame
 
     public int? RequiredSkyFragmentCount => _gameinfo.RequiredSkyFragmentCount;
 
+    public SkyCoinMode SkyCoinMode
+    {
+        get
+        {
+            if (_gameinfo.RequiredSkyFragmentCount.HasValue)
+                return SkyCoinMode.Shattered;
+
+            if (_gameinfo.SaveTheCrystals)
+                return SkyCoinMode.SaveTheCrystals;
+
+            return SkyCoinMode.Standard;
+        }
+    }
+
     public int CollectedSkyFragments
     {
         get => _collectedSkyFragments;
@@ -205,7 +219,7 @@ public class Seed : IGame
             if (_spells.Update(spells))
                 NotifyPropertyChanged(nameof(Spells));
 
-            if (_keyitems.Update(keyItemsFound, skycoinComplete) | (Settings.Equipment.ShowUsedKeyItems && flagsUpdated && _keyitems.UpdateUsed(StateFlags)))
+            if (_keyitems.Update(keyItemsFound, StateFlags, skycoinComplete))
                 NotifyPropertyChanged(nameof(KeyItems));
         }
     }

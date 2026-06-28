@@ -1,6 +1,5 @@
 ﻿using FF.Rando.Companion.Extensions;
 using FF.Rando.Companion.Games.MysticQuestRandomizer.Settings;
-using KGySoft.CoreLibraries;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -24,17 +23,21 @@ internal partial class EquipmentPanel : FlowPanel<EquipmentSettings>
         _armors = Game.Armors.Select(a => new ArmorControl(Game, Settings, a)).ToList();
         _spells = Game.Spells.Select(a => new SpellControl(Game, Settings, a)).ToList();
         _keyItems = Game.KeyItems.Select(a => new KeyItemControl(Game, Settings, a)).ToList();
-        _skyShards = new SkyShardsStats(Game, Settings);
 
         var controls = Enumerable.Empty<Control>()
             .Concat(_weapons)
             .Concat(_armors)
             .Concat(_spells)
             .Concat(_keyItems)
-            .Concat(_skyShards.Yield())
-            .ToArray();
+            .ToList();
 
-        return controls;
+        if (seed.SkyCoinMode == SkyCoinMode.Shattered)
+        {
+            _skyShards = new SkyShardsStats(Game, Settings);
+            controls.Add(_skyShards);
+        }
+
+        return [.. controls];
     }
 
     protected override int GetItemWidth(ControlCollection controlCollection)
@@ -66,7 +69,7 @@ internal partial class EquipmentPanel : FlowPanel<EquipmentSettings>
         else
         {
             var i = 0;
-            foreach (var control in Enumerable.Empty<Control>().Concat(_weapons).Concat(_armors).Concat(_spells).Concat(_keyItems).Concat(_skyShards.Yield()))
+            foreach (var control in Enumerable.Empty<Control>().Concat(_weapons).Concat(_armors).Concat(_spells).Concat(_keyItems).Concat(_skyShards.Yield()).Where(x=>x!=null))
             {
                 controlCollection.SetChildIndex(control, i++);
             }
