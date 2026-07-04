@@ -33,7 +33,7 @@ public class Dragon : IDisposable, INotifyPropertyChanged, IImageWithOverlay
         SetImage();
     }
 
-    public Size DefaultSize => new(40, 40);
+    public Size DefaultSize { get; } = new(40, 40);
 
     private void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
     {

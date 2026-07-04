@@ -69,6 +69,22 @@ public class ImageControl<TGame, TImageSource> : PictureBox, IScalableControl wh
         Size = ImageSize.Scale(Settings.ScaleFactor);
     }
 
+    protected override void OnPaint(PaintEventArgs pe)
+    {
+        if (Image == null || !Settings.ScaleFactor.IsInteger())
+        {
+            base.OnPaint(pe);
+            return;
+        }
+
+        pe.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+        pe.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.None;
+        pe.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
+
+        pe.Graphics.Clear(BackColor);
+        pe.Graphics.DrawImage(Image, new Rectangle(Point.Empty, ClientSize));
+    }
+
     protected override void Dispose(bool disposing)
     {
         if (disposing)

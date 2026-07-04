@@ -213,7 +213,7 @@ public class Check : IDisposable, INotifyPropertyChanged, IImageWithOverlay
         }
     }
 
-    public Size DefaultSize => new(40, 40);
+    public Size DefaultSize { get; } = new(40, 40);
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

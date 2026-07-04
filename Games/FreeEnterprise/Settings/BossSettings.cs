@@ -15,4 +15,11 @@ public class BossSettings(JToken jToken) : PanelSettings(jToken)
         get => GetSetting(2);
         set => SaveSetting(value);
     }
+
+    [DefaultValue(false)]
+    public override bool Enabled
+    {
+        get => GetSetting(false);
+        set => SaveSetting(value);
+    }
 }

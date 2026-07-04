@@ -108,9 +108,9 @@ internal class Sprites : IDisposable
             {KeyItemType.LibraCrest,      new SpriteDefinition(_itemData, new int[2,2]{ { 34, 35 },{ 50, 51 }  }, _palettes[17]) },
             {KeyItemType.CapitansCap,     new SpriteDefinition(_itemData, new int[2,2]{ { 32, 33 },{ 48, 49 }  }, _palettes[17]) },
             {KeyItemType.EarthCrystal,    new SpriteDefinition(_fieldSpriteData, new int[2,2]{ { 832, 833 },{ 834, 835 } }, _palettes[0x14]) },
-            {KeyItemType.WaterCrystal,    new SpriteDefinition(_fieldSpriteData, new int[2,2]{ { 832, 833 },{ 834, 835 } }, _palettes[0x17]) },
-            {KeyItemType.FireCrystal,     new SpriteDefinition(_fieldSpriteData, new int[2,2]{ { 832, 833 },{ 834, 835 } }, _palettes[0x18]) },
-            {KeyItemType.WindCrystal,     new SpriteDefinition(_fieldSpriteData, new int[2,2]{ { 832, 833 },{ 834, 835 } }, _palettes[0x27]) },
+            {KeyItemType.WaterCrystal,    new SpriteDefinition(_fieldSpriteData, new int[2,2]{ { 832, 833 },{ 834, 835 } }, _palettes[0x18]) },
+            {KeyItemType.FireCrystal,     new SpriteDefinition(_fieldSpriteData, new int[2,2]{ { 832, 833 },{ 834, 835 } }, _palettes[0x27]) },
+            {KeyItemType.WindCrystal,     new SpriteDefinition(_fieldSpriteData, new int[2,2]{ { 832, 833 },{ 834, 835 } }, _palettes[0x17]) },
         };
 
         _spellBuilders = new Dictionary<SpellType, SpriteDefinition>

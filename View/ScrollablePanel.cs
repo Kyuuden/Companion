@@ -119,7 +119,10 @@ public abstract class ScrollablePanel<TGame, TSettings> : PictureBox, IPanel, IS
         try
         {
             var unscaledSize = EffectiveSize.Unscale(Settings.ScaleFactor);
-            unscaledSize = new Size((unscaledSize.Width / 8) * 8, (unscaledSize.Height / 8) * 8);
+
+            if (!Settings.ScaleFactor.IsInteger())
+                unscaledSize = new Size((unscaledSize.Width / 8) * 8, (unscaledSize.Height / 8) * 8);
+
             var y = 8;
 
             if (unscaledSize.Width <= 0 || unscaledSize.Height <= 0)
@@ -298,5 +301,22 @@ public abstract class ScrollablePanel<TGame, TSettings> : PictureBox, IPanel, IS
                 Game.PropertyChanged -= PropertyChanged;
         }
         base.Dispose(disposing);
+    }
+
+    protected override void OnPaint(PaintEventArgs pe)
+    {
+        if (Image == null || Settings == null || !Settings.ScaleFactor.IsInteger())
+        {
+            base.OnPaint(pe);
+            return;
+        }
+
+        pe.Graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+        pe.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.None;
+        pe.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
+
+        var destinationSize = Image.Size.Scale(Settings.ScaleFactor);
+
+        pe.Graphics.DrawImage(Image, new Rectangle(Point.Empty, destinationSize));
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace FF.Rando.Companion.View;
 public static class Scaler
@@ -14,4 +15,6 @@ public static class Scaler
     public static SizeF Unscale(this SizeF size, float scaleFactor) => new(size.Width / scaleFactor, size.Height / scaleFactor);
     public static Point Unscale(this Point point, float scaleFactor) => Point.Truncate(((PointF)point).Unscale(scaleFactor));
     public static PointF Unscale(this PointF point, float scaleFactor) => new(point.X / scaleFactor, point.Y / scaleFactor);
+
+    public static bool IsInteger(this float scaleFactor) => Math.Abs(Math.Round(scaleFactor) - scaleFactor) < float.Epsilon;
 }

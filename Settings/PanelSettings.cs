@@ -7,7 +7,7 @@ namespace FF.Rando.Companion.Settings;
 
 public abstract class PanelSettings : INotifyPropertyChanged
 {
-    protected virtual float DefaultScaleFactor => 1.75f;
+    protected virtual float DefaultScaleFactor => 2f;
 
     [Browsable(false)]
     public abstract string Name { get; }
@@ -33,7 +33,7 @@ public abstract class PanelSettings : INotifyPropertyChanged
     }
 
     [Description("Scaling for all elements in this panel, to optimize visibility vs readability")]
-    [DefaultValue(1.75f)]
+    [DefaultValue(2f)]
     public virtual float ScaleFactor
     {
         get => GetSetting(DefaultScaleFactor);
