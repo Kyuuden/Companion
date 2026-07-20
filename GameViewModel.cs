@@ -182,6 +182,14 @@ public class GameViewModel : INotifyPropertyChanged
                 return;
             }
         }
+
+        Game = new Unsupported
+        {
+            Hash = gameInfo.Hash,
+            RootSettings = _settings
+        };
+
+        _emulationContainer = null;
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

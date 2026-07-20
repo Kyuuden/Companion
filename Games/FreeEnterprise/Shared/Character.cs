@@ -109,6 +109,8 @@ internal class Character : ICharacter, IDisposable
         }
     }
 
+    public string AltText => Type.ToString();
+
     public event PropertyChangedEventHandler? PropertyChanged;
 
     private void SetImage()

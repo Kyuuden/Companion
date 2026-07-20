@@ -56,6 +56,8 @@ public class Spell : IImageTracker
         }
     }
 
+    public string AltText => _spellType.GetDescription();
+
     public event PropertyChangedEventHandler? PropertyChanged;
 
     private void SetImage()

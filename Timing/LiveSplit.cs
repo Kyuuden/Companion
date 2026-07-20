@@ -14,6 +14,7 @@ internal class LiveSplit : ITimer
     private bool _isErrored;
     private bool _isPaused;
     private bool _isRunning;
+    private bool _automaticPause;
 
     public LiveSplit()
     {
@@ -40,7 +41,7 @@ internal class LiveSplit : ITimer
             if (_isRunning)
             {
                 if (_isPaused)
-                    return TimerStatus.Paused;
+                    return _automaticPause ? TimerStatus.AutomaticPaused : TimerStatus.ManualPaused;
 
                 return TimerStatus.Running;
             }
@@ -95,9 +96,10 @@ internal class LiveSplit : ITimer
         _isRunning = false;
     }
 
-    public void Pause()
+    public void Pause(bool automatic = false)
     {
         _isPaused = true;
+        _automaticPause = automatic;
         SendCommand("pause");
     }
 

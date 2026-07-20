@@ -34,7 +34,7 @@ public partial class KeyItemControl : ImageControl<ISeed, IKeyItem>
 
     private void GenerateToolTip()
     {
-        var description = Game.Font.RenderText(Value.Description, TextMode.Normal, 28);
+        var description = Game.Font.RenderText(Value.AltText, TextMode.Normal, 28);
         IReadableBitmapData? found;
         IReadableBitmapData? used = null;
         if (Value.IsFound)

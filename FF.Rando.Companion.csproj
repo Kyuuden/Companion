@@ -5,8 +5,8 @@
 	  <Nullable>enable</Nullable>
 	  <TargetFramework>net48</TargetFramework>
 	  <UseWindowsForms>True</UseWindowsForms>
-	  <Version>2.1.6</Version>
-	  <Description>Auto-Tracker for Final Fantasy Randomizers.</Description>
+	  <Version>2.2.0</Version>
+	  <Description>Auto-Tracker for Square Enix Randomizers.</Description>
 	  <Copyright>2025 Kyuuden</Copyright>
 	  <AssemblyVersion></AssemblyVersion>
 	  <FileVersion></FileVersion>
@@ -356,6 +356,24 @@
 	  <Compile Update="Games\FreeEnterprise\View\BossesPanel.cs" />
 	  <Compile Update="Games\FreeEnterprise\View\BossStatsControl.cs">
 	    <SubType>Component</SubType>
+	  </Compile>
+	  <Compile Update="Games\JetsOfTime\View\BossesPanel.cs">
+	    <SubType>Component</SubType>
+	  </Compile>
+	  <Compile Update="Games\JetsOfTime\View\FlowPanel.cs">
+	    <SubType>Component</SubType>
+	  </Compile>
+	  <Compile Update="Games\JetsOfTime\View\KeyItemControl.cs">
+	    <SubType>Component</SubType>
+	  </Compile>
+	  <Compile Update="Games\JetsOfTime\View\CharactersPanel.cs">
+	    <SubType>Component</SubType>
+	  </Compile>
+	  <Compile Update="Games\JetsOfTime\View\KeyItemsPanel.cs">
+	    <SubType>Component</SubType>
+	  </Compile>
+	  <Compile Update="Games\JetsOfTime\View\JetsOfTimeControl.cs">
+	    <SubType>UserControl</SubType>
 	  </Compile>
 	  <Compile Update="Games\MysticQuestRandomizer\MysticQuest.Designer.cs">
 	    <DesignTime>True</DesignTime>

@@ -47,6 +47,8 @@ public class Element : IImageTracker
         }
     }
 
+    public string AltText => $"{_original} > {_updated}";
+
     private void SetImage()
     {
         Image = _settings.ElementsStyle switch

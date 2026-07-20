@@ -53,7 +53,8 @@ public abstract class EmulationContainerBase : IEmulationContainer
                 case TimerStatus.Running:
                     Timer.Pause();
                     break;
-                case TimerStatus.Paused:
+                case TimerStatus.AutomaticPaused:
+                case TimerStatus.ManualPaused:
                     Timer.Resume();
                     break;
                 case TimerStatus.Ready:

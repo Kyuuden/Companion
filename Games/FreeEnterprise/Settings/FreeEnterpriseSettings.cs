@@ -10,6 +10,8 @@ public class FreeEnterpriseSettings : GameSettings
     public override string Name => "FreeEnterprise";
     public override string DisplayName => "Free Enterprise";
 
+    public override string Description => "Final Fantasy 4: Free Enterprise";
+
     public FreeEnterpriseSettings(JObject parent)
         : base(parent)
     {

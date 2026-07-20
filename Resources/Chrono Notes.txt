@@ -1,0 +1,13 @@
+3F0000	3F1F7F	GFX	N	Character menu portraits	2003.05.01
+3F1F80	3F1F9F	PAL	N	Magus menu portrait palette	2008.02.13
+3F1FA0	3F1FBF	PAL	N	Robo menu portrait palette	2008.02.13
+3F1FC0	3F1FDF	PAL	N	Frog menu portrait palette	2008.02.13
+3F1FE0	3F1FFF	PAL	N	Crono menu portrait palette	2008.02.13
+3F2000	3F201F	PAL	N	Ayla menu portrait palette	2008.02.13
+3F2020	3F203F	PAL	N	Lucca menu portrait palette	2008.02.13
+3F2040	3F205F	PAL	N	Marle menu portrait palette	2008.02.13
+
+3F2060	3F445F	GFX	N	Main Font (VWF, 2 bit plane)	2008.02.12		
+3F8E60	3F9C5F	GFX	N	"Item Font (Fixed Width, 2 bit plane)"	2008.02.12
+
+3F9e10		GFX	N	Menu backgrounds	

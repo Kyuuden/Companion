@@ -1,7 +1,7 @@
-﻿# Final Fantasy Rando Companion
+﻿# Squre Enix Rando Companion
 [![(latest) release | GitHub](https://img.shields.io/github/release/Kyuuden/Companion.svg?logo=github&logoColor=333333&style=popout)](https://github.com/Kyuuden/Companion/releases/latest)
 
-An auto-tracker for [Free Enterprise, a Final Fantasy IV randomizer](https://ff4fe.com/), [Mystic Quest Randomizer](https://www.ffmqrando.net/) and [Worlds Collide](https://ff6worldscollide.com/).
+An auto-tracker for [Free Enterprise, a Final Fantasy IV randomizer](https://ff4fe.com/), [Mystic Quest Randomizer](https://www.ffmqrando.net/), [Worlds Collide](https://ff6worldscollide.com/) and [Jets of Time](https://www.wiki.ctjot.com/)
 
 ## Installation
 This tool requires [the latest BizHawk version](https://github.com/TASEmulators/BizHawk/releases/latest).
@@ -19,10 +19,10 @@ BizHawk
 
 ## Usage
 
-Please note: If you are running a pre-5.0 Free Enterprise seed, the SNES core needs to be set to BSNES or BSNESv115+ to enable timing. 
+Please note: If you are running a pre-5.0 Free Enterprise seed or a Jets of Time seed, the SNES core needs to be set to BSNES or BSNESv115+ to enable timing. 
 This can be done through ```Config > Preffered Cores > SNES```.
 
-After launching Bizhawk, open the tracker through ```Tools > External Tool > Final Fantasy Rando Companion```
+After launching Bizhawk, open the tracker through ```Tools > External Tool > Square Enix Rando Companion```
 The display will remain grey until a ROM is loaded. 
 
 ## Updating
@@ -31,7 +31,6 @@ To check if a new version is available, open the about dialog. If there is a new
 ## Roadmap
 
 Upcoming features (not in order):
-- Livesplit integration
 - Completely customizable layouts (drag and drop, reszing etc)
 - Save different layouts based on game flagset
 
@@ -43,3 +42,5 @@ Upcoming features (not in order):
 * [SotRandoTools](https://github.com/TalicZealot/SotnRandoTools) - Used as examples for how to do auto updates, better about screen, and more detailed readme.
 * [KGy SOFT Drawing Libraries](https://github.com/koszeggy/KGySoft.Drawing) - Easier to use, and better performant bitmap manipulation.
 * [Peroquenariz](https://github.com/peroquenariz/FF6WCTools) - Worlds Collide tracking data.
+* [Aeralis](https://github.com/Aeralis/Jets-of-Time-Tracker) - Jets of Time tracking data.
+* [GitExl](https://github.com/GitExl/CTViewer) - Chrono Trigger sprite and location redering.

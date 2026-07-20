@@ -12,14 +12,7 @@ internal class OverlayedSprite(ISprite source, ISprite overlay, Point destinatio
     protected override IReadableBitmapData RenderColorData()
     {
         IReadWriteBitmapData data;
-        if (source.Palette != null && overlay.Palette != null)
-        {
-            data = BitmapDataFactory.CreateBitmapData(source.Size, KnownPixelFormat.Format8bppIndexed, PaletteExtensions.Combine(source.Palette, overlay.Palette));
-        }
-        else
-        {
-            data = BitmapDataFactory.CreateBitmapData(source.Size);
-        }
+        data = BitmapDataFactory.CreateBitmapData(source.Size);
 
         source.RenderData().DrawInto(data);
         overlay.RenderData().DrawInto(data, destination);

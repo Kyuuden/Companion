@@ -9,6 +9,8 @@ internal class MysticQuestRandomizerSettings : GameSettings
 
     public override string DisplayName => "Mystic Quest Randomizer";
 
+    public override string Description => "Final Fantasy Mystic Quest Randomizer";
+
     public MysticQuestRandomizerSettings(JObject parent)
         : base(parent)
     {

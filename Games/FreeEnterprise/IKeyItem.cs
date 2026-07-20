@@ -9,8 +9,6 @@ public interface IKeyItem : IImageTracker
 
     string Name { get; }
 
-    string Description { get; }
-
     string WhereFound { get; }
 
     TimeSpan? WhenFound { get; }

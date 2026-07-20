@@ -30,7 +30,7 @@ internal class OpenSplit : ITimer
         throw new NotImplementedException();
     }
 
-    public void Pause()
+    public void Pause(bool automatic = false)
     {
         throw new NotImplementedException();
     }

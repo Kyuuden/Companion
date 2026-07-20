@@ -7,7 +7,8 @@ public enum TimerStatus
     New,
     Ready,
     Running,
-    Paused,
+    ManualPaused,
+    AutomaticPaused,
     Error
 }
 
@@ -19,7 +20,7 @@ public interface ITimer : IDisposable
     void Initialize();
     void Start();
     void Stop();
-    void Pause();
+    void Pause(bool automatic = false);
     void Resume();
     void Info(string message);
 }

@@ -69,6 +69,8 @@ public abstract class Equipment<TType> : IImageTracker where TType : struct
         }
     }
 
+    public string AltText => Found.OrderBy(_order.IndexOf).Last().GetDescription();
+
     protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

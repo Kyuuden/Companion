@@ -54,7 +54,7 @@ internal class Addresses
         public static readonly Range<long> KnownEspers = 0x1A69L.WithLength(4);
 
         public static readonly Range<long> Statistics = 0x1fc2L.WithLength(64);
-        public static readonly Range<long> State = 0x1e80L.WithLength(150);
+        public static readonly Range<long> State = 0x1e80L.WithLength(216);
         public static readonly Range<long> Dragons = 0x1dc9L.WithLength(24);
         public static readonly Range<long> Chests = 0x1e40L.WithLength(47);
 

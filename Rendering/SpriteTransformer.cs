@@ -1,4 +1,6 @@
 ﻿using FF.Rando.Companion.Rendering.Transforms;
+using KGySoft.Drawing.Imaging;
+using System;
 using System.Drawing;
 
 namespace FF.Rando.Companion.Rendering;
@@ -24,7 +26,7 @@ public static class SpriteTransformer
     public static ISprite Resize(this ISprite sprite, Size size) 
         => new ResizedSprite(sprite, size);
 
-    public static ISprite Pad(this ISprite sprite, Size size, HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment) 
+    public static ISprite Pad(this ISprite sprite, Size size, HorizontalAlignment horizontalAlignment = HorizontalAlignment.Center, VerticalAlignment verticalAlignment = VerticalAlignment.Center) 
         => new PaddedSprite(sprite, size, horizontalAlignment, verticalAlignment);
 
     public static ISprite RotateFlip(this ISprite sprite, RotateFlipType rotateFlipType)
@@ -35,4 +37,10 @@ public static class SpriteTransformer
 
     public static ISprite AdjustBrightness(this ISprite sprite, float adjustment) 
         => new AdjustedBrightnessSprite(sprite, adjustment);
+
+    public static ISprite TransformColors(this ISprite sprite, Func<Color32, Color32> transformer)
+        => new TransformedColorsSprite(sprite, transformer);
+
+    public static ISprite ReplacePalette(this ISprite sprite, Palette palette)
+        => new ReplacedPaletteSprite(sprite, palette);
 }

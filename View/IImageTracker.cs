@@ -6,4 +6,6 @@ namespace FF.Rando.Companion.View;
 public interface IImageTracker : INotifyPropertyChanged
 {
     Bitmap Image { get; }
+
+    string AltText { get; }
 }

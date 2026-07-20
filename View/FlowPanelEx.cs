@@ -29,7 +29,7 @@ public abstract partial class FlowPanelEx<TGame, TSettings> : FlowLayoutPanel, I
 
     public abstract DockStyle DefaultDockStyle { get; }
 
-    public bool CanHaveFillDockStyle => false;
+    public virtual bool CanHaveFillDockStyle => false;
 
     public virtual int Priority => Settings?.Priority ?? int.MaxValue;
 
@@ -104,24 +104,45 @@ public abstract partial class FlowPanelEx<TGame, TSettings> : FlowLayoutPanel, I
         }
     }
 
+    private Size _lastSize;
+
     protected override void OnResize(EventArgs e)
     {
         base.OnResize(e);
-        Arrange();
+
+        if (_lastSize.IsEmpty || _lastSize != Size)
+        {
+            _lastSize = Size;
+            Arrange();
+        }
     }
 
     protected virtual void SortControls(ControlCollection controlCollection, int columns)
     {
 
     }
+   
+    public int DefaultColumnSpacing { get; set; } = 4;
+    public int DefaultRowSpacing { get; set; } = 4;
+
+    protected Padding DefaultItemMargin => new (DefaultColumnSpacing / 2, DefaultRowSpacing / 2, DefaultColumnSpacing / 2, DefaultRowSpacing / 2);
 
     protected virtual int GetItemWidth(ControlCollection controlCollection)
     {
         var visibleControls = controlCollection.OfType<Control>().Where(c => c.Visible).ToList();
         if (visibleControls.Any())
-            return visibleControls.Max(c => c.Width) + 8;
+            return visibleControls.Max(c => c.Width) + DefaultColumnSpacing;
 
-        return controlCollection.OfType<Control>().Max(c => c.Width) + 8;
+        return controlCollection.OfType<Control>().Max(c => c.Width) + DefaultColumnSpacing;
+    }
+
+    protected virtual int GetItemHeight(ControlCollection controlCollection)
+    {
+        var visibleControls = controlCollection.OfType<Control>().Where(c => c.Visible).ToList();
+        if (visibleControls.Any())
+            return visibleControls.Max(c => c.Height) + DefaultRowSpacing;
+
+        return controlCollection.OfType<Control>().Max(c => c.Height) + DefaultRowSpacing;
     }
 
     protected virtual bool CenterMultiColumnItems => false;
@@ -148,6 +169,8 @@ public abstract partial class FlowPanelEx<TGame, TSettings> : FlowLayoutPanel, I
         switch (SpacingMode)
         {
             case SpacingMode.Rows:
+                foreach (Control control in Controls)
+                    control.Margin = DefaultItemMargin;
                 break;
             case SpacingMode.Columns:
                 var elementsize = GetItemWidth(Controls);
@@ -176,38 +199,60 @@ public abstract partial class FlowPanelEx<TGame, TSettings> : FlowLayoutPanel, I
                     }
                     else
                     {
-                        if (!CenterMultiColumnItems || c.Width + 8 <= elementsize)
+                        if (!CenterMultiColumnItems || c.Width + DefaultColumnSpacing <= elementsize)
                         {
-                            var marginAdjustment = Math.Max(0, elementsize - c.Width - 8);
+                            var nonStandardWidthAdjustment = Math.Max(0, elementsize - c.Width - DefaultColumnSpacing);
+                            Padding adjustment = ((i - invisibleCount) % columns) switch
+                            {
+                                0 => new(0, 0, margin + nonStandardWidthAdjustment, 0), // first column
+                                _ when (i - invisibleCount + 1) % columns == 0 => new(margin, 0, 0, 0), //last column 
+                                _ => new Padding(margin, 0, margin + nonStandardWidthAdjustment, 0)
+                            };
 
-                            if ((i - invisibleCount) % columns == 0)
-                                c.Margin = new(4, 4, 4 + margin + marginAdjustment, 4);
-                            else if ((i - invisibleCount + 1) % columns == 0)
-                                c.Margin = new(4 + margin, 4, 4, 4);
-                            else
-                                c.Margin = new(4 + margin, 4, 4 + margin + marginAdjustment, 4);
+                            c.Margin = DefaultItemMargin + adjustment;
                         }
                         else
                         {
-                            var columnSpan = (int)Math.Ceiling((double)c.Width / (elementsize - 8));
+                            var columnSpan = (int)Math.Ceiling((double)c.Width / (elementsize - DefaultColumnSpacing));
                             var columnsWidth = columnSpan * elementsize + margin * (columnSpan - 1) * 2;
                             var halfRemaining = (columnsWidth - c.Width) / 2;
-                            c.Margin = new(4 + halfRemaining, 4, 4 + halfRemaining, 4);
+                            c.Margin = DefaultItemMargin + new Padding(halfRemaining, 0, halfRemaining, 0);
                         }
                     }
 
                     SetFlowBreak(c, (i - invisibleCount + 1) % columns == 0);
                 }
+
+                if (Dock == DockStyle.Fill)
+                {
+                    var height = Size.Height - Padding.Vertical;
+                    var itemHeight = GetItemHeight(Controls);
+
+                    var rows = (Controls.Count - invisibleCount) / columns;
+                    if ((Controls.Count - invisibleCount) % columns != 0)
+                        rows++;
+
+                    var extraHeight = height - (elementsize * rows);
+                    var extraMargin = (extraHeight / rows) / 2;
+
+                    for (int i = 0; i < Controls.Count; i++)
+                    {
+                        Controls[i].Margin += new Padding(0, extraMargin, 0, extraMargin);
+                    }
+                }
+
                 ResumeLayout();
 
                 break;
             case SpacingMode.None:
+                foreach (Control control in Controls)
+                    control.Margin = DefaultItemMargin;
                 break;
         }
 
         var lastControl = Controls[^1];
 
-        if (AutoResize)
+        if (AutoResize && Dock != DockStyle.Fill)
         {
             switch (FlowDirection)
             {

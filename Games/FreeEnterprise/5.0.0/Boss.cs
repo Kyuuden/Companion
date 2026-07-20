@@ -18,13 +18,13 @@ internal class Boss : IBoss
     {
         _seed = seed;
         Id = (int)type;
-        Name = _seed.BossDescriptor.GetName(type);
+        AltText = _seed.BossDescriptor.GetName(type);
         SetImage();
     }
 
     public int Id { get; }
 
-    public string Name { get; }
+    public string AltText { get; }
 
     public Bitmap Image
     {

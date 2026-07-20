@@ -83,6 +83,8 @@ public class KeyItem : IImageTracker
         }
     }
 
+    public string AltText => Type.GetDescription();
+
     public event PropertyChangedEventHandler? PropertyChanged;
 
     private void SetImage()

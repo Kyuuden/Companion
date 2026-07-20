@@ -23,7 +23,7 @@ internal class KeyItem : IKeyItem, IDisposable
         _seed = seed;
         Id = (int)type;
         Name = seed.KeyItemDescriptor.GetName(type);
-        Description = seed.KeyItemDescriptor.GetDescription(type);
+        AltText = seed.KeyItemDescriptor.GetDescription(type);
         _seed.Settings.KeyItems.PropertyChanged += SettingsChanged;
         SetImage();
         IsTrackable = isTrackable;
@@ -37,7 +37,7 @@ internal class KeyItem : IKeyItem, IDisposable
 
     public int Id { get; }
     public string Name { get; }
-    public string Description { get; }
+    public string AltText { get; }
 
     public bool IsTrackable { get; }
 

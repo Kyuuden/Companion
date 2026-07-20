@@ -7,6 +7,7 @@ internal class InternalTimer : ITimer
     private readonly Stopwatch _stopwatch = new();
     private bool _isRunning = false;
     private bool _isPaused = false;
+    private bool _automaticPaused = false;
 
     public bool ShowLocally => true;
 
@@ -20,7 +21,7 @@ internal class InternalTimer : ITimer
         get
         {
             if (_isRunning && !_isPaused) return TimerStatus.Running;
-            if (_isRunning) return TimerStatus.Paused;
+            if (_isRunning) return _automaticPaused ? TimerStatus.AutomaticPaused : TimerStatus.ManualPaused;
             return TimerStatus.Ready;
         }
     }
@@ -47,11 +48,12 @@ internal class InternalTimer : ITimer
         _stopwatch.Stop();
     }
 
-    public void Pause()
+    public void Pause(bool automatic = false)
     {
         if (!_isRunning || _isPaused)
             return;
 
+        _automaticPaused = automatic;
         _isPaused = true;
         _stopwatch.Stop();
     }

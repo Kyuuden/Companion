@@ -11,6 +11,8 @@ public class WorldsCollideSettings : GameSettings
 
     public override string DisplayName => "Worlds Collide";
 
+    public override string Description => "Final Fantasy 6: Worlds Collide";
+
     public WorldsCollideSettings(JObject parent)
         : base(parent)
     {

@@ -5,6 +5,7 @@ using FF.Rando.Companion.Games;
 using FF.Rando.Companion.Settings;
 using FF.Rando.Companion.Timing;
 using FF.Rando.Companion.Utils;
+using FF.Rando.Companion.View;
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -17,11 +18,11 @@ using System.Windows.Forms;
 namespace FF.Rando.Companion;
 
 [ExternalToolEmbeddedIcon("FF.Rando.Companion.Resources.Crystal.png")]
-[ExternalTool("Final Fantasy Rando Companion", 
-    Description = "An autotracker for Final Fantasy IV: Free Enterprise, Final Fantasy Mystic Quest Randomizer, and Final Fantasy VI: Worlds Collide.")]
+[ExternalTool("Square Enix Randomizer Companion", 
+    Description = "An autotracker for Chrono Trigger: Jets of Time, FF4: Free Enterprise, FF6: Worlds Collide, and Final Fantasy Mystic Quest Randomizer.")]
 public partial class MainForm : ToolFormBase, IExternalToolForm
 {
-    protected override string WindowTitleStatic => "Final Fantasy Rando Companion";
+    protected override string WindowTitleStatic => "Square Enix Randomizer Companion";
 
     public ApiContainer? MaybeAPIContainer { get; set; }
 
@@ -36,7 +37,7 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
 
     private readonly GameViewModel _viewModel;
     private IGame? _game;
-    private ITimer _timer = new InternalTimer();
+    private ITimer? _timer;
 
     public MainForm() 
     {
@@ -50,6 +51,8 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
         StopWatchLabel.Font = _settings.Font;
         StopWatchLabel.ForeColor = _settings.TextColor;
         StopWatchLabel.Height = StopWatchLabel.PreferredHeight;
+
+        TrackerPanel.Controls.Add(new UnsupportedGameView(_settings));
 
         CreateTimer();
     }
@@ -67,7 +70,7 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
         };
 
         _timer.Initialize();
-        StopWatchLabel.Visible = _timer.ShowLocally == true;
+        StopWatchLabel.Visible = _timer?.ShowLocally == true;
         _viewModel.Timer = _timer;
     }
 
@@ -90,7 +93,7 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
                 StopWatchLabel.ForeColor = _settings.TextColor;
                 break;
             case nameof(ISettings.TimerMode):
-                if (_timer.Status == TimerStatus.Running)
+                if (_timer?.Status == TimerStatus.Running)
                 {
                     MessageBox.Show("Cannot change the timer mode while a run is in progress", "Settings Error");
                 }
@@ -106,36 +109,33 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
                 }
 
                 var icon = _viewModel.Game.Icon;
-                var hIcon = icon.GetHicon();
-                Icon = Icon.FromHandle(hIcon);
-
-                TrackerPanel.SuspendLayout();
-                if (_game != null)
+                if (icon != null)
                 {
-                    _game.PropertyChanged -= Game_PropertyChanged;
-                    foreach (Control control in TrackerPanel.Controls)
-                    {
-                        control.Dispose();
-                    }
-
-                    TrackerPanel.Controls.Clear();
-                    _game.Dispose();
+                    var hIcon = icon.GetHicon();
+                    Icon = Icon.FromHandle(hIcon);
+                }
+                else
+                {
+                    //Icon = 
                 }
 
-                StopWatchLabel.Visible = _timer.ShowLocally == true;
-                _timer.Initialize();
+                TrackerPanel.SuspendLayout();
+                foreach (Control control in TrackerPanel.Controls)
+                {
+                    control.Dispose();
+                }
+
+                TrackerPanel.Controls.Clear();
+                _game?.Dispose();
+
+                StopWatchLabel.Visible = _timer?.ShowLocally == true;
+                _timer?.Initialize();
                 _game = _viewModel.Game;
-                _viewModel.Game.PropertyChanged += Game_PropertyChanged;
                 TrackerPanel.Controls.Add(_viewModel.Game.CreateControls());
                 TrackerPanel.ResumeLayout(false);
                 TrackerPanel.PerformLayout();
                 break;
         }
-    }
-
-    private void Game_PropertyChanged(object sender, PropertyChangedEventArgs e)
-    {
-
     }
 
     private bool _docking = false;
@@ -153,6 +153,9 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
         if (main == null)
             return;
 
+        _docking = true;
+        var currentSize = Size;
+
         if (main.WindowState == FormWindowState.Minimized)
         {
             WindowState = FormWindowState.Minimized;
@@ -160,9 +163,6 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
         }
         else
             WindowState = FormWindowState.Normal;
-
-        _docking = true;
-        var currentSize = Size;
 
         switch (_settings.WindowStyle)
         {
@@ -276,6 +276,11 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
                         ? FormWindowState.Maximized
                         : FormWindowState.Normal;
             }
+
+            if (Game.IsNullInstance() || Game == null)
+            {
+                
+            }
         }
     }
 
@@ -286,16 +291,16 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
 
         try
         {
-            if (_parentFormLinked && !_docking)
+            if (_parentFormLinked && !_docking && APIs.Emulation.FrameCount() > 1)
                 _viewModel.OnFrame(Game);
         }
         catch { } // If i've done something wrong, don't crash bizhawk.
 
-        if (_timer.ShowLocally == true)
+        if (_timer?.ShowLocally == true)
         {
             StopWatchLabel.Text = _timer.Elapsed?.ToString("hh':'mm':'ss'.'ff");
         }
-        else if (_timer.Status == TimerStatus.Error)
+        else if (_timer?.Status == TimerStatus.Error)
         {
             StopWatchLabel.Visible = true;
             StopWatchLabel.Text = $"{_timer.GetType().Name} Error";
@@ -308,11 +313,11 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
 
     protected override void GeneralUpdate()
     {
-        if (_settings.AutoPauseTimer && APIs.EmuClient.IsPaused() && _timer.Status == TimerStatus.Running)
+        if (_settings.AutoPauseTimer && APIs.EmuClient.IsPaused() && _timer?.Status == TimerStatus.Running)
         {
-            _timer.Pause();
+            _timer.Pause(true);
         }
-        else if (_settings.AutoPauseTimer && !APIs.EmuClient.IsPaused() && _timer.Status == TimerStatus.Paused)
+        else if (_settings.AutoPauseTimer && !APIs.EmuClient.IsPaused() && _timer?.Status == TimerStatus.AutomaticPaused)
         {
             _timer.Resume();
         }
@@ -322,7 +327,6 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
     {
         _viewModel.APIs = APIs;
         _viewModel.MemoryDomains = MemoryDomains;
-        _viewModel.Initialize(Game);
     }
 
     private void DisplayToolStripMenuItem_Click(object sender, EventArgs e)

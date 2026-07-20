@@ -81,7 +81,7 @@ public class ImageControl<TGame, TImageSource> : PictureBox, IScalableControl wh
         pe.Graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.None;
         pe.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
 
-        pe.Graphics.Clear(BackColor);
+        //pe.Graphics.Clear(BackColor);
         pe.Graphics.DrawImage(Image, new Rectangle(Point.Empty, ClientSize));
     }
 

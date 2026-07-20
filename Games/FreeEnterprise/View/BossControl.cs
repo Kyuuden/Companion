@@ -17,7 +17,7 @@ public partial class BossControl : ImageControl<ISeed, IBoss>
         : base(seed, settings, boss)
     {
         _toolTip = new FreeEnterpriseToolTip(settings);
-        _toolTip.SetToolTip(this, boss.Name.Trim());
+        _toolTip.SetToolTip(this, boss.AltText.Trim());
         GenerateToolTip();
     }
 
@@ -35,7 +35,7 @@ public partial class BossControl : ImageControl<ISeed, IBoss>
 
     private void GenerateToolTip()
     {
-        var description = Game.Font.RenderText(Value.Name, TextMode.Normal, 28);
+        var description = Game.Font.RenderText(Value.AltText, TextMode.Normal, 28);
         var encounters = new List<IReadableBitmapData>();
 
         if (Value.Encounters.Any())

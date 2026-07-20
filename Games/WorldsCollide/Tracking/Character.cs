@@ -19,6 +19,7 @@ public class Character : IDisposable, INotifyPropertyChanged, IImageTracker
         Event = @event;
         _seed = seed;
         seed.PropertyChanged += Settings_PropertyChanged;
+        AltText = _seed.Descriptors.GetDescription(Event);
         SetImage();
     }
 
@@ -48,7 +49,7 @@ public class Character : IDisposable, INotifyPropertyChanged, IImageTracker
             if (_isFound && !_hasBeenFound)
             {
                 _hasBeenFound = true;
-                _seed.Container.Timer.Info($"Found {_seed.Descriptors.GetDescription(Event)}");
+                _seed.Container.Timer.Info($"Found {AltText}");
             }
         }
     }
@@ -65,6 +66,8 @@ public class Character : IDisposable, INotifyPropertyChanged, IImageTracker
             NotifyPropertyChanged();
         }
     }
+
+    public string AltText { get; }
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

@@ -13,6 +13,9 @@ public abstract class GameSettings : INotifyPropertyChanged
     public abstract string Name { get; }
     [Browsable(false)]
     public abstract string DisplayName { get; }
+    [Browsable(false)]
+    public abstract string Description { get; }
+
     protected JToken SettingsData { get; }
 
     protected GameSettings(JObject parentData)

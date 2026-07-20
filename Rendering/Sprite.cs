@@ -12,7 +12,7 @@ public abstract class Sprite(Palette palette) : ISprite, IDisposable
     private IReadableBitmapData? _cachedGreyScaleData;
     private bool disposedValue;
 
-    public Palette Palette { get; } = palette;
+    public virtual Palette Palette { get; } = palette;
 
     public virtual Size Size
     {
