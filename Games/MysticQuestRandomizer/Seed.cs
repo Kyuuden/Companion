@@ -1,111 +1,40 @@
 ﻿using BizHawk.Common.CollectionExtensions;
 using FF.Rando.Companion.Extensions;
 using FF.Rando.Companion.Games.MysticQuestRandomizer.RomData;
+using FF.Rando.Companion.Games.MysticQuestRandomizer.Settings;
 using FF.Rando.Companion.Games.MysticQuestRandomizer.Tracking;
 using FF.Rando.Companion.Games.MysticQuestRandomizer.View;
-using FF.Rando.Companion.Settings;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 
 namespace FF.Rando.Companion.Games.MysticQuestRandomizer;
-public class Seed : IGame
+
+public class Seed : GameBase<MysticQuestRandomizerSettings> 
 {
     private int _collectedSkyFragments;
-    private bool _started = false;
-    private bool _victory = false;
     private readonly Weapons _weapons;
     private readonly Armors _armors;
     private readonly Spells _spells;
     private readonly KeyItems _keyitems;
     private readonly GameInfo _gameinfo;
-
     internal readonly RomData.Font Font;
     internal readonly Sprites Sprites;
 
-    internal Seed(string hash, Container container)
+    internal Seed(string hash, EmulationContainer<MysticQuestRandomizerSettings> container)
+        :base(hash, container)
     {
-        Hash = hash ?? throw new ArgumentNullException(nameof(hash));
-        MQRContainer = container ?? throw new ArgumentNullException(nameof(container));
-
-        Settings = container.Settings;
-        Sprites = new Sprites(MQRContainer.Rom);
-        Font = new RomData.Font(MQRContainer.Rom);
-
-        _gameinfo = GameInfo.Parse(this, MQRContainer.Rom);
+        Sprites = new Sprites(Rom);
+        Font = new RomData.Font(Rom);
+        _gameinfo = GameInfo.Parse(this, Rom);
         _weapons = new Weapons(this);
         _armors = new Armors(this);
         _spells = new Spells(this);
         _keyitems = new KeyItems(this, _gameinfo.RequiredSkyFragmentCount.HasValue);
-        container.ButtonPressed += Container_ButtonPressed;
     }
 
-    private void Container_ButtonPressed(InputAction action)
-    {
-        if (action != InputAction.ToggleTimer)
-            return;
-
-        if (!Started)
-            Started = true;
-    }
-
-    public string Hash { get; }
-
-    public Bitmap Icon => MysticQuest.crystal_light;
-
-    public Color BackgroundColor => Color.Black;
-
-    public bool Started
-    {
-        get => _started;
-        protected set
-        {
-            if (!_started && value)
-            {
-                _started = true;
-                NotifyPropertyChanged();
-                if (_started)
-                {
-                    Container.Timer.Start();
-                }
-            }
-        }
-    }
-
-    public bool Victory
-    {
-        get => _victory;
-        protected set
-        {
-            if (!_victory && value)
-            {
-                _victory = true;
-                NotifyPropertyChanged();
-                if (_victory)
-                {
-                    Container.Timer.Stop();
-                }
-            }
-        }
-    }
-
-    public bool RequiresMemoryEvents => false;
-
-    public IEmulationContainer Container => MQRContainer;
-
-    internal Container MQRContainer { get; }
-
-    internal Settings.MysticQuestRandomizerSettings Settings { get; }
-
-    internal ISettings RootSettings => MQRContainer.RootSettings;
-
-    GameSettings IGame.Settings => Settings;
-
-
-    public event PropertyChangedEventHandler? PropertyChanged;
+    public override Bitmap Icon => MysticQuest.crystal_light;
 
     public IEnumerable<Weapon> Weapons => _weapons.Items;
 
@@ -152,36 +81,40 @@ public class Seed : IGame
         }
     }
 
-    public Control CreateControls()
+    public override Control CreateTrackingControl()
     {
         var control = new MysticQuestRandomizerControl();
         control.InitializeDataSources(this);
         return control;
     }
 
-    public void Dispose()
+    public override void Dispose()
     {
+        base.Dispose();
         Font.Dispose();
         Sprites.Dispose();
-        Container.ButtonPressed -= Container_ButtonPressed;
     }
 
     private byte[]? lastLocations;
 
-    public void OnNewFrame()
+    protected override bool CheckIfStarted()
     {
-        if (!Started)
-            Started = MQRContainer.Wram.ReadByte(Addresses.WRAM.GameStateIndicator) == 1;
+        return Wram.ReadByte(Addresses.WRAM.GameStateIndicator) == 1;
+    }
 
-        if (!Victory)
-            Victory = (MQRContainer.Wram.ReadByte(Addresses.WRAM.GameVictoryIndicator) & 0x80) == 0x80 &&
-                MQRContainer.Wram.ReadBytes(Addresses.WRAM.Mob1Health).Read<ushort>(0, 16) is ushort.MinValue or ushort.MaxValue &&
-                MQRContainer.Wram.ReadBytes(Addresses.WRAM.Mob2Health).Read<ushort>(0, 16) is ushort.MinValue or ushort.MaxValue &&
-                MQRContainer.Wram.ReadBytes(Addresses.WRAM.Mob3Health).Read<ushort>(0, 16) is ushort.MinValue or ushort.MaxValue;
+    protected override bool CheckIfVictory()
+    {
+        return (Wram.ReadByte(Addresses.WRAM.GameVictoryIndicator) & 0x80) == 0x80 &&
+                Wram.ReadBytes(Addresses.WRAM.Mob1Health).Read<ushort>(0, 16) is ushort.MinValue or ushort.MaxValue &&
+                Wram.ReadBytes(Addresses.WRAM.Mob2Health).Read<ushort>(0, 16) is ushort.MinValue or ushort.MaxValue &&
+                Wram.ReadBytes(Addresses.WRAM.Mob3Health).Read<ushort>(0, 16) is ushort.MinValue or ushort.MaxValue;
+    }
 
-        if (Started && MQRContainer.Emulation.FrameCount() % MQRContainer.RootSettings.TrackingInterval == 0)
+    protected override void ReadTrackingData()
+    {
+        if (Started)
         {
-            var wramData = Container.Wram.ReadBytes(Addresses.WRAM.WramRegion).AsReadOnlySpan();
+            var wramData = Wram.ReadBytes(Addresses.WRAM.WramRegion).AsReadOnlySpan();
             var checkedBattlefields = wramData.Slice(Addresses.WRAM.Battlefields);
             var checkedLocations = wramData[Addresses.WRAM.Chests];
 
@@ -222,10 +155,5 @@ public class Seed : IGame
             if (_keyitems.Update(keyItemsFound, StateFlags, skycoinComplete))
                 NotifyPropertyChanged(nameof(KeyItems));
         }
-    }
-
-    protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

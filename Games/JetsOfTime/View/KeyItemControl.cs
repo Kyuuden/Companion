@@ -21,6 +21,7 @@ internal class KeyItemControl : ImageControl<Seed, KeyItemBase>
         _toolTip.SetToolTip(this, keyItem.AltText);
 
         BackColor = Color.Transparent;
+        Visible = Value.Exists;
     }
 
     protected override void Value_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -34,6 +35,9 @@ internal class KeyItemControl : ImageControl<Seed, KeyItemBase>
         { 
             case nameof(IImageTracker.AltText):
                 _toolTip.SetToolTip(this, Value.AltText);
+                break;
+            case nameof(KeyItemBase.Exists):
+                Visible = Value.Exists;
                 break;
         }
     }

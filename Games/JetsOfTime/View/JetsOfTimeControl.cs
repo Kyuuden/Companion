@@ -41,6 +41,8 @@ internal partial class JetsOfTimeControl : UserControl
         _keyItems.InitializeDataSources(seed, seed.Settings.KeyItems);
         _characters.InitializeDataSources(_seed, seed.Settings.Characters);
         _bosses.InitializeDataSources(seed, seed.Settings.Bosses);
+        _maps.InitializeDataSources(_seed, seed.Settings.Maps);
+        _statistics.InitializeDataSources(_seed, seed.Settings.Statistics);
         //_checks.InitializeDataSources(_seed, seed.Settings.Checks);
 
         _seed.PropertyChanged += Seed_PropertyChanged;
@@ -54,7 +56,7 @@ internal partial class JetsOfTimeControl : UserControl
 
     private void Seed_ButtonPressed(InputAction action)
     {
-        if (_seed?.RootSettings == null || _scrollables.Count == 0 || !_scrollables.TryGetElementAt(_scrollIndex, out var target))
+        if (_scrollables.Count == 0 || !_scrollables.TryGetElementAt(_scrollIndex, out var target))
             return;
 
         switch (action)
@@ -166,7 +168,7 @@ internal partial class JetsOfTimeControl : UserControl
         SuspendLayout();
         TopPanel.SuspendLayout();
 
-        List<IPanel> panels = [_keyItems, _bosses,  /*_checks*/];
+        List<IPanel> panels = [_keyItems, _bosses, _maps, _statistics /*_checks*/];
         panels.Sort((x, y) => x.Priority > y.Priority ? 1 : -1);
 
         foreach (var control in panels.OfType<Control>())
@@ -179,7 +181,7 @@ internal partial class JetsOfTimeControl : UserControl
             Controls.RemoveAt(0);
 
         bool filled = false;
-        foreach (var panel in panels.Where(p => p.IsEnabled).Take(2).Reverse())
+        foreach (var panel in panels.Where(p => p.IsEnabled).Take(3).Reverse())
         {
             if (panel is not Control control)
                 continue;
@@ -208,7 +210,7 @@ internal partial class JetsOfTimeControl : UserControl
         }
 
         filled = false;
-        foreach (var panel in panels.Where(p => p.IsEnabled).Skip(2).Reverse())
+        foreach (var panel in panels.Where(p => p.IsEnabled).Skip(3).Reverse())
         {
             if (panel is not Control control)
                 continue;

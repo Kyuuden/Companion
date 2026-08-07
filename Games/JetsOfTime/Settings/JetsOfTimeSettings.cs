@@ -19,6 +19,8 @@ internal class JetsOfTimeSettings : GameSettings
         Characters = new CharacterSettings(SettingsData);
         Bosses = new BossSettings(SettingsData);
         //Checks = new ChecksSettings(SettingsData);
+        Maps = new MapSettings(SettingsData);
+        Statistics = new StatisticsSettings(SettingsData);
     }
 
     [TypeConverter(typeof(ExpandableObjectConverter))]
@@ -44,4 +46,14 @@ internal class JetsOfTimeSettings : GameSettings
     //[TypeConverter(typeof(ExpandableObjectConverter))]
     //[Description("Tracking of available Checks.")]
     //public ChecksSettings Checks { get; }
+
+    [DisplayName("World Maps")]
+    [TypeConverter(typeof(ExpandableObjectConverter))]
+    [Description("Tracking of available Checks on world maps")]
+    public MapSettings Maps { get; }
+
+    [DisplayName("Statistics")]
+    [TypeConverter(typeof(ExpandableObjectConverter))]
+    [Description("Tracking of general statistics")]
+    public StatisticsSettings Statistics { get; }
 }

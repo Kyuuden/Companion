@@ -1,8 +1,8 @@
 ﻿using BizHawk.Common.CollectionExtensions;
 using FF.Rando.Companion.Extensions;
 using FF.Rando.Companion.Games.FreeEnterprise.RomData;
+using FF.Rando.Companion.Games.FreeEnterprise.Settings;
 using FF.Rando.Companion.Games.FreeEnterprise.Shared;
-using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -27,7 +27,7 @@ internal class Seed : LegacySeed
 
     public override IEnumerable<ILocation> AvailableLocations => _locations.Items.Where(i=>i.IsAvailable && !i.IsChecked);
 
-    public Seed(string hash, Metadata metadata, Container container)
+    public Seed(string hash, Metadata metadata, EmulationContainer<FreeEnterpriseSettings> container)
         : base(hash, metadata, container)
     {
         _flags = Flags.Binary != null
@@ -39,52 +39,47 @@ internal class Seed : LegacySeed
 
         Descriptors = new Descriptors();
         _keyItems = new KeyItems(this);
-        _party = new Party(container.Settings.Party, Sprites, _flags.VanillaAgility, _flags.CHero);
+        _party = new Party(container.GameSettings.Party, Sprites, _flags.VanillaAgility, _flags.CHero);
         _objectives = new Objectives(this, metadata.Objectives!, _flags.NumRequiredObjectives, _flags.OWinGame == true, _flags.OWinCrystal == true);
         _locations = new Locations(Descriptors, _flags);
     }
 
-    public override void OnNewFrame()
+    protected override void ReadTrackingData()
     {
-        base.OnNewFrame();
-
         if (IsLoading)
             return;
 
-        if (Game.Emulation.FrameCount() % Game.RootSettings.TrackingInterval == 0)
+        var partyData = Wram.ReadBytes(Addresses.WRAM.PartyRegion);
+        var wramData = Wram.ReadBytes(Addresses.WRAM.WramRegion).AsReadOnlySpan();
+        var keyItemLocations = Sram.ReadBytes(Addresses.SRAM.KeyItemLocations);
+        var keyItemsFound = wramData.Slice(Addresses.WRAM.KeyItemFoundBits);
+        var keyItemUsed = wramData.Slice(Addresses.WRAM.KeyItemUsedBits);
+        var locationsChecked = wramData.Slice(Addresses.WRAM.CheckedLocations);
+        var objectiveCompletion = wramData.Slice(Addresses.WRAM.ObjectiveCompletion);
+        var inventory = wramData.Slice(Addresses.WRAM.Inventory);
+        var defeatedBosses = Wram.ReadByte(Addresses.WRAM.BossesDefeated);
+        var teasureCount = Wram.ReadBytes(Games.FreeEnterprise.Shared.Addresses.WRAM.TreasureBits);
+        TreasureCount = teasureCount.CountBits();
+
+        if (_keyItems.Update(keyItemsFound, keyItemUsed, keyItemLocations, inventory))
         {
-            var partyData = Game.Wram.ReadBytes(Addresses.WRAM.PartyRegion);
-            var wramData = Game.Wram.ReadBytes(Addresses.WRAM.WramRegion).AsReadOnlySpan();
-            var keyItemLocations = Game.Sram.ReadBytes(Addresses.SRAM.KeyItemLocations);
-            var keyItemsFound = wramData.Slice(Addresses.WRAM.KeyItemFoundBits);
-            var keyItemUsed = wramData.Slice(Addresses.WRAM.KeyItemUsedBits);
-            var locationsChecked = wramData.Slice(Addresses.WRAM.CheckedLocations);
-            var objectiveCompletion = wramData.Slice(Addresses.WRAM.ObjectiveCompletion);
-            var inventory = wramData.Slice(Addresses.WRAM.Inventory);
-            var defeatedBosses = Game.Wram.ReadByte(Addresses.WRAM.BossesDefeated);
-            var teasureCount = Game.Wram.ReadBytes(Games.FreeEnterprise.Shared.Addresses.WRAM.TreasureBits);
-            TreasureCount = teasureCount.CountBits();
+            NotifyPropertyChanged(nameof(KeyItems));
 
-            if (_keyItems.Update(keyItemsFound, keyItemUsed, keyItemLocations, inventory))
-            {
-                NotifyPropertyChanged(nameof(KeyItems));
-
-                XpRate = (!_flags.XNoKeyBonus && KeyItems.Count(ki => ki.IsFound && ki.IsTrackable) >= 10)
-                    ? 2m : 1m;
-            }
-
-            if (_party.Update(partyData))
-                NotifyPropertyChanged(nameof(Party));
-
-            if (_objectives.Update(objectiveCompletion))
-                NotifyPropertyChanged(nameof(Objectives));
-
-            if (_locations.Update(locationsChecked, _keyItems.Items.Where(ki => ki.IsFound).Select(ki => (KeyItemType)ki.Id).ToImmutableHashSet()))
-                NotifyPropertyChanged(nameof(AvailableLocations));
-
-            DefeatedEncounters = defeatedBosses;
-            BackgroundColor = Game.Wram.ReadBytes(Games.FreeEnterprise.Shared.Addresses.WRAM.BackgroundColor).Read<ushort>(0).ToColor();
+            XpRate = (!_flags.XNoKeyBonus && KeyItems.Count(ki => ki.IsFound && ki.IsTrackable) >= 10)
+                ? 2m : 1m;
         }
+
+        if (_party.Update(partyData))
+            NotifyPropertyChanged(nameof(Party));
+
+        if (_objectives.Update(objectiveCompletion))
+            NotifyPropertyChanged(nameof(Objectives));
+
+        if (_locations.Update(locationsChecked, _keyItems.Items.Where(ki => ki.IsFound).Select(ki => (KeyItemType)ki.Id).ToImmutableHashSet()))
+            NotifyPropertyChanged(nameof(AvailableLocations));
+
+        DefeatedEncounters = defeatedBosses;
+        BackgroundColor = Wram.ReadBytes(Games.FreeEnterprise.Shared.Addresses.WRAM.BackgroundColor).Read<ushort>(0).ToColor();
     }
 
     protected override bool OWinGame => _flags.OWinGame;

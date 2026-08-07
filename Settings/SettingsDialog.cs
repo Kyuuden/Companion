@@ -1,4 +1,5 @@
 ﻿using BizHawk.Client.EmuHawk;
+using System;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -21,7 +22,7 @@ public partial class SettingsDialog : FormBase
         propertyGrid1.SelectedObject = _settings = settings;
         propertyGrid1.LargeButtons = true;
 
-        var buttons = propertyGrid1.SelectedGridItem?.Parent?.Parent?.GridItems?.Cast<GridItem>().FirstOrDefault(i => i.Label == "Buttons");
+        var buttons = propertyGrid1.SelectedGridItem?.Parent?.Parent?.GridItems?.Cast<GridItem>().FirstOrDefault(i => i.Label == RootSettings.KeyBindingCategory);
 
         if (buttons != null)
             buttons.Expanded = true;
@@ -49,6 +50,16 @@ public partial class SettingsDialog : FormBase
             gameTab.Controls.Add(gamePropertyGrid);
 
             tabControl1.TabPages.Add(gameTab);
+        }
+    }
+
+
+    protected override void OnLoad(EventArgs e)
+    {
+        base.OnLoad(e);
+        if (Owner != null)
+        {
+            Icon = Owner.Icon;
         }
     }
 

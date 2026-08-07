@@ -1,5 +1,6 @@
 ﻿using BizHawk.Common.ReflectionExtensions;
 using FF.Rando.Companion.Rendering;
+using FF.Rando.Companion.Timing;
 using FF.Rando.Companion.View;
 using System.ComponentModel;
 using System.Drawing;
@@ -8,15 +9,15 @@ using System.Runtime.CompilerServices;
 namespace FF.Rando.Companion.Games.JetsOfTime.Tracking;
 internal class Boss : INotifyPropertyChanged, IImageTracker
 {
-    private readonly Container _container;
+    private readonly ITimer _timer;
     private readonly ISprite? _sprite;
     private Bitmap? _image;
     private bool _isDefeated;
     private bool _hasBeenDefeated;
 
-    public Boss(Container container, BossType boss, ISprite? sprite)
+    public Boss(ITimer timer, BossType boss, ISprite? sprite)
     {
-        _container = container;
+        _timer = timer;
         Type = boss;
         _sprite = sprite;
         SetImage();
@@ -41,7 +42,7 @@ internal class Boss : INotifyPropertyChanged, IImageTracker
             if (_isDefeated && !_hasBeenDefeated)
             {
                 _hasBeenDefeated = true;
-                _container.Timer.Info($"Defeated {Type}");
+                _timer.Info($"Defeated {Type}");
             }
         }
     }

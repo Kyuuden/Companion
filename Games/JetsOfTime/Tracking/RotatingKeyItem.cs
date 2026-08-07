@@ -1,4 +1,5 @@
 ﻿using FF.Rando.Companion.Games.JetsOfTime.Rendering;
+using FF.Rando.Companion.Timing;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,8 +16,8 @@ internal class RotatingKeyItem : KeyItemBase
     private Timer _timer;
     private SpriteDB _spriteDB;
 
-    public RotatingKeyItem(Container container, SpriteDB spriteDB, KeyItemType type)
-        : base(container, type)
+    public RotatingKeyItem(ITimer timer, SpriteDB spriteDB, KeyItemType type)
+        : base(timer, type)
     {
         _spriteDB = spriteDB;
         _timer = new Timer

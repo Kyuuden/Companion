@@ -18,4 +18,11 @@ public static class SpanExtensions
         span = span.Slice(2);
         return ret;
     }
+
+    public static byte ReadByte(this ref Span<byte> span)
+    {
+        var ret = span[0];
+        span = span.Slice(1);
+        return ret;
+    }
 }

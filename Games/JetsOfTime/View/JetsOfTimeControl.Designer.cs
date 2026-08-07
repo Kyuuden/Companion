@@ -43,6 +43,8 @@ partial class JetsOfTimeControl
     {
         this.TopPanel = new System.Windows.Forms.Panel();
         //this._checks = new FF.Rando.Companion.Games.JetsOfTime.View.ChecksPanel();
+        this._statistics = new FF.Rando.Companion.Games.JetsOfTime.View.StatisticsPanel();
+        this._maps = new FF.Rando.Companion.Games.JetsOfTime.View.MapsPanel();
         this._bosses = new FF.Rando.Companion.Games.JetsOfTime.View.BossesPanel();
         this._keyItems = new FF.Rando.Companion.Games.JetsOfTime.View.KeyItemsPanel();
         this._characters = new FF.Rando.Companion.Games.JetsOfTime.View.CharactersPanel();
@@ -69,6 +71,34 @@ partial class JetsOfTimeControl
         //this._checks.TabIndex = 5;
         //this._checks.TabStop = false;
         //this._checks.CanScrollChanged += CanScrollChanged;
+        // 
+        // _maps
+        // 
+        this._maps.BackColor = Color.FromArgb(0, 0, 99);
+        this._maps.Dock = System.Windows.Forms.DockStyle.Fill;
+        this._maps.Location = new System.Drawing.Point(0, 320);
+        this._maps.Margin = new System.Windows.Forms.Padding(0);
+        this._maps.Name = "_maps";
+        this._maps.Size = new System.Drawing.Size(410, 253);
+        this._maps.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+        this._maps.TabIndex = 5;
+        this._maps.TabStop = false;
+        this._maps.CanScrollChanged += CanScrollChanged;
+        // 
+        // _statistics
+        // 
+        //this._statistics.AutoResize = true;
+        this._statistics.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+        this._statistics.BackColor = Color.FromArgb(0, 0, 99);
+        this._statistics.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+        this._statistics.Dock = System.Windows.Forms.DockStyle.Top;
+        this._statistics.FlowDirection = System.Windows.Forms.FlowDirection.LeftToRight;
+        this._statistics.Icons = false;
+        this._statistics.Location = new System.Drawing.Point(0, 0);
+        this._statistics.Name = "_statistics";
+        this._statistics.Size = new System.Drawing.Size(346, 160);
+        this._statistics.TabIndex = 2;
+        this._statistics.WrapContents = false;
         // 
         // _bosses
         // 
@@ -132,6 +162,8 @@ partial class JetsOfTimeControl
     private KeyItemsPanel _keyItems;
     private CharactersPanel _characters;
     private BossesPanel _bosses;
+    private MapsPanel _maps;
+    private StatisticsPanel _statistics;
     //private ChecksPanel _checks;
     private System.Windows.Forms.Panel TopPanel;
 }

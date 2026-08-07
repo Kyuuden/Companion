@@ -1,5 +1,4 @@
 ﻿using FF.Rando.Companion.Games.JetsOfTime.Settings;
-using FF.Rando.Companion.View;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -17,7 +16,7 @@ internal partial class CharactersPanel : FlowPanel<CharacterSettings>
     public override DockStyle DefaultDockStyle => DockStyle.Left;
 
     protected override Control[] GenerateControls(Seed seed) 
-        => (Game?.Characters.Values ?? []).Select(character => new CharacterControl(seed, Settings!, character)).ToArray();
+        => (Game?.State.Characters.Values ?? []).Select(character => new CharacterControl(seed, Settings!, character)).ToArray();
 }
 
 

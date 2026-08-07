@@ -51,7 +51,7 @@ public abstract class Equipment<TType> : IImageTracker where TType : struct
             foreach (var item in newlyFound)
             {
                 if (_notified.Add(item))
-                    _seed.Container.Timer.Info($"Found {item.GetDescription()}");
+                    _seed.Timer.Info($"Found {item.GetDescription()}");
             }
         }
     }

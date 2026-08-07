@@ -38,7 +38,7 @@ public class Spell : IImageTracker
             if (_isFound && !_hasBeenFound)
             {
                 _hasBeenFound = true;
-                _seed.Container.Timer.Info($"Learned {_spellType.GetDescription()}");
+                _seed.Timer.Info($"Learned {_spellType.GetDescription()}");
             }
         }
     }

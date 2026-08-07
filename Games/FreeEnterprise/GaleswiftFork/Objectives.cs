@@ -155,7 +155,7 @@ internal class Task : ITask
             NotifyPropertyChanged();
 
             if (IsCompleted && !CompletedAt.HasValue)
-                CompletedAt = _seed.Container.Timer.Elapsed;
+                CompletedAt = _seed.Timer.Elapsed;
         }
     }
 

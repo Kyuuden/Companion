@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FF.Rando.Companion.Games.JetsOfTime;
 internal static class Utils
@@ -23,7 +19,7 @@ internal static class Utils
 
 		//Chrono Trigger Decompression Routine
 		//Reverse engineered by Michael Springer (evilpeer@hotmail.com)
-		bool bCarryFlag = false;
+		bool bCarryFlag;
 		ushort nCompressedSize = (ushort)(source[0] | (source[1] << 8)); ;
 		uint nBytePos = 2;
 		uint nByteAfter = nBytePos + nCompressedSize;
@@ -60,7 +56,6 @@ internal static class Utils
 				//C3/07D0:	850B    	STA nBitCtr
 				nBitCtr = nCurByte;
 				//C3/07D2:	C221    	REP #$21
-				bCarryFlag = false;
 				//C3/07D4:	BD0100  	LDA $0001,X
 				//C3/07D7:	6500    	ADC $00
 				//C3/07D9:	8509    	STA nByteAfter
@@ -113,7 +108,6 @@ internal static class Utils
                     //C3/0757:	8F802100	STA $002180
                     result[nWorkPos++] = nCurByte;
 					//C3/075B:	C221    	REP #$21
-					bCarryFlag = false;
 					//C3/075D:	8A      	TXA 
 					//C3/075E:	690900  	ADC #$0009
 					//C3/0761:	AA      	TAX 
@@ -262,4 +256,7 @@ internal static class Utils
 		nBytePos += 2;
 		//C3/07C7:	80BE    	BRA $0787
 	}
+
+	public static bool IsFlagSet(this ReadOnlySpan<byte> bytes, int offset, byte mask)
+		=> (bytes[offset] & mask) != 0;
 }

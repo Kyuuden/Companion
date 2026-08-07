@@ -1,10 +1,4 @@
-﻿using FF.Rando.Companion.Settings;
-using FF.Rando.Companion.Utils;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Windows.Forms;
+﻿
 
 namespace FF.Rando.Companion;
 
@@ -36,9 +30,9 @@ partial class MainForm
     /// </summary>
     private void InitializeComponent()
     {
-            this.menuStrip = new System.Windows.Forms.MenuStrip();
-            this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStrip = new BizHawk.WinForms.Controls.MenuStripEx();
+            this.settingsToolStripMenuItem = new BizHawk.WinForms.Controls.ToolStripMenuItemEx();
+            this.aboutToolStripMenuItem = new BizHawk.WinForms.Controls.ToolStripMenuItemEx();
             this.StopWatchLabel = new System.Windows.Forms.Label();
             this.TrackerPanel = new System.Windows.Forms.Panel();
             this.menuStrip.SuspendLayout();
@@ -50,31 +44,21 @@ partial class MainForm
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.settingsToolStripMenuItem,
             this.aboutToolStripMenuItem});
-            this.menuStrip.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(800, 24);
-            this.menuStrip.TabIndex = 0;
-            this.menuStrip.Text = "menuStrip";
+            this.menuStrip.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.Flow;
             // 
             // settingsToolStripMenuItem
             // 
-            this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.settingsToolStripMenuItem.Text = "Settings";
-            this.settingsToolStripMenuItem.Click += DisplayToolStripMenuItem_Click;
-        
+            this.settingsToolStripMenuItem.Click += SettingsToolStripMenuItem_Click;
             // 
             // aboutToolStripMenuItem
             // 
-            this.aboutToolStripMenuItem.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += AboutToolStripMenuItem_Click;
             // 
             // StopWatchLabel
             // 
-            this.StopWatchLabel.Dock = DockStyle.Bottom;
+            this.StopWatchLabel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.StopWatchLabel.BackColor = System.Drawing.Color.Black;
             this.StopWatchLabel.Font = new System.Drawing.Font("Lucida Console", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.StopWatchLabel.ForeColor = System.Drawing.SystemColors.HighlightText;
@@ -117,9 +101,9 @@ partial class MainForm
     }
     #endregion
 
-    private System.Windows.Forms.MenuStrip menuStrip;
-    private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
+    private BizHawk.WinForms.Controls.MenuStripEx menuStrip;
+    private BizHawk.WinForms.Controls.ToolStripMenuItemEx settingsToolStripMenuItem;
+    private BizHawk.WinForms.Controls.ToolStripMenuItemEx aboutToolStripMenuItem;
     private System.Windows.Forms.Label StopWatchLabel;
-    private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
-    private Panel TrackerPanel;
+    private System.Windows.Forms.Panel TrackerPanel;
 }

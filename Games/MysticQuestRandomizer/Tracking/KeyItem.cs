@@ -51,7 +51,7 @@ public class KeyItem : IImageTracker
             if (_isFound && !_hasBeenFound)
             {
                 _hasBeenFound = true;
-                _seed.Container.Timer.Info($"Found {Type.GetDescription()}");
+                _seed.Timer.Info($"Found {Type.GetDescription()}");
             }
         }
     }

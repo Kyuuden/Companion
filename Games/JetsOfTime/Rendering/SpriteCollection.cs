@@ -5,7 +5,6 @@ using KGySoft.Drawing.Imaging;
 using System;
 using System.Buffers.Binary;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 
@@ -13,12 +12,11 @@ namespace FF.Rando.Companion.Games.JetsOfTime.Rendering;
 
 internal class SpriteCollection : IDisposable
 {
-    private readonly Container _container;
+    private readonly Seed _seed;
 
     private readonly Dictionary<int, BasicSprite> _sprites = [];
     private readonly Dictionary<int, FrameInfo> _frameInfo = [];
 
-    //private IReadOnlyList<FrameInfo>? _allFrameInfo;
     private IReadOnlyList<byte[,]>? _tiles;
     private readonly HashSet<int> _emptyTiles = [];
     private byte[]? _assemblyData;
@@ -27,30 +25,28 @@ internal class SpriteCollection : IDisposable
     private readonly Range<long> _tilesLocation;
     private readonly Range<long> _assemblyLocation;
     private readonly Range<long> _paletteLocation;
-    private readonly Range<long> _animationLocation;
+    //private readonly Range<long> _animationFrameLocation;
+    //private readonly Range<long> _animationDurationLocation;
     private readonly byte _assemblyFlags;
     private readonly bool _compressed;
 
     private readonly int _groupsPerFrame;
     private readonly int _blocksPerGroup;
 
-    private readonly byte[] _headerData;
-
-    public SpriteCollection(Container container, Span<byte> data)
+    public SpriteCollection(Seed container, Span<byte> data)
     {
-        _container = container;
+        _seed = container;
         if (data == null) throw new ArgumentNullException(nameof(data));
         if (data.Length is not 5 and not 10) throw new ArgumentException("Sprite Headers must be 5 or 10 bytes long");
 
-        _tilesLocation = Data.Addresses.ROM.Sprites.SpriteTileData[data[0]];
+        _tilesLocation = Data.Addresses.ROM.Sprites.TileData[data[0]];
         _compressed = data[0] > 6;
 
-        _assemblyLocation = Data.Addresses.ROM.Sprites.SpriteAssemblyData[data[1]];
+        _assemblyLocation = Data.Addresses.ROM.Sprites.AssemblyData[data[1]];
         _paletteLocation = Data.Addresses.ROM.Sprites.PaletteData[data[2]];
-        _animationLocation = Data.Addresses.ROM.Sprites.SpriteAnimationData[data[3]];
+        //_animationFrameLocation = Data.Addresses.ROM.Sprites.AnimationFrameData[data[3]];
+        //_animationDurationLocation = Data.Addresses.ROM.Sprites.AnimationDurationData[data[3]];
         _assemblyFlags = data[4];
-
-        _headerData = data.ToArray();
 
         (_groupsPerFrame, _blocksPerGroup) = (_assemblyFlags & 0x03) switch
         {
@@ -71,11 +67,9 @@ internal class SpriteCollection : IDisposable
         }
     }
 
-    private byte[] AssemblyData => _assemblyData ??= _container.Rom.ReadBytes(_assemblyLocation);
+    private byte[] AssemblyData => _assemblyData ??= _seed.Rom.ReadBytes(_assemblyLocation);
 
-    public Palette Palette => _palette ??= _container.Rom.ReadBytes(_paletteLocation).DecodePalette(new Color32());
-
-    //private IReadOnlyList<FrameInfo> Frames => _allFrameInfo ??= ParseAssemblyData();
+    public Palette Palette => _palette ??= _seed.Rom.ReadBytes(_paletteLocation).DecodePalette(new Color32());
 
     public int Count => (int)(_assemblyLocation.Length() / (_groupsPerFrame * _blocksPerGroup * 10));
 
@@ -98,7 +92,6 @@ internal class SpriteCollection : IDisposable
             _frameInfo[frameIndex] = frameInfo;
         }
 
-        //var frameInfo = Frames[frameIndex];
         var bitmap = BitmapDataFactory.CreateBitmapData(frameInfo.Size, KnownPixelFormat.Format8bppIndexed, Palette);
 
         foreach (var block in frameInfo.Groups.SelectMany(g => g.Blocks))
@@ -118,7 +111,7 @@ internal class SpriteCollection : IDisposable
     {
         if (_tiles == null)
         {
-            var data = _container.Rom.ReadBytes(_tilesLocation);
+            var data = _seed.Rom.ReadBytes(_tilesLocation);
 
             if (_compressed)
             {
@@ -183,11 +176,6 @@ internal class SpriteCollection : IDisposable
                 var x = (sbyte)data[0];
                 var y = (sbyte)data[1];
 
-                if (x > 0 && x % 4 != 0)
-                {
-                    Debug.WriteLine("");
-                }
-
                 block.X = x;
                 block.Y = y;
 
@@ -197,91 +185,6 @@ internal class SpriteCollection : IDisposable
 
         return frame.Normalize(_emptyTiles) ? frame : null;
     }
-
-    //private List<FrameInfo> ParseAssemblyData()
-    //{
-    //    ParseTiles();
-    //    var frames = new List<FrameInfo>();
-
-    //    var (groupsPerFrame, blocksPerGroup) = (_assemblyFlags & 0x03) switch
-    //    {
-    //        0 => (1, 4),
-    //        1 => (1, 8),
-    //        2 => (3, 4),
-    //        3 => (3, 8),
-    //        _ => (1, 4),
-    //    };
-
-    //    var data = AssemblyData.AsSpan();
-
-    //    var blocksPerFrame = groupsPerFrame * blocksPerGroup;
-    //    var frameCount = data.Length / (blocksPerFrame * 10);
-
-    //    for (var frameNum = 0; frameNum < frameCount; frameNum++)
-    //    {
-    //        var frame = new FrameInfo();
-
-    //        for (var groupNum = 0; groupNum < groupsPerFrame; groupNum++)
-    //        {
-    //            var group = new GroupInfo();
-
-    //            for (var blockNum = 0; blockNum < blocksPerGroup; blockNum++)
-    //            {
-    //                var block = new BlockInfo();
-
-    //                var tile = BinaryPrimitives.ReadUInt16LittleEndian(data);
-    //                var tile2 = BinaryPrimitives.ReadUInt16LittleEndian(data[2..]);
-    //                data = data[4..];
-
-    //                block.Tiles.Add(new TileInfo(tile & 0x3FF, (tile & 0x4000) != 0, (tile & 0x8000) != 0));
-    //                block.Tiles.Add(new TileInfo(tile2 & 0x3FF, (tile2 & 0x4000) != 0, (tile2 & 0x8000) != 0));
-    //                group.Blocks.Add(block);
-    //            }
-
-    //            for (var blockNum = 0; blockNum < blocksPerGroup; blockNum++)
-    //            {
-    //                var tile = BinaryPrimitives.ReadUInt16LittleEndian(data);
-    //                var tile2 = BinaryPrimitives.ReadUInt16LittleEndian(data[2..]);
-    //                data = data[4..];
-
-    //                group.Blocks[blockNum].Tiles.Add(new TileInfo(tile & 0x3FF, (tile & 0x4000) != 0, (tile & 0x8000) != 0));
-    //                group.Blocks[blockNum].Tiles.Add(new TileInfo(tile2 & 0x3FF, (tile2 & 0x4000) != 0, (tile2 & 0x8000) != 0));
-    //            }
-
-    //            frame.Groups.Add(group);
-    //        }
-
-    //        for (var groupNum = 0; groupNum < groupsPerFrame; groupNum++)
-    //        {
-    //            var group = frame.Groups[groupNum];
-
-    //            for (var blockNum = 0; blockNum < blocksPerGroup; blockNum++)
-    //            {
-    //                var block = group.Blocks[blockNum];
-
-    //                var x = (sbyte)data[0];
-    //                var y = (sbyte)data[1];
-
-    //                if (x > 0 && x % 4 != 0)
-    //                {
-    //                    Debug.WriteLine("");
-    //                }
-
-    //                block.X = x;
-    //                block.Y = y;
-
-    //                data = data[2..];
-    //            }
-    //        }
-
-    //        if (frame.Normalize(_emptyTiles))
-    //            frames.Add(frame);
-    //        else
-    //            Debug.WriteLine($"Skipping frame# {frameNum}");
-    //    }
-
-    //    return frames;
-    //}
 
     private record TileInfo(int Index, bool FlipHoriztonal, bool FlipVertical);
 
@@ -340,8 +243,8 @@ internal class SpriteCollection : IDisposable
             {
                 foreach (var block in group.Blocks)
                 {
-                    block.X = block.X + XOffset;
-                    block.Y = block.Y + YOffset;
+                    block.X += XOffset;
+                    block.Y += YOffset;
                 }
             }
 

@@ -250,7 +250,8 @@ public abstract partial class FlowPanelEx<TGame, TSettings> : FlowLayoutPanel, I
                 break;
         }
 
-        var lastControl = Controls[^1];
+        var farthestRightControl = Controls.OfType<Control>().Where(c => c.Visible).OrderByDescending(c=>c.Right).FirstOrDefault() as Control;
+        var farthestBottomControl = Controls.OfType<Control>().Where(c => c.Visible).OrderByDescending(c => c.Bottom).FirstOrDefault() as Control;
 
         if (AutoResize && Dock != DockStyle.Fill)
         {
@@ -258,11 +259,11 @@ public abstract partial class FlowPanelEx<TGame, TSettings> : FlowLayoutPanel, I
             {
                 case FlowDirection.LeftToRight:
                 case FlowDirection.RightToLeft:
-                    Height = lastControl.Bottom + lastControl.Margin.Bottom + Padding.Bottom;
+                    Height = farthestBottomControl.Bottom + farthestBottomControl.Margin.Bottom + Padding.Bottom;
                     break;
                 case FlowDirection.TopDown:
                 case FlowDirection.BottomUp:
-                    Width = lastControl.Right + lastControl.Margin.Right + Padding.Right;
+                    Width = farthestRightControl.Right + farthestRightControl.Margin.Right + Padding.Right;
                     break;
             }
 
@@ -272,11 +273,11 @@ public abstract partial class FlowPanelEx<TGame, TSettings> : FlowLayoutPanel, I
                 {
                     case FlowDirection.LeftToRight:
                     case FlowDirection.RightToLeft:
-                        Width = lastControl.Right + lastControl.Margin.Right + Padding.Right;
+                        Width = farthestRightControl.Right + farthestRightControl.Margin.Right + Padding.Right;
                         break;
                     case FlowDirection.TopDown:
                     case FlowDirection.BottomUp:
-                        Height = lastControl.Bottom + lastControl.Margin.Bottom + Padding.Bottom;
+                        Height = farthestBottomControl.Bottom + farthestBottomControl.Margin.Bottom + Padding.Bottom;
                         break;
                 }
             }

@@ -3,7 +3,7 @@ using Newtonsoft.Json.Linq;
 using System.ComponentModel;
 
 namespace FF.Rando.Companion.Games.MysticQuestRandomizer.Settings;
-internal class MysticQuestRandomizerSettings : GameSettings
+public class MysticQuestRandomizerSettings : GameSettings
 {
     public override string Name => "MysticQuestRandomizer";
 

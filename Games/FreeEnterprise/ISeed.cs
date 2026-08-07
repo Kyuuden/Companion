@@ -1,6 +1,4 @@
 ﻿using FF.Rando.Companion.Games.FreeEnterprise.RomData;
-using FF.Rando.Companion.Games.FreeEnterprise.Settings;
-using FF.Rando.Companion.Settings;
 using System.Collections.Generic;
 
 namespace FF.Rando.Companion.Games.FreeEnterprise;
@@ -16,9 +14,6 @@ public interface ISeed : IGame
     Metadata Metadata { get; }
     IEnumerable<IObjectiveGroup> Objectives { get; }
     IEnumerable<ICharacter> Party { get; }
-    bool Victory { get; }
-    new FreeEnterpriseSettings Settings { get; }
-    ISettings RootSettings { get; }
     Font Font { get; }
     Sprites Sprites { get; }
     bool CanTackBosses { get; }

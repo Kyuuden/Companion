@@ -5,9 +5,9 @@
 	  <Nullable>enable</Nullable>
 	  <TargetFramework>net48</TargetFramework>
 	  <UseWindowsForms>True</UseWindowsForms>
-	  <Version>2.2.0</Version>
+	  <Version>2.2.1</Version>
 	  <Description>Auto-Tracker for Square Enix Randomizers.</Description>
-	  <Copyright>2025 Kyuuden</Copyright>
+	  <Copyright>2026 Kyuuden</Copyright>
 	  <AssemblyVersion></AssemblyVersion>
 	  <FileVersion></FileVersion>
 	  <Configurations>Debug;Release</Configurations>
@@ -21,6 +21,9 @@
 		<BIZHAWK_DATA_HOME>$(BIZHAWK_HOME)</BIZHAWK_DATA_HOME>
 		<!-- ignore this; on NixOS these are different dirs -->
 	</PropertyGroup>
+	<ItemGroup>
+	  <Compile Remove="Games\JetsOfTime\Tracking\RotatingKeyItem.cs" />
+	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.43">
 		  <PrivateAssets>all</PrivateAssets>
@@ -40,6 +43,7 @@
 		<Reference Include="BizHawk.Client.EmuHawk" HintPath="$(BIZHAWK_HOME)EmuHawk.exe" />
 		<Reference Include="BizHawk.Common" HintPath="$(BIZHAWK_HOME)dll/BizHawk.Common.dll" />
 		<Reference Include="BizHawk.Emulation.Common" HintPath="$(BIZHAWK_HOME)dll/BizHawk.Emulation.Common.dll" />
+		<Reference Include="BizHawk.Emulation.Cores" HintPath="$(BIZHAWK_HOME)dll/BizHawk.Emulation.Cores.dll" />
 		<Reference Include="BizHawk.WinForms.Controls" HintPath="$(BIZHAWK_HOME)dll/BizHawk.WinForms.Controls.dll" />
 	</ItemGroup>
 	
@@ -374,6 +378,10 @@
 	  </Compile>
 	  <Compile Update="Games\JetsOfTime\View\JetsOfTimeControl.cs">
 	    <SubType>UserControl</SubType>
+	  </Compile>
+	  <Compile Update="Games\JetsOfTime\View\MapsPanel.cs" />
+	  <Compile Update="Games\JetsOfTime\View\StatisticsPanel.cs">
+	    <SubType>Component</SubType>
 	  </Compile>
 	  <Compile Update="Games\MysticQuestRandomizer\MysticQuest.Designer.cs">
 	    <DesignTime>True</DesignTime>

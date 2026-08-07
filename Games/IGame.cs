@@ -9,18 +9,13 @@ namespace FF.Rando.Companion.Games;
 public interface IGame : INotifyPropertyChanged, IDisposable
 {
     string Hash { get; }
-
     Bitmap Icon { get; }
-
     Color BackgroundColor { get; }
-
-    void OnNewFrame();
-
-    Control CreateControls();
-
-    bool RequiresMemoryEvents { get; }
+    Control CreateTrackingControl();
+    bool RequiresMemoryEventsForTiming { get; }
+    GameSettings Settings { get; }
 
     IEmulationContainer Container { get; }
 
-    GameSettings Settings { get; }
+    void OnNewFrame(bool isOnTrackingInterval);
 }

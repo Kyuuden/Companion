@@ -67,7 +67,7 @@ internal class KeyItem : IKeyItem, IDisposable
             SetImage();
 
             if (IsFound)
-                WhenFound = _seed.Container.Timer.Elapsed;
+                WhenFound = _seed.Timer.Elapsed;
         }
     }
 
@@ -84,7 +84,7 @@ internal class KeyItem : IKeyItem, IDisposable
             SetImage();
 
             if (IsUsed)
-                whenUsed = _seed.Container.Timer.Elapsed;
+                whenUsed = _seed.Timer.Elapsed;
         }
     }
 

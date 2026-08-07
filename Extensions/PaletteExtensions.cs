@@ -23,7 +23,7 @@ public static class PaletteExtensions
         return DecodePalette(paletteData.AsReadOnlySpan(), colorZero, maxColors);
     }
 
-    public static Palette DecodePalette(this ReadOnlySpan<byte> paletteData, Color32? colorZero = null, byte maxColors = byte.MaxValue)
+    public static Palette DecodePalette(this ReadOnlySpan<byte> paletteData, Color32? colorZero = null, int maxColors = 256)
     {
         bool first = true;
         List<Color32> colors = [];

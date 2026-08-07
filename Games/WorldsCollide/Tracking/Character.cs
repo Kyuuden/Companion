@@ -49,7 +49,7 @@ public class Character : IDisposable, INotifyPropertyChanged, IImageTracker
             if (_isFound && !_hasBeenFound)
             {
                 _hasBeenFound = true;
-                _seed.Container.Timer.Info($"Found {AltText}");
+                _seed.Timer.Info($"Found {AltText}");
             }
         }
     }

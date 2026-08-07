@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace FF.Rando.Companion.Games.MysticQuestRandomizer.Settings;
 
-internal class CompanionsSettings(JToken parentData) : PanelSettings(parentData)
+public class CompanionsSettings(JToken parentData) : PanelSettings(parentData)
 {
     public override string Name => "Companions";
 

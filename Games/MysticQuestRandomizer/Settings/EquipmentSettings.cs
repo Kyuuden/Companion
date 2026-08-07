@@ -4,7 +4,7 @@ using System.ComponentModel;
 
 namespace FF.Rando.Companion.Games.MysticQuestRandomizer.Settings;
 
-internal class EquipmentSettings(JToken parentData) : PanelSettings(parentData)
+public class EquipmentSettings(JToken parentData) : PanelSettings(parentData)
 {
     public override string Name => "Equipment";
 

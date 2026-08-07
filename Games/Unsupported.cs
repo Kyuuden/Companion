@@ -8,23 +8,24 @@ namespace FF.Rando.Companion.Games;
 internal class Unsupported : IGame
 {
     public required ISettings RootSettings { get; init; }
+
     public required string Hash { get; init; }
 
     public Bitmap Icon => null!;
 
     public Color BackgroundColor => Color.Black;
 
-    public bool RequiresMemoryEvents => false;
-
-    public IEmulationContainer Container => null!;
+    public bool RequiresMemoryEventsForTiming => false;
 
     public GameSettings Settings => null!;
+
+    public IEmulationContainer Container => null!;
 
 #pragma warning disable CS0067
     public event PropertyChangedEventHandler? PropertyChanged;
 #pragma warning restore CS0067
 
-    public Control CreateControls()
+    public Control CreateTrackingControl()
     {
         return new UnsupportedGameView(RootSettings);
     }
@@ -33,7 +34,7 @@ internal class Unsupported : IGame
     {
     }
 
-    public void OnNewFrame()
+    public void OnNewFrame(bool isOnTrackingInterval)
     {
     }
 }

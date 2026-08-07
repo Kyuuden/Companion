@@ -2,6 +2,7 @@
 using BizHawk.Common;
 using BizHawk.Emulation.Common;
 using FF.Rando.Companion.Games.JetsOfTime.Data;
+using FF.Rando.Companion.Games.JetsOfTime.Settings;
 using FF.Rando.Companion.Settings;
 using FF.Rando.Companion.Timing;
 using System;
@@ -16,13 +17,23 @@ internal class Parser : IGameParser
         game = null;
         try
         {
-            var container = new Container(apiContainer, memoryDomains, rootSettings, timer);
+            var container = new EmulationContainer<JetsOfTimeSettings>(apiContainer, memoryDomains, timer, rootSettings, "JetsOfTime");
             var hashScriptArea = container.Rom.ReadBytes(Addresses.ROM.SeedHashScript);
 
-            if (hashScriptArea.AsSpan().IndexOf(HashScript) == -1)
+            var scriptLocation = hashScriptArea.AsSpan().IndexOf(HashScript);
+
+            if (scriptLocation == -1)
                 return false;
 
-            game = new Seed(gameInfo.Hash, container);
+            var flags = new Flags();
+            var nameParts = gameInfo.Name.Split(' ' , '_');
+            if (nameParts.Length > 2)
+            {
+                var flagString = nameParts[1];
+                flags.Parse(flagString);
+            }
+
+            game = new Seed(flags, gameInfo.Hash, container);
             return true;
         }
         catch

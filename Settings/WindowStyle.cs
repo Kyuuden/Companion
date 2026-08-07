@@ -4,10 +4,11 @@ namespace FF.Rando.Companion.Settings;
 
 public enum WindowStyle
 {
-    [Description("Custom (Independent of BizHawk)")]
+    [Description("Independent")]
     Custom,
-    [Description("Dock (16x9)")]
-    Dock_16x9,
-    [Description("Dock (16x10)")]
-    Dock_16x10
+    [Description("Docked")]
+    Docked,
+    [Description("Docked")]
+    [Browsable(false)]
+    Docked_Legacy
 }

@@ -44,7 +44,7 @@ internal class Boss : IBoss
         if (!_encounters.ContainsKey(loc))
         {
             var description = _seed.BossDescriptor.GetLocationName(loc) ?? "UNKNOWN LOCATION";
-            _encounters.Add(loc, new Encounter(description, _seed.Container.Timer.Elapsed));
+            _encounters.Add(loc, new Encounter(description, _seed.Timer.Elapsed));
             NotifyPropertyChanged(nameof(Encounters));
             SetImage();
             return true;
@@ -60,7 +60,7 @@ internal class Boss : IBoss
             if (!encounter.IsDefeated)
             {
                 encounter.IsDefeated = true;
-                encounter.WhenDefeated = _seed.Container.Timer.Elapsed;
+                encounter.WhenDefeated = _seed.Timer.Elapsed;
                 NotifyPropertyChanged(nameof(Encounters));
                 SetImage();
                 return true;

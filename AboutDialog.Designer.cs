@@ -42,13 +42,17 @@ namespace FF.Rando.Companion
             this.updateButton = new System.Windows.Forms.Button();
             this.ff6Link = new System.Windows.Forms.LinkLabel();
             this.ffmqLink = new System.Windows.Forms.LinkLabel();
+            this.jotLink = new System.Windows.Forms.LinkLabel();
+            this.ff6SourceLink = new System.Windows.Forms.LinkLabel();
+            this.ffmqSourceLink = new System.Windows.Forms.LinkLabel();
+            this.ctJotSourceLink = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // button1
             // 
             this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.button1.Location = new System.Drawing.Point(297, 313);
+            this.button1.Location = new System.Drawing.Point(297, 334);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 0;
@@ -103,7 +107,7 @@ namespace FF.Rando.Companion
             // sotnToolsLink
             // 
             this.sotnToolsLink.AutoSize = true;
-            this.sotnToolsLink.Location = new System.Drawing.Point(29, 313);
+            this.sotnToolsLink.Location = new System.Drawing.Point(29, 336);
             this.sotnToolsLink.Margin = new System.Windows.Forms.Padding(20, 5, 5, 5);
             this.sotnToolsLink.Name = "sotnToolsLink";
             this.sotnToolsLink.Size = new System.Drawing.Size(87, 13);
@@ -115,7 +119,7 @@ namespace FF.Rando.Companion
             // updaterLink
             // 
             this.updaterLink.AutoSize = true;
-            this.updaterLink.Location = new System.Drawing.Point(29, 290);
+            this.updaterLink.Location = new System.Drawing.Point(29, 313);
             this.updaterLink.Margin = new System.Windows.Forms.Padding(20, 5, 5, 5);
             this.updaterLink.Name = "updaterLink";
             this.updaterLink.Size = new System.Drawing.Size(144, 13);
@@ -127,7 +131,7 @@ namespace FF.Rando.Companion
             // schalaLink
             // 
             this.schalaLink.AutoSize = true;
-            this.schalaLink.Location = new System.Drawing.Point(29, 244);
+            this.schalaLink.Location = new System.Drawing.Point(29, 267);
             this.schalaLink.Margin = new System.Windows.Forms.Padding(20, 5, 5, 5);
             this.schalaLink.Name = "schalaLink";
             this.schalaLink.Size = new System.Drawing.Size(60, 13);
@@ -139,7 +143,7 @@ namespace FF.Rando.Companion
             // kgySoftLink
             // 
             this.kgySoftLink.AutoSize = true;
-            this.kgySoftLink.Location = new System.Drawing.Point(29, 267);
+            this.kgySoftLink.Location = new System.Drawing.Point(29, 290);
             this.kgySoftLink.Margin = new System.Windows.Forms.Padding(20, 5, 5, 5);
             this.kgySoftLink.Name = "kgySoftLink";
             this.kgySoftLink.Size = new System.Drawing.Size(88, 13);
@@ -184,13 +188,65 @@ namespace FF.Rando.Companion
             this.ffmqLink.Text = "Mystic Quest Randomizer";
             this.ffmqLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.FFmqLink_LinkClicked);
             // 
+            // jotLink
+            // 
+            this.jotLink.AutoSize = true;
+            this.jotLink.Location = new System.Drawing.Point(29, 244);
+            this.jotLink.Margin = new System.Windows.Forms.Padding(20, 5, 5, 5);
+            this.jotLink.Name = "jotLink";
+            this.jotLink.Size = new System.Drawing.Size(64, 13);
+            this.jotLink.TabIndex = 22;
+            this.jotLink.TabStop = true;
+            this.jotLink.Text = "Jets of Time";
+            this.jotLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.JOTLink_LinkClicked);
+            // 
+            // ff6SourceLink
+            // 
+            this.ff6SourceLink.AutoSize = true;
+            this.ff6SourceLink.Location = new System.Drawing.Point(136, 198);
+            this.ff6SourceLink.Margin = new System.Windows.Forms.Padding(0, 5, 5, 5);
+            this.ff6SourceLink.Name = "ff6SourceLink";
+            this.ff6SourceLink.Size = new System.Drawing.Size(45, 13);
+            this.ff6SourceLink.TabIndex = 23;
+            this.ff6SourceLink.TabStop = true;
+            this.ff6SourceLink.Text = "(source)";
+            this.ff6SourceLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ff6SourceLink_LinkClicked);
+            // 
+            // ffmqSourceLink
+            // 
+            this.ffmqSourceLink.AutoSize = true;
+            this.ffmqSourceLink.Location = new System.Drawing.Point(161, 221);
+            this.ffmqSourceLink.Margin = new System.Windows.Forms.Padding(0, 5, 5, 5);
+            this.ffmqSourceLink.Name = "ffmqSourceLink";
+            this.ffmqSourceLink.Size = new System.Drawing.Size(45, 13);
+            this.ffmqSourceLink.TabIndex = 24;
+            this.ffmqSourceLink.TabStop = true;
+            this.ffmqSourceLink.Text = "(source)";
+            this.ffmqSourceLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ffmqSourceLink_LinkClicked);
+            // 
+            // ctJotSourceLink
+            // 
+            this.ctJotSourceLink.AutoSize = true;
+            this.ctJotSourceLink.Location = new System.Drawing.Point(98, 244);
+            this.ctJotSourceLink.Margin = new System.Windows.Forms.Padding(0, 5, 5, 5);
+            this.ctJotSourceLink.Name = "ctJotSourceLink";
+            this.ctJotSourceLink.Size = new System.Drawing.Size(45, 13);
+            this.ctJotSourceLink.TabIndex = 25;
+            this.ctJotSourceLink.TabStop = true;
+            this.ctJotSourceLink.Text = "(source)";
+            this.ctJotSourceLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ctJotSourceLink_LinkClicked);
+            // 
             // AboutDialog
             // 
             this.AcceptButton = this.button1;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(384, 348);
+            this.ClientSize = new System.Drawing.Size(384, 369);
             this.ControlBox = false;
+            this.Controls.Add(this.ctJotSourceLink);
+            this.Controls.Add(this.ffmqSourceLink);
+            this.Controls.Add(this.ff6SourceLink);
+            this.Controls.Add(this.jotLink);
             this.Controls.Add(this.ffmqLink);
             this.Controls.Add(this.ff6Link);
             this.Controls.Add(this.updateButton);
@@ -226,5 +282,9 @@ namespace FF.Rando.Companion
         private System.Windows.Forms.Button updateButton;
         private System.Windows.Forms.LinkLabel ff6Link;
         private System.Windows.Forms.LinkLabel ffmqLink;
+        private System.Windows.Forms.LinkLabel jotLink;
+        private System.Windows.Forms.LinkLabel ff6SourceLink;
+        private System.Windows.Forms.LinkLabel ffmqSourceLink;
+        private System.Windows.Forms.LinkLabel ctJotSourceLink;
     }
 }

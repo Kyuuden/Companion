@@ -1,5 +1,6 @@
 ﻿using FF.Rando.Companion.Games.JetsOfTime.Rendering;
 using FF.Rando.Companion.Rendering;
+using FF.Rando.Companion.Timing;
 using System;
 using System.Windows.Forms;
 using HorizontalAlignment = FF.Rando.Companion.Rendering.HorizontalAlignment;
@@ -12,8 +13,8 @@ internal class AnimatedKeyItem : KeyItemBase
     private int _index = 0;
     private readonly Timer _timer;
 
-    public AnimatedKeyItem(Container container, KeyItemType type, SpriteCollection collection, int interval = 1000)
-        :base(container, type)
+    public AnimatedKeyItem(ITimer timer, KeyItemType type, SpriteCollection collection, int interval = 1000)
+        :base(timer, type)
     {
         _spriteCollection = collection;
         _timer = new Timer { Interval = interval };

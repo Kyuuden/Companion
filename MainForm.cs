@@ -1,6 +1,7 @@
 ﻿using BizHawk.Client.Common;
 using BizHawk.Client.EmuHawk;
 using BizHawk.Emulation.Common;
+using BizHawk.Emulation.Cores;
 using FF.Rando.Companion.Games;
 using FF.Rando.Companion.Settings;
 using FF.Rando.Companion.Timing;
@@ -12,6 +13,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -19,9 +21,9 @@ namespace FF.Rando.Companion;
 
 [ExternalToolEmbeddedIcon("FF.Rando.Companion.Resources.Crystal.png")]
 [ExternalTool("Square Enix Randomizer Companion", 
-    Description = "An autotracker for Chrono Trigger: Jets of Time, FF4: Free Enterprise, FF6: Worlds Collide, and Final Fantasy Mystic Quest Randomizer.")]
+    Description = $"An autotracker for:\nChrono Trigger: Jets of Time\nFF4: Free Enterprise\nFF6: Worlds Collide\nFinal Fantasy Mystic Quest Randomizer.")]
 public partial class MainForm : ToolFormBase, IExternalToolForm
-{
+{ 
     protected override string WindowTitleStatic => "Square Enix Randomizer Companion";
 
     public ApiContainer? MaybeAPIContainer { get; set; }
@@ -29,6 +31,9 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
     private ApiContainer APIs => MaybeAPIContainer!;
 
     private readonly ISettings _settings;
+
+    [RequiredService]
+    private IEmulator? Emulator { get; set; }
 
     [OptionalService]
     public IMemoryDomains? MemoryDomains { get; set; }
@@ -53,6 +58,15 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
         StopWatchLabel.Height = StopWatchLabel.PreferredHeight;
 
         TrackerPanel.Controls.Add(new UnsupportedGameView(_settings));
+
+        using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("FF.Rando.Companion.Resources.Crystal.png"))
+        {
+            if (stream != null)
+            {
+                var hIcon = (Image.FromStream(stream) as Bitmap)!.GetHicon();
+                Icon = Icon.FromHandle(hIcon);
+            }
+        }
 
         CreateTimer();
     }
@@ -82,8 +96,10 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
         {
             case nameof(ISettings.DockOffset):
             case nameof(ISettings.DockSide):
-            case nameof(ISettings.WindowStyle):
                 DockToScreen();
+                break;
+            case nameof(ISettings.WindowStyle):
+                DockToScreen(true);
                 break;
             case nameof(ISettings.Font):
                 StopWatchLabel.Font = _settings.Font;
@@ -95,7 +111,7 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
             case nameof(ISettings.TimerMode):
                 if (_timer?.Status == TimerStatus.Running)
                 {
-                    MessageBox.Show("Cannot change the timer mode while a run is in progress", "Settings Error");
+                    DialogController.ShowMessageBox("Cannot change the timer mode while a run is in progress", "Settings Error");
                 }
                 else
                 {
@@ -103,9 +119,19 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
                 }
                 break;
             case nameof(GameViewModel.Game) when _viewModel.Game != null:
-                if (_viewModel.Game.RequiresMemoryEvents && APIs.MemoryEvents == null) 
+                
+                if (_viewModel.Game.RequiresMemoryEventsForTiming && Emulator?.SystemId is VSystemID.Raw.SNES && APIs.MemoryEvents == null)
                 {
-                    MessageBox.Show("Automatic timing of runs is not supported on the Snes9x core. Please use the BSNES or BSNESv115+ core to have this feature.", "Timing unavailable");
+                    if (Config != null && DialogController.ShowMessageBox2(
+                        $"Automatic timing of runs is not supported on the {Config.PreferredCores[VSystemID.Raw.SNES]} core.\nWould you like to switch to the {CoreNames.Bsnes115} core to have this feature?", 
+                        "Timing unavailable"))
+                    {
+                        Config.PreferredCores[VSystemID.Raw.SNES] = CoreNames.Bsnes115;
+                        _viewModel.Game.Dispose();
+                        _viewModel.Game = null;
+                        APIs.EmuClient.RebootCore();
+                        return;
+                    }
                 }
 
                 var icon = _viewModel.Game.Icon;
@@ -113,10 +139,6 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
                 {
                     var hIcon = icon.GetHicon();
                     Icon = Icon.FromHandle(hIcon);
-                }
-                else
-                {
-                    //Icon = 
                 }
 
                 TrackerPanel.SuspendLayout();
@@ -131,7 +153,7 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
                 StopWatchLabel.Visible = _timer?.ShowLocally == true;
                 _timer?.Initialize();
                 _game = _viewModel.Game;
-                TrackerPanel.Controls.Add(_viewModel.Game.CreateControls());
+                TrackerPanel.Controls.Add(_viewModel.Game.CreateTrackingControl());
                 TrackerPanel.ResumeLayout(false);
                 TrackerPanel.PerformLayout();
                 break;
@@ -147,7 +169,7 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
             .GetValue(this, null) as BizHawk.Client.EmuHawk.MainForm;
     }
 
-    private void DockToScreen()
+    private void DockToScreen(bool reposition = false)
     {
         var main = GetBizHawkForm();
         if (main == null)
@@ -166,7 +188,16 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
 
         switch (_settings.WindowStyle)
         {
-            case WindowStyle.Dock_16x9:
+            case WindowStyle.Custom:
+                FormBorderStyle = FormBorderStyle.Sizable;
+                if (reposition)
+                {
+                    Location = _settings.WindowPosition;
+                    Size = _settings.WindowSize;
+                }
+                break;
+
+            default:
                 FormBorderStyle = FormBorderStyle.FixedSingle;
                 Size = new Size((int)(APIs.EmuClient.ScreenHeight() * 16.0 / 9.0) - APIs.EmuClient.ScreenWidth(), main.Height);
                 Location = new Point(
@@ -178,23 +209,6 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
                 if (currentSize != Size)
                     Invalidate();
 
-                break;
-            case WindowStyle.Dock_16x10:
-                FormBorderStyle = FormBorderStyle.FixedSingle;
-                Size = new Size((int)(APIs.EmuClient.ScreenHeight() * 16.0 / 10.0) - APIs.EmuClient.ScreenWidth(), main.Height);
-                Location = new Point(
-                    _settings.DockSide == DockSide.Right
-                        ? main.Location.X + main.Width + _settings.DockOffset
-                        : main.Location.X - Width - _settings.DockOffset,
-                    main.Location.Y);
-
-                if (currentSize != Size)
-                    Invalidate();
-
-                break;
-            case WindowStyle.Custom:
-            default:
-                FormBorderStyle = FormBorderStyle.Sizable;
                 break;
         }
 
@@ -231,13 +245,6 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
         base.OnClosing(e);
     }
 
-    protected override void OnResize(EventArgs e)
-    {
-        base.OnResize(e);
-
-        if (_settings == null || _settings.WindowStyle != WindowStyle.Custom)
-            return;
-    }
     protected override void OnClosed(EventArgs e)
     {
         if (_parentFormLinked && GetBizHawkForm() is { } mainForm)
@@ -276,11 +283,6 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
                         ? FormWindowState.Maximized
                         : FormWindowState.Normal;
             }
-
-            if (Game.IsNullInstance() || Game == null)
-            {
-                
-            }
         }
     }
 
@@ -292,7 +294,9 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
         try
         {
             if (_parentFormLinked && !_docking && APIs.Emulation.FrameCount() > 1)
+            {
                 _viewModel.OnFrame(Game);
+            }
         }
         catch { } // If i've done something wrong, don't crash bizhawk.
 
@@ -329,7 +333,7 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
         _viewModel.MemoryDomains = MemoryDomains;
     }
 
-    private void DisplayToolStripMenuItem_Click(object sender, EventArgs e)
+    private void SettingsToolStripMenuItem_Click(object sender, EventArgs e)
     {
         var existing = OwnedForms.OfType<SettingsDialog>().FirstOrDefault();
 

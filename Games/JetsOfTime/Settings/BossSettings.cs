@@ -8,10 +8,10 @@ public class BossSettings(JToken jToken) : PanelSettings(jToken)
 {
     public override string Name => "Bosses";
 
-    [DefaultValue(3)]
+    [DefaultValue(5)]
     public override int Priority
     {
-        get => GetSetting(3);
+        get => GetSetting(5);
         set => SaveSetting(value);
     }
 

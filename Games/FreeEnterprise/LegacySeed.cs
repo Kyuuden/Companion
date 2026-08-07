@@ -1,4 +1,5 @@
 ﻿using FF.Rando.Companion.Games.FreeEnterprise.RomData;
+using FF.Rando.Companion.Games.FreeEnterprise.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,11 +27,11 @@ internal abstract class LegacySeed : SeedBase
 
     protected bool IsLoading => _state == RunState.Loading;
 
-    public override bool RequiresMemoryEvents => true;
+    public override bool RequiresMemoryEventsForTiming => true;
 
     protected abstract bool OWinGame { get; }
 
-    public LegacySeed(string hash, Metadata metadata, Container container)
+    public LegacySeed(string hash, Metadata metadata, EmulationContainer<FreeEnterpriseSettings> container)
         : base(hash, metadata, container)
     {
         _state = RunState.Loading;
@@ -75,16 +76,16 @@ internal abstract class LegacySeed : SeedBase
             switch (_state)
             {
                 case RunState.RunStarted:
-                    if (Game.MemoryEvents == null)
+                    if (MemoryEvents == null)
                         throw new KeyNotFoundException();
 
-                    Game.MemoryEvents?.AddExecCallback(Flash, ZeromusDeathAnimation, "System Bus");
+                    MemoryEvents?.AddExecCallback(Flash, ZeromusDeathAnimation, "System Bus");
                     break;
                 case RunState.Menu:
-                    if (Game.MemoryEvents == null)
+                    if (MemoryEvents == null)
                         throw new KeyNotFoundException();
 
-                    Game.MemoryEvents?.AddExecCallback(StartNewGame, MenuSaveNewGame, "System Bus");
+                    MemoryEvents?.AddExecCallback(StartNewGame, MenuSaveNewGame, "System Bus");
                     break;
             }
         }
@@ -100,10 +101,10 @@ internal abstract class LegacySeed : SeedBase
             switch (_state)
             {
                 case RunState.RunStarted:
-                    Game.MemoryEvents?.RemoveMemoryCallback(Flash);
+                    MemoryEvents?.RemoveMemoryCallback(Flash);
                     break;
                 case RunState.Menu:
-                    Game.MemoryEvents?.RemoveMemoryCallback(StartNewGame);
+                    MemoryEvents?.RemoveMemoryCallback(StartNewGame);
                     break;
             }
         }
@@ -112,19 +113,19 @@ internal abstract class LegacySeed : SeedBase
         }
     }
 
-    public override void OnNewFrame()
+    protected override bool CheckIfVictory()
     {
-        base.OnNewFrame();
-
         if (!IsLoading && OWinGame)
         {
-            var time = Game.Wram.ReadBytes(Shared.Addresses.WRAM.EndGameTime);
+            var time = Wram.ReadBytes(Shared.Addresses.WRAM.EndGameTime);
             if (time.Any(t => t != 0))
             {
                 RemoveCallbacks();
-                Victory = true;
                 _state = RunState.RunFinished;
+                return true;
             }
         }
+
+        return base.CheckIfVictory();
     }
 }

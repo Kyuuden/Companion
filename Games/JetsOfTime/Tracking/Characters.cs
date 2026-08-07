@@ -1,22 +1,27 @@
-﻿using System;
+﻿using FF.Rando.Companion.Games.JetsOfTime.Rendering;
+using FF.Rando.Companion.Timing;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FF.Rando.Companion.Games.JetsOfTime.Tracking;
 
-internal class Characters(Seed seed)
+internal class Characters(ITimer timer, Sprites spriteDB)
 {
     private readonly IReadOnlyList<Character> _values =
     [
-        new Character(seed, CharacterType.Chrono),
-        new Character(seed, CharacterType.Marle),
-        new Character(seed, CharacterType.Lucca),
-        new Character(seed, CharacterType.Robo),
-        new Character(seed, CharacterType.Frog),
-        new Character(seed, CharacterType.Ayla),
-        new Character(seed, CharacterType.Magus),
+        new Character(CharacterType.Chrono, timer, spriteDB.GetPortrait(PortraitType.Chrono)),
+        new Character(CharacterType.Marle, timer, spriteDB.GetPortrait(PortraitType.Marle)),
+        new Character(CharacterType.Lucca, timer, spriteDB.GetPortrait(PortraitType.Lucca)),
+        new Character(CharacterType.Robo, timer, spriteDB.GetPortrait(PortraitType.Robo)),
+        new Character(CharacterType.Frog, timer, spriteDB.GetPortrait(PortraitType.Frog)),
+        new Character(CharacterType.Ayla, timer, spriteDB.GetPortrait(PortraitType.Ayla)),
+        new Character(CharacterType.Magus, timer, spriteDB.GetPortrait(PortraitType.Magus)),
     ];
 
     internal IReadOnlyList<Character> Values => _values;
+
+    public bool IsFound(CharacterType characterType) => Values.FirstOrDefault(c=> c.Type == characterType).IsFound;
 
     public bool Update(ReadOnlySpan<byte> partyData)
     {

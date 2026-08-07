@@ -18,6 +18,8 @@ namespace FF.Rando.Companion.Settings;
 
 public class RootSettings : ISettings
 {
+    public const string KeyBindingCategory = "Key Bindings";
+
     private static readonly string FileName = "FF.Rando.Companion.Settings.json";
     private readonly string _settingsFile;
 
@@ -57,8 +59,8 @@ public class RootSettings : ISettings
     [DisplayName("Window Style")]
     [Description("Should the tracker window be docked to BizHawk's window, or allowed to be independent.")]
     [TypeConverter(typeof(EnumDescriptionConverter))]
-    [DefaultValue(WindowStyle.Dock_16x9)]
-    public WindowStyle WindowStyle { get => GetSetting(WindowStyle.Dock_16x9); set => SaveSetting(value); }
+    [DefaultValue(WindowStyle.Docked)]
+    public WindowStyle WindowStyle { get => GetSetting(WindowStyle.Docked); set => SaveSetting(value); }
 
     [Category("Window")]
     [DisplayName("BizHawk Dock Side")]
@@ -154,7 +156,7 @@ public class RootSettings : ISettings
     
     [DisplayName("Next Panel")]
     [DefaultValue("X1 Back")]
-    [Category("Buttons")]
+    [Category(KeyBindingCategory)]
     [Editor(typeof(ButtonAssignmentEditor), typeof(UITypeEditor))]
     [TypeConverter(typeof(ButtonAssignmentConverter))]
     public string NextPanelButton
@@ -165,7 +167,7 @@ public class RootSettings : ISettings
 
     [DisplayName("Next Page")]
     [DefaultValue("X1 RightTrigger")]
-    [Category("Buttons")]
+    [Category(KeyBindingCategory)]
     [Editor(typeof(ButtonAssignmentEditor), typeof(UITypeEditor))]
     [TypeConverter(typeof(ButtonAssignmentConverter))]
     public string NextPageButton
@@ -176,7 +178,7 @@ public class RootSettings : ISettings
 
     [DisplayName("Previous Page")]
     [DefaultValue("X1 LeftTrigger")]
-    [Category("Buttons")]
+    [Category(KeyBindingCategory)]
     [Editor(typeof(ButtonAssignmentEditor), typeof(UITypeEditor))]
     [TypeConverter(typeof(ButtonAssignmentConverter))]
     public string PreviousPageButton
@@ -187,7 +189,7 @@ public class RootSettings : ISettings
 
     [DisplayName("Scroll Down")]
     [DefaultValue("X1 RStickDown")]
-    [Category("Buttons")]
+    [Category(KeyBindingCategory)]
     [Editor(typeof(ButtonAssignmentEditor), typeof(UITypeEditor))]
     [TypeConverter(typeof(ButtonAssignmentConverter))]
     public string ScrollDownButton
@@ -198,7 +200,7 @@ public class RootSettings : ISettings
 
     [DisplayName("Scroll Up")]
     [DefaultValue("X1 RStickUp")]
-    [Category("Buttons")]
+    [Category(KeyBindingCategory)]
     [Editor(typeof(ButtonAssignmentEditor), typeof(UITypeEditor))]
     [TypeConverter(typeof(ButtonAssignmentConverter))]
     public string ScrollUpButton
@@ -208,13 +210,13 @@ public class RootSettings : ISettings
     }
 
     [DisplayName("Start / Stop Timer")]
-    [DefaultValue("")]
-    [Category("Buttons")]
+    [DefaultValue("Backtick")]
+    [Category(KeyBindingCategory)]
     [Editor(typeof(ButtonAssignmentEditor), typeof(UITypeEditor))]
     [TypeConverter(typeof(ButtonAssignmentConverter))]
     public string ToggleTimerButton
     {
-        get => GetStringSetting("");
+        get => GetStringSetting("Backtick");
         set => SaveStringSetting(value);
     }
 

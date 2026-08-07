@@ -16,5 +16,5 @@ internal partial class BossesPanel : FlowPanel<BossSettings>
     public override bool CanHaveFillDockStyle => true;
 
     protected override Control[] GenerateControls(Seed seed)
-         => (Game?.Bosses.Values ?? []).Select(boss => new BossControl(seed, Settings!, boss)).ToArray();
+         => (Game?.State.Bosses.Values ?? []).Select(boss => new BossControl(seed, Settings!, boss)).ToArray();
 }

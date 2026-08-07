@@ -10,25 +10,25 @@ using System.Runtime.InteropServices;
 using System.Text;
 
 namespace FF.Rando.Companion.Games.JetsOfTime.Rendering;
-internal class LocationDB : IDisposable
+internal class Locations : IDisposable
 {
-    private readonly Dictionary<int, Location> _locationCache = [];
+    private readonly Dictionary<LocationType, Location> _locationCache = [];
 
-    private readonly Container _container;
+    private readonly Seed _seed;
     private readonly LocationTileCache _locationTileCache;
 
-    public LocationDB(Container container)
+    public Locations(Seed seed)
     {
-        _container = container;
-        _locationTileCache = new LocationTileCache(_container);
+        _seed = seed;
+        _locationTileCache = new LocationTileCache(_seed);
     }
 
-    public Location Get(int index)
+    public Location Get(LocationType loc)
     {
-        if (_locationCache.TryGetValue(index, out var location)) return location;
+        if (_locationCache.TryGetValue(loc, out var location)) return location;
 
-        location = new Location(_container, _locationTileCache, index);
-        _locationCache.Add(index, location);
+        location = new Location(_seed, _locationTileCache, (int)loc);
+        _locationCache.Add(loc, location);
         return location;
     }
 
@@ -40,7 +40,7 @@ internal class LocationDB : IDisposable
     }
 }
 
-internal class LocationTileCache(Container container)
+internal class LocationTileCache(Seed seed)
 {
     private readonly Dictionary<int, List<byte[,]>> _tiles = [];
 
@@ -50,7 +50,7 @@ internal class LocationTileCache(Container container)
 
         if (_tiles.TryGetValue(index, out var tiles)) return tiles;
 
-        var compressedTiles = container.Rom.ReadBytes(Data.Addresses.ROM.LocationMaps.TileData[index]);
+        var compressedTiles = seed.Rom.ReadBytes(Data.Addresses.ROM.LocationMaps.TileData[index]);
         var decompressed = Utils.DecompressData(compressedTiles);
 
         tiles = decompressed.ReadMany<byte[]>(0x20 * 8).Select(b => b.DecodeTile(4)).ToList();
@@ -63,7 +63,7 @@ internal class Location : IDisposable
 {
     private readonly Palette _palette;
     private readonly List<byte[,]> _allLayer12TileData = [];
-    private readonly List<byte[,]> _layer12AnimatedTileData;
+    //private readonly List<byte[,]> _layer12AnimatedTileData;
     private readonly List<BlockInfo> _layer12Blocks = [];
     private readonly List<int> _layer1BlockIds = [];
     private readonly List<int> _layer2BlockIds = [];
@@ -75,17 +75,19 @@ internal class Location : IDisposable
     private readonly Size _layer3Size;
 
     private readonly Dictionary<SpriteKey, ISprite> _renderedSprites = [];
+    private ISprite? _openedChest;
+    private ISprite? _closedChest;
 
-    public Location(Container container, LocationTileCache tileCache, int index)
+    public Location(Seed seed, LocationTileCache tileCache, int index)
     {
-        var header = container.Rom.ReadBytes(Data.Addresses.ROM.LocationMaps.Headers[index]);
+        var header = seed.Rom.ReadBytes(Data.Addresses.ROM.LocationMaps.Headers[index]);
 
         var layer12Index = header[1];
         var layer3Index = header[2];
         var paletteIndex = header[3];
         var mapIndex = BinaryPrimitives.ReadUInt16LittleEndian(header.AsSpan()[4..]);
 
-        var paletteData = container.Rom.ReadBytes(Data.Addresses.ROM.LocationMaps.PaletteData[paletteIndex]);
+        var paletteData = seed.Rom.ReadBytes(Data.Addresses.ROM.LocationMaps.PaletteData[paletteIndex]);
         var colors = new List<Color32>([new(), new(), new(), new(), new(), new(), new(), new(), new(), new(), new(), new(), new(), new(), new(), new()]);
         foreach (var color in MemoryMarshal.Cast<byte, ushort>(paletteData))
         {
@@ -94,9 +96,9 @@ internal class Location : IDisposable
         }
         _palette = new Palette(colors);
 
-        var layer12TileSets = container.Rom.ReadBytes(Data.Addresses.ROM.LocationMaps.TileSets[layer12Index]);
+        var layer12TileSets = seed.Rom.ReadBytes(Data.Addresses.ROM.LocationMaps.TileSets[layer12Index]);
 
-        _layer12AnimatedTileData = tileCache.Get(layer12TileSets[6]);
+        //_layer12AnimatedTileData = tileCache.Get(layer12TileSets[6]);
         _allLayer12TileData.AddRange(tileCache.Get(layer12TileSets[0]));
         _allLayer12TileData.AddRange(tileCache.Get(layer12TileSets[1]));
         _allLayer12TileData.AddRange(tileCache.Get(layer12TileSets[2]));
@@ -105,7 +107,7 @@ internal class Location : IDisposable
         _allLayer12TileData.AddRange(tileCache.Get(layer12TileSets[5]));
         _allLayer12TileData.AddRange(tileCache.Get(layer12TileSets[7]));
 
-        var assemblyData = Utils.DecompressData(container.Rom.ReadBytes(Data.Addresses.ROM.LocationMaps.Layer12AssemblyData[layer12Index])).AsSpan();
+        var assemblyData = Utils.DecompressData(seed.Rom.ReadBytes(Data.Addresses.ROM.LocationMaps.Layer12AssemblyData[layer12Index])).AsSpan();
 
         var currentBlock = new BlockInfo();
         for (int i = 0; i < assemblyData.Length; i+=2)
@@ -118,7 +120,7 @@ internal class Location : IDisposable
             }
         }
 
-        var mapData = Utils.DecompressData(container.Rom.ReadBytes(Data.Addresses.ROM.LocationMaps.MapData[mapIndex])).AsReadOnlySpan();
+        var mapData = Utils.DecompressData(seed.Rom.ReadBytes(Data.Addresses.ROM.LocationMaps.MapData[mapIndex])).AsReadOnlySpan();
         var layer12Size = mapData[0];
         var flags = mapData[1];
         mapData = mapData[6..];
@@ -139,7 +141,7 @@ internal class Location : IDisposable
 
         _layer3Size = new Size(((flags >> 0) & 0x03) * 16 + 16, ((flags >> 2) & 0x03) * 16 + 16);
         var layer3BlockCount = _layer3Size.Width * _layer3Size.Height;
-        var layer3BlockIds = new List<int>();
+        //var layer3BlockIds = new List<int>();
 
         if ((flags & 0x80) != 0)
         {
@@ -182,7 +184,7 @@ internal class Location : IDisposable
             {
                 var props = properties[y * _size.Width + x];
                 if (props.IsFlagSet(BlockProperties.Layer1_HighBank))
-                   _layer1BlockIds[y * _layer1Size.Width + x] |= 256;// = Math.Min(layer1BlockIds[y * layer1Width + x] + 256, _layer12Blocks.Count);
+                   _layer1BlockIds[y * _layer1Size.Width + x] |= 256;
             }
         }
 
@@ -192,24 +194,43 @@ internal class Location : IDisposable
             {
                 var props = properties[y * _size.Width + x];
                 if (props.IsFlagSet(BlockProperties.Layer2_HighBank))
-                    _layer2BlockIds[y * _layer2Size.Width + x] |= 256;// = Math.Min(layer2BlockIds[y * layer2Width + x] + 256, _layer12Blocks.Count);
+                    _layer2BlockIds[y * _layer2Size.Width + x] |= 256;
             }
         }
     }
 
+    public ISprite? GetOpenChest()
+    {
+        if (_layer12Blocks.Count < 512)
+            return null;
+
+        if (_openedChest != null)
+            return _openedChest;
+
+        var chest = BitmapDataFactory.CreateBitmapData(16, 16, KnownPixelFormat.Format8bppIndexed, _palette);
+        RenderBlock(chest, 0, 0, _layer12Blocks[511], false);
+        RenderBlock(chest, 0, 0, _layer12Blocks[511], true);
+
+        return _openedChest = new BasicSprite(chest);
+    }
+
+    public ISprite? GetClosedChest()
+    {
+        if (_layer12Blocks.Count < 512)
+            return null;
+
+        if (_closedChest != null) return _closedChest;
+
+        var chest = BitmapDataFactory.CreateBitmapData(16, 16, KnownPixelFormat.Format8bppIndexed, _palette);
+        RenderBlock(chest, 0, 0, _layer12Blocks[510], false);
+        RenderBlock(chest, 0, 0, _layer12Blocks[510], true);
+
+        return _closedChest = new BasicSprite(chest);
+    }
+
+
     public ISprite? Render(bool includeLayer1, bool includeLayer2, bool includeLayer3)
     {
-        //width = 16 * 8;
-        //height = (_allLayer12TileData.Count / 16) * 8;
-        //var test = BitmapDataFactory.CreateBitmapData(width, height, KnownPixelFormat.Format8bppIndexed, _palette);
-        //for (int i = 0; i < _allLayer12TileData.Count; i++)
-        //{
-        //    _allLayer12TileData[i].DrawInto(test, (i % 16) * 8, (i / 16) * 8, colorOffset: 2);
-        //}
-
-        //test.MakeGrayscale();
-        //return new BasicSprite(test);
-
         if (_renderedSprites.TryGetValue(new SpriteKey(includeLayer1, includeLayer2, includeLayer3), out var sprite))
             return sprite;
 
@@ -268,6 +289,8 @@ internal class Location : IDisposable
             sprite.Dispose();
 
         _renderedSprites.Clear();
+        _openedChest?.Dispose();
+        _closedChest?.Dispose();
     }
 
     private record SpriteKey(bool Layer1, bool Layer2, bool Layer3);

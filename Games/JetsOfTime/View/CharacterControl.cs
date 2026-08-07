@@ -1,7 +1,6 @@
 ﻿using FF.Rando.Companion.Games.JetsOfTime.Tracking;
 using FF.Rando.Companion.Settings;
 using FF.Rando.Companion.View;
-using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 

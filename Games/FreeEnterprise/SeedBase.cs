@@ -1,67 +1,31 @@
 ﻿using FF.Rando.Companion.Games.FreeEnterprise.View;
 using FF.Rando.Companion.Games.FreeEnterprise.RomData;
 using FF.Rando.Companion.Games.FreeEnterprise.Settings;
-using FF.Rando.Companion.Settings;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 
 namespace FF.Rando.Companion.Games.FreeEnterprise;
 
-internal abstract class SeedBase : ISeed
+public abstract class SeedBase : GameBase<FreeEnterpriseSettings>, ISeed
 {
-    private Color _backgroundColor = Color.FromArgb(0, 0, 99);
-    private bool _started = false;
-    private bool _victory = false;
     private decimal? _xpRate = null;
     private int _defeatedEncounters = 0;
     private int? _treasureCount;
 
     public abstract IKeyItemDescriptor KeyItemDescriptor { get; }
+
     public abstract IBossDescriptor BossDescriptor { get; }
 
     public RomData.Font Font { get; }
-    public Sprites Sprites { get; }
-    public string Hash { get; }
-    public Metadata Metadata { get; }
-    public Flags Flags { get; }
-    public bool Started
-    {
-        get => _started;
-        protected set
-        {
-            if (!_started && value)
-            {
-                _started = true;
-                NotifyPropertyChanged();
-                if (_started)
-                {
-                    Container.Timer.Start();
-                }
-            }
-        }
-    }
 
-    public bool Victory
-    {
-        get => _victory;
-        protected set
-        {
-            if (!_victory && value)
-            {
-                _victory = true;
-                NotifyPropertyChanged();
-                if (_victory)
-                {
-                    Container.Timer.Stop();
-                }
-            }
-        }
-    }
+    public Sprites Sprites { get; }
+
+    public Metadata Metadata { get; }
+
+    public Flags Flags { get; }
 
     public abstract IEnumerable<ICharacter> Party { get; }
 
@@ -125,41 +89,15 @@ internal abstract class SeedBase : ISeed
 
     public abstract IEnumerable<IObjectiveGroup> Objectives { get; }
 
-    public Color BackgroundColor
-    {
-        get => _backgroundColor;
-        protected set
-        {
-            if (value != _backgroundColor)
-            {
-                _backgroundColor = value;
-                NotifyPropertyChanged();
-            }
-        }
-    }
-
     public abstract IEnumerable<ILocation> AvailableLocations { get; }
 
-    public virtual void OnNewFrame()
+    public SeedBase(string hash, Metadata metadata, EmulationContainer<FreeEnterpriseSettings> container)
+        :base(hash, container)
     {
-    }
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    protected Container Game { get; private set; }
-
-    public ISettings RootSettings => Game.RootSettings;
-
-    public IEmulationContainer Container => Game;
-
-    public SeedBase(string hash, Metadata metadata, Container container)
-    {
-        Hash = hash ?? throw new ArgumentNullException(nameof(hash));
         Metadata = metadata ?? throw new ArgumentNullException(nameof(metadata));
-        Game = container ?? throw new ArgumentNullException(nameof(container));
 
-        Font = new RomData.Font(Game.Rom);
-        Sprites = new Sprites(Game.Rom);
+        Font = new RomData.Font(Rom);
+        Sprites = new Sprites(Rom);
 
         Flags = new Flags
         {
@@ -167,7 +105,6 @@ internal abstract class SeedBase : ISeed
             Binary = Metadata.BinaryFlags == "(hidden)" || Metadata.BinaryFlags == null ? null : ParseBinaryFlags(Metadata.BinaryFlags),
         };
 
-        Settings = container.Settings;
         Icon = FreeEnterprise.FFIVFE_Icons_1THECrystal_Color;
     }
 
@@ -208,29 +145,20 @@ internal abstract class SeedBase : ISeed
         return [.. result];
     }
 
-    public FreeEnterpriseSettings Settings { get; private set; }
+    public override Bitmap Icon { get; }
 
-    GameSettings IGame.Settings => Settings;
-
-    public Bitmap Icon { get; }
     public virtual bool CanTackBosses => false;
 
-    public abstract bool RequiresMemoryEvents { get; }
-
-    protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    public Control CreateControls()
+    public override Control CreateTrackingControl()
     {
         var control = new FreeEnterpriseControl();
         control.InitializeDataSources(this);
         return control;
     }
 
-    public void Dispose()
+    public override void Dispose()
     {
+        base.Dispose();
         Font.Dispose();
         Sprites.Dispose();
     }

@@ -1,5 +1,4 @@
-﻿using FF.Rando.Companion.Extensions;
-using FF.Rando.Companion.Rendering;
+﻿using FF.Rando.Companion.Rendering;
 using KGySoft.Drawing.Imaging;
 using System.Drawing;
 

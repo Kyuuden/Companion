@@ -1,4 +1,7 @@
-﻿using FF.Rando.Companion.View;
+﻿using FF.Rando.Companion.Rendering;
+using FF.Rando.Companion.Timing;
+using FF.Rando.Companion.View;
+using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.CompilerServices;
@@ -6,14 +9,16 @@ using System.Runtime.CompilerServices;
 namespace FF.Rando.Companion.Games.JetsOfTime.Tracking;
 internal class Character : INotifyPropertyChanged, IImageTracker
 {
-    private readonly Seed _seed;
+    private readonly ITimer _timer;
     private Bitmap? _image;
     private bool _isFound;
     private bool _hasBeenFound;
+    private readonly ISprite _sprite;
 
-    public Character(Seed seed, CharacterType characterType)
+    public Character(CharacterType characterType, ITimer timer, ISprite? sprite)
     {
-        _seed = seed;
+        _timer = timer;
+        _sprite = sprite ?? throw new ArgumentNullException(nameof(sprite));
         Type = characterType;
         AltText = Type.ToString();
         SetImage();
@@ -38,7 +43,7 @@ internal class Character : INotifyPropertyChanged, IImageTracker
             if (_isFound && !_hasBeenFound)
             {
                 _hasBeenFound = true;
-                _seed.Container.Timer.Info($"Found {Type}");
+                _timer.Info($"Found {Type}");
             }
         }
     }
@@ -67,8 +72,6 @@ internal class Character : INotifyPropertyChanged, IImageTracker
 
     private void SetImage()
     {
-        var sprite = _seed.SpriteDB.GetPortrait((PortraitType)Type);
-        if (sprite != null)
-            Image = sprite.Render(!IsFound);
+        Image = _sprite.Render(!IsFound);
     }
 }

@@ -2,7 +2,6 @@
 using FF.Rando.Companion.Games.WorldsCollide.Enums;
 using FF.Rando.Companion.Games.WorldsCollide.Settings;
 using FF.Rando.Companion.Games.WorldsCollide.View;
-using FF.Rando.Companion.Settings;
 using KGySoft.Drawing.Imaging;
 using System;
 using System.Buffers.Binary;
@@ -10,19 +9,16 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace FF.Rando.Companion.Games.WorldsCollide;
-public class Seed : IGame
+public class Seed : GameBase<WorldsCollideSettings>
 {
     internal readonly RomData.Font Font;
     internal readonly RomData.Backgrounds Backgrounds;
     internal readonly RomData.Sprites Sprites;
 
-    private bool _started = false;
-    private bool _victory = false;
     private Color32 _primaryFontColor;
     private List<Palette> _backgroundPalettes = [];
     private int _selectedBackground;
@@ -42,42 +38,28 @@ public class Seed : IGame
 
     private readonly HashSet<Esper> _foundEspers = [];
 
-    internal Seed(string hash, Container container)
+    internal Seed(string hash, EmulationContainer<WorldsCollideSettings> container)
+        :base(hash, container)
     {
-        Hash = hash ?? throw new ArgumentNullException(nameof(hash));
-        WorldsCollideContainer = container ?? throw new ArgumentNullException(nameof(container));
         Font = new RomData.Font(container.Rom);
         Backgrounds = new RomData.Backgrounds(container.Rom);
         Sprites = new RomData.Sprites(container.Rom);
-
         Icon = Sprites.Items.Get(Item.Magicite).Render();
-
         _spriteSet = GetSpriteSet(Settings.Icons);
         _characters = new Tracking.Characters(this);
         _checks = new Tracking.Checks(this);
         _dragons = new Tracking.Dragons(this);
         _dragonLocations = new Tracking.DragonLocations(this);
-
-
         _checks.UpdateRelatedChecks();
         Reward? reward = null;
         _checks.Update(new byte[(int)RomData.Addresses.WRAM.State.Length()], ref reward);
         _dragonLocations.Update(new byte[(int)RomData.Addresses.WRAM.State.Length()]);
-
-        Settings.PropertyChanged += Settings_PropertyChanged;
-        container.ButtonPressed += Container_ButtonPressed;
+        Settings.PropertyChanged += GameSettings_PropertyChanged;
     }
 
-    private void Container_ButtonPressed(InputAction action)
-    {
-        if (action != InputAction.ToggleTimer)
-            return;
+    public override Bitmap Icon { get; }
 
-        if (!Started)
-            Started = true;
-    }
-
-    private void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
+    private void GameSettings_PropertyChanged(object sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(WorldsCollideSettings.Icons))
             SpriteSet = GetSpriteSet(Settings.Icons);
@@ -103,12 +85,6 @@ public class Seed : IGame
 
         return palettes;
     }
-
-    public string Hash { get; }
-
-    public Bitmap Icon { get; }
-
-    public Color BackgroundColor => Color.Black;
 
     public Color32 PrimaryFontColor
     {
@@ -158,36 +134,6 @@ public class Seed : IGame
             _backgroundPalettes = value;
             Backgrounds.UpdatePalettes(value);
             NotifyPropertyChanged();
-        }
-    }
-
-    public bool Started
-    {
-        get => _started;
-        protected set
-        {
-            if (!_started && value)
-            {
-                _started = true;
-                NotifyPropertyChanged();
-                if (_started)
-                    Container.Timer.Start();
-            }
-        }
-    }
-
-    public bool Victory
-    {
-        get => _victory;
-        protected set
-        {
-            if (!_victory && value)
-            {
-                _victory = true;
-                NotifyPropertyChanged();
-                if (_victory)
-                    Container.Timer.Stop();
-            }
         }
     }
 
@@ -256,31 +202,16 @@ public class Seed : IGame
         }
     }
 
-    public bool RequiresMemoryEvents => false;
-
-    public IEmulationContainer Container => WorldsCollideContainer;
-
-    internal Container WorldsCollideContainer { get; }
-
-    internal WorldsCollideSettings Settings => WorldsCollideContainer.Settings;
-
-    internal ISettings RootSettings => WorldsCollideContainer.RootSettings;
-
-    GameSettings IGame.Settings => Settings;
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    public Control CreateControls()
+    public override Control CreateTrackingControl()
     {
         var control = new WorldsCollideControl();
         control.InitializeDataSources(this);
         return control;
     }
 
-    public void Dispose()
+    public override void Dispose()
     {
-        Settings.PropertyChanged -= Settings_PropertyChanged;
-        Container.ButtonPressed -= Container_ButtonPressed;
+        Settings.PropertyChanged -= GameSettings_PropertyChanged;
         Font.Dispose();
         Backgrounds.Dispose();
         Sprites.Dispose();
@@ -293,102 +224,98 @@ public class Seed : IGame
     private bool _kefkaTowerStatueTwoDefeated;
     private bool _kefkaTowerStatueThreeDefeated;
 
-    public void OnNewFrame()
+    protected override bool CheckIfStarted()
     {
-        if (!Started)
-        {
-            var mapId = BinaryPrimitives.ReadUInt16LittleEndian(Container.Wram.ReadBytes(RomData.Addresses.WRAM.MapIndex)) & 0x1FF;
-            var menuType = Container.Wram.ReadByte(RomData.Addresses.WRAM.MenuType);
-            var saveGameSlot = Container.Wram.ReadByte(RomData.Addresses.WRAM.CurrentSaveGameSlot);
-            if (mapId == 3 && saveGameSlot == 1 && menuType == 9)
-                Started = true;
-        }
+        var mapId = BinaryPrimitives.ReadUInt16LittleEndian(Wram.ReadBytes(RomData.Addresses.WRAM.MapIndex)) & 0x1FF;
+        var menuType = Wram.ReadByte(RomData.Addresses.WRAM.MenuType);
+        var saveGameSlot = Wram.ReadByte(RomData.Addresses.WRAM.CurrentSaveGameSlot);
+        if (mapId == 3 && saveGameSlot == 1 && menuType == 9)
+            return true;
 
-        if (!Victory)
-        {
-            var mapId = BinaryPrimitives.ReadUInt16LittleEndian(Container.Wram.ReadBytes(RomData.Addresses.WRAM.MapIndex)) & 0x1FF;
-            if (mapId == 0x164)
-            {
-                var inKefkaFight = (BinaryPrimitives.ReadUInt16LittleEndian(Container.Wram.ReadBytes(RomData.Addresses.WRAM.BattleIndex)) & 0x3FF) == 0x0202;
-                var thunderclap = Container.Wram.ReadByte(0xE9E9) == 0xE3;
-                var isKefkaDead = Container.Wram.ReadByte(RomData.Addresses.WRAM.KefkaCrumbleAnimation) == 0x01;
-                Victory = inKefkaFight && (thunderclap || isKefkaDead);
-            }
-        }
-
-        if (WorldsCollideContainer.Emulation.FrameCount() % WorldsCollideContainer.RootSettings.TrackingInterval == 0)
-        {
-            var configData = Container.Wram.ReadBytes(RomData.Addresses.WRAM.ConfigData).AsSpan();
-            if ((configData[2] & 0xF0) == 0)
-            {
-                PrimaryFontColor = BinaryPrimitives.ReadUInt16LittleEndian(configData.Slice(8, 2)).ToColor();
-                BackgroundPalettes = GetBackgroundPalettes(configData);
-                SelectedBackground = configData[1] & 0x7;
-            }
-
-            if (Started)
-            {
-                var eventState = Container.Wram.ReadBytes(RomData.Addresses.WRAM.State).AsReadOnlySpan();
-                var dragonState = Container.Wram.ReadBytes(RomData.Addresses.WRAM.Dragons).AsReadOnlySpan();
-                var chests = Container.Wram.ReadBytes(RomData.Addresses.WRAM.Chests);
-                var espers = Container.Wram.ReadBytes(RomData.Addresses.WRAM.KnownEspers);
-                var newEspers = new HashSet<Esper>();
-                
-                for (int i = 0; i < espers.Length * 8; i ++)
-                {
-                    if (((espers[i / 8] >> (i % 8)) & 0x01) == 1)
-                        newEspers.Add(Esper.Ramuh + i);
-                }
-
-                var latestEspers = newEspers.Except(_foundEspers).ToList();
-
-                _foundEspers.Clear();
-                _foundEspers.UnionWith(newEspers);
-
-                var previousFoundCharacters = Characters.Where(c => c.IsFound).Select(c => c.Event).ToHashSet();
-
-                if (_characters.Update(eventState))
-                    NotifyPropertyChanged(nameof(Characters));
-
-                var newcharacters = Characters.Where(c => c.IsFound).Select(c => c.Event).ToHashSet();
-                newcharacters.ExceptWith(previousFoundCharacters);
-
-                if ((latestEspers.Count + newcharacters.Count) == 1)
-                {
-                    _currentReward = latestEspers.Any() ? latestEspers.First().ToReward() : newcharacters.First().ToReward();
-                }
-
-                if (_checks.Update(eventState, ref _currentReward))
-                    NotifyPropertyChanged(nameof(Checks));
-
-                if (_dragonLocations.Update(eventState))
-                    NotifyPropertyChanged(nameof(DragonLocations));
-
-                if (_dragons.Update(dragonState, ref _currentReward))
-                    NotifyPropertyChanged(nameof(Dragons));
-
-                var characterCountData = Container.Wram.ReadBytes(RomData.Addresses.WRAM.CHARACTER_COUNT);
-                characterCountData[1] &= 0x3F;
-
-                CharacterCount = characterCountData.CountBits();
-                EsperCount = Container.Wram.ReadByte(RomData.Addresses.WRAM.ESPER_COUNT);
-                BossCount = Container.Wram.ReadByte(RomData.Addresses.WRAM.BOSS_COUNT);
-                DragonCount = Container.Wram.ReadByte(RomData.Addresses.WRAM.DRAGON_COUNT);
-                CheckCount = Container.Wram.ReadByte(RomData.Addresses.WRAM.CHECK_COUNT);
-                ChestCount = chests.CountBits();
-
-                KefkaTowerUnlocked = eventState.Read<bool>((int)Events.UNLOCKED_FINAL_KEFKA);
-                KefkaTowerSkipUnlocked = eventState.Read<bool>((int)Events.UNLOCKED_KT_SKIP);
-                KefkaTowerStatueOneDefeated = eventState.Read<bool>((int)Events.DOOM_STATUE_KEFKA_TOWER);
-                KefkaTowerStatueTwoDefeated = eventState.Read<bool>((int)Events.GODDESS_STATUE_KEFKA_TOWER);
-                KefkaTowerStatueThreeDefeated = eventState.Read<bool>((int)Events.POLTRGEIST_STATUE_KEFKA_TOWER);
-            }
-        }
+        return false;
     }
 
-    protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+    protected override bool CheckIfVictory()
     {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        var mapId = BinaryPrimitives.ReadUInt16LittleEndian(Wram.ReadBytes(RomData.Addresses.WRAM.MapIndex)) & 0x1FF;
+        if (mapId == 0x164)
+        {
+            var inKefkaFight = (BinaryPrimitives.ReadUInt16LittleEndian(Wram.ReadBytes(RomData.Addresses.WRAM.BattleIndex)) & 0x3FF) == 0x0202;
+            var thunderclap = Wram.ReadByte(0xE9E9) == 0xE3;
+            var isKefkaDead = Wram.ReadByte(RomData.Addresses.WRAM.KefkaCrumbleAnimation) == 0x01;
+            return inKefkaFight && (thunderclap || isKefkaDead);
+        }
+
+        return false;
+    }
+
+    protected override void ReadTrackingData()
+    {
+        var configData = Wram.ReadBytes(RomData.Addresses.WRAM.ConfigData).AsSpan();
+        if ((configData[2] & 0xF0) == 0)
+        {
+            PrimaryFontColor = BinaryPrimitives.ReadUInt16LittleEndian(configData.Slice(8, 2)).ToColor();
+            BackgroundPalettes = GetBackgroundPalettes(configData);
+            SelectedBackground = configData[1] & 0x7;
+        }
+
+        if (Started)
+        {
+            var eventState = Wram.ReadBytes(RomData.Addresses.WRAM.State).AsReadOnlySpan();
+            var dragonState = Wram.ReadBytes(RomData.Addresses.WRAM.Dragons).AsReadOnlySpan();
+            var chests = Wram.ReadBytes(RomData.Addresses.WRAM.Chests);
+            var espers = Wram.ReadBytes(RomData.Addresses.WRAM.KnownEspers);
+            var newEspers = new HashSet<Esper>();
+
+            for (int i = 0; i < espers.Length * 8; i++)
+            {
+                if (((espers[i / 8] >> (i % 8)) & 0x01) == 1)
+                    newEspers.Add(Esper.Ramuh + i);
+            }
+
+            var latestEspers = newEspers.Except(_foundEspers).ToList();
+
+            _foundEspers.Clear();
+            _foundEspers.UnionWith(newEspers);
+
+            var previousFoundCharacters = Characters.Where(c => c.IsFound).Select(c => c.Event).ToHashSet();
+
+            if (_characters.Update(eventState))
+                NotifyPropertyChanged(nameof(Characters));
+
+            var newcharacters = Characters.Where(c => c.IsFound).Select(c => c.Event).ToHashSet();
+            newcharacters.ExceptWith(previousFoundCharacters);
+
+            if ((latestEspers.Count + newcharacters.Count) == 1)
+            {
+                _currentReward = latestEspers.Any() ? latestEspers.First().ToReward() : newcharacters.First().ToReward();
+            }
+
+            if (_checks.Update(eventState, ref _currentReward))
+                NotifyPropertyChanged(nameof(Checks));
+
+            if (_dragonLocations.Update(eventState))
+                NotifyPropertyChanged(nameof(DragonLocations));
+
+            if (_dragons.Update(dragonState, ref _currentReward))
+                NotifyPropertyChanged(nameof(Dragons));
+
+            var characterCountData = Wram.ReadBytes(RomData.Addresses.WRAM.CHARACTER_COUNT);
+            characterCountData[1] &= 0x3F;
+
+            CharacterCount = characterCountData.CountBits();
+            EsperCount = Wram.ReadByte(RomData.Addresses.WRAM.ESPER_COUNT);
+            BossCount = Wram.ReadByte(RomData.Addresses.WRAM.BOSS_COUNT);
+            DragonCount = Wram.ReadByte(RomData.Addresses.WRAM.DRAGON_COUNT);
+            CheckCount = Wram.ReadByte(RomData.Addresses.WRAM.CHECK_COUNT);
+            ChestCount = chests.CountBits();
+
+            KefkaTowerUnlocked = eventState.Read<bool>((int)Events.UNLOCKED_FINAL_KEFKA);
+            KefkaTowerSkipUnlocked = eventState.Read<bool>((int)Events.UNLOCKED_KT_SKIP);
+            KefkaTowerStatueOneDefeated = eventState.Read<bool>((int)Events.DOOM_STATUE_KEFKA_TOWER);
+            KefkaTowerStatueTwoDefeated = eventState.Read<bool>((int)Events.GODDESS_STATUE_KEFKA_TOWER);
+            KefkaTowerStatueThreeDefeated = eventState.Read<bool>((int)Events.POLTRGEIST_STATUE_KEFKA_TOWER);
+        }
     }
 
     public int ChestCount

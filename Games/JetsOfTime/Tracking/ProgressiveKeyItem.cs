@@ -1,7 +1,7 @@
 ﻿using FF.Rando.Companion.Rendering;
+using FF.Rando.Companion.Timing;
 using KGySoft.Drawing.Imaging;
 using System;
-using System.ComponentModel;
 
 namespace FF.Rando.Companion.Games.JetsOfTime.Tracking;
 
@@ -11,8 +11,8 @@ internal class ProgressiveKeyItem : KeyItemBase
     private readonly string[] _descriptions;
     private byte _progress;
 
-    public ProgressiveKeyItem(Container container, KeyItemType type, ISprite[] sprites, string[] descriptions)
-        : base(container, type)
+    public ProgressiveKeyItem(ITimer timer, KeyItemType type, ISprite[] sprites, string[] descriptions)
+        : base(timer, type)
     {
         if (sprites.Length == 0) throw new ArgumentException();
 

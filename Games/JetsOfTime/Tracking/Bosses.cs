@@ -1,9 +1,9 @@
-﻿using BizHawk.Client.EmuHawk;
-using FF.Rando.Companion.Games.JetsOfTime.Rendering;
-using FF.Rando.Companion.Games.WorldsCollide.Settings.SpriteSet;
+﻿using FF.Rando.Companion.Games.JetsOfTime.Rendering;
 using FF.Rando.Companion.Rendering;
+using FF.Rando.Companion.Timing;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 
@@ -11,17 +11,18 @@ namespace FF.Rando.Companion.Games.JetsOfTime.Tracking;
 
 internal class Bosses
 {
-    private readonly Container _container;
-    private readonly SpriteDB _spriteDB;
-    private readonly LocationDB _locationDB;
+    private readonly ITimer _timer;
+    private readonly Sprites _spriteDB;
+    private readonly Locations _locationDB;
+    private readonly Dictionary<BossType, Boss> _bosses;
 
-    public Bosses(Container container, SpriteDB spriteDB, LocationDB locationDB)
+    public Bosses(ITimer timer, Sprites spriteDB, Locations locationDB)
     {
-        _container = container;
+        _timer = timer;
         _spriteDB = spriteDB;
         _locationDB = locationDB;
 
-        Values = new List<BossType>(
+        _bosses = new List<BossType>(
         [
             BossType.Yakra,
             BossType.YakraXIII,
@@ -41,21 +42,23 @@ internal class Bosses
             BossType.SunOfTheSun,
             BossType.Zeal,
             BossType.Golem
-        ]).Select(CreateTracker).ToList();
+        ]).ToDictionary(t => t, CreateTracker);
     }
 
-    public IReadOnlyList<Boss> Values { get; }
+    public bool IsDefeated(BossType boss) => _bosses[boss].IsDefeated;
+
+    public IEnumerable<Boss> Values => _bosses.Values;
 
     private Boss CreateTracker(BossType type)
     {
         //return new Boss(_container, type, CreateTestSprites(type, MonsterType.Masamune, 0));
-        return new Boss(_container, type, CreateSprite(type));
+        return new Boss(_timer, type, CreateSprite(type));
     }
 
-    private ISprite? CreateTestSprites(BossType type, MonsterType monsterType, int offset)
-    {
-        return _spriteDB.GetMonster(monsterType).Get((int)type + offset)?.Crop(new Rectangle(8, 4, 48, 48));
-    }
+    //private ISprite? CreateTestSprites(BossType type, MonsterType monsterType, int offset)
+    //{
+    //    return _spriteDB.GetMonster(monsterType).Get((int)type + offset)?.Crop(new Rectangle(8, 4, 48, 48));
+    //}
 
     private ISprite? CreateSprite(BossType type)
     {
@@ -70,7 +73,7 @@ internal class Bosses
             BossType.DragonTank => _spriteDB.GetMonster(MonsterType.DragonTank).Get(0)?
                 .Crop(new Rectangle(64, 8, 48, 48)),
 
-            BossType.Guardian => _locationDB.Get(0xDB).Render(true, false, true)?
+            BossType.Guardian => _locationDB.Get(LocationType.ArrisDomeGuardianChamber).Render(true, false, true)?
                 .Crop(new Rectangle(64, 93, 128, 128)),
 
             BossType.RSeries => _spriteDB.GetMonster(MonsterType.RSeries).Get(49)?
@@ -105,7 +108,7 @@ internal class Bosses
             BossType.RustTyrano => _spriteDB.GetMonster(MonsterType.RustTyrano).Get(0)?
                 .Crop(new Rectangle(0, 8, 48, 48)),
 
-            BossType.GigaGaia => _locationDB.Get(0x18D).Render(true, false, true)?
+            BossType.GigaGaia => _locationDB.Get(LocationType.MtWoeSummit).Render(true, false, true)?
                 .Crop(new Rectangle(64 + 16, 256 + 32, 96, 96)),
 
             BossType.MotherBrain => _spriteDB.GetMonster(MonsterType.Motherbrain).Get(0)?

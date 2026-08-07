@@ -140,7 +140,7 @@ public class Check : IDisposable, INotifyPropertyChanged, IImageWithOverlay
             if (_isCompleted && !_hasBeenCompleted)
             {
                 _hasBeenCompleted = true;
-                _seed.Container.Timer.Info($"Completed {_seed.Descriptors.GetDescription(Event)}");
+                _seed.Timer.Info($"Completed {_seed.Descriptors.GetDescription(Event)}");
             }
         }
     }

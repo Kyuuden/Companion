@@ -47,7 +47,7 @@ public class CharacterQuest : INotifyPropertyChanged
             if (IsCompleted && !_hasBeenCompleted)
             {
                 _hasBeenCompleted = true;
-                _seed.Container.Timer.Info(Description);
+                _seed.Timer.Info(Description);
             }
 
             return true;

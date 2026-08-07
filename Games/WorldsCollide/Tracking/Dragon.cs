@@ -73,7 +73,7 @@ public class Dragon : IDisposable, INotifyPropertyChanged, IImageWithOverlay
             if (IsDefeated && !_hasBeenDefeated)
             {
                 _hasBeenDefeated = true;
-                _seed.Container.Timer.Info($"Defeated {_seed.Descriptors.GetDescription(DragonType)}");
+                _seed.Timer.Info($"Defeated {_seed.Descriptors.GetDescription(DragonType)}");
             }
         }
     }

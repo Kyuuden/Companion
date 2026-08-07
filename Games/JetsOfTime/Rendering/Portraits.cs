@@ -4,20 +4,21 @@ using System;
 using FF.Rando.Companion.Rendering;
 using KGySoft.Drawing.Imaging;
 using KGySoft.CoreLibraries;
+using FF.Rando.Companion.MemoryManagement;
 
 namespace FF.Rando.Companion.Games.JetsOfTime.Rendering;
 
-internal class PortraitSprites
+internal class Portraits
 {
     private readonly Dictionary<PortraitType, ISprite?> _sprites = [];
 
-    public PortraitSprites(Container container)
+    public Portraits(IMemorySpace rom)
     {
-        var tileData = container.Rom.ReadBytes(Data.Addresses.ROM.PortraitTiles).AsSpan();
-        var palettes = container.Rom.ReadBytes(Data.Addresses.ROM.PortraitPalettes).AsSpan();
+        var tileData = rom.ReadBytes(Data.Addresses.ROM.PortraitTiles).AsSpan();
+        var palettes = rom.ReadBytes(Data.Addresses.ROM.PortraitPalettes).AsSpan();
 
-        var epochTileData = container.Rom.ReadBytes(Data.Addresses.ROM.EpochPortraitTiles);
-        var epochPalette = container.Rom.ReadBytes(Data.Addresses.ROM.EpochPortraitPalette);
+        var epochTileData = rom.ReadBytes(Data.Addresses.ROM.EpochPortraitTiles);
+        var epochPalette = rom.ReadBytes(Data.Addresses.ROM.EpochPortraitPalette);
 
         foreach (PortraitType character in Enum.GetValues(typeof(PortraitType)))
         {

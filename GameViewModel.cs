@@ -18,7 +18,7 @@ public class GameViewModel : INotifyPropertyChanged
     private IMemoryDomains? _memoryDomains;
     private ITimer? _timer;
     private readonly ISettings _settings;
-    private readonly List<IGameParser> _gameParsers;
+    private readonly List<IGameParser> _seedParsers;
     private readonly Dictionary<InputAction, int> _activeInputActions = [];
 
     public GameViewModel(ISettings settings)
@@ -29,10 +29,10 @@ public class GameViewModel : INotifyPropertyChanged
             .SelectMany(s => s.GetTypes())
             .Where(p => p != parserType && parserType.IsAssignableFrom(p));
 
-        _gameParsers = [];
+        _seedParsers = [];
         foreach (var parser in parsers)
         {
-            _gameParsers.Add((IGameParser)Activator.CreateInstance(parser));
+            _seedParsers.Add((IGameParser)Activator.CreateInstance(parser));
         }
     }
 
@@ -124,7 +124,7 @@ public class GameViewModel : INotifyPropertyChanged
                 _activeInputActions.Remove(button);
         }
 
-        Game.OnNewFrame();
+        Game.OnNewFrame((APIs?.Emulation?.FrameCount() ?? int.MaxValue) % _settings.TrackingInterval == 0);
     }
 
     private bool TryGetAction(string button, out InputAction action)
@@ -173,12 +173,12 @@ public class GameViewModel : INotifyPropertyChanged
         if (gameInfo.IsNullInstance())
             return;
 
-        foreach (var parser in _gameParsers)
+        foreach (var parser in _seedParsers)
         {
             if (parser.TryParseGameInfo(APIs!, MemoryDomains!, _settings, gameInfo, _timer!, out var game))
             {
+                _emulationContainer = game?.Container;
                 Game = game!;
-                _emulationContainer = Game.Container;
                 return;
             }
         }

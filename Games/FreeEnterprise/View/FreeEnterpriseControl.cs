@@ -24,7 +24,7 @@ public partial class FreeEnterpriseControl : UserControl
         _party.Resize += TrackerResized;
     }
 
-    public void InitializeDataSources(ISeed seed)
+    public void InitializeDataSources(SeedBase seed)
     {
         _seed = seed ?? throw new ArgumentNullException(nameof(seed));
 
@@ -48,7 +48,7 @@ public partial class FreeEnterpriseControl : UserControl
 
     private void Seed_ButtonPressed(InputAction action)
     {
-        if (_seed?.RootSettings == null || _scrollables.Count == 0 || !_scrollables.TryGetElementAt(_scrollIndex, out var target))
+        if (_scrollables.Count == 0 || !_scrollables.TryGetElementAt(_scrollIndex, out var target))
             return;
 
         switch (action)

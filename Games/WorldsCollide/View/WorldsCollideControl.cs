@@ -47,7 +47,7 @@ public partial class WorldsCollideControl : UserControl
 
     private void Seed_ButtonPressed(InputAction action)
     {
-        if (_seed?.RootSettings == null || _scrollables.Count == 0 || !_scrollables.TryGetElementAt(_scrollIndex, out var target))
+        if (_scrollables.Count == 0 || !_scrollables.TryGetElementAt(_scrollIndex, out var target))
             return;
 
         switch (action)

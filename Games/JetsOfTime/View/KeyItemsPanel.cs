@@ -15,5 +15,5 @@ internal partial class KeyItemsPanel : FlowPanel<KeyItemSettings>
     public override DockStyle DefaultDockStyle => DockStyle.Top;
 
     protected override Control[] GenerateControls(Seed seed) 
-        => (Game?.KeyItems.Items ?? []).Select(ki => new KeyItemControl(seed, Settings!, ki)).ToArray();
+        => (Game?.State.KeyItems.Items ?? []).Select(ki => new KeyItemControl(seed, Settings!, ki)).ToArray();
 }

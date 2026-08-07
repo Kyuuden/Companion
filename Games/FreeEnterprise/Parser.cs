@@ -2,6 +2,7 @@
 using BizHawk.Emulation.Common;
 using FF.Rando.Companion.Extensions;
 using FF.Rando.Companion.Games.FreeEnterprise.RomData;
+using FF.Rando.Companion.Games.FreeEnterprise.Settings;
 using FF.Rando.Companion.Settings;
 using FF.Rando.Companion.Timing;
 using Newtonsoft.Json.Linq;
@@ -10,14 +11,14 @@ using System.Text;
 
 namespace FF.Rando.Companion.Games.FreeEnterprise;
 
-public class SeedParser : IGameParser
+public class Parser : IGameParser
 {
     public bool TryParseGameInfo(ApiContainer apiContainer, IMemoryDomains memoryDomains, ISettings rootSettings, IGameInfo gameInfo, ITimer timer, out IGame? game)
     {
         game = null;
         try
         {
-            var feContainer = new Container(apiContainer, memoryDomains, rootSettings, timer);
+            var feContainer = new EmulationContainer<FreeEnterpriseSettings>(apiContainer, memoryDomains, timer, rootSettings, "FreeEnterprise");
 
             var jsonDataLength = feContainer.Rom.Read<uint>(Shared.Addresses.ROM.MetadataLength);
             if (jsonDataLength <= 0)

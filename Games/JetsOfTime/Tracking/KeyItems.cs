@@ -1,25 +1,137 @@
 ﻿using FF.Rando.Companion.Extensions;
 using FF.Rando.Companion.Games.JetsOfTime.Rendering;
 using FF.Rando.Companion.Rendering;
+using FF.Rando.Companion.Timing;
 using KGySoft.Drawing.Imaging;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 
 namespace FF.Rando.Companion.Games.JetsOfTime.Tracking;
 
-internal class KeyItems
+internal class KeyItems : INotifyPropertyChanged
 {
-    private readonly Container _container;
-    private readonly SpriteDB _spriteDB;
+    private readonly ITimer _timer;
+    private readonly IFlags _flags;
+    private readonly Sprites _spriteDB;
+    private readonly Dictionary<KeyItemType, KeyItemBase> _items;
 
-    public KeyItems(Container container, SpriteDB spriteDB)
+    private readonly Dictionary<GameMode, List<KeyItemType>> _keyItemsByGameMode = new()
     {
-        _container = container;
-        _spriteDB = spriteDB;
+        {
+            GameMode.Standard,
+            [
+                KeyItemType.BentHilt,
+                KeyItemType.BentSword,
+                KeyItemType.Masamune,
+                KeyItemType.GrandLeon,
+                KeyItemType.HerosMedal,
+                KeyItemType.RobosRibbon,
 
-        Items = new List<KeyItemType>(
+                KeyItemType.GateKey,
+                KeyItemType.Dreamstone,
+                KeyItemType.RubyKnife,
+                KeyItemType.PrismShard,
+                KeyItemType.MoonStone,
+                KeyItemType.Jerky,
+
+                KeyItemType.Pendant,
+                KeyItemType.Clone,
+                KeyItemType.ChronoTrigger,
+                KeyItemType.TomasPop,
+                KeyItemType.Magic,
+                KeyItemType.JetsOfTime,
+            ]
+        },
+        { 
+            GameMode.LostWorlds,
+            [
+                KeyItemType.Pendant,
+                KeyItemType.Clone,
+                KeyItemType.ChronoTrigger,
+                KeyItemType.Dreamstone,
+                KeyItemType.RubyKnife,
+            ]
+        },
+        { 
+            GameMode.LegacyOfCyrus,
+            [
+                KeyItemType.BentHilt,
+                KeyItemType.BentSword,
+                KeyItemType.Masamune,
+                KeyItemType.GrandLeon,
+                KeyItemType.HerosMedal,
+                KeyItemType.GateKey,
+                KeyItemType.Pendant,
+                KeyItemType.PrismShard,
+                KeyItemType.TomasPop,
+                KeyItemType.Jerky,
+                KeyItemType.Dreamstone,
+                KeyItemType.RobosRibbon,
+                KeyItemType.JetsOfTime,
+            ]
+        },
+        { 
+            GameMode.IceAge,
+            [
+                KeyItemType.BentHilt,
+                KeyItemType.BentSword,
+                KeyItemType.Masamune,
+                KeyItemType.GrandLeon,
+                KeyItemType.HerosMedal,
+                KeyItemType.RobosRibbon,
+                KeyItemType.GateKey,
+                KeyItemType.Dreamstone,
+                KeyItemType.RubyKnife,
+                KeyItemType.PrismShard,
+                KeyItemType.MoonStone,
+                KeyItemType.Jerky,
+                KeyItemType.Pendant,
+                KeyItemType.Clone,
+                KeyItemType.ChronoTrigger,
+                KeyItemType.TomasPop,
+                KeyItemType.Magic,
+                KeyItemType.JetsOfTime,
+                KeyItemType.Tools,
+            ]
+        },
+        { 
+            GameMode.VanillaRando,
+            [
+                KeyItemType.BentHilt,
+                KeyItemType.BentSword,
+                KeyItemType.Masamune,
+                KeyItemType.GrandLeon,
+                KeyItemType.HerosMedal,
+                KeyItemType.GateKey,
+                KeyItemType.Dreamstone,
+                KeyItemType.RubyKnife,
+                KeyItemType.PrismShard,
+                KeyItemType.MoonStone,
+                KeyItemType.Jerky,
+                KeyItemType.Pendant,
+                KeyItemType.Clone,
+                KeyItemType.ChronoTrigger,
+                KeyItemType.TomasPop,
+                KeyItemType.Magic,
+                KeyItemType.JetsOfTime,
+                KeyItemType.Tools,
+            ]
+        },
+    };
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    public KeyItems(ITimer timer, IFlags flags, Sprites spriteDB)
+    {
+        _flags = flags;
+        _timer = timer;
+        _spriteDB = spriteDB;
+        _flags.PropertyChanged += FlagsChanged;
+
+        _items = new List<KeyItemType>(
         [
             KeyItemType.BentHilt,
             KeyItemType.BentSword,
@@ -27,7 +139,6 @@ internal class KeyItems
             KeyItemType.GrandLeon,
             KeyItemType.HerosMedal,
             KeyItemType.RobosRibbon,
-            //KeyItemType.ValidationCat,
 
             KeyItemType.GateKey,
             KeyItemType.Dreamstone,
@@ -42,17 +153,28 @@ internal class KeyItems
             KeyItemType.TomasPop,
             KeyItemType.Magic,
             KeyItemType.JetsOfTime,
+            KeyItemType.Tools,
 
-        ]).Select(CreateKeyItemTracker).ToList();
+        ]).ToDictionary(t => t, CreateKeyItemTracker);
+
+        FlagsChanged(null!, null!);
+    }
+
+    private void FlagsChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        foreach (var item in Items)
+        {
+            item.Exists = _keyItemsByGameMode[_flags.Mode ?? GameMode.Standard].Contains(item.Type);
+        }
     }
 
     private KeyItemBase CreateKeyItemTracker(KeyItemType keyItemType)
     {
         return keyItemType switch
         {
-            KeyItemType.Magic => new AnimatedKeyItem(_container, keyItemType, _spriteDB.GetNpc(NPCType.Save_point), 250),
-            KeyItemType.MoonStone => new ProgressiveKeyItem(_container, keyItemType, [CreateSprite(KeyItemType.MoonStone)!, CreateSprite(KeyItemType.SunStone)!], [KeyItemType.MoonStone.GetDescription(), KeyItemType.SunStone.GetDescription()]),
-            _ => new KeyItem(_container, keyItemType, CreateSprite(keyItemType))
+            KeyItemType.Magic => new AnimatedKeyItem(_timer, keyItemType, _spriteDB.GetNpc(NPCType.Save_point), 250),
+            KeyItemType.MoonStone => new ProgressiveKeyItem(_timer, keyItemType, [CreateSprite(KeyItemType.MoonStone)!, CreateSprite(KeyItemType.SunStone)!], [KeyItemType.MoonStone.GetDescription(), KeyItemType.SunStone.GetDescription()]),
+            _ => new KeyItem(_timer, keyItemType, CreateSprite(keyItemType)),
         };
     }
 
@@ -62,9 +184,6 @@ internal class KeyItems
         {
             KeyItemType.Masamune => _spriteDB.GetNpc(NPCType.Melchior).Get(1)?
                                 .Crop(new Rectangle(0, 0, 22, 32))
-                                .Pad(new Size(32, 32)),
-
-            KeyItemType.ValidationCat => _spriteDB.GetNpc(NPCType.Cat).Get(2)?
                                 .Pad(new Size(32, 32)),
 
             KeyItemType.Pendant => _spriteDB.GetNpc(NPCType.Pendant).Get(0)?
@@ -144,11 +263,21 @@ internal class KeyItems
         };
     }
 
-    public IReadOnlyList<KeyItemBase> Items { get; }
+    public IEnumerable<KeyItemBase> Items => _items.Values;
+
+    public bool IsFound(KeyItemType keyItem) =>
+        keyItem switch
+        {
+            KeyItemType.MoonStone when _items[KeyItemType.MoonStone] is ProgressiveKeyItem pki => pki.Progress > 0,
+            KeyItemType.SunStone when _items[KeyItemType.MoonStone] is ProgressiveKeyItem pki => pki.Progress == 2,
+            _ => _items[keyItem].IsFound
+        };
 
     public bool Update(ReadOnlySpan<byte> inventory, ReadOnlySpan<byte> events, ReadOnlySpan<byte> equipped)
     {
         var updated = false;
+        HashSet<KeyItemType> changed = [];
+
         foreach (var item in Items)
         {
             var isFound = false; 
@@ -167,19 +296,19 @@ internal class KeyItems
                 case KeyItemType.Magic:
                     isFound = (events[0xE1] & 0x02) != 0;
                     break;
+
                 case KeyItemType.Masamune:
                     isFound = (events[0x103] & 0x02) != 0;
-                    break;
-                case KeyItemType.ValidationCat:
-                    isFound = (events[0x1A6] & 0x02) != 0;
                     break;
 
                 case KeyItemType.HerosMedal:
                     isFound = (inventory.IndexOf(item.Id) != -1) || equipped[0x16A] == item.Id;
                     break;
+
                 case KeyItemType.RobosRibbon:
                     isFound = (inventory.IndexOf(item.Id) != -1) || equipped[0x11A] == item.Id;
                     break;
+
                 case KeyItemType.GrandLeon:
                     isFound = (inventory.IndexOf(item.Id) != -1) || equipped[0x169] == item.Id;
                     break;
@@ -234,9 +363,11 @@ internal class KeyItems
             {
                 updated = true;
                 item.IsFound = isFound;
+                changed.Add(item.Type);
             }
         }
 
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(string.Join(";", changed)));
         return updated;
     }
 }

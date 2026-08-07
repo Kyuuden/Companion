@@ -1,29 +1,28 @@
 ﻿using FF.Rando.Companion.Extensions;
+using FF.Rando.Companion.Rendering;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Data;
-using System;
-using FF.Rando.Companion.Rendering;
 
 namespace FF.Rando.Companion.Games.JetsOfTime.Rendering;
-internal class SpriteDB : IDisposable
+internal class Sprites : IDisposable
 {
     private readonly List<SpriteCollection> _characterHeaders = [];
     private readonly List<SpriteCollection> _npcHeaders = [];
     private readonly List<SpriteCollection> _monsterHeaders = [];
-    private readonly PortraitSprites _portraitSprites;
+    private readonly Portraits _portraitSprites;
 
-    private readonly Container _container;
+    private readonly Seed _seed;
 
-    public SpriteDB(Container container)
+    public Sprites(Seed seed)
     {
-        _container = container;
+        _seed = seed;
 
-        _characterHeaders.AddRange(_container.Rom.ReadBytes(Data.Addresses.ROM.Sprites.CharacterHeaders).ReadMany<byte[]>(0, 5 * 8, 7).Select(b => new SpriteCollection(container, b)));
-        _npcHeaders.AddRange(_container.Rom.ReadBytes(Data.Addresses.ROM.Sprites.NpcHeaders).ReadMany<byte[]>(0, 5 * 8, 256).Select(b => new SpriteCollection(container, b)));
-        _monsterHeaders.AddRange(_container.Rom.ReadBytes(Data.Addresses.ROM.Sprites.MonsterHeaders).ReadMany<byte[]>(10 * 8).Select(b => new SpriteCollection(container, b)));
+        _characterHeaders.AddRange(_seed.Rom.ReadBytes(Data.Addresses.ROM.Sprites.CharacterHeaders).ReadMany<byte[]>(0, 5 * 8, 7).Select(b => new SpriteCollection(seed, b)));
+        _npcHeaders.AddRange(_seed.Rom.ReadBytes(Data.Addresses.ROM.Sprites.NpcHeaders).ReadMany<byte[]>(0, 5 * 8, 256).Select(b => new SpriteCollection(seed, b)));
+        _monsterHeaders.AddRange(_seed.Rom.ReadBytes(Data.Addresses.ROM.Sprites.MonsterHeaders).ReadMany<byte[]>(10 * 8).Select(b => new SpriteCollection(seed, b)));
 
-        _portraitSprites = new PortraitSprites(container);
+        _portraitSprites = new Portraits(_seed.Rom);
     }
 
     public SpriteCollection GetCharacter(CharacterType characterType) => _characterHeaders[(int)characterType];
