@@ -1796,9 +1796,12 @@ internal class Addresses
 
     internal static class WRAM
     {
+        public static readonly long RunStartedMarker = 0x299FL;
+        public static readonly Range<long> CurrentLocation = 0x100L.WithLength(2);
         public static readonly Range<long> MenuPointer = 0x0016L.WithLength(3);
         public static readonly Range<long> Gold = 0x2C53L.WithLength(3);
         public static readonly long Background = 0x2991L;
+        public static readonly long Storyline = 0x10000L;
         public static readonly Range<long> EventData = 0x10000L.WithLength(0x200);
         public static readonly Range<long> PartyData = 0x2980L.WithLength(0x09);
         public static readonly Range<long> InventoryData = 0x2400L.WithLength(0xF2);

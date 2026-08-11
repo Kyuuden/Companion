@@ -35,6 +35,8 @@ internal class MapsPanel : PictureBox, IPanel, IScrollablePanel
         foreach (var period in _timePeriods.Periods)
             period.Updated += Period_Updated;
 
+        _seed.PropertyChanged += PropertyChanged;
+        _seed.State.PropertyChanged += PropertyChanged;
         _settings.PropertyChanged += PropertyChanged;
 
         BackColor = _seed.BackgroundColor;
@@ -72,7 +74,19 @@ internal class MapsPanel : PictureBox, IPanel, IScrollablePanel
                 break;
             case MapSettings _ when e.PropertyName == nameof(MapSettings.MarkerColor):
             case MapSettings _ when e.PropertyName == nameof(MapSettings.ShowAllExistingChecks):
+            case Seed _ when e.PropertyName == nameof(Seed.Started):
                 Render();
+                break;
+            case State s when e.PropertyName == nameof(State.CurrentTimePeriod):
+                if (_settings?.Follow == true)
+                {
+                    var currentPeriod = _timePeriods?.Periods.IndexOf(p => p.Period == s.CurrentTimePeriod);
+                    if (currentPeriod.HasValue && currentPeriod.Value != -1)
+                    {
+                        _periodIndex = currentPeriod.Value;
+                        Render();
+                    }
+                }
                 break;
             case IFlags _:
                 break;
@@ -131,36 +145,37 @@ internal class MapsPanel : PictureBox, IPanel, IScrollablePanel
             Image = null;
             var baseImage = BitmapDataFactory.CreateBitmapData(period.Map.Size);
             period.Map.RenderData().DrawInto(baseImage);
-            Image = baseImage.ToBitmap();
+
 
             var sb = new StringBuilder();
             sb.AppendLine($"{period.Description}:\n");
 
-            if (!(_seed?.Started ?? false))
-                return;
-
-            Func<CheckLocation, bool> predicate = _settings!.ShowAllExistingChecks
-                ? loc => loc.Exists && !loc.IsComplete
-                : loc => loc.Exists && loc.IsAccessable && !loc.IsComplete;
-
-            foreach (var loc in period.Locations.Where(predicate))
+            if ((_seed?.Started ?? false))
             {
-                baseImage.FillRectangle(
-                    _settings!.MarkerColor,
-                    loc.Location.X * 16 - 0x30,
-                    (Math.Max(0, (loc.Location.Y - 1) * 16 + 8)),
-                    16,
-                    16);
+                Func<CheckLocation, bool> predicate = _settings!.ShowAllExistingChecks
+                    ? loc => loc.Exists && !loc.IsComplete
+                    : loc => loc.Exists && loc.IsAccessable && !loc.IsComplete;
 
-                sb.AppendLine($"{loc.Description}:");
-                foreach (var check in loc.Checks.Where(c => c.Exists && !c.IsComplete))
+                foreach (var loc in period.Locations.Where(predicate))
                 {
-                    if (check.IsAccessable || _settings!.ShowAllExistingChecks)
-                        sb.AppendLine(check.Description);
+                    baseImage.FillRectangle(
+                        _settings!.MarkerColor,
+                        loc.Location.X * 16 - 0x30,
+                        (Math.Max(0, (loc.Location.Y - 1) * 16 + 8)),
+                        16,
+                        16);
+
+                    sb.AppendLine($"{loc.Description}:");
+                    foreach (var check in loc.Checks.Where(c => c.Exists && !c.IsComplete))
+                    {
+                        if (check.IsAccessable || _settings!.ShowAllExistingChecks)
+                            sb.AppendLine(check.Description);
+                    }
+                    sb.AppendLine();
                 }
-                sb.AppendLine();
             }
 
+            Image = baseImage.ToBitmap();
             _toolTip.SetToolTip(this, sb.ToString());
         }
         catch (Exception)

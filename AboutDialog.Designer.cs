@@ -210,7 +210,7 @@ namespace FF.Rando.Companion
             this.ff6SourceLink.TabIndex = 23;
             this.ff6SourceLink.TabStop = true;
             this.ff6SourceLink.Text = "(source)";
-            this.ff6SourceLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ff6SourceLink_LinkClicked);
+            this.ff6SourceLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.FF6SourceLink_LinkClicked);
             // 
             // ffmqSourceLink
             // 
@@ -222,7 +222,7 @@ namespace FF.Rando.Companion
             this.ffmqSourceLink.TabIndex = 24;
             this.ffmqSourceLink.TabStop = true;
             this.ffmqSourceLink.Text = "(source)";
-            this.ffmqSourceLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ffmqSourceLink_LinkClicked);
+            this.ffmqSourceLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.FFmqSourceLink_LinkClicked);
             // 
             // ctJotSourceLink
             // 
@@ -234,7 +234,7 @@ namespace FF.Rando.Companion
             this.ctJotSourceLink.TabIndex = 25;
             this.ctJotSourceLink.TabStop = true;
             this.ctJotSourceLink.Text = "(source)";
-            this.ctJotSourceLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.ctJotSourceLink_LinkClicked);
+            this.ctJotSourceLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.CtJotSourceLink_LinkClicked);
             // 
             // AboutDialog
             // 

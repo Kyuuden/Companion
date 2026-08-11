@@ -25,9 +25,18 @@ public class MapSettings(JToken jToken) : PanelSettings(jToken)
 
     [DefaultValue(false)]
     [Description("If true, shows all checks that exist in the seed, regardless if they are currently accessable")]
+    [DisplayName("Show All Checks")]
     public bool ShowAllExistingChecks
     {
         get => GetSetting(false);
+        set => SaveSetting(value);
+    }
+
+    [DefaultValue(true)]
+    [Description("If true, Map changes to current time period automatically.")]
+    public bool Follow
+    {
+        get => GetSetting(true);
         set => SaveSetting(value);
     }
 

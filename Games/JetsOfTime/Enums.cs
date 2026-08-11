@@ -8,6 +8,8 @@ public enum TimePeriodType : byte
     Prehistory,
     [Description("12,000 BC")]
     DarkAges,
+    [Description("12,000 BC - Kingdom of Zeal")]
+    KingdomOfZeal,
     [Description("600 AD")]
     MiddleAges,
     [Description("1000 AD")]
@@ -628,7 +630,7 @@ public enum MonsterType
     //Crono = 255,
 }
 
-public enum LocationType
+public enum LocationType : ushort
 {
     [Description("Load Screen")]
     LoadScreen = 0x000,
@@ -1653,5 +1655,9 @@ public enum EventType
     SeedValidated,
     MoonstoneDroppedOff,
     WokeRoboUp,
-    TalkedToToma
+    TalkedToToma,
+
+    TalkedToKnightCaptain,
+    TalkedToCook,
+
 }

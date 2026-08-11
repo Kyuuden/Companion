@@ -141,7 +141,7 @@ internal class Events : INotifyPropertyChanged
     public bool WokeRoboUp => _state?.Read<bool>(0x7C * 8 + 7) ?? false;
     public bool BurrowHeroMedalChest => _state?.Read<bool>(0x106 * 8 + 2) ?? false;
     public bool RainbowShell => _state?.Read<bool>(0xA9 * 8 + 7) ?? false;
-    public bool SnailStopPurchase => _state?.Read<bool>(0x1D0 * 8 + 4) ?? false;    
+    public bool SnailStopPurchase => _state?.Read<bool>(0x1D0 * 8 + 4) ?? false;
     public bool BorrowCarpentersTools => _state?.Read<bool>(0x19E * 8 + 7) ?? false;
     public bool TabansGift => _state?.Read<bool>(0x7A * 8) ?? false;
     public bool ReforgeTheMasamune => _state?.Read<bool>(0x103 * 8 + 1) ?? false;
@@ -161,6 +161,8 @@ internal class Events : INotifyPropertyChanged
     public bool MoonstoneDroppedOff => _state?.Read<bool>(0x13A * 8 + 2) ?? false;
     public bool UnlockedDeathPeak => _state?.Read<bool>(0x70 * 8 + 2) ?? false;
     public bool BlackOmenRaised => false;
+    public bool TalkedToKnightCaptain => _state?.Read<bool>(0xA9 * 8 + 2) ?? false;
+    public bool TalkedToCook => _state?.Read<bool>(0xA9 * 8 + 3) ?? false;
     #endregion
 
 

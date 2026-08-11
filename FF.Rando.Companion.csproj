@@ -5,7 +5,7 @@
 	  <Nullable>enable</Nullable>
 	  <TargetFramework>net48</TargetFramework>
 	  <UseWindowsForms>True</UseWindowsForms>
-	  <Version>2.2.1</Version>
+	  <Version>2.2.2</Version>
 	  <Description>Auto-Tracker for Square Enix Randomizers.</Description>
 	  <Copyright>2026 Kyuuden</Copyright>
 	  <AssemblyVersion></AssemblyVersion>

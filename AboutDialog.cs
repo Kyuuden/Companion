@@ -86,19 +86,19 @@ public partial class AboutDialog : Form
         Process.Start(Paths.JetsOfTimeLink);
     }
 
-    private void ff6SourceLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+    private void FF6SourceLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
     {
         ffmqSourceLink.LinkVisited = true;
         Process.Start(Paths.WorldsCollideSourceLink);
     }
 
-    private void ffmqSourceLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+    private void FFmqSourceLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
     {
         ffmqSourceLink.LinkVisited = true;
         Process.Start(Paths.MysticQuestRandomizerSourceLink);
     }
 
-    private void ctJotSourceLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+    private void CtJotSourceLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
     {
         ctJotSourceLink.LinkVisited = true;
         Process.Start(Paths.JetsOfTimeSourceLink);

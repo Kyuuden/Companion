@@ -7,7 +7,7 @@ internal class TimePeriods
 {
     public IReadOnlyList<TimePeriod> Periods { get; }
 
-    public TimePeriods(WorldMaps maps)
+    public TimePeriods(WorldMaps maps, Locations locations)
     {
         Periods =
         [
@@ -109,6 +109,17 @@ internal class TimePeriods
                     },
                 ]
             },
+            new TimePeriod(TimePeriodType.KingdomOfZeal)
+            {
+                Map = maps.Get(MapType.KingdomOfZeal).Render(true, true, false)!.Crop(new System.Drawing.Rectangle(0x200, 0x148, 512, 376)),
+                AccessRules =
+                [
+                    KeyItemType.GateKey,
+                    EventType.MagusSpotBossDefeated,
+                    EventType.RSeriesSpotBossDefeated,
+                    GameMode.LostWorlds
+                ],
+            },
             new TimePeriod(TimePeriodType.MiddleAges)
             {
                 Map = maps.Get(MapType.MiddleAges).Render(true, true, false)!.Crop(new System.Drawing.Rectangle(0x30, 0, 0x570, 1024)),
@@ -151,11 +162,12 @@ internal class TimePeriods
                     },
                     new(CheckLocationType.ZenanBridge)
                     {
+                        ExistanceRules = [new() { Negate = true, GameMode = GameMode.LostWorlds} ],
                         Location = new(0xF, 0x1C),
                         Checks =
                         [
-                            new Check("Defeat Zombor") { CompleteRules = [EventType.ZomborSpotBossDefeated]},
-                            new Check("Cook's Rations") { ExistanceRules = [new() { Negate = true, GameMode = GameMode.LostWorlds} ], IsKeyItem = true, CompleteRules = [EventType.CooksRations]}
+                            new Check("Talk to Knight-Capitan") { CompleteRules = [EventType.TalkedToKnightCaptain] },
+                            new Check("Defeat Zombor") { AccessRules = [EventType.CooksRations],  CompleteRules = [EventType.ZomborSpotBossDefeated]},
                         ]
                     },
                    new(CheckLocationType.SunkenDesert)
@@ -193,6 +205,8 @@ internal class TimePeriods
                         Location = new(0x11,0xc),
                         Checks =
                         [
+                            new Check("Talk to Cook") { ExistanceRules = [new() { Negate = true, GameMode = GameMode.LostWorlds} ],CompleteRules = [EventType.TalkedToCook, EventType.CooksRations], AccessRules = [EventType.TalkedToKnightCaptain] },
+                            new Check("Cooks Rations") { ExistanceRules = [new() { Negate = true, GameMode = GameMode.LostWorlds} ], CompleteRules = [EventType.CooksRations], AccessRules = [EventType.TalkedToCook] },
                             new Check("Rescue Marle") { CompleteRules = [EventType.RescueMarle], AccessRules = [EventType.YakaraSpotBossDefeated]},
                             new ChestsCheck("King's Tower Chests") { ChestIds = [242, 29] },
                             new ChestsCheck("Queen's Tower Chest") { ChestIds = [235] },
@@ -274,7 +288,7 @@ internal class TimePeriods
                         AccessRules = [new() { CanFly = true, KeyItems = [KeyItemType.GrandLeon] }],
                         Checks =
                         [
-                            new ChestsCheck() { ChestIds = [3425, 3427] },
+                            new ChestsCheck("Chests", 0) { ChestIds = [3425, 3427] },
                             new SealedChestsCheck("Sealed Chests") { ChestIds = [3376, 3377, 3378] }
                         ]
                     },
@@ -452,8 +466,8 @@ internal class TimePeriods
                         Location = new(0x4d, 0x2b),
                         Checks =
                         [
-                            new ChestsCheck("Upstairs Chest") { ChestIds = [3426]},
-                            new ChestsCheck("Basement Chest") { AccessRules = [CharacterType.Frog], ChestIds = [3424] },
+                            new ChestsCheck("Upstairs Chest", 0) { ChestIds = [3426]},
+                            new ChestsCheck("Basement Chest", 0) { AccessRules = [CharacterType.Frog], ChestIds = [3424] },
                             new SealedChestsCheck("Sealed Chests") { ChestIds = [3429, 3430, 3431] }
                         ]
                     },
@@ -592,6 +606,12 @@ internal class TimePeriods
                     //},
                 ]
             },
+            new TimePeriod(TimePeriodType.EndOfTime)
+            {
+                ExistanceRules = [new() { GameMode = GameMode.LostWorlds, Negate = true }],
+                Map = locations.Get(LocationType.EndofTime).Render(true, true, false)!.Crop(new System.Drawing.Rectangle(0,0,0x300, 0x1f0)),
+                AccessRules = [KeyItemType.GateKey, EventType.MagusSpotBossDefeated, EventType.RSeriesSpotBossDefeated]
+            }
         ];
     }
 

@@ -25,6 +25,7 @@ internal abstract class StatisticControl<T> : StatisticControl<T, Seed> where T 
         BackColor = Color.Transparent;
         UpdateImage();
         _toolTip.SetToolTip(this, Description);
+        seed.State.PropertyChanged += Seed_PropertyChanged;
     }
 
     protected abstract IReadableBitmapData Icon { get; }

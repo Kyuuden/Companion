@@ -19,6 +19,7 @@ internal class State : INotifyPropertyChanged
     private int _openedChests;
     private int _openedSealedChests;
     private int _completedChecks;
+    private TimePeriodType _currentTimePeriod;
 
     public required Characters Characters { get; init; }
     public required KeyItems KeyItems { get; init; }
@@ -26,7 +27,6 @@ internal class State : INotifyPropertyChanged
     public required Events Events { get; init; }
     public required TimePeriods TimePeriods { get; init; }
     public required Flags Flags { get; init; }
-    
 
     public uint Gold
     {
@@ -105,6 +105,17 @@ internal class State : INotifyPropertyChanged
         }
     }
 
+    public TimePeriodType CurrentTimePeriod
+    {
+        get => _currentTimePeriod;
+        protected set
+        {
+            if (_currentTimePeriod == value) return;
+            _currentTimePeriod = value;
+            NotifyPropertyChanged();
+        }
+    }
+
     public bool Update(IMemorySpace wram)
     {
         var eventData = wram.ReadBytes(Addresses.WRAM.EventData).AsSpan();
@@ -112,6 +123,7 @@ internal class State : INotifyPropertyChanged
         var inventoryData = wram.ReadBytes(Addresses.WRAM.InventoryData);
         var equipmentData = wram.ReadBytes(Addresses.WRAM.EquipmentData);
         var gold = wram.ReadBytes(Addresses.WRAM.Gold).Read<uint>(0, 24);
+        var loc = (LocationType)BinaryPrimitives.ReadUInt16LittleEndian(wram.ReadBytes(Addresses.WRAM.CurrentLocation));
 
         if (BinaryPrimitives.ReadUInt16LittleEndian(partyData) == 0)
             return false;
@@ -148,7 +160,18 @@ internal class State : INotifyPropertyChanged
 
         OpenedChests = TimePeriods.Periods.SelectMany(p => p.Locations.SelectMany(l => l.Checks)).OfType<ChestsCheck>().Where(c=> !c.AccessRules.Any(a=>a.CanOpenSealed)).Sum(c=>c.OpenedChests);
         OpenedSealedChests = TimePeriods.Periods.SelectMany(p => p.Locations.SelectMany(l => l.Checks)).OfType<SealedChestsCheck>().Sum(c => c.OpenedChests);
-        CompletedChecks = TimePeriods.Periods.SelectMany(p => p.Locations.SelectMany(l => l.Checks)).Count(c => c.Exists && c.IsComplete);
+        CompletedChecks = TimePeriods.Periods.SelectMany(p => p.Locations.SelectMany(l => l.Checks)).Count(c => c.IsKeyItem && c.Exists && c.IsComplete);
+
+        switch (loc)
+        {
+            case LocationType.Present: CurrentTimePeriod = TimePeriodType.Present; break;
+            case LocationType.MiddleAges: CurrentTimePeriod = TimePeriodType.MiddleAges; break;
+            case LocationType.Future: CurrentTimePeriod = TimePeriodType.Future; break;
+            case LocationType.Prehistoric: CurrentTimePeriod = TimePeriodType.Prehistory; break;
+            case LocationType.DarkAges: CurrentTimePeriod = TimePeriodType.DarkAges; break;
+            case LocationType.KingdomofZeal: CurrentTimePeriod = TimePeriodType.KingdomOfZeal; break;
+            case LocationType.EndofTime: CurrentTimePeriod = TimePeriodType.EndOfTime; break;
+        }
 
         return ret;
     }

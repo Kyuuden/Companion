@@ -1,5 +1,4 @@
 ﻿using FF.Rando.Companion.Extensions;
-using FF.Rando.Companion.Games.WorldsCollide.Tracking;
 using FF.Rando.Companion.Rendering;
 using System;
 using System.Collections.Generic;
@@ -9,6 +8,8 @@ using System.Linq;
 namespace FF.Rando.Companion.Games.JetsOfTime.Tracking;
 internal class TimePeriod(TimePeriodType timePeriod)
 {
+    public TimePeriodType Period { get; } = timePeriod;
+
     public string Description { get; } = timePeriod.GetDescription();
 
     public bool IsAccessable { get; private set; }
@@ -89,7 +90,7 @@ internal class CheckLocation(CheckLocationType type)
             Exists = exists;
         }
 
-        var canAccess = (AccessRules.Count == 0 || AccessRules.Any(r => r.IsAccessable(state))) && Checks.Any(c=>c.IsAccessable && c.Exists);
+        var canAccess = (AccessRules.Count == 0 || AccessRules.Any(r => r.IsAccessable(state))) && Checks.Any(c=>c.IsAccessable && c.Exists && !c.IsComplete);
         if (canAccess != IsAccessable)
         {
             ret = true;
@@ -111,7 +112,7 @@ internal class CheckLocation(CheckLocationType type)
 
 internal class SealedChestsCheck : ChestsCheck
 {
-    public SealedChestsCheck(string name = "Sealed Chests") : base(name)
+    public SealedChestsCheck(string name = "Sealed Chests") : base(name, 0)
     {
         ExistanceRules = [Flag.Chronosanity];
         AccessRules = [AccessRule.Sealed];
@@ -122,14 +123,17 @@ internal class SealedChestsCheck : ChestsCheck
 
 internal class ChestsCheck : Check
 {
+    protected uint ChestIdOffset { get; }
+
     public List<uint> ChestIds { get; init; } = [];
 
     public int OpenedChests { get; private set; } = 0;
 
-    public ChestsCheck(string name = "Chests") : base(name)
+    public ChestsCheck(string name = "Chests", uint offset = 8) : base(name)
     {
         CompleteRules = [];
         IsKeyItem = true;
+        ChestIdOffset = offset;
     }
 
     public override bool Update(State state)
@@ -150,7 +154,7 @@ internal class ChestsCheck : Check
             IsAccessable = canAccess;
         }
 
-        var openedCount = ChestIds.Count(state.Events.EventData.Read<bool>);
+        var openedCount = ChestIds.Count(cid => state.Events.EventData.Read<bool>(cid + ChestIdOffset));
         ret |= openedCount != OpenedChests;
         OpenedChests = openedCount;
 
@@ -203,7 +207,7 @@ internal class Check(string name)
             IsAccessable = canAccess;
         }
 
-        var isComplete = CompleteRules.All(r => r.IsComplete(state));
+        var isComplete = CompleteRules.Any(r => r.IsComplete(state));
 
         if (isComplete != IsComplete)
         {
@@ -212,6 +216,11 @@ internal class Check(string name)
         }
 
         return ret;
+    }
+
+    public override string ToString()
+    {
+        return $"{Description} Exists: {Exists}, IsAccessable: {IsAccessable}, IsComplete: {IsComplete}, IsKeyItem: {IsKeyItem}, IsGoMode: {IsGoMode}";
     }
 }
 

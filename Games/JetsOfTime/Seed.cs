@@ -1,10 +1,9 @@
-﻿using FF.Rando.Companion.Extensions;
-using FF.Rando.Companion.Games.JetsOfTime.Data;
+﻿using FF.Rando.Companion.Games.JetsOfTime.Data;
 using FF.Rando.Companion.Games.JetsOfTime.Rendering;
 using FF.Rando.Companion.Games.JetsOfTime.Settings;
 using FF.Rando.Companion.Games.JetsOfTime.Tracking;
 using FF.Rando.Companion.Games.JetsOfTime.View;
-using System.Collections.Generic;
+using System.Buffers.Binary;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -35,20 +34,19 @@ internal class Seed : GameBase<JetsOfTimeSettings>
             KeyItems = new KeyItems(Timer, Flags, Sprites),
             Characters = new Characters(Timer, Sprites),
             Bosses = new Bosses(Timer, Sprites, Locations),
-            TimePeriods = new TimePeriods(WorldMaps)
+            TimePeriods = new TimePeriods(WorldMaps, Locations)
         };
 
         State.TimePeriods.Update(State);
 
         Icon = Sprites.GetPortrait(PortraitType.Epoch)?.Render()!;
-        CreateCallbacks();
     }
 
     public State State { get; }
 
     public override Bitmap Icon { get; }
 
-    public override bool RequiresMemoryEventsForTiming => true;
+    public override bool RequiresMemoryEventsForTiming => false;
 
     public override Control CreateTrackingControl()
     {
@@ -64,6 +62,7 @@ internal class Seed : GameBase<JetsOfTimeSettings>
         Backgrounds.Dispose();
         Sprites.Dispose();
         Locations.Dispose();
+        WorldMaps.Dispose();
     }
 
     public int SelectedBackground
@@ -79,32 +78,6 @@ internal class Seed : GameBase<JetsOfTimeSettings>
 
     public Flags Flags { get; }
 
-    private void CreateCallbacks()
-    {
-        try
-        {
-            if (MemoryEvents == null)
-                throw new KeyNotFoundException();
-
-            MemoryEvents?.AddWriteCallback (StartNewGame, 0x7E2990, "System Bus");
-        }
-        catch (KeyNotFoundException) //snes9X core doesn't support exec callbacks
-        {
-        }
-    }
-
-    private uint? StartNewGame(uint address, uint value, uint flags)
-    {
-        var menuPtr = Wram.ReadBytes(Addresses.WRAM.MenuPointer).Read<uint>(0, 24);
-
-        if (menuPtr == 0x00c2e1e3)
-        {
-            MemoryEvents?.RemoveMemoryCallback(StartNewGame);
-            Started = true;
-        }
-        return null;
-    }
-
     protected override void ReadTrackingData()
     {
         SelectedBackground = Wram.ReadByte(Addresses.WRAM.Background) & 0x07;
@@ -113,5 +86,21 @@ internal class Seed : GameBase<JetsOfTimeSettings>
             return;
 
         State.Update(Wram);
+    }
+
+    protected override bool CheckIfStarted()
+    {
+        return Wram.ReadByte(Addresses.WRAM.RunStartedMarker) != 0;
+    }
+
+    protected override bool CheckIfVictory()
+    {
+        var loc = (LocationType)BinaryPrimitives.ReadUInt16LittleEndian(Wram.ReadBytes(Addresses.WRAM.CurrentLocation));
+
+        return loc switch
+        {
+            LocationType.BlackOmenCelestialGate or LocationType.Tesseract => Wram.ReadByte(Addresses.WRAM.Storyline) == 0xD6,
+            _ => base.CheckIfVictory(),
+        };
     }
 }
