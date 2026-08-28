@@ -2,6 +2,7 @@
 using FF.Rando.Companion.Rendering;
 using FF.Rando.Companion.Timing;
 using System;
+using System.Drawing;
 using System.Windows.Forms;
 using HorizontalAlignment = FF.Rando.Companion.Rendering.HorizontalAlignment;
 
@@ -12,13 +13,15 @@ internal class AnimatedKeyItem : KeyItemBase
     private readonly SpriteCollection _spriteCollection;
     private int _index = 0;
     private readonly Timer _timer;
+    private readonly RotateFlipType? _rotateFlipType;
 
-    public AnimatedKeyItem(ITimer timer, KeyItemType type, SpriteCollection collection, int interval = 1000)
+    public AnimatedKeyItem(ITimer timer, KeyItemType type, SpriteCollection collection, int interval = 1000, RotateFlipType? rotateFlipType = null)
         :base(timer, type)
     {
         _spriteCollection = collection;
         _timer = new Timer { Interval = interval };
         _timer.Tick += NextFrame;
+        _rotateFlipType = rotateFlipType;
         SetImage();
     }
 
@@ -42,7 +45,14 @@ internal class AnimatedKeyItem : KeyItemBase
             _timer.Stop();
         }
 
-        var image = _spriteCollection.Get(_index)?.Pad(new System.Drawing.Size(32, 32), HorizontalAlignment.Center, VerticalAlignment.Center)?.Render(!IsFound);
+        var baseImage = _spriteCollection.Get(_index)?.Pad(new Size(32, 32), HorizontalAlignment.Center, VerticalAlignment.Center);
+
+        if (_rotateFlipType.HasValue && baseImage != null)
+        {
+            baseImage = baseImage.RotateFlip(_rotateFlipType.Value);
+        }
+
+        var image = baseImage?.Render(!IsFound);
         if (image != null)
             Image = image;
     }

@@ -7,6 +7,7 @@ using System.Buffers.Binary;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace FF.Rando.Companion.Games.JetsOfTime;
 
@@ -19,7 +20,8 @@ internal class State : INotifyPropertyChanged
     private int _openedChests;
     private int _openedSealedChests;
     private int _completedChecks;
-    private TimePeriodType _currentTimePeriod;
+    private LocationAccess _periodAccess;
+    private LocationType _currentLocation;
 
     public required Characters Characters { get; init; }
     public required KeyItems KeyItems { get; init; }
@@ -105,13 +107,24 @@ internal class State : INotifyPropertyChanged
         }
     }
 
-    public TimePeriodType CurrentTimePeriod
+    public LocationType CurrentLocation
     {
-        get => _currentTimePeriod;
+        get => _currentLocation;
         protected set
         {
-            if (_currentTimePeriod == value) return;
-            _currentTimePeriod = value;
+            if (_currentLocation == value) return;
+            _currentLocation = value;
+            NotifyPropertyChanged();
+        }
+    }
+
+    public LocationAccess LocationAccess
+    {
+        get => _periodAccess;
+        protected set
+        {
+            if (_periodAccess == value) return;
+            _periodAccess = value;
             NotifyPropertyChanged();
         }
     }
@@ -124,6 +137,7 @@ internal class State : INotifyPropertyChanged
         var equipmentData = wram.ReadBytes(Addresses.WRAM.EquipmentData);
         var gold = wram.ReadBytes(Addresses.WRAM.Gold).Read<uint>(0, 24);
         var loc = (LocationType)BinaryPrimitives.ReadUInt16LittleEndian(wram.ReadBytes(Addresses.WRAM.CurrentLocation));
+        var periodAccess = wram.ReadBytes(Addresses.WRAM.TimePeriodAccess);
 
         if (BinaryPrimitives.ReadUInt16LittleEndian(partyData) == 0)
             return false;
@@ -133,6 +147,23 @@ internal class State : INotifyPropertyChanged
             return false;
 
         var ret = false;
+
+        var accessablePeriods = LocationAccess.None;
+        foreach (var period in MemoryMarshal.Cast<byte, ushort>(periodAccess))
+        {
+            switch ((LocationType)period)
+            {
+                case LocationType.Present: accessablePeriods |= LocationAccess.Preset; break;
+                case LocationType.MiddleAges: accessablePeriods |= LocationAccess.MiddleAges; break;
+                case LocationType.Prehistoric: accessablePeriods |= LocationAccess.Prehistory; break;
+                case LocationType.DarkAges: accessablePeriods |= LocationAccess.DarkAges; break;
+                case LocationType.Future: accessablePeriods |= LocationAccess.Future; break;
+                case LocationType.EndofTimeEpoch: accessablePeriods |= LocationAccess.EndOfTime; break;
+            }
+        }
+
+        ret |= LocationAccess != accessablePeriods;
+        LocationAccess = accessablePeriods;
 
         ret |= Events.Update(eventData);
         Validated = Events.SeedValidated;
@@ -160,18 +191,10 @@ internal class State : INotifyPropertyChanged
 
         OpenedChests = TimePeriods.Periods.SelectMany(p => p.Locations.SelectMany(l => l.Checks)).OfType<ChestsCheck>().Where(c=> !c.AccessRules.Any(a=>a.CanOpenSealed)).Sum(c=>c.OpenedChests);
         OpenedSealedChests = TimePeriods.Periods.SelectMany(p => p.Locations.SelectMany(l => l.Checks)).OfType<SealedChestsCheck>().Sum(c => c.OpenedChests);
-        CompletedChecks = TimePeriods.Periods.SelectMany(p => p.Locations.SelectMany(l => l.Checks)).Count(c => c.IsKeyItem && c.Exists && c.IsComplete);
+        CompletedChecks = TimePeriods.Periods.SelectMany(p => p.Locations.SelectMany(l => l.Checks)).Count(c => c.CheckType == CheckType.KeyItem && c.Exists && c.IsComplete);
 
-        switch (loc)
-        {
-            case LocationType.Present: CurrentTimePeriod = TimePeriodType.Present; break;
-            case LocationType.MiddleAges: CurrentTimePeriod = TimePeriodType.MiddleAges; break;
-            case LocationType.Future: CurrentTimePeriod = TimePeriodType.Future; break;
-            case LocationType.Prehistoric: CurrentTimePeriod = TimePeriodType.Prehistory; break;
-            case LocationType.DarkAges: CurrentTimePeriod = TimePeriodType.DarkAges; break;
-            case LocationType.KingdomofZeal: CurrentTimePeriod = TimePeriodType.KingdomOfZeal; break;
-            case LocationType.EndofTime: CurrentTimePeriod = TimePeriodType.EndOfTime; break;
-        }
+        ret |= CurrentLocation != loc;
+        CurrentLocation = loc;
 
         return ret;
     }

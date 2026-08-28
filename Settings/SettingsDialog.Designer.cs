@@ -73,7 +73,7 @@ partial class SettingsDialog
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(480, 480);
             this.Controls.Add(this.tabControl1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable;
             this.Name = "SettingsDialog";            
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);

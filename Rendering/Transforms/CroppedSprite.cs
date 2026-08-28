@@ -7,6 +7,8 @@ internal class CroppedSprite(ISprite source, Rectangle rectangle) : Sprite(sourc
 {
     public override Size Size => rectangle.Size;
 
+    public Rectangle Rectangle => rectangle;
+
     protected override IReadableBitmapData RenderColorData()
     {
         return source.RenderData().Clone(rectangle);

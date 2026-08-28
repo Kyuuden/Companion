@@ -1,10 +1,15 @@
-﻿using FF.Rando.Companion.Games.JetsOfTime.Data;
+﻿using FF.Rando.Companion.Extensions;
+using FF.Rando.Companion.Games.JetsOfTime.Data;
 using FF.Rando.Companion.Games.JetsOfTime.Rendering;
 using FF.Rando.Companion.Games.JetsOfTime.Settings;
 using FF.Rando.Companion.Games.JetsOfTime.Tracking;
 using FF.Rando.Companion.Games.JetsOfTime.View;
+using System;
 using System.Buffers.Binary;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace FF.Rando.Companion.Games.JetsOfTime;
@@ -95,9 +100,17 @@ internal class Seed : GameBase<JetsOfTimeSettings>
 
     protected override bool CheckIfVictory()
     {
-        var loc = (LocationType)BinaryPrimitives.ReadUInt16LittleEndian(Wram.ReadBytes(Addresses.WRAM.CurrentLocation));
+        switch (State.CurrentLocation)
+        {
+            case LocationType.BlackOmenCelestialGate when State.Flags.ZealEnd == true:
+                var zeal = Wram.ReadBytes(Addresses.WRAM.BlackOmenZeal2);
+                return zeal[0] == (byte)MonsterType.Zeal && BinaryPrimitives.ReadUInt16LittleEndian(zeal.AsSpan()[3..]) == 0;
+            case LocationType.Tesseract:
+                var core = Wram.ReadBytes(Addresses.WRAM.TesseractCore);
+                return core[0] == (byte)MonsterType.Lavos_Bit2 && BinaryPrimitives.ReadUInt16LittleEndian(core.AsSpan()[3..]) == 0;
+        }
 
-        return loc switch
+        return State.CurrentLocation switch
         {
             LocationType.BlackOmenCelestialGate or LocationType.Tesseract => Wram.ReadByte(Addresses.WRAM.Storyline) == 0xD6,
             _ => base.CheckIfVictory(),

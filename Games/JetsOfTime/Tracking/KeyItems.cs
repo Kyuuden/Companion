@@ -151,7 +151,6 @@ internal class KeyItems : INotifyPropertyChanged
             KeyItemType.Clone,
             KeyItemType.ChronoTrigger,
             KeyItemType.TomasPop,
-            KeyItemType.Magic,
             KeyItemType.JetsOfTime,
             KeyItemType.Tools,
 
@@ -160,11 +159,14 @@ internal class KeyItems : INotifyPropertyChanged
         FlagsChanged(null!, null!);
     }
 
-    private void FlagsChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    private void FlagsChanged(object sender, PropertyChangedEventArgs e)
     {
         foreach (var item in Items)
         {
             item.Exists = _keyItemsByGameMode[_flags.Mode ?? GameMode.Standard].Contains(item.Type);
+
+            if (item.Type == KeyItemType.JetsOfTime)
+                item.Exists = _flags.EpochFail ?? true;
         }
     }
 
@@ -172,7 +174,6 @@ internal class KeyItems : INotifyPropertyChanged
     {
         return keyItemType switch
         {
-            KeyItemType.Magic => new AnimatedKeyItem(_timer, keyItemType, _spriteDB.GetNpc(NPCType.Save_point), 250),
             KeyItemType.MoonStone => new ProgressiveKeyItem(_timer, keyItemType, [CreateSprite(KeyItemType.MoonStone)!, CreateSprite(KeyItemType.SunStone)!], [KeyItemType.MoonStone.GetDescription(), KeyItemType.SunStone.GetDescription()]),
             _ => new KeyItem(_timer, keyItemType, CreateSprite(keyItemType)),
         };

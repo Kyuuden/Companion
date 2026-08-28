@@ -6,9 +6,9 @@ using System.Drawing;
 using System.Linq;
 
 namespace FF.Rando.Companion.Games.JetsOfTime.Tracking;
-internal class TimePeriod(TimePeriodType timePeriod)
+internal class TimePeriod(LocationType timePeriod)
 {
-    public TimePeriodType Period { get; } = timePeriod;
+    public LocationType Period { get; } = timePeriod;
 
     public string Description { get; } = timePeriod.GetDescription();
 
@@ -112,12 +112,11 @@ internal class CheckLocation(CheckLocationType type)
 
 internal class SealedChestsCheck : ChestsCheck
 {
-    public SealedChestsCheck(string name = "Sealed Chests") : base(name, 0)
+    public SealedChestsCheck(string name = "Sealed Chests", uint offset = 0) : base(name, offset)
     {
         ExistanceRules = [Flag.Chronosanity];
         AccessRules = [AccessRule.Sealed];
         CompleteRules = [];
-        IsKeyItem = true;
     }
 }
 
@@ -129,10 +128,11 @@ internal class ChestsCheck : Check
 
     public int OpenedChests { get; private set; } = 0;
 
+    public int RemainingChests => ChestIds.Count - OpenedChests;
+
     public ChestsCheck(string name = "Chests", uint offset = 8) : base(name)
     {
         CompleteRules = [];
-        IsKeyItem = true;
         ChestIdOffset = offset;
     }
 
@@ -140,7 +140,11 @@ internal class ChestsCheck : Check
     {
         var ret = false;
 
-        var exists = (ExistanceRules.Count == 0 || ExistanceRules.Any(r => r.Exists(state))) && state.Flags[Flag.Chronosanity] == true;
+        var checkType = (state.Flags[Flag.Chronosanity] == true) ? CheckType.KeyItem : CheckType.Other;
+        ret |= CheckType != checkType;
+        CheckType = checkType;
+
+        var exists = ExistanceRules.Count == 0 || ExistanceRules.Any(r => r.Exists(state));
         if (exists != Exists)
         {
             ret = true;
@@ -167,11 +171,25 @@ internal class ChestsCheck : Check
 
         return ret;
     }
+
+    public override string Description => $"{base.Description}: {RemainingChests} remaining.";
 }
 
-internal class Check(string name)
+internal enum CheckType
 {
-    public string Description { get; } = name;
+    Other,
+    OtherProgression,
+    CharacterProgression,
+    Character,
+    KeyItemProgression,
+    KeyItem,
+    GoMode,
+    FinalBoss,
+}
+
+internal class Check(string name, CheckType type = CheckType.Other)
+{
+    public virtual string Description { get; } = name;
 
     public bool Exists { get; protected set; }
 
@@ -185,9 +203,7 @@ internal class Check(string name)
 
     public List<CompleteRule> CompleteRules { get; init; } = [];
 
-    public bool IsGoMode { get; init; }
-
-    public bool IsKeyItem { get; init; }
+    public CheckType CheckType { get; protected set; } = type;
 
     public virtual bool Update(State state)
     {
@@ -220,18 +236,22 @@ internal class Check(string name)
 
     public override string ToString()
     {
-        return $"{Description} Exists: {Exists}, IsAccessable: {IsAccessable}, IsComplete: {IsComplete}, IsKeyItem: {IsKeyItem}, IsGoMode: {IsGoMode}";
+        return $"{Description} Type: {CheckType}, Exists: {Exists}, IsAccessable: {IsAccessable}, IsComplete: {IsComplete}";
     }
 }
 
 internal class CompleteRule
 {
+    public LocationAccess? PeriodAccess { get; init; }
     public List<KeyItemType> KeyItems { get; init; } = [];
     public List<EventType> Events { get; init; } = [];
 
     public virtual bool IsComplete(State state)
     {
         var ret = true;
+
+        if (PeriodAccess.HasValue)
+            ret &= (PeriodAccess.Value & state.LocationAccess) != LocationAccess.None;
 
         foreach (var ki in KeyItems)
             ret &= state.KeyItems.IsFound(ki);
@@ -242,6 +262,7 @@ internal class CompleteRule
         return ret;
     }
 
+    public static implicit operator CompleteRule(LocationAccess timePeriodAccess) => new() { PeriodAccess = timePeriodAccess };
     public static implicit operator CompleteRule(EventType eventType) => new() { Events = [eventType] };
     public static implicit operator CompleteRule(KeyItemType type) => new() { KeyItems = [type] };
 }
@@ -275,6 +296,7 @@ internal class ExistanceRule
 internal class AccessRule
 {
     public bool Negate { get; init; } = false;
+    public LocationAccess? PeriodAccess { get; init; }
     public List<CharacterType> Characters { get; init; } = [];
     public List<KeyItemType> KeyItems { get; init; } = [];
     public List<EventType> Events { get; init; } = [];
@@ -290,6 +312,9 @@ internal class AccessRule
 
         if (GameMode.HasValue)
             ret &= (state.Flags.Mode == GameMode.Value);
+
+        if (PeriodAccess.HasValue)
+            ret &= (PeriodAccess.Value & state.LocationAccess) != LocationAccess.None;
 
         foreach (var ch in Characters)
             ret &= state.Characters.IsFound(ch);
@@ -318,6 +343,7 @@ internal class AccessRule
         return ret;
     }
 
+    public static implicit operator AccessRule(LocationAccess timePeriodAccess) => new() { PeriodAccess = timePeriodAccess };
     public static implicit operator AccessRule(EventType eventType) => new() { Events = [eventType] };
     public static implicit operator AccessRule(KeyItemType type) => new() {  KeyItems = [type] };
     public static implicit operator AccessRule(CharacterType type) => new() { Characters = [type] };

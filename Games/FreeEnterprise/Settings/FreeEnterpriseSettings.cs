@@ -23,9 +23,11 @@ public class FreeEnterpriseSettings : GameSettings
         Stats = new StatsSettings(SettingsData);
     }
 
+    public override BorderSettings BorderSettings => base.BorderSettings;
+
     [TypeConverter(typeof(ExpandableObjectConverter))]
-    [Description("Tracking of found and defeated bosses.")]
-    public BossSettings Bosses { get; }
+    [Description("Tracking of party members")]
+    public PartySettings Party { get; }
 
     [DisplayName("Key Items")]
     [TypeConverter(typeof(ExpandableObjectConverter))]
@@ -33,12 +35,12 @@ public class FreeEnterpriseSettings : GameSettings
     public KeyItemSettings KeyItems { get; }
 
     [TypeConverter(typeof(ExpandableObjectConverter))]
-    [Description("Tracking of completed objectives")]
-    public ObjectivesSettings Objectives { get; }
+    [Description("Tracking of found and defeated bosses.")]
+    public BossSettings Bosses { get; }
 
     [TypeConverter(typeof(ExpandableObjectConverter))]
-    [Description("Tracking of party members")]
-    public PartySettings Party { get; }
+    [Description("Tracking of completed objectives")]
+    public ObjectivesSettings Objectives { get; }
 
     [TypeConverter(typeof(ExpandableObjectConverter))]
     [Description("Tracking of available locations to check")]

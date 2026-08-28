@@ -60,3 +60,11 @@ Possible end game detection:
 
 Legacy of Cyrus: 
 0x7f0216 = 0x3? seems to be set when cat hits switch
+
+TODOs / bugs:
+repair ruins - need grand leon, 3318 to start repair
+then Unknown set: 3952
+Unknown set: 3320;3321
+
+
+1a0, d0

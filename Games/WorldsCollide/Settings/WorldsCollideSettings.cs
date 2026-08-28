@@ -25,32 +25,6 @@ public class WorldsCollideSettings : GameSettings
         TextChecks = new TextChecksSettings(SettingsData);
     }
 
-    [TypeConverter(typeof(ExpandableObjectConverter))]
-    [DisplayName("Borders and Backgrounds")]
-    public override BorderSettings BorderSettings { get; }
-
-    [TypeConverter(typeof(ExpandableObjectConverter))]
-    [Description("Tracking of general statistics")]
-    [Category("Statistics")]
-    public StatsSettings Stats { get; }
-
-    [TypeConverter(typeof(ExpandableObjectConverter))]
-    [Description("Tracking of checks")]
-    public CheckSettings Checks { get; }
-
-    [TypeConverter(typeof(ExpandableObjectConverter))]
-    [Description("Tracking of characters")]
-    public CharacterSettings Characters { get; }
-
-    [TypeConverter(typeof(ExpandableObjectConverter))]
-    [Description("Tracking of dragons")]
-    public DragonSettings Dragons { get; }
-
-    [TypeConverter(typeof(ExpandableObjectConverter))]
-    [Description("Tracking of dragon locations")]
-    [DisplayName("Dragon Locations")]
-    public DragonLocationSettings DragonLocations { get; }
-
     [DefaultValue(SpriteSetType.Locations)]
     [TypeConverter(typeof(EnumDescriptionConverter))]
     [DisplayName("Icons")]
@@ -62,7 +36,33 @@ public class WorldsCollideSettings : GameSettings
     }
 
     [TypeConverter(typeof(ExpandableObjectConverter))]
+    [DisplayName("Borders and Backgrounds")]
+    public override BorderSettings BorderSettings { get; }
+
+    [TypeConverter(typeof(ExpandableObjectConverter))]
+    [Description("Tracking of characters")]
+    public CharacterSettings Characters { get; }
+
+    [TypeConverter(typeof(ExpandableObjectConverter))]
+    [Description("Tracking of checks")]
+    public CheckSettings Checks { get; }
+
+    [TypeConverter(typeof(ExpandableObjectConverter))]
+    [Description("Tracking of dragons")]
+    public DragonSettings Dragons { get; }
+
+    [TypeConverter(typeof(ExpandableObjectConverter))]
+    [Description("Tracking of dragon locations")]
+    [DisplayName("Dragon Locations")]
+    public DragonLocationSettings DragonLocations { get; }
+
+    [TypeConverter(typeof(ExpandableObjectConverter))]
     [Description("Tracking of all checks as text")]
     [DisplayName("Text-based Checks")]
     public TextChecksSettings TextChecks { get; }
+
+    [TypeConverter(typeof(ExpandableObjectConverter))]
+    [Description("Tracking of general statistics")]
+    [Category("Statistics")]
+    public StatsSettings Stats { get; }
 }

@@ -1,6 +1,7 @@
 ﻿using FF.Rando.Companion.Games.JetsOfTime.Settings;
 using FF.Rando.Companion.Games.JetsOfTime.Tracking;
 using FF.Rando.Companion.Rendering;
+using FF.Rando.Companion.Rendering.Transforms;
 using FF.Rando.Companion.View;
 using KGySoft.CoreLibraries;
 using KGySoft.Drawing.Imaging;
@@ -55,11 +56,11 @@ internal class MapsPanel : PictureBox, IPanel, IScrollablePanel
         CanScroll = availableCnt > 1;
 
         if (availableCnt == 1)
-            _periodIndex = _timePeriods!.Periods.IndexOf(p=>p.IsAccessable);
+            _periodIndex = _timePeriods!.Periods.IndexOf(p => p.IsAccessable);
         else if (_periodIndex == -1 && availableCnt > 0)
             ScrollRight();
 
-        if (sender == _timePeriods!.Periods[_periodIndex])
+        if (_periodIndex != -1 && sender == _timePeriods!.Periods[_periodIndex])
             Render();
     }
 
@@ -72,15 +73,18 @@ internal class MapsPanel : PictureBox, IPanel, IScrollablePanel
             case MapSettings _ when e.PropertyName == nameof(MapSettings.Enabled):
                 Visible = _settings?.Enabled == true;
                 break;
-            case MapSettings _ when e.PropertyName == nameof(MapSettings.MarkerColor):
+            case MapSettings _ when e.PropertyName == nameof(MapSettings.ProgressionMarkerColor):
+            case MapSettings _ when e.PropertyName == nameof(MapSettings.GoModeMarkerColor):
+            case MapSettings _ when e.PropertyName == nameof(MapSettings.PointOfInterestMarkerColor):
+            case MapSettings _ when e.PropertyName == nameof(MapSettings.ShowPointsOfInterest):
             case MapSettings _ when e.PropertyName == nameof(MapSettings.ShowAllExistingChecks):
             case Seed _ when e.PropertyName == nameof(Seed.Started):
                 Render();
                 break;
-            case State s when e.PropertyName == nameof(State.CurrentTimePeriod):
+            case State s when e.PropertyName == nameof(State.CurrentLocation):
                 if (_settings?.Follow == true)
                 {
-                    var currentPeriod = _timePeriods?.Periods.IndexOf(p => p.Period == s.CurrentTimePeriod);
+                    var currentPeriod = _timePeriods?.Periods.IndexOf(p => p.Period == s.CurrentLocation);
                     if (currentPeriod.HasValue && currentPeriod.Value != -1)
                     {
                         _periodIndex = currentPeriod.Value;
@@ -143,14 +147,16 @@ internal class MapsPanel : PictureBox, IPanel, IScrollablePanel
 
             Image?.Dispose();
             Image = null;
-            var baseImage = BitmapDataFactory.CreateBitmapData(period.Map.Size);
-            period.Map.RenderData().DrawInto(baseImage);
 
+            BackgroundImage = period.Map.Render();
+
+            var markers = BitmapDataFactory.CreateBitmapData(period.Map.Size);
+            var offset = period.Map is CroppedSprite croppedSprite ? croppedSprite.Rectangle.Location : new Point(0, 0);
 
             var sb = new StringBuilder();
             sb.AppendLine($"{period.Description}:\n");
 
-            if ((_seed?.Started ?? false))
+            if (_seed?.Started ?? false)
             {
                 Func<CheckLocation, bool> predicate = _settings!.ShowAllExistingChecks
                     ? loc => loc.Exists && !loc.IsComplete
@@ -158,24 +164,56 @@ internal class MapsPanel : PictureBox, IPanel, IScrollablePanel
 
                 foreach (var loc in period.Locations.Where(predicate))
                 {
-                    baseImage.FillRectangle(
-                        _settings!.MarkerColor,
-                        loc.Location.X * 16 - 0x30,
-                        (Math.Max(0, (loc.Location.Y - 1) * 16 + 8)),
-                        16,
-                        16);
+                    var checks = loc.Checks.Where(c => c.Exists && !c.IsComplete && (c.IsAccessable || _settings!.ShowAllExistingChecks)).ToList();
 
-                    sb.AppendLine($"{loc.Description}:");
-                    foreach (var check in loc.Checks.Where(c => c.Exists && !c.IsComplete))
+                    if (!checks.Any()) continue;
+
+                    var color = (CheckType)checks.Max(c => (int)c.CheckType) switch
                     {
-                        if (check.IsAccessable || _settings!.ShowAllExistingChecks)
-                            sb.AppendLine(check.Description);
+                        CheckType.OtherProgression => _settings!.ProgressionMarkerColor,
+                        CheckType.CharacterProgression => _settings!.ProgressionMarkerColor,
+                        CheckType.Character => _settings!.ProgressionMarkerColor,
+                        CheckType.KeyItemProgression => _settings!.ProgressionMarkerColor,
+                        CheckType.KeyItem => _settings!.ProgressionMarkerColor,
+                        CheckType.GoMode => _settings!.GoModeMarkerColor,
+                        CheckType.FinalBoss => _settings!.GoModeMarkerColor,
+                        _ => _settings.PointOfInterestMarkerColor
+                    };
+
+                    if (color != _settings.PointOfInterestMarkerColor || _settings.ShowPointsOfInterest)
+                    {
+                        markers.FillRectangle(
+                            color,
+                            loc.Location.X * 16 - offset.X,
+                            (Math.Max(0, (loc.Location.Y - 1) * 16 + 8 - offset.Y)),
+                            16,
+                            16);
+
+                        markers.DrawRectangle(
+                            Color.Black,
+                            loc.Location.X * 16 - offset.X,
+                            (Math.Max(0, (loc.Location.Y - 1) * 16 + 8 - offset.Y)),
+                            16,
+                            16);
                     }
-                    sb.AppendLine();
+
+                    if (color != _settings.PointOfInterestMarkerColor || _settings.ShowPointsOfInterest)
+                    {
+                        sb.AppendLine($"{loc.Description}:");
+                        foreach (var check in checks)
+                        {
+                            if (!_settings.ShowPointsOfInterest && check.CheckType == CheckType.Other)
+                                continue;
+
+                            if (check.IsAccessable || _settings!.ShowAllExistingChecks)
+                                sb.AppendLine(check.Description);
+                        }
+                        sb.AppendLine();
+                    }
                 }
             }
 
-            Image = baseImage.ToBitmap();
+            Image = markers.ToBitmap();
             _toolTip.SetToolTip(this, sb.ToString());
         }
         catch (Exception)
@@ -226,6 +264,8 @@ internal class MapsPanel : PictureBox, IPanel, IScrollablePanel
 
     public void ScrollLeft()
     {
+        if (!CanScroll) return;
+
         Func<TimePeriod, bool> predicate = _settings!.ShowAllExistingChecks
             ? loc => loc.Exists
             : loc => loc.Exists && loc.IsAccessable;
@@ -241,6 +281,8 @@ internal class MapsPanel : PictureBox, IPanel, IScrollablePanel
 
     public void ScrollRight()
     {
+        if (!CanScroll) return;
+
         Func<TimePeriod, bool> predicate = _settings!.ShowAllExistingChecks
             ? loc => loc.Exists
             : loc => loc.Exists && loc.IsAccessable;

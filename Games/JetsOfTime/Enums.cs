@@ -1,23 +1,18 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 
 namespace FF.Rando.Companion.Games.JetsOfTime;
 
-public enum TimePeriodType : byte
+[Flags]
+public enum LocationAccess
 {
-    [Description("65,000,000 BC")]
-    Prehistory,
-    [Description("12,000 BC")]
-    DarkAges,
-    [Description("12,000 BC - Kingdom of Zeal")]
-    KingdomOfZeal,
-    [Description("600 AD")]
-    MiddleAges,
-    [Description("1000 AD")]
-    Present,
-    [Description("2300 AD")]
-    Future,
-    [Description("End of Time")]
-    EndOfTime
+    None = 0,
+    Prehistory = 1,
+    DarkAges = 2,
+    MiddleAges = 4,
+    Preset = 8,
+    Future = 16,
+    EndOfTime = 32,
 }
 
 public enum KeyItemType : byte
@@ -158,7 +153,7 @@ public enum NPCType
     Zeal_citizen_researcher_with_glasses = 0x24,
     Cronos_mom = 0x25,
     Middle_Ages_or_Present_Age_villager_little_girl_with_purple_hair = 0x26,
-    //Middle_Ages_or_Present_Age_villager_man = 0x27,
+    Middle_Ages_or_Present_Age_villager_man2 = 0x27,
     Middle_Ages_or_Present_Age_villager_woman_with_purple_hair = 0x28,
     Middle_Ages_or_Present_Age_villager_young_man = 0x29,
     Middle_Ages_or_Present_Age_villager_young_woman = 0x2A,
@@ -169,15 +164,15 @@ public enum NPCType
     Middle_Ages_or_Present_Age_villager_little_girl = 0x2F,
     Middle_Ages_or_Present_Age_villager_waitress_with_purple_hair = 0x30,
     Middle_Ages_or_Present_Age_villager_shopkeeper = 0x31,
-    //Nun = 0x32,
+    Nun2 = 0x32,
     Guardia_knight_600AD = 0x33,
-    //Middle_Ages_or_Present_Age_villager_man = 0x34,
+    Middle_Ages_or_Present_Age_villager_man3 = 0x34,
     Cyrus = 0x35,
     Young_Glenn = 0x36,
     King_Guardia_XXI_600AD = 0x37,
     Strength_Test_Machine_part_Millennial_Fair = 0x38,
     Middle_Ages_or_Present_Age_villager_old_man_2C_dupe_UNUSED = 0x39,
-    //Zeal_citizen_researcher_with_glasses = 0x3A,
+    Zeal_citizen_researcher_with_glasses2 = 0x3A,
     Cat = 0x3B,
     False_prophet_Magus = 0x3C,
     Melchior_in_gray_robe_UNUSED = 0x3D,
@@ -198,7 +193,7 @@ public enum NPCType
     Reptite = 0x4C,
     Kilwala = 0x4D,
     Blue_imp = 0x4E,
-    //Middle_Ages_or_Present_Age_villager_man = 0x4F,
+    Middle_Ages_or_Present_Age_villager_man4 = 0x4F,
     Middle_Ages_or_Present_Age_villager_woman = 0x50,
     GI_Jogger = 0x51,
     Millennial_Fair_visitor_old_man = 0x52,
@@ -228,7 +223,7 @@ public enum NPCType
     Trash_can_on_its_side = 0x6A,
     Piece_of_cheese = 0x6B,
     Barrel = 0x6C,
-    //UNUSED = 0x6D,
+    UNUSED6D = 0x6D,
     Dead_sunstone = 0x6E,
     Metal_mug = 0x6F,
     Blue_star = 0x70,
@@ -261,10 +256,10 @@ public enum NPCType
     Masamune_Spinning = 0x8B,
     Music_note = 0x8C,
     Small_fish = 0x8D,
-    //Water_splash = 0x8E,
-    //Lightning_bolt = 0x8F,
-    //UNUSED = 0x90,
-    //UNUSED = 0x91,
+    Water_splash2 = 0x8E,
+    Lightning_bolt2 = 0x8F,
+    UNUSED90 = 0x90,
+    UNUSED91 = 0x91,
     Small_rock = 0x92,
     Rainbow_shell = 0x95,
     Shadow_beds = 0x96,
@@ -866,7 +861,7 @@ public enum LocationType : ushort
     DenadoroEntrance = 0x091,
     [Description("Denadoro Lower East Face")]
     DenadoroLowerEastFace = 0x092,
-    [Description("Denadoro Upper East Face")]
+    [Description("DenadoroUpper East Face")]
     DenadoroUpperEastFace = 0x093,
     [Description("Denadoro Mountain Vista")]
     DenadoroMountainVista = 0x094,
@@ -1082,7 +1077,7 @@ public enum LocationType : ushort
     DeathPeakNorthwestFace = 0x104,
     [Description("Prehistoric Canyon")]
     PrehistoricCanyon = 0x105,
-    [Description("Death Peak Upper North Face")]
+    [Description("Death PeakUpper North Face")]
     DeathPeakUpperNorthFace = 0x106,
     [Description("Death Peak Lower North Face")]
     DeathPeakLowerNorthFace = 0x107,
@@ -1142,7 +1137,7 @@ public enum LocationType : ushort
     LarubaRuins = 0x124,
     [Description("Dactyl Nest, Lower")]
     DactylNest_Lower = 0x125,
-    [Description("Dactyl Nest, Upper")]
+    [Description("Dactyl Nest,Upper")]
     DactylNest_Upper = 0x126,
     [Description("Dactyl Nest Summit")]
     DactylNestSummit = 0x127,
@@ -1306,7 +1301,7 @@ public enum LocationType : ushort
     MtWoeLowerEasternFace = 0x189,
     [Description("Mt. Woe Middle Eastern Face")]
     MtWoeMiddleEasternFace = 0x18A,
-    [Description("Mt. Woe Upper Eastern Face")]
+    [Description("Mt. WoeUpper Eastern Face")]
     MtWoeUpperEasternFace = 0x18B,
     [Description("Mt. Woe Summit (wrong map)")]
     MtWoeSummit_wrongmap = 0x18C,
@@ -1396,7 +1391,7 @@ public enum LocationType : ushort
     BlackbirdArmory1 = 0x1BC,
     [Description("Blackbird Storage")]
     BlackbirdStorage = 0x1BD,
-    [Description("Castle Magus Upper Battlements")]
+    [Description("Castle MagusUpper Battlements")]
     CastleMagusUpperBattlements = 0x1BE,
     [Description("Castle Magus Grand Stairway")]
     CastleMagusGrandStairway = 0x1BF,
@@ -1419,7 +1414,7 @@ public enum LocationType : ushort
     [Description("Credits (TBD)")]
     Credits_TBD = 0x1CC,
     [Description("End of Time")]
-    EndofTime = 0x1D0,
+    EndOfTime = 0x1D0,
     [Description("Spekkio")]
     Spekkio = 0x1D1,
     [Description("Apocalypse Lavos")]
@@ -1581,6 +1576,10 @@ public enum CheckLocationType
     FionasShrine,
     [Description("West Cape")]
     WestCape,
+    [Description("Medina Portal")]
+    MedinaPortal,
+    [Description("Black Omen")]
+    BlackOmen,
 
     [Description("Arris Dome")]
     ArrisDome,
@@ -1608,6 +1607,12 @@ public enum CheckLocationType
     Lab32,
     [Description("Keepers Dome")]
     KeepersDome,
+
+    [Description("Spekkio")]
+    Spekkio,
+
+    [Description("Zeal Palace")]
+    ZealPalace,
 }
 
 public enum EventType
@@ -1639,7 +1644,7 @@ public enum EventType
     ReturnTheMasamune,
     CooksRations,
     MelchiorsRefinements,
-    ReplantTheForest,
+    ReplantedTheForest,
     BurrowHeroMedalChest,
     RainbowShell,
     SnailStopPurchase,
@@ -1650,6 +1655,7 @@ public enum EventType
     KingsGuardiasTrial,
     CloneGame,
     ActivateComputer,
+    CollectedArrisDomeReward,
     LearnMagic,
     AttachEpochWings,
     SeedValidated,
@@ -1659,5 +1665,137 @@ public enum EventType
 
     TalkedToKnightCaptain,
     TalkedToCook,
+    UnlockedDeathPeak,
+    BlackOmenRaised,
+    UnlockedMagusCastle,
+    SecureRainbowShell,
 
+    GiveJerkyToPorreMayorAncestor,
+    PorreMayorItem,
+
+    KinoCellButton,
+    ZealTeleportersEnabled
+}
+
+public enum WorldSpriteType
+{
+    PCFacingDown = 0,
+    PCWalkDown = 1,
+    PCWalkDown_Half = 2,
+    PCFacingUp = 3,
+    PCWalkingUp = 4,
+    PCWalkingUp_Half = 5,
+    PCFacingLeft = 6,
+    PCWalkingLeft = 7,
+    PCWalkingLeft_Half = 8,
+    PCFacingRight = 9,
+    PCWalkingRight = 10,
+    PCWalkingRight_Half = 11,
+    PCFacingDown2 = 12,
+    PCWalkDown2 = 13,
+    PCWalkDown_Half2 = 14,
+    PCFacingUp2 = 15,
+    PCWalkingUp2 = 16,
+    PCWalkingUp_Half2 = 17,
+    PCFacingLeft2 = 18,
+    PCWalkingLeft2 = 19,
+    PCWalkingLeft_Half2 = 20,
+    PCFacingRight2 = 21,
+    PCWalkingRight2 = 22,
+    PCWalkingRight_Half2 = 23,
+    Epoch1 = 24,
+    Epoch2 = 25,
+    Epoch3 = 26,
+    Epoch4 = 27,
+    Epoch5 = 28,
+    Epoch6 = 29,
+    Epoch7 = 30,
+    Shadow = 31,
+    SmokePuff1 = 32,
+    SmokePuff2 = 33,
+    SeagullUp = 34,
+    Balloon = 35,
+    DactylSitting = 36,
+    DactylDown1 = 37,
+    DactylUp1 = 38,
+    DactylLeft1 = 39,
+    DactylRight = 40,
+    DactylDown2 = 41,
+    DactylDown3 = 42,
+    DactylUp2 = 43,
+    DactylLeft2 = 44,
+    Epoch8 = 45,
+    SteamboatFacingUp = 72,
+    SteamboatFacingDown = 73,
+    SteamboatFacingLeft = 74,
+    SteamboatFacingRight = 75,
+    VortexTop = 76,
+    VortexBottom = 77,
+    EpochShadow = 78,
+    SeagullFacingDown = 79,
+    SeagullFacingLeft = 80,
+    MagusCastle = 81,
+    OzzieCastle = 82,
+    Bat = 83,
+    DebrisImpact1 = 84,
+    LavosSurfaceCrackSmall = 85,
+    LavosSurfaceCrackMedium = 86,
+    LavosSurfaceCrackLarge = 87,
+    LavosSurfaceHoleBackground = 88,
+    LavosSurfaceHoleForeground = 89,
+    LavosLavarockLarge = 90,
+    LavosLavarockMedium = 91,
+    LavosLavarockSmall = 92,
+    LavosLavarockTiny = 93,
+    Lavos1 = 94,
+    Lavos2 = 95,
+    LavosFireStreak1 = 96,
+    LavosFireStreak2 = 97,
+    LavosFireStreak3 = 98,
+    LavosFireStreak4 = 99,
+    LavosFireStreak5 = 100,
+    LavosFireStreak6 = 101,
+    LavosFireStreak7 = 102,
+    LavosFireStreak8 = 103,
+    LavosFireStreak9 = 104,
+    LavosFireStreak10 = 105,
+    DebrisImpact2 = 106,
+    LavosSurfaceCrackMask = 107,
+    DactylDown = 112,
+    DactylUp = 113,
+    DactylLeft = 114,
+    AD1000Sign = 117,
+    AD600Sign = 118,
+    AD2300Sign = 119,
+    BC65000000Sign = 120,
+    BC12000Sign = 121,
+    AD1999Sign = 122,
+    UknownTimeSign = 123,
+    Null = 124,
+    Unknown = 125,
+    BlackOmenTop1 = 126,
+    BlackOmenBottom1 = 127,
+    BlackOmenTop2 = 128,
+    BlackOmenBottom2 = 129,
+    BlackbirdDown = 131,
+    BlackbirdLeft = 132,
+    BlackbirdRight = 133,
+    MtWoe = 134,
+    MtWoe2 = 135,
+    MtWoeChainLink = 136,
+    TwinklingStar = 137,
+    AD600RoboTractorRight = 138,
+    AD600RoboTractorLeft = 139,
+    AD600RoboSarecrow = 140,
+    AD600RoboSeedingLeft = 143,
+    AD600RoboSeedingRight = 144,
+    DesertVortex = 155,
+    BlackOmenRevealLightning1 = 156,
+    BlackOmenRevealLightning2 = 157,
+    PCIdle1 = 162,
+    PCIdle2 = 163,
+    PCIdle3 = 164,
+    Star = 165,
+    DimensionalVortex1 = 166,
+    DimensionalVortex2 = 167,
 }

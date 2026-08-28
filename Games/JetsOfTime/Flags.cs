@@ -189,6 +189,8 @@ public class Flags : IFlags
                     return;
             }
         }
+
+        PropertyChanged?.Invoke(this, new(""));
     }
 
     public string? FlagString { get; private set; }

@@ -39,7 +39,7 @@ public partial class SettingsDialog : FormBase
             {
                 SelectedObject = game.Value,
                 Dock = DockStyle.Fill,
-                PropertySort = PropertySort.Alphabetical,
+                PropertySort = PropertySort.NoSort,
                 ToolbarVisible = false,
                 LargeButtons = true
             };

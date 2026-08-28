@@ -17,10 +17,36 @@ public class MapSettings(JToken jToken) : PanelSettings(jToken)
     }
 
     [DefaultValue(KnownColor.Fuchsia)]
-    public Color MarkerColor
+    [DisplayName("Progression Marker Color")]
+    public Color ProgressionMarkerColor
     {
-        get => Color.FromArgb((int)GetSetting(0xFFFF00FF));
+        get => Color.FromArgb((int)GetSetting((uint)Color.Fuchsia.ToArgb()));
         set => SaveSetting((uint)value.ToArgb());
+    }
+
+    [DisplayName("Go Mode Marker Color")]
+    [DefaultValue(KnownColor.Green)]
+    public Color GoModeMarkerColor
+    {
+        get => Color.FromArgb((int)GetSetting((uint)Color.Green.ToArgb()));
+        set => SaveSetting((uint)value.ToArgb());
+    }
+
+    [DisplayName("Points of Interest Marker Color")]
+    [DefaultValue(KnownColor.DarkRed)]
+    public Color PointOfInterestMarkerColor
+    {
+        get => Color.FromArgb((int)GetSetting((uint)Color.DarkRed.ToArgb()));
+        set => SaveSetting((uint)value.ToArgb());
+    }
+
+    [DisplayName("Points of Interest Enabled")]
+    [Description("Show markers for points of interest, where no progression can be found, but chests or other sources of items exist.")]
+    [DefaultValue(false)]
+    public bool ShowPointsOfInterest
+    {
+        get => GetSetting(false);
+        set => SaveSetting(value);
     }
 
     [DefaultValue(false)]

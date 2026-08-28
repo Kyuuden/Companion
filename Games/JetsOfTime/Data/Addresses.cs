@@ -1,5 +1,6 @@
 ﻿using BizHawk.Common;
 using FF.Rando.Companion.Extensions;
+using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -1236,7 +1237,7 @@ internal class Addresses
                 0x3DF3EL.RangeToExclusive(0x3E000L),
             ];
 
-            public static readonly IReadOnlyList<Range<long>> TileData = 
+            public static readonly IReadOnlyList<Range<long>> MapData = 
             [
                 0x66A39L.RangeToExclusive(0x6793FL),
                 0x6793FL.RangeToExclusive(0x688FEL),
@@ -1278,6 +1279,26 @@ internal class Addresses
                 0x6CF72L.RangeToExclusive(0x6D2C0L),
                 0x6D2C0L.RangeToExclusive(0x6D410L),
             ];
+
+            public static readonly IReadOnlyList<Range<long>> SpriteTileData =
+            [
+                0x059A56L.RangeToExclusive(0x05B114),
+                0x05B114L.RangeToExclusive(0x05B798),
+                0x05B798L.RangeToExclusive(0x05C6ED),
+                0x05C6EDL.RangeToExclusive(0x05CD21),
+                0x05CD21L.RangeToExclusive(0x05D597),
+                0x05D597L.RangeToExclusive(0x05D80B),
+                0x05D80BL.RangeToExclusive(0x05DA88),
+                0x05DA88L.RangeToExclusive(0x05E0F7),
+                0x05E0F7L.RangeToExclusive(0x05EAAF),
+                0x05EAAFL.RangeToExclusive(0x05ED14),
+                0x05ED14L.RangeToExclusive(0x060000),
+                0x060000L.RangeToExclusive(0x0607B6),
+                0x0607B6L.RangeToExclusive(0x060E9A),
+                0x060E9AL.RangeToExclusive(0x062000),
+            ];
+
+            public static readonly Range<long> SpriteScriptData = 0x3E000L.WithLength(8192);
         }
 
         internal static class LocationMaps
@@ -1802,10 +1823,14 @@ internal class Addresses
         public static readonly Range<long> Gold = 0x2C53L.WithLength(3);
         public static readonly long Background = 0x2991L;
         public static readonly long Storyline = 0x10000L;
+        public static readonly Range<long> TimePeriodAccess = 0x2881L.WithLength(14);
         public static readonly Range<long> EventData = 0x10000L.WithLength(0x200);
         public static readonly Range<long> PartyData = 0x2980L.WithLength(0x09);
         public static readonly Range<long> InventoryData = 0x2400L.WithLength(0xF2);
         public static readonly Range<long> EquipmentData = 0x2600L.WithLength(0x230);
+        public static readonly Range<long> TesseractCore = 0x62ADL.WithLength(5);
+        public static readonly Range<long> BlackOmenZeal2 = 0x5FADL.WithLength(5);
+        public static readonly Range<long> EnemyData = 0x5FADL.WithLength(0x80 * 8);
     }
 
     internal static class SRAM

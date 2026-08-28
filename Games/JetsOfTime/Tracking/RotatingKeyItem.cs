@@ -14,15 +14,15 @@ internal class RotatingKeyItem : KeyItemBase
     private int _npcIndex = 38;
     private int _index = 0;
     private Timer _timer;
-    private SpriteDB _spriteDB;
+    private Sprites _spriteDB;
 
-    public RotatingKeyItem(ITimer timer, SpriteDB spriteDB, KeyItemType type)
+    public RotatingKeyItem(ITimer timer, Sprites spriteDB, KeyItemType type)
         : base(timer, type)
     {
         _spriteDB = spriteDB;
         _timer = new Timer
         {
-            Interval = 750
+            Interval = 250
         };
         _timer.Tick += _timer_Tick;
         _timer.Start();
@@ -31,18 +31,14 @@ internal class RotatingKeyItem : KeyItemBase
 
     private void _timer_Tick(object sender, EventArgs e)
     {
-        //_index++;
-        //if (_index == _spriteDB.GetNpc(npcTypes[_npcIndex]).Count)
-        //{
-        //    _index = 0;
-        //    _npcIndex++;
-        //    _npcIndex %= npcTypes.Count;
-        //    Debug.WriteLine(npcTypes[_npcIndex]);
-        //}
-
-        _npcIndex++;
-        _npcIndex %= npcTypes.Count;
-        Debug.WriteLine(npcTypes[_npcIndex]);
+        _index++;
+        if (_index == _spriteDB.GetNpc(npcTypes[_npcIndex]).Count)
+        {
+            _index = 0;
+            _npcIndex++;
+            _npcIndex %= npcTypes.Count;
+            Debug.WriteLine(npcTypes[_npcIndex]);
+        }
 
         SetImage();
     }

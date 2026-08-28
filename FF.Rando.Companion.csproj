@@ -5,7 +5,7 @@
 	  <Nullable>enable</Nullable>
 	  <TargetFramework>net48</TargetFramework>
 	  <UseWindowsForms>True</UseWindowsForms>
-	  <Version>2.2.2</Version>
+	  <Version>2.2.3</Version>
 	  <Description>Auto-Tracker for Square Enix Randomizers.</Description>
 	  <Copyright>2026 Kyuuden</Copyright>
 	  <AssemblyVersion></AssemblyVersion>
@@ -21,9 +21,6 @@
 		<BIZHAWK_DATA_HOME>$(BIZHAWK_HOME)</BIZHAWK_DATA_HOME>
 		<!-- ignore this; on NixOS these are different dirs -->
 	</PropertyGroup>
-	<ItemGroup>
-	  <Compile Remove="Games\JetsOfTime\Tracking\RotatingKeyItem.cs" />
-	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="ILRepack.Lib.MSBuild.Task" Version="2.0.43">
 		  <PrivateAssets>all</PrivateAssets>

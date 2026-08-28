@@ -1,4 +1,5 @@
-﻿using FF.Rando.Companion.Settings;
+﻿using FF.Rando.Companion.Games.JetsOfTime.Settings;
+using FF.Rando.Companion.Settings;
 using FF.Rando.Companion.View;
 using KGySoft.CoreLibraries;
 using System;
@@ -46,6 +47,7 @@ internal partial class JetsOfTimeControl : UserControl
         //_checks.InitializeDataSources(_seed, seed.Settings.Checks);
 
         _seed.PropertyChanged += Seed_PropertyChanged;
+        seed.Settings.PropertyChanged += Seed_PropertyChanged;
         seed.Settings.KeyItems.PropertyChanged += Seed_PropertyChanged;
         seed.Settings.Characters.PropertyChanged += Seed_PropertyChanged;
         seed.Settings.Bosses.PropertyChanged += Seed_PropertyChanged;
@@ -107,6 +109,7 @@ internal partial class JetsOfTimeControl : UserControl
                 break;
             case nameof(PanelSettings.Priority):
             case nameof(PanelSettings.Enabled):
+            case nameof(JetsOfTimeSettings.TopPanelCount):
                 ArrangePanels();
                 break;
         }
@@ -181,7 +184,7 @@ internal partial class JetsOfTimeControl : UserControl
             Controls.RemoveAt(0);
 
         bool filled = false;
-        foreach (var panel in panels.Where(p => p.IsEnabled).Take(3).Reverse())
+        foreach (var panel in panels.Where(p => p.IsEnabled).Take(_seed!.Settings.TopPanelCount).Reverse())
         {
             if (panel is not Control control)
                 continue;
@@ -210,7 +213,7 @@ internal partial class JetsOfTimeControl : UserControl
         }
 
         filled = false;
-        foreach (var panel in panels.Where(p => p.IsEnabled).Skip(3).Reverse())
+        foreach (var panel in panels.Where(p => p.IsEnabled).Skip(_seed!.Settings.TopPanelCount).Reverse())
         {
             if (panel is not Control control)
                 continue;

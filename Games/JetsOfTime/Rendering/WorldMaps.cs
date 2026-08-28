@@ -3,22 +3,29 @@ using FF.Rando.Companion.Games.JetsOfTime.Data;
 using FF.Rando.Companion.MemoryManagement;
 using FF.Rando.Companion.Rendering;
 using KGySoft.Drawing.Imaging;
+using KGySoft.Drawing;
 using System;
 using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace FF.Rando.Companion.Games.JetsOfTime.Rendering;
 internal class WorldMaps : IDisposable
 {
     private readonly Dictionary<MapType, WorldMap> _worldMapCache = [];
+
+    private readonly WorldSprites _worldSprites;
+
     private readonly Seed _seed;
 
     public WorldMaps(Seed seed)
     {
         _seed = seed;
+        _worldSprites = new WorldSprites(seed.Rom);
+
     }
 
     public WorldMap Get(MapType type)
@@ -30,16 +37,127 @@ internal class WorldMaps : IDisposable
         return map;
     }
 
+    //public Bitmap GetSpriteTiles(int page)
+    //{
+    //    if (page >= _spriteTiles.Count)
+    //        return null;
+
+    //    var palette = page switch
+    //    {
+    //        1 => _spritePalettes[0],
+    //        8 => _spritePalettes[5],
+
+    //        11 => _spritePalettes[9],
+    //        12 => _spritePalettes[9],
+    //        _ => _spritePalettes[page],
+    //    };
+
+    //    var bmpData = BitmapDataFactory.CreateBitmapData(16*8, 16*8, KnownPixelFormat.Format8bppIndexed, palette);
+
+    //    for (int y = 0; y < 16; y++)
+    //        for (int x = 0; x < 16; x++)
+    //            if ((y * 16 + x) < _spriteTiles[page].Count)
+    //                _spriteTiles[page][y * 16 + x].DrawInto(bmpData, x * 8, y * 8, colorOffset:
+    //                    page switch
+    //                    {
+    //                        0 => (y / 2) * 16,
+    //                        _ => (_paletteOffsets[page]) * 8,
+    //                    }
+    //                    );
+
+    //    _paletteOffsets[page] = (_paletteOffsets[page] + 1) % (palette.Count / 8);
+
+    //    return bmpData.ToBitmap();
+    //}
+
     public void Dispose()
     {
         foreach (var map in _worldMapCache.Values)
             map.Dispose();
 
         _worldMapCache.Clear();
-
+        _worldSprites.Dispose();
     }
 }
 
+internal class WorldSprites : IDisposable
+{
+    private readonly List<byte[,]> _tiles = [];
+    private readonly byte[] _scriptData;
+    private Dictionary<int, int> _spriteOffsets = [];
+    private Dictionary<int, List<BlockInfo>> _spriteBlocks = [];
+
+    public WorldSprites(IMemorySpace rom)
+    {
+        foreach (var range in Addresses.ROM.WorldMaps.SpriteTileData)
+        {
+            var decompressed = Utils.DecompressData(rom.ReadBytes(range));
+            _tiles.AddRange(decompressed.ReadMany<byte[]>(0x20 * 8).Select(b => b.DecodeTile(4)));
+        }
+
+        _scriptData = rom.ReadBytes(Addresses.ROM.WorldMaps.SpriteScriptData);
+
+        var offsetnum = 0;
+        foreach (var offset in MemoryMarshal.Cast<byte, ushort>(_scriptData)[..166])
+        {
+            _spriteOffsets[offsetnum++] = offset - 0xe000;
+        }
+
+        foreach (var kvp in _spriteOffsets)
+        {
+            var data = _scriptData.AsSpan()[kvp.Value..];
+            if (data[0] != 4)
+                continue;
+
+            var assemblyOffset = BinaryPrimitives.ReadUInt16LittleEndian(data[1..]) - 0xe000;
+            var assemblyData = _scriptData.AsSpan()[assemblyOffset..];
+
+            var tileCount = assemblyData.ReadByte();
+            for(int i = 0; i < tileCount; i++)
+            {
+                var x = assemblyData.ReadByte();
+                var y = assemblyData.ReadByte();
+                var tileData = assemblyData.ReadUShort();
+            }
+        }
+    }
+
+    public void Dispose()
+    {
+    }
+
+    public record class TileInfo
+    {
+        public int Index { get; }
+        public bool FlipHoriztonal { get; }
+        public bool FlipVertical { get; }
+        public bool Priority { get; }
+
+        public TileInfo(ushort value)
+        {
+            Index = value & 0x3ff;
+            Priority = (value & 0x2000) != 0;
+            FlipHoriztonal = (value & 0x4000) != 0;
+            FlipVertical = (value & 0x8000) != 0;
+        }
+
+        protected virtual bool PrintMembers(StringBuilder builder)
+        {
+            if (Priority)
+                builder.Append(", Priority");
+            if (FlipHoriztonal)
+                builder.Append(", FlipH");
+            if (FlipVertical)
+                builder.Append(", FlipV");
+            return true;
+        }
+    }
+
+    private class BlockInfo
+    {
+        public List<TileInfo> Tiles { get; } = [];
+    }
+}
 
 internal class WorldMap : IDisposable
 {
@@ -133,7 +251,7 @@ internal class WorldMap : IDisposable
         var paletteData = Utils.DecompressData(rom.ReadBytes(Addresses.ROM.WorldMaps.PaletteData[paletteIndex])).AsReadOnlySpan();
         _palette = paletteData.DecodePalette(new Color32());
 
-        var mapData = Utils.DecompressData(rom.ReadBytes(Addresses.ROM.WorldMaps.TileData[mapIndex])).AsSpan();
+        var mapData = Utils.DecompressData(rom.ReadBytes(Addresses.ROM.WorldMaps.MapData[mapIndex])).AsSpan();
 
         for(int i = 0; i < _layer12BlockSize.Width * _layer12BlockSize.Height; i++)
             _layer1BlockIds.Add(mapData.ReadByte());
@@ -142,8 +260,47 @@ internal class WorldMap : IDisposable
             _layer2BlockIds.Add(mapData.ReadByte() + 256);
     }
 
+    public ISprite Render(IList<IRenderInstruction> instructions)
+    {
+        var bmp = BitmapDataFactory.CreateBitmapData(_layer12Size, KnownPixelFormat.Format8bppIndexed, _palette);
+        List<int> l1Ids = [.. _layer1BlockIds];
+        List<int> l2Ids = [.. _layer2BlockIds];
 
-    public ISprite? Render(bool includeLayer1, bool includeLayer2, bool includeLayer3)
+        foreach (var instruction in instructions)
+        {
+            switch (instruction)
+            {
+                case SetBlock setBlock when setBlock.Layer == 1:
+                    l1Ids[setBlock.Y * _layer12BlockSize.Height + setBlock.X] = setBlock.BlockId;
+                    break;
+                case SetBlock setBlock when setBlock.Layer == 2:
+                    l2Ids[setBlock.Y * _layer12BlockSize.Height + setBlock.X] = setBlock.BlockId;
+                    break;
+                case CopyBlocks copyBlocks:
+                    var src = copyBlocks.SourceLayer == 1 ? _layer1BlockIds : _layer2BlockIds;
+                    var dest = copyBlocks.DestinationLayer == 1 ? l1Ids : l2Ids;
+                    var srcIndex = copyBlocks.SourceY * _layer12BlockSize.Width + copyBlocks.SourceX;
+                    var destIndex = copyBlocks.DestinationY * _layer12BlockSize.Width + copyBlocks.DestinationX;
+                    for(var y = 0; y < copyBlocks.Height; y++)
+                    {
+                        for (var x = 0; x < copyBlocks.Width; x++)
+                        {
+                            dest[destIndex + x + (y * _layer12BlockSize.Width)] = src[srcIndex + x + (_layer12BlockSize.Width * y)];
+                        }
+                    }
+
+                    break;
+            }
+        }
+
+        RenderLayer(bmp, _layer12BlockSize, l2Ids, _layer12Blocks, false);
+        RenderLayer(bmp, _layer12BlockSize, l1Ids, _layer12Blocks, false);
+        RenderLayer(bmp, _layer12BlockSize, l2Ids, _layer12Blocks, true);
+        RenderLayer(bmp, _layer12BlockSize, l1Ids, _layer12Blocks, true);
+        return new BasicSprite(bmp);
+    }
+
+    public ISprite? Render(bool includeLayer1 = true, bool includeLayer2 = true, bool includeLayer3 = false)
     {
         if (_renderedSprites.TryGetValue(new SpriteKey(includeLayer1, includeLayer2, includeLayer3), out var sprite))
             return sprite;

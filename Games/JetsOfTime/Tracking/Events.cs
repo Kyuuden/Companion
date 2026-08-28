@@ -121,13 +121,13 @@ internal class Events : INotifyPropertyChanged
     public bool RSeriesSpotBossDefeated => _state?.Read<bool>(0x103 * 8 + 6) ?? false;
     public bool SonOfSunSpotBossDefeated => _state?.Read<bool>(0x13A * 8 + 1) ?? false;
     public bool MotherBrainSpotBossDefeated => _state?.Read<bool>(0x13B * 8 + 4) ?? false;
-    public bool ZealSpotBossDefeated => _state?.Read<byte>(0x67 * 8, 3) != 0;
+    public bool ZealSpotBossDefeated => false;
     public bool OzzieSpotBossDefeated => _state?.Read<bool>(0x1A1 * 8 + 7) ?? false;
     public bool CyrusGraveSpotBossDefeated => _state?.Read<bool>(0x1A3 * 8 + 6) ?? false;
     #endregion
 
     #region Character Checks
-    public bool FriendToTheDactyls => _state?.Read<bool>(0x150 * 8 + 4) ?? false;
+    public bool FriendToTheDactyls => _state?.Read<bool>(0x160 * 8 + 4) ?? false;
     public bool SavedByFrog => _state?.Read<bool>(0x100 * 8) ?? false;
     public bool RescueMarle => _state?.Read<bool>(0xA1 * 8 + 2) ?? false;
     public bool FixRobo => _state?.Read<bool>(0xF3 * 8 + 1) ?? false;
@@ -147,22 +147,31 @@ internal class Events : INotifyPropertyChanged
     public bool ReforgeTheMasamune => _state?.Read<bool>(0x103 * 8 + 1) ?? false;
     public bool KingsGuardiasTrial => _state?.Read<bool>(0xA2 * 8 +7) ?? false;
     public bool CloneGame => _state?.Read<bool>(0x7C * 8) ?? false;
-    public bool ActivateComputer => _state?.Read<bool>(0xA4 * 8 ) ?? false;
+    public bool CollectedArrisDomeReward => _state?.Read<bool>(0xA4 * 8) ?? false;
     public bool LearnMagic => _state?.Read<bool>(0xE1 * 8 + 1) ?? false;
     public bool AttachEpochWings => _state?.Read<bool>(0xBA * 8 + 7) ?? false;
-    public bool SeedValidated => _state?.Read<bool>(0x1A6 * 8 + 7) ?? false;
+    public bool SeedValidated => _state?.Read<bool>(0x1A6 * 8 + 3) ?? false;
 
     #endregion
 
     #region Intermediate Events
-    public bool ReplantedTheForest => ((_state?[0x19E] ?? 0x00) & 0x81) == 0x81;
-    public bool TalkedToToma => _state?.Read<bool>(0x1AC * 8 + 6) ?? false;
+    public bool ReplantedTheForest => _state?.Read<bool>(0x1F0 * 8 + 1) ?? false;// ((_state?[0x19E] ?? 0x00) & 0x81) == 0x81;
+    public bool TalkedToToma => _state?.Read<bool>(0x1F6 * 8 + 7) ?? false;
     public bool TalkToCarpenter => _state?.Read<bool>(0x19E * 8 + 5) ?? false;
     public bool MoonstoneDroppedOff => _state?.Read<bool>(0x13A * 8 + 2) ?? false;
     public bool UnlockedDeathPeak => _state?.Read<bool>(0x70 * 8 + 2) ?? false;
-    public bool BlackOmenRaised => false;
+    public bool BlackOmenRaised => _state?.Read<byte>(0x67 * 8, 3) != 0;
     public bool TalkedToKnightCaptain => _state?.Read<bool>(0xA9 * 8 + 2) ?? false;
     public bool TalkedToCook => _state?.Read<bool>(0xA9 * 8 + 3) ?? false;
+    public bool UnlockedMagusCastle => _state?.Read<bool>(0x57 * 8 + 1) ?? false;
+    public bool ActivateComputer => _state?.Read<bool>(0x105 * 8 + 2) ?? false;
+    public bool SecureRainbowShell => _state?.Read<bool>(1294) ?? false;
+    public bool GiveJerkyToPorreMayorAncestor => _state?.Read<bool>(3730) ?? false;
+    public bool PorreMayorItem => _state?.Read<bool>(2515) ?? false;
+
+    public bool KinoCellButton => _state?.Read<bool>(0x5C * 8 + 4) ?? false;
+
+    public bool ZealTeleportersEnabled => (!_state?.Read<bool>(0x57 * 8 + 7)) ?? false;
     #endregion
 
 

@@ -229,7 +229,7 @@ internal class Location : IDisposable
     }
 
 
-    public ISprite? Render(bool includeLayer1, bool includeLayer2, bool includeLayer3)
+    public ISprite? Render(bool includeLayer1 = true, bool includeLayer2 = true, bool includeLayer3 = false)
     {
         if (_renderedSprites.TryGetValue(new SpriteKey(includeLayer1, includeLayer2, includeLayer3), out var sprite))
             return sprite;

@@ -20,6 +20,8 @@ public class MysticQuestRandomizerSettings : GameSettings
         //Stats = new StatsSettings(SettingsData);
     }
 
+    public override BorderSettings BorderSettings => base.BorderSettings;
+
     [DisplayName("Equipment, Spells, and Key Items")]
     [TypeConverter(typeof(ExpandableObjectConverter))]
     [Description("Tracking of found Weapons, Armors, Spells, and Key Items.")]

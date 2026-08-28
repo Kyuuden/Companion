@@ -17,6 +17,9 @@ public enum VerticalAlignment
 
 public static class SpriteTransformer
 {
+    public static ISprite Crop(this ISprite sprite, int x, int y, int width, int length)
+        => sprite.Crop(new Rectangle(x, y, width, length));
+
     public static ISprite Crop(this ISprite sprite, Rectangle rectangle) 
         => new CroppedSprite(sprite, rectangle);
 

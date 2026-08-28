@@ -81,6 +81,7 @@ partial class JetsOfTimeControl
         this._maps.Name = "_maps";
         this._maps.Size = new System.Drawing.Size(410, 253);
         this._maps.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+        this._maps.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
         this._maps.TabIndex = 5;
         this._maps.TabStop = false;
         this._maps.CanScrollChanged += CanScrollChanged;

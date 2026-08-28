@@ -199,7 +199,7 @@ public abstract partial class FlowPanelEx<TGame, TSettings> : FlowLayoutPanel, I
                     }
                     else
                     {
-                        if (!CenterMultiColumnItems || c.Width + DefaultColumnSpacing <= elementsize)
+                        if (!CenterMultiColumnItems || ((c.Width + DefaultColumnSpacing) <= elementsize))
                         {
                             var nonStandardWidthAdjustment = Math.Max(0, elementsize - c.Width - DefaultColumnSpacing);
                             Padding adjustment = ((i - invisibleCount) % columns) switch

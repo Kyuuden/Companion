@@ -23,24 +23,27 @@ internal class JetsOfTimeSettings : GameSettings
         Statistics = new StatisticsSettings(SettingsData);
     }
 
+    [DisplayName("Number of Panels Next to Characters")]
+    [DefaultValue(3)]
+    public int TopPanelCount
+    {
+        get => GetSetting(3);
+        set => SaveSetting(value);
+    }
+
     [TypeConverter(typeof(ExpandableObjectConverter))]
     [DisplayName("Borders and Backgrounds")]
     public override BorderSettings BorderSettings { get; }
-
-    [DisplayName("Key Items")]
-    [TypeConverter(typeof(ExpandableObjectConverter))]
-    [Description("Tracking of found and used key items.")]
-    public KeyItemSettings KeyItems { get; }
 
     [DisplayName("Characters")]
     [TypeConverter(typeof(ExpandableObjectConverter))]
     [Description("Tracking of found party members.")]
     public CharacterSettings Characters { get; }
 
-    [DisplayName("Bosses")]
+    [DisplayName("Key Items")]
     [TypeConverter(typeof(ExpandableObjectConverter))]
-    [Description("Tracking of defeated bosses.")]
-    public BossSettings Bosses { get; }
+    [Description("Tracking of found and used key items.")]
+    public KeyItemSettings KeyItems { get; }
 
     //[DisplayName("Checks")]
     //[TypeConverter(typeof(ExpandableObjectConverter))]
@@ -56,4 +59,9 @@ internal class JetsOfTimeSettings : GameSettings
     [TypeConverter(typeof(ExpandableObjectConverter))]
     [Description("Tracking of general statistics")]
     public StatisticsSettings Statistics { get; }
+
+    [DisplayName("Bosses")]
+    [TypeConverter(typeof(ExpandableObjectConverter))]
+    [Description("Tracking of defeated bosses.")]
+    public BossSettings Bosses { get; }
 }
