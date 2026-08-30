@@ -861,7 +861,7 @@ public enum LocationType : ushort
     DenadoroEntrance = 0x091,
     [Description("Denadoro Lower East Face")]
     DenadoroLowerEastFace = 0x092,
-    [Description("DenadoroUpper East Face")]
+    [Description("Denadoro Upper East Face")]
     DenadoroUpperEastFace = 0x093,
     [Description("Denadoro Mountain Vista")]
     DenadoroMountainVista = 0x094,
@@ -1077,7 +1077,7 @@ public enum LocationType : ushort
     DeathPeakNorthwestFace = 0x104,
     [Description("Prehistoric Canyon")]
     PrehistoricCanyon = 0x105,
-    [Description("Death PeakUpper North Face")]
+    [Description("Death Peak Upper North Face")]
     DeathPeakUpperNorthFace = 0x106,
     [Description("Death Peak Lower North Face")]
     DeathPeakLowerNorthFace = 0x107,
@@ -1137,7 +1137,7 @@ public enum LocationType : ushort
     LarubaRuins = 0x124,
     [Description("Dactyl Nest, Lower")]
     DactylNest_Lower = 0x125,
-    [Description("Dactyl Nest,Upper")]
+    [Description("Dactyl Nest, Upper")]
     DactylNest_Upper = 0x126,
     [Description("Dactyl Nest Summit")]
     DactylNestSummit = 0x127,
@@ -1301,7 +1301,7 @@ public enum LocationType : ushort
     MtWoeLowerEasternFace = 0x189,
     [Description("Mt. Woe Middle Eastern Face")]
     MtWoeMiddleEasternFace = 0x18A,
-    [Description("Mt. WoeUpper Eastern Face")]
+    [Description("Mt. Woe Upper Eastern Face")]
     MtWoeUpperEasternFace = 0x18B,
     [Description("Mt. Woe Summit (wrong map)")]
     MtWoeSummit_wrongmap = 0x18C,
@@ -1391,7 +1391,7 @@ public enum LocationType : ushort
     BlackbirdArmory1 = 0x1BC,
     [Description("Blackbird Storage")]
     BlackbirdStorage = 0x1BD,
-    [Description("Castle MagusUpper Battlements")]
+    [Description("Castle Magus Upper Battlements")]
     CastleMagusUpperBattlements = 0x1BE,
     [Description("Castle Magus Grand Stairway")]
     CastleMagusGrandStairway = 0x1BF,

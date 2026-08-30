@@ -15,10 +15,10 @@ public class Parser : IGameParser
         try
         {
             var container = new EmulationContainer<Settings.WorldsCollideSettings>(apiContainer, memoryDomains, timer, rootSettings, "WorldsCollide");
-            var indentifier = container.Rom.ReadBytes(Addresses.ROM.Indentifier).BytesToHexString();
+            var indentifierArea = container.Rom.ReadBytes(Addresses.ROM.IndentifierArea).BytesToHexString();
 
             //                       F F V I   W o r l d s   C o l l i d e
-            if (!indentifier.Equals("85859588FF96A8ABA59DACFF82A8A5A5A29D9E00", StringComparison.OrdinalIgnoreCase))
+            if (!indentifierArea.Contains("85859588FF96A8ABA59DACFF82A8A5A5A29D9E00"))
                 return false;
 
             game = new Seed(gameInfo.Hash, container);

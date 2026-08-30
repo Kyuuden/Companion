@@ -6,7 +6,7 @@ internal class Addresses
 {
     internal static class ROM
     {
-        public static readonly Range<long> Indentifier = 0x3F4D7L.WithLength(20);
+        public static readonly Range<long> IndentifierArea = 0x3F400L.WithLength(0x100);
 
         public static readonly Range<long> Font = 0x47FC0L.WithLength(0x1000);
         public static readonly Range<long> FontPalettes = 0x18E800L.WithLength(0xA0);
