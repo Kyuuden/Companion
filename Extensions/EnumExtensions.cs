@@ -51,7 +51,7 @@ public static class EnumExtensions
     /// <param name="value"></param>
     /// <returns>sequence of each set flag in value</returns>
     /// <exception cref="ArgumentException">if T is not an enum type with a [Flags] attribute</exception>
-    public static IEnumerable<T> GetFlags<T>(this T value) where T : struct
+    public static IEnumerable<T> GetFlags<T>(this T value, bool allowMultiFlags = true) where T : struct
     {
         CheckEnumWithFlags<T>();
 
@@ -59,8 +59,12 @@ public static class EnumExtensions
         {
             if (val.FieldType == typeof(T))
             {
-                if (value.IsFlagSet((T)val.GetValue(typeof(T))))
-                    yield return (T)val.GetValue(typeof(T));
+                var flagVal = (T)val.GetValue(typeof(T));
+                if (!allowMultiFlags && BitConverter.GetBytes(Convert.ToInt64(flagVal)).CountBits() != 1)
+                    continue;
+
+                if (value.IsFlagSet(flagVal))
+                    yield return flagVal;
             }
         }
     }

@@ -4,7 +4,7 @@ using System.Drawing;
 
 namespace FF.Rando.Companion.Rendering;
 
-public class BasicSprite(IReadableBitmapData bitmapData) : Sprite(bitmapData.Palette!), ITemporarySprite
+public class BasicSprite(IReadableBitmapData bitmapData) : Sprite(bitmapData.Palette!)
 {
     private readonly IReadableBitmapData _bitmapData = bitmapData;
 

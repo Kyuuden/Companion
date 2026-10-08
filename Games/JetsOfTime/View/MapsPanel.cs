@@ -1,16 +1,15 @@
 ﻿using FF.Rando.Companion.Games.JetsOfTime.Settings;
 using FF.Rando.Companion.Games.JetsOfTime.Tracking;
-using FF.Rando.Companion.Rendering;
 using FF.Rando.Companion.Rendering.Transforms;
 using FF.Rando.Companion.View;
 using KGySoft.CoreLibraries;
 using KGySoft.Drawing.Imaging;
 using KGySoft.Drawing.Shapes;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace FF.Rando.Companion.Games.JetsOfTime.View;
@@ -25,13 +24,19 @@ internal class MapsPanel : PictureBox, IPanel, IScrollablePanel
     private int _periodIndex = -1;
     private double _aspect;
 
-    private readonly ToolTip _toolTip = new() { ShowAlways = true };
+    private readonly RegionedToolTip _toolTip;
+
+    public MapsPanel()
+    {
+        _toolTip = new(this);
+    }
 
     public virtual void InitializeDataSources(Seed seed, MapSettings settings)
     {
         _seed = seed ?? throw new ArgumentNullException(nameof(seed));
         _settings = settings ?? throw new ArgumentNullException(nameof(settings));
 
+        DoubleBuffered = true;
         _timePeriods = seed.State.TimePeriods;
         foreach (var period in _timePeriods.Periods)
             period.Updated += Period_Updated;
@@ -153,8 +158,7 @@ internal class MapsPanel : PictureBox, IPanel, IScrollablePanel
             var markers = BitmapDataFactory.CreateBitmapData(period.Map.Size);
             var offset = period.Map is CroppedSprite croppedSprite ? croppedSprite.Rectangle.Location : new Point(0, 0);
 
-            var sb = new StringBuilder();
-            sb.AppendLine($"{period.Description}:\n");
+            _toolTip.ClearRegions();
 
             if (_seed?.Started ?? false)
             {
@@ -182,39 +186,31 @@ internal class MapsPanel : PictureBox, IPanel, IScrollablePanel
 
                     if (color != _settings.PointOfInterestMarkerColor || _settings.ShowPointsOfInterest)
                     {
-                        markers.FillRectangle(
-                            color,
+                        var rect = new Rectangle(
                             loc.Location.X * 16 - offset.X,
                             (Math.Max(0, (loc.Location.Y - 1) * 16 + 8 - offset.Y)),
                             16,
                             16);
 
-                        markers.DrawRectangle(
-                            Color.Black,
-                            loc.Location.X * 16 - offset.X,
-                            (Math.Max(0, (loc.Location.Y - 1) * 16 + 8 - offset.Y)),
-                            16,
-                            16);
-                    }
+                        markers.FillRectangle(color, rect);
+                        markers.DrawRectangle(Color.Black, rect);
 
-                    if (color != _settings.PointOfInterestMarkerColor || _settings.ShowPointsOfInterest)
-                    {
-                        sb.AppendLine($"{loc.Description}:");
+                        List<string> strings = [$"{loc.Description}:"];
                         foreach (var check in checks)
                         {
                             if (!_settings.ShowPointsOfInterest && check.CheckType == CheckType.Other)
                                 continue;
 
                             if (check.IsAccessable || _settings!.ShowAllExistingChecks)
-                                sb.AppendLine(check.Description);
+                                strings.Add(check.Description);
                         }
-                        sb.AppendLine();
+
+                        _toolTip.AddRegion(rect, string.Join("\n", strings));
                     }
                 }
             }
 
             Image = markers.ToBitmap();
-            _toolTip.SetToolTip(this, sb.ToString());
         }
         catch (Exception)
         {

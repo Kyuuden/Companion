@@ -1,6 +1,5 @@
 ﻿using FF.Rando.Companion.Games.JetsOfTime.Settings;
 using FF.Rando.Companion.View;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace FF.Rando.Companion.Games.JetsOfTime.View;

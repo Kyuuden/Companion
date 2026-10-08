@@ -1,9 +1,9 @@
 ﻿using FF.Rando.Companion.Games.WorldsCollide.Enums;
 
 namespace FF.Rando.Companion.Games.WorldsCollide;
-public class Descriptors
+public static class Descriptors
 {
-    public string GetDescription(Reward reward)
+    public static string GetDescription(this Reward reward)
         => reward switch
         {
             Reward.Terra => "Terra",
@@ -51,91 +51,96 @@ public class Descriptors
             _ => "Unknown"
         };
 
-    public string GetDescription(Events @event)
+    public static string GetDescription(this EventType @event)
         => @event switch
         {
-            Events.GOT_RAIDEN => "Ancient Castle",
-            Events.NAMED_GAU => "Baren Falls",
-            Events.DEFEATED_FLAME_EATER => "Burning House",
-            Events.FINISHED_COLLAPSING_HOUSE => "Collapsing House",
-            Events.DEFEATED_DULLAHAN => "Daryl's Tomb",
-            Events.FINISHED_DOMA_WOB => "Doma Siege",
-            Events.DEFEATED_STOOGES => "Doma Dream Door",
-            Events.FINISHED_DOMA_WOR => "Doma Dream Awaken",
-            Events.GOT_ALEXANDR => "Doma Dream Throne",
-            Events.DEFEATED_HIDON => "Ebot's Rock",
-            Events.DEFEATED_ULTROS_ESPER_MOUNTAIN => "Esper Mountain",
-            Events.RECRUITED_STRAGO_FANATICS_TOWER => "Fanatics' Tower Follower",
-            Events.DEFEATED_MAGIMASTER => "Fanatics' Tower Leader",
-            Events.NAMED_EDGAR => "Figaro Castle Throne",
-            Events.DEFEATED_TENTACLES_FIGARO => "Figaro Castle Engine",
-            Events.RECRUITED_SHADOW_FLOATING_CONTINENT => "Floating Continent Arrive",
-            Events.DEFEATED_ATMAWEAPON => "Floating Continent Beast",
-            Events.FINISHED_FLOATING_CONTINENT => "Floating Continent Escape",
-            Events.RECRUITED_SHADOW_GAU_FATHER_HOUSE => "Gau's Father's House",
-            Events.FINISHED_IMPERIAL_CAMP => "Imperial Camp",
-            Events.DEFEATED_ATMA => "Kefka's Tower Cell Beast",
-            Events.RECRUITED_SHADOW_KOHLINGEN => "Kohlingen Cafe",
-            Events.RODE_RAFT_LETE_RIVER => "Lete River",
-            Events.CHASING_LONE_WOLF7 => "Lone Wolf Chase",
-            Events.GOT_BOTH_REWARDS_LONE_WOLF => "Lone Wolf Moogle Room",
-            Events.GOT_IFRIT_SHIVA => "Magitek Factory Trash",
-            Events.DEFEATED_NUMBER_024 => "Magitek Factory Guard",
-            Events.DEFEATED_CRANES => "Magitek Factory Finish",
-            Events.RECRUITED_TERRA_MOBLIZ => "Mobliz Attack",
-            Events.COMPLETED_MOOGLE_DEFENSE => "Moogle Defense",
-            Events.DEFEATED_VARGAS => "Mt. Kolts",
-            Events.FINISHED_MT_ZOZO => "Mt. Zozo",
-            Events.FINISHED_NARSHE_BATTLE => "Narshe Battle",
-            Events.GOT_RAGNAROK => "Narshe Weapon Shop",
-            Events.GOT_BOTH_REWARDS_WEAPON_SHOP => "Narshe Weapon Shop Mines",
-            Events.FINISHED_OPERA_DISRUPTION => "Opera House Disruption",
-            Events.DEFEATED_CHADARNOOK => "Owzer's Mansion",
-            Events.GOT_PHANTOM_TRAIN_REWARD => "Phantom Train",
-            Events.RECRUITED_LOCKE_PHOENIX_CAVE => "Phoenix Cave",
-            Events.BLOCK_SEALED_GATE => "Sealed Gate",
-            Events.DEFEATED_DOOM_GAZE => "Search The Skies",
-            Events.GOT_SERPENT_TRENCH_REWARD => "Serpent Trench",
-            Events.FREED_CELES => "South Figaro Prisoner",
-            Events.DEFEATED_TUNNEL_ARMOR => "South Figaro Cave",
-            Events.GOT_TRITOCH => "Tritoch Cliff",
-            Events.BOUGHT_ESPER_TZEN => "Tzen Thief",
-            Events.RECRUITED_UMARO_WOR => "Umaro's Cave",
-            Events.VELDT_REWARD_OBTAINED => "Veldt",
-            Events.DEFEATED_SR_BEHEMOTH => "Veldt Cave",
-            Events.DEFEATED_WHELK => "Whelk Gate",
-            Events.RECRUITED_GOGO_WOR => "Zone Eater",
-            Events.GOT_ZOZO_REWARD => "Zozo Tower",
-            Events.AUCTION_BOUGHT_ESPER1 => "Auction 1",
-            Events.AUCTION_BOUGHT_ESPER2 => "Auction 2",
-            Events.TERRA_IN_PARTY => "Terra",
-            Events.LOCKE_IN_PARTY => "Locke",
-            Events.CYAN_IN_PARTY => "Cyan",
-            Events.SHADOW_IN_PARTY => "Shadow",
-            Events.EDGAR_IN_PARTY => "Edgar",
-            Events.SABIN_IN_PARTY => "Sabin",
-            Events.CELES_IN_PARTY => "Celes",
-            Events.STRAGO_IN_PARTY => "Strago",
-            Events.RELM_IN_PARTY => "Relm",
-            Events.SETZER_IN_PARTY => "Setzer",
-            Events.MOG_IN_PARTY => "Mog",
-            Events.GAU_IN_PARTY => "Gau",
-            Events.GOGO_IN_PARTY => "Gogo",
-            Events.UMARO_IN_PARTY => "Umaro",
+            EventType.GOT_RAIDEN => "Ancient Castle",
+            EventType.NAMED_GAU => "Baren Falls",
+            EventType.DEFEATED_FLAME_EATER => "Burning House",
+            EventType.FINISHED_COLLAPSING_HOUSE => "Collapsing House",
+            EventType.DEFEATED_DULLAHAN => "Daryl's Tomb",
+            EventType.FINISHED_DOMA_WOB => "Doma Siege",
+            EventType.DEFEATED_STOOGES => "Doma Dream Door",
+            EventType.FINISHED_DOMA_WOR => "Doma Dream Awaken",
+            EventType.GOT_ALEXANDR => "Doma Dream Throne",
+            EventType.DEFEATED_HIDON => "Ebot's Rock",
+            EventType.DEFEATED_ULTROS_ESPER_MOUNTAIN => "Esper Mountain",
+            EventType.RECRUITED_STRAGO_FANATICS_TOWER => "Fanatics' Tower Follower",
+            EventType.DEFEATED_MAGIMASTER => "Fanatics' Tower Leader",
+            EventType.NAMED_EDGAR => "Figaro Castle Throne",
+            EventType.DEFEATED_TENTACLES_FIGARO => "Figaro Castle Engine",
+            EventType.RECRUITED_SHADOW_FLOATING_CONTINENT => "Floating Continent Arrive",
+            EventType.DEFEATED_ATMAWEAPON => "Floating Continent Beast",
+            EventType.FINISHED_FLOATING_CONTINENT => "Floating Continent Escape",
+            EventType.RECRUITED_SHADOW_GAU_FATHER_HOUSE => "Gau's Father's House",
+            EventType.FINISHED_IMPERIAL_CAMP => "Imperial Camp",
+            EventType.DEFEATED_ATMA => "Kefka's Tower Cell Beast",
+            EventType.RECRUITED_SHADOW_KOHLINGEN => "Kohlingen Cafe",
+            EventType.RODE_RAFT_LETE_RIVER => "Lete River",
+            EventType.CHASING_LONE_WOLF7 => "Lone Wolf Chase",
+            EventType.GOT_BOTH_REWARDS_LONE_WOLF => "Lone Wolf Moogle Room",
+            EventType.GOT_IFRIT_SHIVA => "Magitek Factory Trash",
+            EventType.DEFEATED_NUMBER_024 => "Magitek Factory Guard",
+            EventType.DEFEATED_CRANES => "Magitek Factory Finish",
+            EventType.RECRUITED_TERRA_MOBLIZ => "Mobliz Attack",
+            EventType.COMPLETED_MOOGLE_DEFENSE => "Moogle Defense",
+            EventType.DEFEATED_VARGAS => "Mt. Kolts",
+            EventType.FINISHED_MT_ZOZO => "Mt. Zozo",
+            EventType.FINISHED_NARSHE_BATTLE => "Narshe Battle",
+            EventType.GOT_RAGNAROK => "Narshe Weapon Shop",
+            EventType.GOT_BOTH_REWARDS_WEAPON_SHOP => "Narshe Weapon Shop Mines",
+            EventType.FINISHED_OPERA_DISRUPTION => "Opera House Disruption",
+            EventType.DEFEATED_CHADARNOOK => "Owzer's Mansion",
+            EventType.GOT_PHANTOM_TRAIN_REWARD => "Phantom Train",
+            EventType.RECRUITED_LOCKE_PHOENIX_CAVE => "Phoenix Cave",
+            EventType.BLOCK_SEALED_GATE => "Sealed Gate",
+            EventType.DEFEATED_DOOM_GAZE => "Search The Skies",
+            EventType.GOT_SERPENT_TRENCH_REWARD => "Serpent Trench",
+            EventType.FREED_CELES => "South Figaro Prisoner",
+            EventType.DEFEATED_TUNNEL_ARMOR => "South Figaro Cave",
+            EventType.GOT_TRITOCH => "Tritoch Cliff",
+            EventType.BOUGHT_ESPER_TZEN => "Thief in the Woods",
+            EventType.RECRUITED_UMARO_WOR => "Umaro's Cave",
+            EventType.VELDT_REWARD_OBTAINED => "Veldt",
+            EventType.DEFEATED_SR_BEHEMOTH => "Veldt Cave",
+            EventType.DEFEATED_WHELK => "Whelk Gate",
+            EventType.RECRUITED_GOGO_WOR => "Zone Eater",
+            EventType.GOT_ZOZO_REWARD => "Zozo Tower",
+            EventType.AUCTION_BOUGHT_ESPER1 => "Auction House 1",
+            EventType.AUCTION_BOUGHT_ESPER2 => "Auction House 2",
+            EventType.TERRA_IN_PARTY => "Terra",
+            EventType.LOCKE_IN_PARTY => "Locke",
+            EventType.CYAN_IN_PARTY => "Cyan",
+            EventType.SHADOW_IN_PARTY => "Shadow",
+            EventType.EDGAR_IN_PARTY => "Edgar",
+            EventType.SABIN_IN_PARTY => "Sabin",
+            EventType.CELES_IN_PARTY => "Celes",
+            EventType.STRAGO_IN_PARTY => "Strago",
+            EventType.RELM_IN_PARTY => "Relm",
+            EventType.SETZER_IN_PARTY => "Setzer",
+            EventType.MOG_IN_PARTY => "Mog",
+            EventType.GAU_IN_PARTY => "Gau",
+            EventType.GOGO_IN_PARTY => "Gogo",
+            EventType.UMARO_IN_PARTY => "Umaro",
 
+            EventType.DEFEATED_ANCIENT_CASTLE_DRAGON => "Ancient Castle Dragon",
+            EventType.DEFEATED_FANATICS_TOWER_DRAGON => "Fanatics' Tower Dragon",
+            EventType.DEFEATED_KEFKA_TOWER_DRAGON_G => "Kefka's Tower Dragon G",
+            EventType.DEFEATED_KEFKA_TOWER_DRAGON_S => "Kefka's Tower Dragon S",
+            EventType.DEFEATED_MT_ZOZO_DRAGON => "Mt. Zozo Dragon",
+            EventType.DEFEATED_NARSHE_DRAGON => "Narshe Dragon",
+            EventType.DEFEATED_OPERA_HOUSE_DRAGON => "Opera House Dragon",
+            EventType.DEFEATED_PHOENIX_CAVE_DRAGON => "Phoenix Cave Dragon",
 
-            Events.DEFEATED_ANCIENT_CASTLE_DRAGON => "Ancient Castle Dragon",
-            Events.DEFEATED_FANATICS_TOWER_DRAGON => "Fanatics' Tower Dragon",
-            Events.DEFEATED_KEFKA_TOWER_DRAGON_G => "Kefka's Tower Dragon G",
-            Events.DEFEATED_KEFKA_TOWER_DRAGON_S => "Kefka's Tower Dragon S",
-            Events.DEFEATED_MT_ZOZO_DRAGON => "Mt. Zozo Dragon",
-            Events.DEFEATED_NARSHE_DRAGON => "Narshe Dragon",
-            Events.DEFEATED_OPERA_HOUSE_DRAGON => "Opera House Dragon",
-            Events.DEFEATED_PHOENIX_CAVE_DRAGON => "Phoenix Cave Dragon",
+            EventType.GODDESS_STATUE_KEFKA_TOWER => "Goddess Statue",
+            EventType.DOOM_STATUE_KEFKA_TOWER => "Doom Statue",
+            EventType.POLTRGEIST_STATUE_KEFKA_TOWER => "Poltrgeist Statue",
+            EventType.UNLOCKED_FINAL_KEFKA => "Final Kefka Unlock",
+            EventType.UNLOCKED_KT_SKIP => "Kefka Tower Skip Unlock",
             _ => string.Empty
         };
 
-    public string GetDescription(Monster monster)
+    public static string GetDescription(this Monster monster)
         => monster switch
         {
             Monster.Guard => "Guard",
@@ -397,7 +402,7 @@ public class Descriptors
             _ => string.Empty
         };
 
-    public string GetDescription(Boss boss)
+    public static string GetDescription(this Boss boss)
         => boss switch
         {
             Boss.Whelk => "Whelk",
@@ -443,7 +448,7 @@ public class Descriptors
             Boss.Poltrgeist => "Poltrgeist",
             Boss.FinalKefka => "Kefka",
             Boss.L40Magic => "L.40 Magic",
-            Boss.UltrosLetRiver => "Ultros (Lete River)",
+            Boss.UltrosLeteRiver => "Ultros (Lete River)",
             Boss.UltrosOpera => "Ultros (Opera House)",
             Boss.UltrosEspers => "Ultros (Esper Mountain)",
             Boss.Chupon => "Chupon",
@@ -502,17 +507,29 @@ public class Descriptors
             _ => string.Empty
         };
 
-    public string GetDescription(Dragons dragon)
+    public static string GetDescription(this DragonType dragon)
         => dragon switch
         {
-            Dragons.ICE_DRAGON_DEFEATED => GetDescription(Boss.IceDragon),
-            Dragons.STORM_DRAGON_DEFEATED => GetDescription(Boss.StormDrgn),
-            Dragons.DIRT_DRAGON_DEFEATED => GetDescription(Boss.DirtDrgn),
-            Dragons.GOLD_DRAGON_DEFEATED => GetDescription(Boss.GoldDrgn),
-            Dragons.SKULL_DRAGON_DEFEATED => GetDescription(Boss.SkullDrgn),
-            Dragons.BLUE_DRAGON_DEFEATED => GetDescription(Boss.BlueDrgn),
-            Dragons.RED_DRAGON_DEFEATED => GetDescription(Boss.RedDragon),
-            Dragons.WHITE_DRAGON_DEFEATED => GetDescription(Monster.WhiteDrgn),
+            DragonType.ICE_DRAGON_DEFEATED => GetDescription(Boss.IceDragon),
+            DragonType.STORM_DRAGON_DEFEATED => GetDescription(Boss.StormDrgn),
+            DragonType.DIRT_DRAGON_DEFEATED => GetDescription(Boss.DirtDrgn),
+            DragonType.GOLD_DRAGON_DEFEATED => GetDescription(Boss.GoldDrgn),
+            DragonType.SKULL_DRAGON_DEFEATED => GetDescription(Boss.SkullDrgn),
+            DragonType.BLUE_DRAGON_DEFEATED => GetDescription(Boss.BlueDrgn),
+            DragonType.RED_DRAGON_DEFEATED => GetDescription(Boss.RedDragon),
+            DragonType.WHITE_DRAGON_DEFEATED => GetDescription(Monster.WhiteDrgn),
+            _ => string.Empty
+        };
+
+    public static string GetDescription(this Statistic stat)
+        => stat switch
+        {
+            Statistic.CharacterCount => "Found Character Count",
+            Statistic.EsperCount => "Found Esper Count",
+            Statistic.DragonCount => "Defeated Dragon Count",
+            Statistic.BossCount => "Defeated Boss Count",
+            Statistic.CheckCount => "Completed Check Count",
+            Statistic.ChestCount => "Opened Chest Count",
             _ => string.Empty
         };
 }

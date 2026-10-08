@@ -5,7 +5,7 @@ namespace FF.Rando.Companion.Rendering;
 
 public static class TileExtensions
 {
-    public static void DrawInto(this byte[,] tile, IWritableBitmapData data, Point point, bool flipHorizontal = false, bool flipVertical = false)
+    public static void DrawInto(this byte[,] tile, IWritableBitmapData data, Point point, bool flipHorizontal = false, bool flipVertical = false, int colorOffset = 0)
     {
         tile.DrawInto(data, point.X, point.Y, flipHorizontal, flipVertical);
     }
@@ -16,27 +16,33 @@ public static class TileExtensions
             return;
 
         var transparent0 = data.Palette != null && data.Palette[0] == new Color32();
-
         for (int y = 0; y < 8; y++)
+        {
+            var sourceY = y;
+            if (flipVertical) sourceY = 7 - sourceY;
+            var dy = destinationY + y;
+
+            if (dy >= data.Height || dy < 0)
+                continue;
+
+            var dRow = data[dy];
+
             for (int x = 0; x < 8; x++)
             {
                 var sourceX = x;
-                var sourceY = y;
-
                 if (flipHorizontal) sourceX = 7 - sourceX;
-                if (flipVertical) sourceY = 7 - sourceY;
 
-                if (transparent0 && tile[sourceX, sourceY] == 0)
+                var colorIndex = tile[sourceX, sourceY];
+
+                if (transparent0 && colorIndex == 0)
                     continue;
 
                 var dx = destinationX + x;
-                var dy = destinationY + y;
-                
-                if (dx < 0 || dy < 0) continue;
-                if (dx >= data.Width || dy >= data.Height) continue;
+                if (dx < 0 || dx >= data.Width) continue;
 
-                data.SetColorIndex(dx, dy, tile[sourceX, sourceY] + colorOffset);
+                dRow.SetColorIndex(dx, colorIndex + colorOffset);
             }
+        }
     }
 
     public static IReadWriteBitmapData DrawTile(this IReadWriteBitmapData data, byte[,] tile, int destinationX = 0, int destinationY = 0, bool flipHorizontal = false, bool flipVertical = false)

@@ -5,7 +5,7 @@
 	  <Nullable>enable</Nullable>
 	  <TargetFramework>net48</TargetFramework>
 	  <UseWindowsForms>True</UseWindowsForms>
-	  <Version>2.2.4</Version>
+	  <Version>2.2.5</Version>
 	  <Description>Auto-Tracker for Square Enix Randomizers.</Description>
 	  <Copyright>2026 Kyuuden</Copyright>
 	  <AssemblyVersion></AssemblyVersion>
@@ -397,6 +397,12 @@
 	  <Compile Update="Games\MysticQuestRandomizer\View\StatsPanel.cs">
 	    <SubType>UserControl</SubType>
 	  </Compile>
+	  <Compile Update="Games\WorldsCollide\View\ChecksPanel.cs">
+	    <SubType>Component</SubType>
+	  </Compile>
+	  <Compile Update="Games\WorldsCollide\View\MapsPanel.cs">
+	    <SubType>Component</SubType>
+	  </Compile>
 	  <Compile Update="Properties\Resources.Designer.cs">
 	    <DesignTime>True</DesignTime>
 	    <AutoGen>True</AutoGen>
@@ -406,9 +412,6 @@
 	    <SubType>UserControl</SubType>
 	  </Compile>
 	  <Compile Update="View\StatisticControl.cs">
-	    <SubType>Component</SubType>
-	  </Compile>
-	  <Compile Update="Games\WorldsCollide\View\CharacterControl.cs">
 	    <SubType>Component</SubType>
 	  </Compile>
 	  <Compile Update="Games\WorldsCollide\View\WorldsCollideControl.cs">
@@ -429,6 +432,10 @@
 	    <Generator>ResXFileCodeGenerator</Generator>
 	    <LastGenOutput>Resources.Designer.cs</LastGenOutput>
 	  </EmbeddedResource>
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <Folder Include="View\Interfaces\" />
 	</ItemGroup>
 
 </Project>

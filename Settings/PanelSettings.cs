@@ -5,7 +5,14 @@ using System.Runtime.CompilerServices;
 
 namespace FF.Rando.Companion.Settings;
 
-public abstract class PanelSettings : INotifyPropertyChanged
+public interface IPanelSettings : INotifyPropertyChanged
+{
+    bool Enabled { get; }
+    float ScaleFactor { get; }
+    int Priority { get; }
+}
+
+public abstract class PanelSettings : IPanelSettings
 {
     protected virtual float DefaultScaleFactor => 2f;
 

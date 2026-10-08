@@ -8,11 +8,31 @@ public abstract class Sprite(Palette palette) : ISprite, IDisposable
 {
     private Bitmap? _cached;
     private Bitmap? _cachedGreyScale;
+    private float _greyScaleBrightnessAdjustment = -0.66f;
     private IReadableBitmapData? _cachedData;
     private IReadableBitmapData? _cachedGreyScaleData;
     private bool disposedValue;
 
     public virtual Palette Palette { get; } = palette;
+
+    public virtual float GreyscaleBrightnessAdjustment
+    {
+        get => _greyScaleBrightnessAdjustment;
+        set
+        {
+            if (value == _greyScaleBrightnessAdjustment)
+                return;
+
+            if (value > 1.0f || value < -1.0f)
+                throw new ArgumentException();
+
+            _greyScaleBrightnessAdjustment = value;
+            _cachedGreyScale?.Dispose();
+            _cachedGreyScale = null;
+            _cachedGreyScaleData?.Dispose();
+            _cachedGreyScaleData = null;
+        }
+    }
 
     public virtual Size Size
     {
@@ -48,7 +68,7 @@ public abstract class Sprite(Palette palette) : ISprite, IDisposable
     {
         var tmp = _cachedData ??= RenderColorData();
         var greyscale = tmp.ToGrayscale();
-        greyscale.AdjustBrightness(-0.66f);
+        greyscale.AdjustBrightness(GreyscaleBrightnessAdjustment);
         return greyscale;
     }
 
@@ -93,6 +113,8 @@ public abstract class Sprite(Palette palette) : ISprite, IDisposable
             disposedValue = true;
         }
     }
+
+    public bool IsDisposed { get { return disposedValue; } }
 
     public void Dispose()
     {

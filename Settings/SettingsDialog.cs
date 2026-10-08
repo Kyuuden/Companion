@@ -1,4 +1,5 @@
 ﻿using BizHawk.Client.EmuHawk;
+using FF.Rando.Companion.Games;
 using System;
 using System.Linq;
 using System.Windows.Forms;
@@ -17,7 +18,7 @@ public partial class SettingsDialog : FormBase
 
     public override bool BlocksInputWhenFocused => false;
 
-    public SettingsDialog(ISettings settings) :this()
+    public SettingsDialog(IGame? activeGame, ISettings settings) :this()
     {
         propertyGrid1.SelectedObject = _settings = settings;
         propertyGrid1.LargeButtons = true;
@@ -39,7 +40,7 @@ public partial class SettingsDialog : FormBase
             {
                 SelectedObject = game.Value,
                 Dock = DockStyle.Fill,
-                PropertySort = PropertySort.NoSort,
+                PropertySort = game.Value.Sort,
                 ToolbarVisible = false,
                 LargeButtons = true
             };
@@ -50,6 +51,9 @@ public partial class SettingsDialog : FormBase
             gameTab.Controls.Add(gamePropertyGrid);
 
             tabControl1.TabPages.Add(gameTab);
+            if (game.Value == activeGame?.Settings)
+                tabControl1.SelectedIndex = tabControl1.TabPages.Count - 1;
+
         }
     }
 

@@ -6,7 +6,7 @@ using System.Drawing;
 
 namespace FF.Rando.Companion.Games.WorldsCollide.View;
 
-public abstract class FlowPanelEx<TSettings> : FlowPanelEx<Seed, TSettings> where TSettings : PanelSettings
+internal abstract class FlowPanelEx<TSettings> : FlowPanelEx<Seed, TSettings> where TSettings : IPanelSettings
 {
     protected override void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
     {

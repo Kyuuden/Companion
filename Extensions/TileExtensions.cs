@@ -10,6 +10,12 @@ public static class TileExtensions
         return DecodeTile(data.AsReadOnlySpan(), bitsPerPixel, width, height);
     }
 
+    public static byte[,] DecodeTile(this Span<byte> data, int bitsPerPixel, uint width = 8, uint height = 8)
+    {
+        ReadOnlySpan<byte> readOnlyData = data;
+        return readOnlyData.DecodeTile(bitsPerPixel, width, height);
+    }
+
     public static byte[,] DecodeTile(this ReadOnlySpan<byte> data, int bitsPerPixel, uint width = 8, uint height = 8)
     {
         if (width % 8 != 0 || height % 8 != 0)

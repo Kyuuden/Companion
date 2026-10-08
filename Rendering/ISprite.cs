@@ -8,6 +8,8 @@ public interface ISprite : IDisposable
 {
     Size Size { get; }
     Palette? Palette { get; }
+    float GreyscaleBrightnessAdjustment { get; set; }
     IReadableBitmapData RenderData(bool greyscale = false);
     Bitmap Render(bool greyscale = false);
+    bool IsDisposed { get; }
 }

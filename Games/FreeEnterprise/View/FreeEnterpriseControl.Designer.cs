@@ -90,7 +90,6 @@ partial class FreeEnterpriseControl
             this._stats.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this._stats.Dock = System.Windows.Forms.DockStyle.Bottom;
             this._stats.FlowDirection = System.Windows.Forms.FlowDirection.LeftToRight;
-            this._stats.Icons = false;
             this._stats.Location = new System.Drawing.Point(0, 573);
             this._stats.Margin = new System.Windows.Forms.Padding(0);
             this._stats.Name = "_stats";
@@ -106,7 +105,6 @@ partial class FreeEnterpriseControl
             this._bosses.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this._bosses.Dock = System.Windows.Forms.DockStyle.Top;
             this._bosses.FlowDirection = System.Windows.Forms.FlowDirection.LeftToRight;
-            this._bosses.Icons = false;
             this._bosses.Location = new System.Drawing.Point(64, 160);
             this._bosses.Name = "bossesControl1";
             this._bosses.Size = new System.Drawing.Size(346, 160);
@@ -121,7 +119,6 @@ partial class FreeEnterpriseControl
             this._keyItems.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this._keyItems.Dock = System.Windows.Forms.DockStyle.Top;
             this._keyItems.FlowDirection = System.Windows.Forms.FlowDirection.LeftToRight;
-            this._keyItems.Icons = false;
             this._keyItems.Location = new System.Drawing.Point(64, 0);
             this._keyItems.Name = "_keyItems";
             this._keyItems.Size = new System.Drawing.Size(346, 160);
@@ -136,7 +133,6 @@ partial class FreeEnterpriseControl
             this._party.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this._party.Dock = System.Windows.Forms.DockStyle.Left;
             this._party.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this._party.Icons = false;
             this._party.Location = new System.Drawing.Point(0, 0);
             this._party.MinimumSize = new System.Drawing.Size(64, 264);
             this._party.Name = "_party";

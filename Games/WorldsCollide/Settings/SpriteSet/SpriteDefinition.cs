@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using FF.Rando.Companion.Games.WorldsCollide.Enums;
+using System.Collections.Generic;
 
 
 namespace FF.Rando.Companion.Games.WorldsCollide.Settings.SpriteSet;
@@ -9,6 +10,27 @@ internal class SpriteDefinition
     {
     }
 
+    public SpriteDefinition(Item item) : this(item, []) { }
+    public SpriteDefinition(Item item, List<SpriteTransform> spriteTransforms) : this(SpriteSource.Item, (int)item, spriteTransforms) { }
+
+    public SpriteDefinition(Boss boss) : this(boss, []) { }
+    public SpriteDefinition(Boss boss, List<SpriteTransform> spriteTransforms) : this(SpriteSource.Boss, (int)boss, spriteTransforms) { }
+
+    public SpriteDefinition(Monster monster) : this(monster, []) { }
+    public SpriteDefinition(Monster monster, List<SpriteTransform> spriteTransforms) : this(SpriteSource.Monster, (int)monster, spriteTransforms) { }
+
+    public SpriteDefinition(Esper esper) : this(esper, []) { }
+    public SpriteDefinition(Esper esper, List<SpriteTransform> spriteTransforms) : this(SpriteSource.Esper, (int)esper, spriteTransforms) { }
+
+    public SpriteDefinition(CharacterEx character, Pose pose = Pose.Stand) : this(SpriteSource.Character, (int)character, (int)pose, []) { }
+    public SpriteDefinition(CharacterEx character, Pose pose, List<SpriteTransform> spriteTransforms) : this(SpriteSource.Character, (int)character, (int)pose, spriteTransforms) { }
+
+    public SpriteDefinition(TileSet tileset) : this(tileset, []) { }
+    public SpriteDefinition(TileSet tileset, List<SpriteTransform> spriteTransforms) : this(SpriteSource.Background, (int)tileset, spriteTransforms) { }
+
+    public SpriteDefinition(MapLocation location) : this(location, []) { }
+    public SpriteDefinition(MapLocation location, List<SpriteTransform> spriteTransforms) : this(SpriteSource.Map, (int)location, spriteTransforms) { }
+
     public SpriteDefinition(SpriteSource source, int id, int subId, List<SpriteTransform> spriteTransforms)
     {
         Source = source;
@@ -17,15 +39,15 @@ internal class SpriteDefinition
         Transforms = spriteTransforms;
     }
 
-    public SpriteDefinition(SpriteSource source, int id)
+    private SpriteDefinition(SpriteSource source, int id)
         : this(source, id, 0, [])
     { }
 
-    public SpriteDefinition(SpriteSource source, int id, int subId)
+    private SpriteDefinition(SpriteSource source, int id, int subId)
     : this(source, id, subId, [])
     { }
 
-    public SpriteDefinition(SpriteSource source, int id, List<SpriteTransform> spriteTransforms)
+    private SpriteDefinition(SpriteSource source, int id, List<SpriteTransform> spriteTransforms)
     : this(source, id, 0, spriteTransforms)
     { }
 

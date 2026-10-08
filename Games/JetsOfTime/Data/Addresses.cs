@@ -1,6 +1,5 @@
 ﻿using BizHawk.Common;
 using FF.Rando.Companion.Extensions;
-using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Linq;
 

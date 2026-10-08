@@ -11,6 +11,7 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using FF.Rando.Companion.Rendering.SNES;
 
 namespace FF.Rando.Companion.Games.JetsOfTime.Rendering;
 internal class WorldMaps : IDisposable
@@ -85,7 +86,7 @@ internal class WorldSprites : IDisposable
     private readonly List<byte[,]> _tiles = [];
     private readonly byte[] _scriptData;
     private Dictionary<int, int> _spriteOffsets = [];
-    private Dictionary<int, List<BlockInfo>> _spriteBlocks = [];
+    private Dictionary<int, List<MapBlock>> _spriteBlocks = [];
 
     public WorldSprites(IMemorySpace rom)
     {
@@ -125,38 +126,6 @@ internal class WorldSprites : IDisposable
     public void Dispose()
     {
     }
-
-    public record class TileInfo
-    {
-        public int Index { get; }
-        public bool FlipHoriztonal { get; }
-        public bool FlipVertical { get; }
-        public bool Priority { get; }
-
-        public TileInfo(ushort value)
-        {
-            Index = value & 0x3ff;
-            Priority = (value & 0x2000) != 0;
-            FlipHoriztonal = (value & 0x4000) != 0;
-            FlipVertical = (value & 0x8000) != 0;
-        }
-
-        protected virtual bool PrintMembers(StringBuilder builder)
-        {
-            if (Priority)
-                builder.Append(", Priority");
-            if (FlipHoriztonal)
-                builder.Append(", FlipH");
-            if (FlipVertical)
-                builder.Append(", FlipV");
-            return true;
-        }
-    }
-
-    private class BlockInfo
-    {
-        public List<TileInfo> Tiles { get; } = [];
-    }
 }
 
 internal class WorldMap : IDisposable
@@ -166,8 +135,8 @@ internal class WorldMap : IDisposable
     private static readonly Size _layer12BlockSize = new(96, 64);
     private readonly Dictionary<SpriteKey, ISprite> _renderedSprites = [];
 
-    private readonly List<BlockInfo> _layer12Blocks = [];
-    private readonly List<BlockInfo> _layer3Blocks = [];
+    private readonly List<MapBlock> _layer12Blocks = [];
+    private readonly List<MapBlock> _layer3Blocks = [];
     private readonly List<byte[,]> _layer12Tiles = [];
     private readonly List<byte[,]> _layer3Tiles = [];
     private readonly List<int> _layer1BlockIds = [];
@@ -213,19 +182,19 @@ internal class WorldMap : IDisposable
 
         var layer12AssemblyData = Utils.DecompressData(rom.ReadBytes(Addresses.ROM.WorldMaps.Layer12AssemblyData[layer12AssemblyIndex])).AsSpan();
 
-        var currentBlock = new BlockInfo();
+        var currentBlock = new MapBlock();
         for (int i = 0; i < layer12AssemblyData.Length; i += 2)
         {
-            currentBlock.Tiles.Add(new TileInfo(BinaryPrimitives.ReadUInt16LittleEndian(layer12AssemblyData[i..])));
-            if (currentBlock.Tiles.Count == 4)
+            currentBlock.Add(new MapTile(BinaryPrimitives.ReadUInt16LittleEndian(layer12AssemblyData[i..])));
+            if (currentBlock.Complete)
             {
                 _layer12Blocks.Add(currentBlock);
-                currentBlock = new BlockInfo();
+                currentBlock = new MapBlock();
             }
         }
 
         var layer3AssemblyData = Utils.DecompressData(rom.ReadBytes(Addresses.ROM.WorldMaps.Layer3AssemblyData[layer3AssemblyIndex])).AsSpan();
-        var layer3blocks = new SortedDictionary<int, BlockInfo>();
+        var layer3blocks = new SortedDictionary<int, MapBlock>();
 
         var tileNum = 0;
         for (int i = 0; i < layer3AssemblyData.Length; i += 2)
@@ -239,10 +208,10 @@ internal class WorldMap : IDisposable
 
             if (!layer3blocks.TryGetValue(blockX + (blockY * 16), out currentBlock))
             {
-                currentBlock = layer3blocks[blockX + (blockY * 16)] = new BlockInfo();
+                currentBlock = layer3blocks[blockX + (blockY * 16)] = new MapBlock();
             }
 
-            currentBlock.Tiles.Add(new TileInfo(BinaryPrimitives.ReadUInt16LittleEndian(layer3AssemblyData[i..])));
+            currentBlock.Add(new MapTile(BinaryPrimitives.ReadUInt16LittleEndian(layer3AssemblyData[i..])));
             tileNum ++;
         }
 
@@ -324,7 +293,7 @@ internal class WorldMap : IDisposable
         return sprite;
     }
 
-    private void RenderLayer(IReadWriteBitmapData bmp, Size layerSize, List<int> blockIds, List<BlockInfo> blocks, bool priorityTiles)
+    private void RenderLayer(IReadWriteBitmapData bmp, Size layerSize, List<int> blockIds, List<MapBlock> blocks, bool priorityTiles)
     {
         for (int y = 0; y < bmp.Height / 16; y++)
         {
@@ -339,19 +308,19 @@ internal class WorldMap : IDisposable
         }
     }
 
-    private void RenderBlock(IWritableBitmapData bmp, int x, int y, BlockInfo block, bool priorityTiles)
+    private void RenderBlock(IWritableBitmapData bmp, int x, int y, MapBlock block, bool priorityTiles)
     {
-        if (block.Tiles[0].Priority == priorityTiles && block.Tiles[0].Index < _layer12Tiles.Count)
-            _layer12Tiles[block.Tiles[0].Index].DrawInto(bmp, x + 0, y + 0, block.Tiles[0].FlipHoriztonal, block.Tiles[0].FlipVertical, block.Tiles[0].Palette * 16);
+        if (block.UpperLeft.Priority == priorityTiles && block.UpperLeft.Index < _layer12Tiles.Count)
+            _layer12Tiles[block.UpperLeft.Index].DrawInto(bmp, x + 0, y + 0, block.UpperLeft.FlipHoriztonal, block.UpperLeft.FlipVertical, block.UpperLeft.Palette * 16);
 
-        if (block.Tiles[1].Priority == priorityTiles && block.Tiles[1].Index < _layer12Tiles.Count)
-            _layer12Tiles[block.Tiles[1].Index].DrawInto(bmp, x + 8, y + 0, block.Tiles[1].FlipHoriztonal, block.Tiles[1].FlipVertical, block.Tiles[1].Palette * 16);
+        if (block.UpperRight.Priority == priorityTiles && block.UpperRight.Index < _layer12Tiles.Count)
+            _layer12Tiles[block.UpperRight.Index].DrawInto(bmp, x + 8, y + 0, block.UpperRight.FlipHoriztonal, block.UpperRight.FlipVertical, block.UpperRight.Palette * 16);
 
-        if (block.Tiles[2].Priority == priorityTiles && block.Tiles[2].Index < _layer12Tiles.Count)
-            _layer12Tiles[block.Tiles[2].Index].DrawInto(bmp, x + 0, y + 8, block.Tiles[2].FlipHoriztonal, block.Tiles[2].FlipVertical, block.Tiles[2].Palette * 16);
+        if (block.LowerLeft.Priority == priorityTiles && block.LowerLeft.Index < _layer12Tiles.Count)
+            _layer12Tiles[block.LowerLeft.Index].DrawInto(bmp, x + 0, y + 8, block.LowerLeft.FlipHoriztonal, block.LowerLeft.FlipVertical, block.LowerLeft.Palette * 16);
 
-        if (block.Tiles[3].Priority == priorityTiles && block.Tiles[3].Index < _layer12Tiles.Count)
-            _layer12Tiles[block.Tiles[3].Index].DrawInto(bmp, x + 8, y + 8, block.Tiles[3].FlipHoriztonal, block.Tiles[3].FlipVertical, block.Tiles[3].Palette * 16);
+        if (block.LowerRight.Priority == priorityTiles && block.LowerRight.Index < _layer12Tiles.Count)
+            _layer12Tiles[block.LowerRight.Index].DrawInto(bmp, x + 8, y + 8, block.LowerRight.FlipHoriztonal, block.LowerRight.FlipVertical, block.LowerRight.Palette * 16);
     }
 
     public void Dispose()
@@ -363,39 +332,4 @@ internal class WorldMap : IDisposable
     }
 
     private record SpriteKey(bool Layer1, bool Layer2, bool Layer3);
-
-    public record class TileInfo
-    {
-        public int Index { get; }
-        public int Palette { get; }
-        public bool FlipHoriztonal { get; }
-        public bool FlipVertical { get; }
-        public bool Priority { get; }
-
-        public TileInfo(ushort value)
-        {
-            Index = value & 0x3ff;
-            Palette = ((value & 0x1c00) >> 10);
-            Priority = (value & 0x2000) != 0;
-            FlipHoriztonal = (value & 0x4000) != 0;
-            FlipVertical = (value & 0x8000) != 0;
-        }
-
-        protected virtual bool PrintMembers(StringBuilder builder)
-        {
-            builder.Append($"Index = {Index:X}, Palette = {Palette:X}");
-            if (Priority)
-                builder.Append(", Priority");
-            if (FlipHoriztonal)
-                builder.Append(", FlipH");
-            if (FlipVertical)
-                builder.Append(", FlipV");
-            return true;
-        }
-    }
-
-    private class BlockInfo
-    {
-        public List<TileInfo> Tiles { get; } = [];
-    }
 }

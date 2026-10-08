@@ -38,9 +38,14 @@ public static class IReadWriteBitmapDataExtensions
             case RotateFlipType.RotateNoneFlipX:
             {
                 var copy = data.Clone();
-                for (var y = 0; y < data.Height; y++)
+                var sRow = data.GetMovableRow(0);
+                var dRow = copy.GetMovableRow(0);
+                do
+                {
                     for (var x = 0; x < data.Width; x++)
-                        copy.SetColor32(x, y, data.GetColor32(data.Width - x -1, y));
+                        dRow.SetColor32(x, sRow.GetColor32(data.Width - x - 1));
+                }
+                while (sRow.MoveNextRow() && dRow.MoveNextRow());
 
                 return copy;
             }
@@ -48,7 +53,18 @@ public static class IReadWriteBitmapDataExtensions
                 return data.Clone(); //TODO
 
             case RotateFlipType.Rotate180FlipX:
-                return data.Clone(); //TODO
+            {
+                var copy = data.Clone();
+                for (var y = 0; y < data.Height; y++)
+                {
+                    var source = data[y];
+                    var dest = copy[data.Height - y - 1];
+
+                    for (var x = 0; x < source.Width; x++)
+                        dest[x] = source[x];
+                }
+                return copy;
+            }
 
             case RotateFlipType.Rotate270FlipX:
             {

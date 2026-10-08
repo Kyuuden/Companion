@@ -2,10 +2,10 @@
 
 public enum Statistic
 {
-    Character,
-    Esper,
-    Dragon,
-    Boss,
-    Check,
-    Chest
+    CharacterCount,
+    EsperCount,
+    DragonCount,
+    BossCount,
+    CheckCount,
+    ChestCount
 }

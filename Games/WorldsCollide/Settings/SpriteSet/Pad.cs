@@ -31,3 +31,11 @@ internal class AdjustBrightness : SpriteTransform
 {
     public float Adjustment { get; set; }
 }
+
+internal class SetGreyscaleBrightness : SpriteTransform
+{
+    public SetGreyscaleBrightness() { }
+    public SetGreyscaleBrightness(float brightness) { Brightness = brightness; }
+
+    public float Brightness { get; set; }
+}

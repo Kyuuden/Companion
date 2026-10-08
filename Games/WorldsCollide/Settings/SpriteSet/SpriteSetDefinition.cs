@@ -1,7 +1,4 @@
-﻿using FF.Rando.Companion.Games.WorldsCollide.Enums;
-using System.Collections.Generic;
-
-namespace FF.Rando.Companion.Games.WorldsCollide.Settings.SpriteSet;
+﻿namespace FF.Rando.Companion.Games.WorldsCollide.Settings.SpriteSet;
 internal class SpriteSetDefinition
 {
     // Terra
@@ -88,6 +85,14 @@ internal class SpriteSetDefinition
     public SpriteDefinition? JidoorAuctionHouse2 { get; set; }
     public SpriteDefinition? KefkasTowerCellBeast { get; set; }
 
+    public SpriteDefinition? GoddessStatue { get; set; }
+    public SpriteDefinition? DoomStatue { get; set; }
+    public SpriteDefinition? PoltrgeistStatue { get; set; }
+
+    public SpriteDefinition? FinalKefkaUnlocked { get; set; }
+
+    public SpriteDefinition? KefkaTowerSkipUnlocked { get; set; }
+
     // Dragon Locations
     public SpriteDefinition? PhoenixCaveDragon { get; set; }
     public SpriteDefinition? AncientCasteDragon { get; set; }
@@ -97,6 +102,7 @@ internal class SpriteSetDefinition
     public SpriteDefinition? NarsheDragon { get; set; }
     public SpriteDefinition? KefkasTowerMiddlePathDragon { get; set; }
     public SpriteDefinition? KefkasTowerRightPathDragon { get; set; }
+
 
     // Dragons
     public SpriteDefinition? BlueDragon { get; set; }
@@ -131,11 +137,4 @@ internal class SpriteSetDefinition
     public SpriteDefinition? BossCount { get; set; }
     public SpriteDefinition? CheckCount { get; set; }
     public SpriteDefinition? ChestCount { get; set; }
-
-    // Overlays
-    public SpriteDefinition? ClearedCheckOverlay { get; set; }
-    public SpriteDefinition? DefeatedDragonOverlay { get; set; }
-
-    // Related Events
-    public List<List<Events>> RelatedEvents { get; set; } = [];
 }

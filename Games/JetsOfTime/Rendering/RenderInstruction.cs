@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FF.Rando.Companion.Games.JetsOfTime.Rendering;
+﻿namespace FF.Rando.Companion.Games.JetsOfTime.Rendering;
 internal interface IRenderInstruction
 {
 

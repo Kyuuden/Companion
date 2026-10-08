@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace FF.Rando.Companion.View;
-internal interface IScrollablePanel : IPanel
+internal interface IScrollablePanel
 {
     bool IsEnabledForScrolling { get; set; }
     void ScrollDown();

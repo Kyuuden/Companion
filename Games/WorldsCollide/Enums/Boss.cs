@@ -45,7 +45,7 @@ public enum Boss
     Poltrgeist,
     FinalKefka,
     L40Magic,
-    UltrosLetRiver,
+    UltrosLeteRiver,
     UltrosOpera,
     UltrosEspers,
     Chupon,

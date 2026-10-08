@@ -88,8 +88,10 @@ internal class Events : INotifyPropertyChanged
                         changedUnknown.Add(i);
                 }
 
+#if DEBUG
                 if (changedUnknown.Count > 0)
                     Debug.WriteLine($"Unknown set: {string.Join(";", changedUnknown)}");
+#endif
             }
 
             _state = newState.ToArray();

@@ -15,6 +15,8 @@ public abstract class GameSettings : INotifyPropertyChanged
     public abstract string DisplayName { get; }
     [Browsable(false)]
     public abstract string Description { get; }
+    [Browsable(false)]
+    public virtual System.Windows.Forms.PropertySort Sort { get; } = System.Windows.Forms.PropertySort.NoSort;
 
     protected JToken SettingsData { get; }
 

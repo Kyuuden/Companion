@@ -1,15 +1,11 @@
-﻿using FF.Rando.Companion.Extensions;
-using FF.Rando.Companion.Games.JetsOfTime.Data;
+﻿using FF.Rando.Companion.Games.JetsOfTime.Data;
 using FF.Rando.Companion.Games.JetsOfTime.Rendering;
 using FF.Rando.Companion.Games.JetsOfTime.Settings;
 using FF.Rando.Companion.Games.JetsOfTime.Tracking;
 using FF.Rando.Companion.Games.JetsOfTime.View;
 using System;
 using System.Buffers.Binary;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace FF.Rando.Companion.Games.JetsOfTime;

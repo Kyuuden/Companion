@@ -1,289 +1,229 @@
 ﻿using FF.Rando.Companion.Extensions;
 using FF.Rando.Companion.Games.WorldsCollide.Enums;
-using FF.Rando.Companion.Rendering;
-using FF.Rando.Companion.Rendering.Transforms;
-using FF.Rando.Companion.View;
-using KGySoft.Drawing.Imaging;
-using KGySoft.Drawing.Shapes;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Linq;
-using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace FF.Rando.Companion.Games.WorldsCollide.Tracking;
 
-public class Check : IDisposable, INotifyPropertyChanged, IImageWithOverlay
+internal interface ICheck
 {
-    private readonly Seed _seed;
+    string Description { get; }
 
-    private Bitmap? _image;
-    private Bitmap? _overlay;
-    private ISprite? _overlaySprite;
-    private Reward? _reward;
-    private bool _isCompleted;
-    private bool _hasBeenCompleted;
+    bool IsAvailable { get; }
+
+    bool IsComplete { get; }
+
+    bool Update(State state);
+
+    public event Action? Updated;
+}
+
+internal interface IEventCheck
+{
+    public EventType Event { get; }
+}
+
+internal interface ICharacterGate
+{
+    public EventType CharacterGate { get; }
+}
+
+internal interface IRewardable
+{
+    public RewardType RewardType { get; }
+}
+
+internal class BasicCheck(EventType trackedEvent, RewardType rewardType) : ICheck, IEventCheck, IRewardable
+{
+    public virtual string Description { get; } = trackedEvent.GetDescription();
+    public virtual bool IsAvailable => true;
+    public bool IsComplete { get; private set; }
+    public EventType Event { get; } = trackedEvent;
+
+    public RewardType RewardType { get; } = rewardType;
+
+    public event Action? Updated;
+
+    public virtual bool Update(State state)
+    {
+        var ret = false;
+        var isComplete = state.Events[Event];
+        ret |= IsComplete != isComplete;
+        IsComplete = isComplete;
+        
+        if (ret) Updated?.Invoke();
+        return ret;
+    }
+
+    public override string ToString() => $"{Description} ({string.Join(" / ", RewardType.GetFlags(false).Select(f=>f.ToString()))})";
+}
+
+internal class CharacterCheck(EventType character) : BasicCheck(character.IsCharacter() ? character : throw new ArgumentException(), RewardType.None)
+{
+}
+
+internal class GatedCheck(EventType trackedEvent, EventType gatedCharacter, RewardType rewardType) : BasicCheck(trackedEvent, rewardType), ICharacterGate
+{
     private bool _isAvailable;
-    private bool _isVisible = true;
-    private List<Check> _linkedChecks = [];
-    private string _description = "";
 
-    public Check(Seed seed, Events @event)
+    public override bool IsAvailable => _isAvailable;
+
+    public EventType CharacterGate { get; } = gatedCharacter.IsCharacter()
+            ? gatedCharacter
+            : throw new ArgumentException($"{gatedCharacter.GetDescription()} is not a character");
+
+    public override bool Update(State state)
     {
-        _seed = seed;
-        Event = @event;
-        CharacterGate = Event.GetRequirements().OfType<Events?>().FirstOrDefault(r => r.HasValue && r.Value.IsCharacter());
-        seed.PropertyChanged += Settings_PropertyChanged;
-        Description = CreateDescription();
-        SetImage();
+        var ret = false;
+
+        var isAvailable = state.Events[CharacterGate];
+        ret |= IsAvailable != isAvailable;
+        _isAvailable = isAvailable;
+
+        ret |= base.Update(state);
+        return ret;
+    }
+}
+
+internal class ProgressiveCheck(List<EventType> stages, List<RewardType> rewards) : ICheck
+{
+    private List<EventType> _completedStages = [];
+
+    public virtual string Description { get; } = new string(BizHawk.Common.StringExtensions.StringExtensions.CommonPrefix(stages.Select(s => s.GetDescription()))).Trim();
+
+    public virtual bool IsAvailable => true;
+
+    public bool IsComplete => _completedStages.Count == Stages.Count;
+
+    public IReadOnlyList<EventType> Stages { get; } = (stages.Count == rewards.Count) ? [.. stages] : throw new ArgumentException("Must have same number of rewards as stages");
+
+    public IReadOnlyList<EventType> CompletedStages => _completedStages;
+
+    public IReadOnlyList<RewardType> StageRewards { get;} = [.. rewards];
+
+    public event Action? Updated;
+
+    public virtual bool Update(State state)
+    {
+        var ret = false;
+
+        var completed = Stages.Where(s => state.Events[s]).ToList();
+        ret |= completed.SequenceEqual(_completedStages);
+        _completedStages = completed;
+
+        if (ret) Updated?.Invoke();
+        return ret;
     }
 
-    private void Settings_PropertyChanged(object sender, PropertyChangedEventArgs e)
+    public override string ToString()
     {
-        if (e.PropertyName == nameof(Seed.SpriteSet))
+        StringBuilder sb = new();
+        sb.AppendLine(Description);
+
+        for (int i = 0; i < Stages.Count; i ++)
         {
-            SetImage();
+            if (CompletedStages.Contains(Stages[i]))
+                continue;
+
+            sb.AppendLine($"{Stages[i].GetDescription()} ({string.Join(" / ", StageRewards[i].GetFlags(false).Select(f => f.ToString()))})");
         }
+
+        return sb.ToString();
+    }
+}
+
+internal class GatedProgressiveCheck(EventType gatedCharacter, List<EventType> stages, List<RewardType> rewards) : ProgressiveCheck(stages, rewards), ICharacterGate
+{
+    private bool _isAvailable;
+
+    public override bool IsAvailable => _isAvailable;
+
+    public EventType CharacterGate { get; } = gatedCharacter.IsCharacter()
+            ? gatedCharacter
+            : throw new ArgumentException($"{gatedCharacter.GetDescription()} is not a character");
+
+    public override bool Update(State state)
+    {
+        var ret = false;
+
+        var isAvailable = state.Events[CharacterGate];
+        ret |= IsAvailable != isAvailable;
+        _isAvailable = isAvailable;
+
+        ret |= base.Update(state);
+        return ret;
+    }
+}
+
+internal class CustomAvailabilityCheck(EventType trackedEvent) : ICheck, IEventCheck
+{
+    public virtual string Description { get; } = trackedEvent.GetDescription();
+
+    public bool IsAvailable { get; private set; }
+
+    public bool IsComplete { get; private set; }
+
+    public EventType Event { get; } = trackedEvent;
+
+    public required List<Rule> Rules { get; init; }
+
+    public event Action? Updated;
+
+    public bool Update(State state)
+    {
+        var ret = false;
+
+        var isAvailable = Rules.Any(r => r.IsActive(state));
+        ret |= IsAvailable != isAvailable;
+        IsAvailable = isAvailable;
+
+        var isComplete = state.Events[Event];
+        ret |= IsComplete != isComplete;
+        IsComplete = isComplete;
+
+        if (ret) Updated?.Invoke();
+
+        return ret;
+    }
+}
+
+internal static class CheckExtensions
+{
+    internal static RewardType GetPossibleRewards(this ICheck check)
+    {
+        return check switch
+        {
+            IRewardable hasReward => hasReward.RewardType,
+            ProgressiveCheck progressive => progressive.StageRewards.Skip(progressive.CompletedStages.Count).Aggregate(RewardType.None, (acc, r) => acc | r),
+            _ => RewardType.None
+        };
+    }
+}
+
+internal class CheckComparer : IEqualityComparer<ICheck>
+{
+    public bool Equals(ICheck x, ICheck y)
+    {
+        return x switch
+        {
+            GatedProgressiveCheck gpcX when y is GatedProgressiveCheck gpcY => gpcX.Stages.SequenceEqual(gpcY.Stages) && gpcX.CharacterGate == gpcY.CharacterGate,
+            ProgressiveCheck pcX when y is ProgressiveCheck pcY => pcX.Stages.SequenceEqual(pcY.Stages),
+            GatedCheck gX when y is GatedCheck gY => gX.Event == gY.Event && gX.CharacterGate == gY.CharacterGate,
+            BasicCheck bX when y is BasicCheck bY => bX.Event == bY.Event,
+            CustomAvailabilityCheck cacX when y is CustomAvailabilityCheck cacy => cacX.Event == cacy.Event,
+            _ => false
+        };
     }
 
-    public int Id => (int)Event;
-    public Events Event { get; }
-
-    public List<Check> LinkedChecks
+    public int GetHashCode(ICheck c)
     {
-        get => _linkedChecks;
-        set
+        return c switch
         {
-            if (_linkedChecks.Select(c => c.Id).ToHashSet().SetEquals(value.Select(c => c.Id)))
-                return;
-
-            foreach (var check in _linkedChecks)
-                check.PropertyChanged -= Check_PropertyChanged;
-
-            _linkedChecks = value;
-
-            foreach (var check in _linkedChecks)
-                check.PropertyChanged += Check_PropertyChanged;
-
-            NotifyPropertyChanged();
-            Description = CreateDescription();
-            SetImage();
-        }
-    }
-
-    private string CreateDescription()
-    {
-        var description = $"{_seed.Descriptors.GetDescription(Event)}\n";
-        var req = Event.GetRequirements();
-
-        if (req.Count > 0)
-        {
-            description += "\nRequirements:\n";
-            description += string.Join("\n", req.Select(_seed.Descriptors.GetDescription));
-        }
-
-        if (Reward.HasValue)
-        {
-            description += "\n\nRewards:\n";
-            description += $"{_seed.Descriptors.GetDescription(Reward.Value)}\n";
-        }
-
-        foreach (var check in _linkedChecks)
-        {
-            description += "\n\n";
-            description += check.CreateDescription();
-        }
-
-        return description;
-    }
-
-    private void Check_PropertyChanged(object sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(Reward))
-        {
-            Description = CreateDescription();
-        }
-        if (e.PropertyName == nameof(Overlay))
-        {
-            SetImage();
-        }
-    }
-
-    public Events? CharacterGate { get; }
-
-    public string Description
-    {
-        get => _description;
-        private set
-        {
-            if (_description == value)
-                return;
-
-            _description = value;
-            NotifyPropertyChanged();
-        }
-    }
-
-    public bool IsCompleted
-    {
-        get => _isCompleted;
-        set
-        {
-            if (_isCompleted == value)
-                return;
-
-            _isCompleted = value;
-            NotifyPropertyChanged();
-            SetImage();
-
-            if (_isCompleted && !_hasBeenCompleted)
-            {
-                _hasBeenCompleted = true;
-                _seed.Timer.Info($"Completed {_seed.Descriptors.GetDescription(Event)}");
-            }
-        }
-    }
-
-    public bool IsAvailable
-    {
-        get => _isAvailable;
-        set
-        {
-            if (_isAvailable == value)
-                return;
-
-            _isAvailable = value;
-            NotifyPropertyChanged();
-            SetImage();
-        }
-    }
-
-    public bool IsVisible
-    {
-        get => _isVisible;
-        set
-        {
-            if (_isVisible == value)
-                return;
-
-            _isVisible = value;
-            NotifyPropertyChanged();
-        }
-    }
-
-    public Reward? Reward
-    {
-        get => _reward;
-        set
-        {
-            if (_reward == value || _reward.HasValue)
-                return;
-
-            _reward = value;
-            Description = CreateDescription();
-            NotifyPropertyChanged();
-            SetImage();
-        }
-    }
-
-    public Bitmap? Image
-    {
-        get => _image!;
-        set
-        {
-            if (_image == value)
-                return;
-
-            _image = value;
-            NotifyPropertyChanged();
-        }
-    }
-
-    public Bitmap? Overlay
-    {
-        get => _overlay;
-        set
-        {
-            if (_overlay == value)
-                return;
-
-            _overlay = value;
-            NotifyPropertyChanged();
-        }
-    }
-
-    public Size DefaultSize { get; } = new(40, 40);
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    private void SetImage()
-    {
-        var sprite = _seed.SpriteSet.Get(Event);
-        if (sprite != null)
-            Image = sprite.Render(!IsAvailable);
-
-        if (!IsAvailable)
-        {
-            Overlay = null;
-        }
-        else
-        {
-            var rewards = Reward.Yield().Concat(LinkedChecks.Select(c => c.Reward));
-            var overlayparts = new List<ISprite>();
-            ISprite? overlay = null;
-            foreach (var reward in Reward.Yield().Concat(LinkedChecks.Select(c => c.Reward)))
-            {
-                var characterReward = reward.ToCharacter();
-                var esper = reward.ToEsper();
-
-                if (characterReward.HasValue)
-                    overlayparts.Add(_seed.Sprites.Characters.Get(characterReward.Value, Pose.Celebrate1)!);
-                else if (esper.HasValue)
-                    overlayparts.Add(_seed.Sprites.Items.Get(Item.Magicite));
-                else if (reward.HasValue)
-                    overlayparts.Add(_seed.Sprites.Items.Get(Item.Chest));
-            }
-
-            if (overlayparts.Any())
-            {
-                var width = Math.Max(32, (LinkedChecks.Count + 1) * 16);
-                var bmpData = BitmapDataFactory.CreateBitmapData(width, width);
-                if (overlayparts.Count == (LinkedChecks.Count + 1))
-                    bmpData.FillRectangle(new Color32(96, 0, 0, 0), new Rectangle(Point.Empty, bmpData.Size));
-
-                overlay = new BasicSprite(bmpData);
-                var x = width;
-
-                foreach (var part in overlayparts.Reverse<ISprite>())
-                {
-                    x -= part.Size.Width;
-                    overlay = overlay.Overlay(part, new Point(x, overlay.Size.Height - part.Size.Height));
-                }
-            }
-
-            if (_overlaySprite is ITemporarySprite)
-                _overlaySprite.Dispose();
-
-            _overlaySprite = overlay;
-
-            Overlay = _overlaySprite?.Render();
-        }
-    }
-
-    public void Dispose()
-    {
-        if (_overlaySprite is ITemporarySprite)
-        {
-            _overlaySprite.Dispose();
-            _overlaySprite = null;
-        }
-
-        _seed.PropertyChanged -= Settings_PropertyChanged;
+            ProgressiveCheck pc => pc.Stages.Last().GetHashCode(),
+            IEventCheck b => b.Event.GetHashCode(),
+            _ => 0
+        };
     }
 }

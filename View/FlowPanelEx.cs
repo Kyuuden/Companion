@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace FF.Rando.Companion.View;
 
-public abstract partial class FlowPanelEx<TGame, TSettings> : FlowLayoutPanel, IPanel where TGame : IGame where TSettings : PanelSettings
+public abstract partial class FlowPanelEx<TGame, TSettings> : FlowLayoutPanel, IPanel where TGame : IGame where TSettings : IPanelSettings
 {
     public FlowPanelEx()
     {
@@ -20,8 +20,6 @@ public abstract partial class FlowPanelEx<TGame, TSettings> : FlowLayoutPanel, I
     public SpacingMode SpacingMode { get; set; } = SpacingMode.None;
 
     public int WrapAfter { get; set; } = int.MaxValue;
-
-    public bool Icons { get; set; }
 
     protected TGame? Game { get; private set; }
 
@@ -147,7 +145,7 @@ public abstract partial class FlowPanelEx<TGame, TSettings> : FlowLayoutPanel, I
 
     protected virtual bool CenterMultiColumnItems => false;
 
-    protected void Arrange()
+    protected virtual void Arrange()
     {
         if (Game == null || Settings == null || Controls.Count == 0)
             return;
@@ -164,15 +162,55 @@ public abstract partial class FlowPanelEx<TGame, TSettings> : FlowLayoutPanel, I
             ? new Padding(Game.Settings.BorderSettings.BorderScaleFactor.TileSize())
             : new Padding(0);
 
-        var paddedWidth = Width - Padding.Horizontal;
-
         switch (SpacingMode)
         {
             case SpacingMode.Rows:
-                foreach (Control control in Controls)
-                    control.Margin = DefaultItemMargin;
+            {
+                var paddedHeight = Height- Padding.Vertical;
+                var elementHeight = GetItemHeight(Controls);
+                var rows = WrapContents
+                    ? Math.Min(WrapAfter, Math.Min(Controls.OfType<Control>().Where(c => c.Visible).Count(), paddedHeight / elementHeight))
+                    : Controls.OfType<Control>().Where(c => c.Visible).Count();
+
+                var extra = paddedHeight - (elementHeight * rows);
+                var divisions = rows > 1 ? (rows - 1) * 2 : 2;
+                var margin = Math.Max(0, extra / divisions);
+
+                if (rows <= 0)
+                    break;
+
+                SuspendLayout();
+                SortControls(Controls, rows);
+                var invisibleCount = 0;
+                for (int i = 0; i < Controls.Count; i++)
+                {
+                    var c = Controls[i];
+
+                    if (!c.Visible)
+                    {
+                        invisibleCount++;
+                    }
+                    else
+                    {
+                        Padding adjustment = ((i - invisibleCount) % rows) switch
+                        {
+                            0 => new(0, 0, 0, margin),
+                            _ when (i - invisibleCount + 1) % rows == 0 => new(0, margin, 0, 0),
+                            _ => new Padding(0, margin, 0, margin)
+                        };
+
+                        c.Margin = DefaultItemMargin + adjustment;
+                    }
+
+                    SetFlowBreak(c, (i - invisibleCount + 1) % rows == 0);
+                }
+
+                ResumeLayout();
                 break;
+            }
             case SpacingMode.Columns:
+            {
+                var paddedWidth = Width - Padding.Horizontal;
                 var elementsize = GetItemWidth(Controls);
                 var columns = WrapContents
                     ? Math.Min(WrapAfter, Math.Min(Controls.OfType<Control>().Where(c => c.Visible).Count(), paddedWidth / elementsize))
@@ -186,7 +224,6 @@ public abstract partial class FlowPanelEx<TGame, TSettings> : FlowLayoutPanel, I
                     break;
 
                 SuspendLayout();
-
                 SortControls(Controls, columns);
                 var invisibleCount = 0;
                 for (int i = 0; i < Controls.Count; i++)
@@ -242,8 +279,8 @@ public abstract partial class FlowPanelEx<TGame, TSettings> : FlowLayoutPanel, I
                 }
 
                 ResumeLayout();
-
                 break;
+            }
             case SpacingMode.None:
                 foreach (Control control in Controls)
                     control.Margin = DefaultItemMargin;

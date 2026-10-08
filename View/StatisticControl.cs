@@ -10,25 +10,26 @@ public abstract class StatisticControl<T, TGame> : PictureBox, IScalableControl 
 {
     protected T Stat { get; private set; }
     protected TGame Game { get; private set; }
-    protected PanelSettings Settings { get; private set; }
+    protected IPanelSettings Settings { get; private set; }
 
     protected abstract T GetStat();
     protected abstract string PropertyName { get; }
 
+    protected Size OriginalSize { get; }
 
-    public StatisticControl(TGame game, PanelSettings settings, Size minimumSize)
+    public StatisticControl(TGame game, IPanelSettings settings, Size defaultSize)
     {
         Game = game ?? throw new ArgumentNullException();
         Settings = settings ?? throw new ArgumentNullException();
 
         ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
         SuspendLayout();
-        Size = new System.Drawing.Size(56, 16);
-        MinimumSize = minimumSize;
+        Size = OriginalSize = defaultSize;
         DoubleBuffered = true;
         BackColor = Game.BackgroundColor;
         Margin = new Padding(4);
         SizeMode = PictureBoxSizeMode.Zoom;
+        BackgroundImageLayout = ImageLayout.Stretch;
         Name = "ImageControl";
         Stat = GetStat();
         UpdateImage();
@@ -48,24 +49,28 @@ public abstract class StatisticControl<T, TGame> : PictureBox, IScalableControl 
 
         var newStat = GetStat();
         if (newStat?.Equals(Stat) == true) return;
+        UpdateStat();
+    }
 
-        Stat = newStat;
+    protected virtual void UpdateStat()
+    {
+        Stat = GetStat();
         UpdateImage();
     }
 
-    protected void UpdateImage()
+    protected virtual void UpdateImage()
     {
         Image?.Dispose();
         Image = null;
         Image = Render();
-        Size = Image.Size.Scale(Settings.ScaleFactor);
+        Size = OriginalSize.Scale(Settings.ScaleFactor);
     }
 
-    protected abstract System.Drawing.Image Render();
+    protected abstract Image? Render();
 
-    public void Rescale()
+    public virtual void Rescale()
     {
-        Size = Image.Size.Scale(Settings.ScaleFactor);
+        Size = OriginalSize.Scale(Settings.ScaleFactor);
     }
 
     protected override void Dispose(bool disposing)

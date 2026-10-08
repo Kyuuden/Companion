@@ -34,16 +34,16 @@ internal abstract class StatisticControl<T> : StatisticControl<T, Seed> where T 
     {
         var icon = Icon;
         var text = Game.Font.RenderText(GetStatText(), TextMode.Disabled);
-        var data = BitmapDataFactory.CreateBitmapData(MinimumSize);
+        var data = BitmapDataFactory.CreateBitmapData(OriginalSize);
 
         var destinationRect = new Rectangle(
-            0, (MinimumSize.Height - icon.Height) / 2,
+            0, (OriginalSize.Height - icon.Height) / 2,
             icon.Width, icon.Height);
 
         icon.DrawInto(data, destinationRect, KGySoft.Drawing.ScalingMode.NearestNeighbor);
 
         destinationRect = new Rectangle(
-            MinimumSize.Width - text.Width, (MinimumSize.Height - text.Height) / 2,
+            OriginalSize.Width - text.Width, (OriginalSize.Height - text.Height) / 2,
             text.Width, text.Height);
 
         text.DrawInto(data, destinationRect, KGySoft.Drawing.ScalingMode.NearestNeighbor);

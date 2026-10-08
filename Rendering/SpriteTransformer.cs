@@ -32,6 +32,9 @@ public static class SpriteTransformer
     public static ISprite Pad(this ISprite sprite, Size size, HorizontalAlignment horizontalAlignment = HorizontalAlignment.Center, VerticalAlignment verticalAlignment = VerticalAlignment.Center) 
         => new PaddedSprite(sprite, size, horizontalAlignment, verticalAlignment);
 
+    public static ISprite Pad(this ISprite sprite, int left, int top, int width, int height)
+        => new ManualPaddedSprite(sprite, left, top, width, height);
+
     public static ISprite RotateFlip(this ISprite sprite, RotateFlipType rotateFlipType)
         => new FlippedRotatedSprite(sprite, rotateFlipType);
 

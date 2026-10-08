@@ -343,7 +343,7 @@ public partial class MainForm : ToolFormBase, IExternalToolForm
             return;
         }
 
-        var dialog = new SettingsDialog(_settings)
+        var dialog = new SettingsDialog(_game, _settings)
         {
             Owner = this as Form,
             StartPosition = FormStartPosition.CenterParent

@@ -1,8 +1,10 @@
 ﻿using FF.Rando.Companion.Games.WorldsCollide.Enums;
+using FF.Rando.Companion.Games.WorldsCollide.Rendering;
 using FF.Rando.Companion.Games.WorldsCollide.RomData;
 using FF.Rando.Companion.Games.WorldsCollide.Settings.SpriteSet;
 using FF.Rando.Companion.Rendering;
 using FF.Rando.Companion.Rendering.Transforms;
+using KGySoft.CoreLibraries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,147 +14,122 @@ namespace FF.Rando.Companion.Games.WorldsCollide.Settings;
 internal class SerializedSpriteSet : ISpriteSet, IDisposable
 {
     private readonly Dictionary<Statistic, Func<ISprite?>> _statisticSpritesGetters = [];
-    private readonly Dictionary<Dragons, Func<ISprite?>> _dragonSpritesGetters = [];
-    private readonly Dictionary<Events, Func<ISprite?>> _checkSpritesGetters = [];
+    private readonly Dictionary<DragonType, Func<ISprite?>> _dragonSpritesGetters = [];
+    private readonly Dictionary<EventType, Func<ISprite?>> _checkSpritesGetters = [];
     private readonly Dictionary<Statistic, ISprite?> _statisticSprites = [];
-    private readonly Dictionary<Dragons, ISprite?> _dragonSprites = [];
-    private readonly Dictionary<Events, ISprite?> _checkSprites = [];
-    private readonly List<List<Events>> _relatedEvents = [];
-
-    private readonly Func<ISprite?> _clearedCheckOverlayGetter;
-    private readonly Func<ISprite?> _defeatedDragonOverlayGetter;
-
-    private ISprite? _clearedCheckOverlay;
-    private ISprite? _defeatedDragonOverlay;
+    private readonly Dictionary<DragonType, ISprite?> _dragonSprites = [];
+    private readonly Dictionary<EventType, ISprite?> _checkSprites = [];
 
     private readonly Sprites _sprites;
+    private readonly LocationMaps _maps;
     private readonly Font _font;
     private bool disposedValue;
 
-    public IEnumerable<IEnumerable<Events>> RelatedEvents => _relatedEvents;
-
-    public ISprite? ClearedCheckOverlay
-    {
-        get
-        {
-            _clearedCheckOverlay ??= _clearedCheckOverlayGetter?.Invoke();
-            return _clearedCheckOverlay;
-        }
-    }
-
-    public ISprite? DefeatedDragonOverlay
-    {
-        get
-        {
-            _defeatedDragonOverlay ??= _defeatedDragonOverlayGetter?.Invoke();
-            return _defeatedDragonOverlay;
-        }
-    }
-
-    public SerializedSpriteSet(Sprites sprites, Font font, SpriteSetDefinition spriteSetDefinition)
+    public SerializedSpriteSet(Sprites sprites, Font font, LocationMaps maps, SpriteSetDefinition spriteSetDefinition)
     {
         _sprites = sprites;
         _font = font;
+        _maps = maps;
 
-        _dragonSpritesGetters[Dragons.DIRT_DRAGON_DEFEATED] = GetSprite(spriteSetDefinition.DirtDragon);
-        _dragonSpritesGetters[Dragons.GOLD_DRAGON_DEFEATED] = GetSprite(spriteSetDefinition.GoldDragon);
-        _dragonSpritesGetters[Dragons.ICE_DRAGON_DEFEATED] = GetSprite(spriteSetDefinition.IceDragon);
-        _dragonSpritesGetters[Dragons.RED_DRAGON_DEFEATED] = GetSprite(spriteSetDefinition.RedDragon);
-        _dragonSpritesGetters[Dragons.WHITE_DRAGON_DEFEATED] = GetSprite(spriteSetDefinition.WhiteDragon);
-        _dragonSpritesGetters[Dragons.BLUE_DRAGON_DEFEATED] = GetSprite(spriteSetDefinition.BlueDragon);
-        _dragonSpritesGetters[Dragons.SKULL_DRAGON_DEFEATED] = GetSprite(spriteSetDefinition.SkullDragon);
-        _dragonSpritesGetters[Dragons.STORM_DRAGON_DEFEATED] = GetSprite(spriteSetDefinition.StormDragon);
+        _dragonSpritesGetters[DragonType.DIRT_DRAGON_DEFEATED] = GetSprite(spriteSetDefinition.DirtDragon);
+        _dragonSpritesGetters[DragonType.GOLD_DRAGON_DEFEATED] = GetSprite(spriteSetDefinition.GoldDragon);
+        _dragonSpritesGetters[DragonType.ICE_DRAGON_DEFEATED] = GetSprite(spriteSetDefinition.IceDragon);
+        _dragonSpritesGetters[DragonType.RED_DRAGON_DEFEATED] = GetSprite(spriteSetDefinition.RedDragon);
+        _dragonSpritesGetters[DragonType.WHITE_DRAGON_DEFEATED] = GetSprite(spriteSetDefinition.WhiteDragon);
+        _dragonSpritesGetters[DragonType.BLUE_DRAGON_DEFEATED] = GetSprite(spriteSetDefinition.BlueDragon);
+        _dragonSpritesGetters[DragonType.SKULL_DRAGON_DEFEATED] = GetSprite(spriteSetDefinition.SkullDragon);
+        _dragonSpritesGetters[DragonType.STORM_DRAGON_DEFEATED] = GetSprite(spriteSetDefinition.StormDragon);
 
-        _checkSpritesGetters[Events.TERRA_IN_PARTY] = GetSprite(spriteSetDefinition.Terra);
-        _checkSpritesGetters[Events.LOCKE_IN_PARTY] = GetSprite(spriteSetDefinition.Locke);
-        _checkSpritesGetters[Events.EDGAR_IN_PARTY] = GetSprite(spriteSetDefinition.Edgar);
-        _checkSpritesGetters[Events.SABIN_IN_PARTY] = GetSprite(spriteSetDefinition.Sabin);
-        _checkSpritesGetters[Events.SHADOW_IN_PARTY] = GetSprite(spriteSetDefinition.Shadow);
-        _checkSpritesGetters[Events.CYAN_IN_PARTY] = GetSprite(spriteSetDefinition.Cyan);
-        _checkSpritesGetters[Events.GAU_IN_PARTY] = GetSprite(spriteSetDefinition.Gau);
-        _checkSpritesGetters[Events.CELES_IN_PARTY] = GetSprite(spriteSetDefinition.Celes);
-        _checkSpritesGetters[Events.SETZER_IN_PARTY] = GetSprite(spriteSetDefinition.Setzer);
-        _checkSpritesGetters[Events.MOG_IN_PARTY] = GetSprite(spriteSetDefinition.Mog);
-        _checkSpritesGetters[Events.STRAGO_IN_PARTY] = GetSprite(spriteSetDefinition.Strago);
-        _checkSpritesGetters[Events.RELM_IN_PARTY] = GetSprite(spriteSetDefinition.Relm);
-        _checkSpritesGetters[Events.GOGO_IN_PARTY] = GetSprite(spriteSetDefinition.Gogo);
-        _checkSpritesGetters[Events.UMARO_IN_PARTY] = GetSprite(spriteSetDefinition.Umaro);
+        _checkSpritesGetters[EventType.TERRA_IN_PARTY] = GetSprite(spriteSetDefinition.Terra);
+        _checkSpritesGetters[EventType.LOCKE_IN_PARTY] = GetSprite(spriteSetDefinition.Locke);
+        _checkSpritesGetters[EventType.EDGAR_IN_PARTY] = GetSprite(spriteSetDefinition.Edgar);
+        _checkSpritesGetters[EventType.SABIN_IN_PARTY] = GetSprite(spriteSetDefinition.Sabin);
+        _checkSpritesGetters[EventType.SHADOW_IN_PARTY] = GetSprite(spriteSetDefinition.Shadow);
+        _checkSpritesGetters[EventType.CYAN_IN_PARTY] = GetSprite(spriteSetDefinition.Cyan);
+        _checkSpritesGetters[EventType.GAU_IN_PARTY] = GetSprite(spriteSetDefinition.Gau);
+        _checkSpritesGetters[EventType.CELES_IN_PARTY] = GetSprite(spriteSetDefinition.Celes);
+        _checkSpritesGetters[EventType.SETZER_IN_PARTY] = GetSprite(spriteSetDefinition.Setzer);
+        _checkSpritesGetters[EventType.MOG_IN_PARTY] = GetSprite(spriteSetDefinition.Mog);
+        _checkSpritesGetters[EventType.STRAGO_IN_PARTY] = GetSprite(spriteSetDefinition.Strago);
+        _checkSpritesGetters[EventType.RELM_IN_PARTY] = GetSprite(spriteSetDefinition.Relm);
+        _checkSpritesGetters[EventType.GOGO_IN_PARTY] = GetSprite(spriteSetDefinition.Gogo);
+        _checkSpritesGetters[EventType.UMARO_IN_PARTY] = GetSprite(spriteSetDefinition.Umaro);
 
-        _checkSpritesGetters[Events.DEFEATED_WHELK] = GetSprite(spriteSetDefinition.WhelkGate);
-        _checkSpritesGetters[Events.RODE_RAFT_LETE_RIVER] = GetSprite(spriteSetDefinition.LeteRiver);
-        _checkSpritesGetters[Events.BLOCK_SEALED_GATE] = GetSprite(spriteSetDefinition.SealedGate);
-        _checkSpritesGetters[Events.GOT_ZOZO_REWARD] = GetSprite(spriteSetDefinition.ZozoTower);
-        _checkSpritesGetters[Events.RECRUITED_TERRA_MOBLIZ] = GetSprite(spriteSetDefinition.MoblizAttack);
-        _checkSpritesGetters[Events.DEFEATED_TUNNEL_ARMOR] = GetSprite(spriteSetDefinition.SouthFigaroCave);
-        _checkSpritesGetters[Events.GOT_RAGNAROK] = GetSprite(spriteSetDefinition.NarsheWeaponShop);
-        _checkSpritesGetters[Events.GOT_BOTH_REWARDS_WEAPON_SHOP] = GetSprite(spriteSetDefinition.NarsheWeaponShopMines);
-        _checkSpritesGetters[Events.RECRUITED_LOCKE_PHOENIX_CAVE] = GetSprite(spriteSetDefinition.PhoenixCave);
-        _checkSpritesGetters[Events.NAMED_EDGAR] = GetSprite(spriteSetDefinition.FigaroCastleThrone);
-        _checkSpritesGetters[Events.DEFEATED_TENTACLES_FIGARO] = GetSprite(spriteSetDefinition.FigaroCastleEngine);
-        _checkSpritesGetters[Events.GOT_RAIDEN] = GetSprite(spriteSetDefinition.AncientCastle);
-        _checkSpritesGetters[Events.DEFEATED_VARGAS] = GetSprite(spriteSetDefinition.MtKolts);
-        _checkSpritesGetters[Events.FINISHED_COLLAPSING_HOUSE] = GetSprite(spriteSetDefinition.CollapsingHouse);
-        _checkSpritesGetters[Events.NAMED_GAU] = GetSprite(spriteSetDefinition.BarenFalls);
-        _checkSpritesGetters[Events.FINISHED_IMPERIAL_CAMP] = GetSprite(spriteSetDefinition.ImperialCamp);
-        _checkSpritesGetters[Events.GOT_PHANTOM_TRAIN_REWARD] = GetSprite(spriteSetDefinition.PhantomTrain);
-        _checkSpritesGetters[Events.RECRUITED_SHADOW_GAU_FATHER_HOUSE] = GetSprite(spriteSetDefinition.GauFatherHouse);
-        _checkSpritesGetters[Events.RECRUITED_SHADOW_FLOATING_CONTINENT] = GetSprite(spriteSetDefinition.FloatingContinentArrival);
-        _checkSpritesGetters[Events.DEFEATED_ATMAWEAPON] = GetSprite(spriteSetDefinition.FloatingContinentBeast);
-        _checkSpritesGetters[Events.FINISHED_FLOATING_CONTINENT] = GetSprite(spriteSetDefinition.FloatingContinentEscape);
-        _checkSpritesGetters[Events.DEFEATED_SR_BEHEMOTH] = GetSprite(spriteSetDefinition.VeldtCave);
-        _checkSpritesGetters[Events.FINISHED_DOMA_WOB] = GetSprite(spriteSetDefinition.DomaSiege);
-        _checkSpritesGetters[Events.DEFEATED_STOOGES] = GetSprite(spriteSetDefinition.DomaDreamDoor);
-        _checkSpritesGetters[Events.FINISHED_DOMA_WOR] = GetSprite(spriteSetDefinition.DomaDreamAwaken);
-        _checkSpritesGetters[Events.GOT_ALEXANDR] = GetSprite(spriteSetDefinition.DomaDreamThrone);
-        _checkSpritesGetters[Events.FINISHED_MT_ZOZO] = GetSprite(spriteSetDefinition.MtZozo);
-        _checkSpritesGetters[Events.VELDT_REWARD_OBTAINED] = GetSprite(spriteSetDefinition.Veldt);
-        _checkSpritesGetters[Events.GOT_SERPENT_TRENCH_REWARD] = GetSprite(spriteSetDefinition.SerpentTrench);
-        _checkSpritesGetters[Events.FREED_CELES] = GetSprite(spriteSetDefinition.SouthFigaroPrisoner);
-        _checkSpritesGetters[Events.GOT_IFRIT_SHIVA] = GetSprite(spriteSetDefinition.MagitekFactoryTrash);
-        _checkSpritesGetters[Events.DEFEATED_NUMBER_024] = GetSprite(spriteSetDefinition.MagitekFactoryGuard);
-        _checkSpritesGetters[Events.DEFEATED_CRANES] = GetSprite(spriteSetDefinition.MagitekFactoryFinish);
-        _checkSpritesGetters[Events.FINISHED_OPERA_DISRUPTION] = GetSprite(spriteSetDefinition.OperaHouseDisruption);
-        _checkSpritesGetters[Events.RECRUITED_SHADOW_KOHLINGEN] = GetSprite(spriteSetDefinition.KohlingenCafe);
-        _checkSpritesGetters[Events.DEFEATED_DULLAHAN] = GetSprite(spriteSetDefinition.DarylsTomb);
-        _checkSpritesGetters[Events.CHASING_LONE_WOLF7] = GetSprite(spriteSetDefinition.LoneWolfChase);
-        _checkSpritesGetters[Events.GOT_BOTH_REWARDS_LONE_WOLF] = GetSprite(spriteSetDefinition.LoneWolfMoogleRoom);
-        _checkSpritesGetters[Events.COMPLETED_MOOGLE_DEFENSE] = GetSprite(spriteSetDefinition.MoogleDefense);
-        _checkSpritesGetters[Events.DEFEATED_FLAME_EATER] = GetSprite(spriteSetDefinition.BurningHouse);
-        _checkSpritesGetters[Events.DEFEATED_HIDON] = GetSprite(spriteSetDefinition.EbotsRock);
-        _checkSpritesGetters[Events.DEFEATED_MAGIMASTER] = GetSprite(spriteSetDefinition.FanaticsTowerLeader);
-        _checkSpritesGetters[Events.RECRUITED_STRAGO_FANATICS_TOWER] = GetSprite(spriteSetDefinition.FanaticsTowerFollower);
-        _checkSpritesGetters[Events.DEFEATED_ULTROS_ESPER_MOUNTAIN] = GetSprite(spriteSetDefinition.EsperMountain);
-        _checkSpritesGetters[Events.DEFEATED_CHADARNOOK] = GetSprite(spriteSetDefinition.OwzersMansion);
-        _checkSpritesGetters[Events.RECRUITED_GOGO_WOR] = GetSprite(spriteSetDefinition.ZoneEater);
-        _checkSpritesGetters[Events.RECRUITED_UMARO_WOR] = GetSprite(spriteSetDefinition.UmarosCave);
-        _checkSpritesGetters[Events.FINISHED_NARSHE_BATTLE] = GetSprite(spriteSetDefinition.NarsheBattle);
-        _checkSpritesGetters[Events.BOUGHT_ESPER_TZEN] = GetSprite(spriteSetDefinition.TzenThief);
-        _checkSpritesGetters[Events.DEFEATED_DOOM_GAZE] = GetSprite(spriteSetDefinition.SearchTheSkies);
-        _checkSpritesGetters[Events.GOT_TRITOCH] = GetSprite(spriteSetDefinition.TritochCliff);
-        _checkSpritesGetters[Events.AUCTION_BOUGHT_ESPER1] = GetSprite(spriteSetDefinition.JidoorAuctionHouse1);
-        _checkSpritesGetters[Events.AUCTION_BOUGHT_ESPER2] = GetSprite(spriteSetDefinition.JidoorAuctionHouse2);
-        _checkSpritesGetters[Events.DEFEATED_ATMA] = GetSprite(spriteSetDefinition.KefkasTowerCellBeast);
+        _checkSpritesGetters[EventType.DEFEATED_WHELK] = GetSprite(spriteSetDefinition.WhelkGate);
+        _checkSpritesGetters[EventType.RODE_RAFT_LETE_RIVER] = GetSprite(spriteSetDefinition.LeteRiver);
+        _checkSpritesGetters[EventType.BLOCK_SEALED_GATE] = GetSprite(spriteSetDefinition.SealedGate);
+        _checkSpritesGetters[EventType.GOT_ZOZO_REWARD] = GetSprite(spriteSetDefinition.ZozoTower);
+        _checkSpritesGetters[EventType.RECRUITED_TERRA_MOBLIZ] = GetSprite(spriteSetDefinition.MoblizAttack);
+        _checkSpritesGetters[EventType.DEFEATED_TUNNEL_ARMOR] = GetSprite(spriteSetDefinition.SouthFigaroCave);
+        _checkSpritesGetters[EventType.GOT_RAGNAROK] = GetSprite(spriteSetDefinition.NarsheWeaponShop);
+        _checkSpritesGetters[EventType.GOT_BOTH_REWARDS_WEAPON_SHOP] = GetSprite(spriteSetDefinition.NarsheWeaponShopMines);
+        _checkSpritesGetters[EventType.RECRUITED_LOCKE_PHOENIX_CAVE] = GetSprite(spriteSetDefinition.PhoenixCave);
+        _checkSpritesGetters[EventType.NAMED_EDGAR] = GetSprite(spriteSetDefinition.FigaroCastleThrone);
+        _checkSpritesGetters[EventType.DEFEATED_TENTACLES_FIGARO] = GetSprite(spriteSetDefinition.FigaroCastleEngine);
+        _checkSpritesGetters[EventType.GOT_RAIDEN] = GetSprite(spriteSetDefinition.AncientCastle);
+        _checkSpritesGetters[EventType.DEFEATED_VARGAS] = GetSprite(spriteSetDefinition.MtKolts);
+        _checkSpritesGetters[EventType.FINISHED_COLLAPSING_HOUSE] = GetSprite(spriteSetDefinition.CollapsingHouse);
+        _checkSpritesGetters[EventType.NAMED_GAU] = GetSprite(spriteSetDefinition.BarenFalls);
+        _checkSpritesGetters[EventType.FINISHED_IMPERIAL_CAMP] = GetSprite(spriteSetDefinition.ImperialCamp);
+        _checkSpritesGetters[EventType.GOT_PHANTOM_TRAIN_REWARD] = GetSprite(spriteSetDefinition.PhantomTrain);
+        _checkSpritesGetters[EventType.RECRUITED_SHADOW_GAU_FATHER_HOUSE] = GetSprite(spriteSetDefinition.GauFatherHouse);
+        _checkSpritesGetters[EventType.RECRUITED_SHADOW_FLOATING_CONTINENT] = GetSprite(spriteSetDefinition.FloatingContinentArrival);
+        _checkSpritesGetters[EventType.DEFEATED_ATMAWEAPON] = GetSprite(spriteSetDefinition.FloatingContinentBeast);
+        _checkSpritesGetters[EventType.FINISHED_FLOATING_CONTINENT] = GetSprite(spriteSetDefinition.FloatingContinentEscape);
+        _checkSpritesGetters[EventType.DEFEATED_SR_BEHEMOTH] = GetSprite(spriteSetDefinition.VeldtCave);
+        _checkSpritesGetters[EventType.FINISHED_DOMA_WOB] = GetSprite(spriteSetDefinition.DomaSiege);
+        _checkSpritesGetters[EventType.DEFEATED_STOOGES] = GetSprite(spriteSetDefinition.DomaDreamDoor);
+        _checkSpritesGetters[EventType.FINISHED_DOMA_WOR] = GetSprite(spriteSetDefinition.DomaDreamAwaken);
+        _checkSpritesGetters[EventType.GOT_ALEXANDR] = GetSprite(spriteSetDefinition.DomaDreamThrone);
+        _checkSpritesGetters[EventType.FINISHED_MT_ZOZO] = GetSprite(spriteSetDefinition.MtZozo);
+        _checkSpritesGetters[EventType.VELDT_REWARD_OBTAINED] = GetSprite(spriteSetDefinition.Veldt);
+        _checkSpritesGetters[EventType.GOT_SERPENT_TRENCH_REWARD] = GetSprite(spriteSetDefinition.SerpentTrench);
+        _checkSpritesGetters[EventType.FREED_CELES] = GetSprite(spriteSetDefinition.SouthFigaroPrisoner);
+        _checkSpritesGetters[EventType.GOT_IFRIT_SHIVA] = GetSprite(spriteSetDefinition.MagitekFactoryTrash);
+        _checkSpritesGetters[EventType.DEFEATED_NUMBER_024] = GetSprite(spriteSetDefinition.MagitekFactoryGuard);
+        _checkSpritesGetters[EventType.DEFEATED_CRANES] = GetSprite(spriteSetDefinition.MagitekFactoryFinish);
+        _checkSpritesGetters[EventType.FINISHED_OPERA_DISRUPTION] = GetSprite(spriteSetDefinition.OperaHouseDisruption);
+        _checkSpritesGetters[EventType.RECRUITED_SHADOW_KOHLINGEN] = GetSprite(spriteSetDefinition.KohlingenCafe);
+        _checkSpritesGetters[EventType.DEFEATED_DULLAHAN] = GetSprite(spriteSetDefinition.DarylsTomb);
+        _checkSpritesGetters[EventType.CHASING_LONE_WOLF7] = GetSprite(spriteSetDefinition.LoneWolfChase);
+        _checkSpritesGetters[EventType.GOT_BOTH_REWARDS_LONE_WOLF] = GetSprite(spriteSetDefinition.LoneWolfMoogleRoom);
+        _checkSpritesGetters[EventType.COMPLETED_MOOGLE_DEFENSE] = GetSprite(spriteSetDefinition.MoogleDefense);
+        _checkSpritesGetters[EventType.DEFEATED_FLAME_EATER] = GetSprite(spriteSetDefinition.BurningHouse);
+        _checkSpritesGetters[EventType.DEFEATED_HIDON] = GetSprite(spriteSetDefinition.EbotsRock);
+        _checkSpritesGetters[EventType.DEFEATED_MAGIMASTER] = GetSprite(spriteSetDefinition.FanaticsTowerLeader);
+        _checkSpritesGetters[EventType.RECRUITED_STRAGO_FANATICS_TOWER] = GetSprite(spriteSetDefinition.FanaticsTowerFollower);
+        _checkSpritesGetters[EventType.DEFEATED_ULTROS_ESPER_MOUNTAIN] = GetSprite(spriteSetDefinition.EsperMountain);
+        _checkSpritesGetters[EventType.DEFEATED_CHADARNOOK] = GetSprite(spriteSetDefinition.OwzersMansion);
+        _checkSpritesGetters[EventType.RECRUITED_GOGO_WOR] = GetSprite(spriteSetDefinition.ZoneEater);
+        _checkSpritesGetters[EventType.RECRUITED_UMARO_WOR] = GetSprite(spriteSetDefinition.UmarosCave);
+        _checkSpritesGetters[EventType.FINISHED_NARSHE_BATTLE] = GetSprite(spriteSetDefinition.NarsheBattle);
+        _checkSpritesGetters[EventType.BOUGHT_ESPER_TZEN] = GetSprite(spriteSetDefinition.TzenThief);
+        _checkSpritesGetters[EventType.DEFEATED_DOOM_GAZE] = GetSprite(spriteSetDefinition.SearchTheSkies);
+        _checkSpritesGetters[EventType.GOT_TRITOCH] = GetSprite(spriteSetDefinition.TritochCliff);
+        _checkSpritesGetters[EventType.AUCTION_BOUGHT_ESPER1] = GetSprite(spriteSetDefinition.JidoorAuctionHouse1);
+        _checkSpritesGetters[EventType.AUCTION_BOUGHT_ESPER2] = GetSprite(spriteSetDefinition.JidoorAuctionHouse2);
+        _checkSpritesGetters[EventType.DEFEATED_ATMA] = GetSprite(spriteSetDefinition.KefkasTowerCellBeast);
 
-        _checkSpritesGetters[Events.DEFEATED_PHOENIX_CAVE_DRAGON] = GetSprite(spriteSetDefinition.PhoenixCaveDragon);
-        _checkSpritesGetters[Events.DEFEATED_ANCIENT_CASTLE_DRAGON] = GetSprite(spriteSetDefinition.AncientCasteDragon);
-        _checkSpritesGetters[Events.DEFEATED_MT_ZOZO_DRAGON] = GetSprite(spriteSetDefinition.MtZozoDragon);
-        _checkSpritesGetters[Events.DEFEATED_OPERA_HOUSE_DRAGON] = GetSprite(spriteSetDefinition.OperaHouseDragon);
-        _checkSpritesGetters[Events.DEFEATED_FANATICS_TOWER_DRAGON] = GetSprite(spriteSetDefinition.FanaticsTowerDragon);
-        _checkSpritesGetters[Events.DEFEATED_NARSHE_DRAGON] = GetSprite(spriteSetDefinition.NarsheDragon);
-        _checkSpritesGetters[Events.DEFEATED_KEFKA_TOWER_DRAGON_G] = GetSprite(spriteSetDefinition.KefkasTowerMiddlePathDragon);
-        _checkSpritesGetters[Events.DEFEATED_KEFKA_TOWER_DRAGON_S] = GetSprite(spriteSetDefinition.KefkasTowerRightPathDragon);
+        _checkSpritesGetters[EventType.DEFEATED_PHOENIX_CAVE_DRAGON] = GetSprite(spriteSetDefinition.PhoenixCaveDragon);
+        _checkSpritesGetters[EventType.DEFEATED_ANCIENT_CASTLE_DRAGON] = GetSprite(spriteSetDefinition.AncientCasteDragon);
+        _checkSpritesGetters[EventType.DEFEATED_MT_ZOZO_DRAGON] = GetSprite(spriteSetDefinition.MtZozoDragon);
+        _checkSpritesGetters[EventType.DEFEATED_OPERA_HOUSE_DRAGON] = GetSprite(spriteSetDefinition.OperaHouseDragon);
+        _checkSpritesGetters[EventType.DEFEATED_FANATICS_TOWER_DRAGON] = GetSprite(spriteSetDefinition.FanaticsTowerDragon);
+        _checkSpritesGetters[EventType.DEFEATED_NARSHE_DRAGON] = GetSprite(spriteSetDefinition.NarsheDragon);
+        _checkSpritesGetters[EventType.DEFEATED_KEFKA_TOWER_DRAGON_G] = GetSprite(spriteSetDefinition.KefkasTowerMiddlePathDragon);
+        _checkSpritesGetters[EventType.DEFEATED_KEFKA_TOWER_DRAGON_S] = GetSprite(spriteSetDefinition.KefkasTowerRightPathDragon);
+        _checkSpritesGetters[EventType.GODDESS_STATUE_KEFKA_TOWER] = GetSprite(spriteSetDefinition.GoddessStatue);
+        _checkSpritesGetters[EventType.DOOM_STATUE_KEFKA_TOWER] = GetSprite(spriteSetDefinition.DoomStatue);
+        _checkSpritesGetters[EventType.POLTRGEIST_STATUE_KEFKA_TOWER] = GetSprite(spriteSetDefinition.PoltrgeistStatue);
+        _checkSpritesGetters[EventType.UNLOCKED_KT_SKIP] = GetSprite(spriteSetDefinition.KefkaTowerSkipUnlocked);
+        _checkSpritesGetters[EventType.UNLOCKED_FINAL_KEFKA] = GetSprite(spriteSetDefinition.FinalKefkaUnlocked);
 
-        _statisticSpritesGetters[Statistic.Character] = GetSprite(spriteSetDefinition.CharacterCount);
-        _statisticSpritesGetters[Statistic.Esper] = GetSprite(spriteSetDefinition.EsperCount);
-        _statisticSpritesGetters[Statistic.Dragon] = GetSprite(spriteSetDefinition.DragonCount);
-        _statisticSpritesGetters[Statistic.Boss] = GetSprite(spriteSetDefinition.BossCount);
-        _statisticSpritesGetters[Statistic.Check] = GetSprite(spriteSetDefinition.CheckCount);
-        _statisticSpritesGetters[Statistic.Chest] = GetSprite(spriteSetDefinition.ChestCount);
-
-        _clearedCheckOverlayGetter = GetSprite(spriteSetDefinition.ClearedCheckOverlay);
-        _defeatedDragonOverlayGetter = GetSprite(spriteSetDefinition.DefeatedDragonOverlay);
-
-        _relatedEvents = spriteSetDefinition.RelatedEvents;
+        _statisticSpritesGetters[Statistic.CharacterCount] = GetSprite(spriteSetDefinition.CharacterCount);
+        _statisticSpritesGetters[Statistic.EsperCount] = GetSprite(spriteSetDefinition.EsperCount);
+        _statisticSpritesGetters[Statistic.DragonCount] = GetSprite(spriteSetDefinition.DragonCount);
+        _statisticSpritesGetters[Statistic.BossCount] = GetSprite(spriteSetDefinition.BossCount);
+        _statisticSpritesGetters[Statistic.CheckCount] = GetSprite(spriteSetDefinition.CheckCount);
+        _statisticSpritesGetters[Statistic.ChestCount] = GetSprite(spriteSetDefinition.ChestCount);
     }
 
     private Func<ISprite?> GetSprite(SpriteDefinition? spriteDefinition)
@@ -176,7 +153,7 @@ internal class SerializedSpriteSet : ISpriteSet, IDisposable
                     ? _sprites.Backgrounds.Get(TileSet.GhostTrain)
                     : _sprites.Combat.Get((Boss)spriteDefinition.Id),
             SpriteSource.Esper => () => _sprites.Combat.Get((Esper)spriteDefinition.Id),
-            SpriteSource.Effect => () => _sprites.Effects.Get((Effect)spriteDefinition.Id),
+            SpriteSource.Map => () => _maps.Get((MapLocation)spriteDefinition.Id),
             _ => () => null
         };
 
@@ -202,6 +179,9 @@ internal class SerializedSpriteSet : ISpriteSet, IDisposable
                 case Pad pad:
                     transformFuncs.Add(source => source.Pad(pad.GetSize(), pad.HorizontalAlignment, pad.VerticalAlignment));
                     break;
+                case ManualPad mp:
+                    transformFuncs.Add(source => source.Pad(mp.Left, mp.Top, mp.Width, mp.Height));
+                    break;
                 case Greyscale:
                     transformFuncs.Add(source => source.Greyscale());
                     break;
@@ -214,13 +194,6 @@ internal class SerializedSpriteSet : ISpriteSet, IDisposable
                 case AdjustBrightness adjust:
                     transformFuncs.Add(source => source.AdjustBrightness(adjust.Adjustment));
                     break;
-                case TextOverlay textOverlay:
-                    transformFuncs.Add(source =>
-                    {
-                        var text = _font.RenderText(textOverlay.Text, Companion.View.TextMode.Normal);
-                        return source.Overlay(new BasicSprite(text), textOverlay.GetDestination());
-                    });
-                    break;
                 case AlternateDisabledSprite alternateDisabledSprite:
                     transformFuncs.Add(source =>
                     {
@@ -229,6 +202,13 @@ internal class SerializedSpriteSet : ISpriteSet, IDisposable
                             return source;
 
                         return new CustomGreyscaleSrpite(source, o);
+                    });
+                    break;
+                case SetGreyscaleBrightness setGreyscaleBrightness:
+                    transformFuncs.Add(source =>
+                    {
+                        source.GreyscaleBrightnessAdjustment = setGreyscaleBrightness.Brightness;
+                        return source;
                     });
                     break;
             }
@@ -246,35 +226,25 @@ internal class SerializedSpriteSet : ISpriteSet, IDisposable
         };
     }
 
-    public ISprite? Get(Events @event)
+    private static ISprite? GetOrCreate<T>(T value, Dictionary<T, ISprite?> cache, Dictionary<T, Func<ISprite?>> creators)
     {
-        if (_checkSprites.ContainsKey(@event))
-            return _checkSprites[@event];
+        var sprite = cache.GetValueOrDefault(value);
 
-        _checkSprites[@event] = _checkSpritesGetters[@event]();
+        if (sprite != null && !sprite.IsDisposed)
+            return sprite;
 
-        return _checkSprites[@event];
+        if (!creators.TryGetValue(value, out var creator))
+            return null;
+
+        cache[value] = creator();
+        return cache[value];
     }
 
-    public ISprite? Get(Statistic statistic)
-    {
-        if (_statisticSprites.ContainsKey(statistic))
-            return _statisticSprites[statistic];
+    public ISprite? Get(EventType @event) => GetOrCreate(@event, _checkSprites, _checkSpritesGetters);
 
-        _statisticSprites[statistic] = _statisticSpritesGetters[statistic]();
+    public ISprite? Get(Statistic statistic) => GetOrCreate(statistic, _statisticSprites, _statisticSpritesGetters);
 
-        return _statisticSprites[statistic];
-    }
-
-    public ISprite? Get(Dragons dragon)
-    {
-        if (_dragonSprites.ContainsKey(dragon))
-            return _dragonSprites[dragon];
-
-        _dragonSprites[dragon] = _dragonSpritesGetters[dragon]();
-
-        return _dragonSprites[dragon];
-    }
+    public ISprite? Get(DragonType dragon) => GetOrCreate(dragon, _dragonSprites, _dragonSpritesGetters);
 
     protected virtual void Dispose(bool disposing)
     {

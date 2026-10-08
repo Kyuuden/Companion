@@ -25,4 +25,9 @@ public static class SpanExtensions
         span = span.Slice(1);
         return ret;
     }
+
+    public static Span<byte> Slice(this Span<byte> span, BizHawk.Common.Range<long> range)
+    {
+        return span.Slice((int)range.Start, (int)range.Length());
+    }
 }

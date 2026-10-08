@@ -67,7 +67,6 @@ partial class MysticQuestRandomizerControl
             this._elements.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this._elements.Dock = System.Windows.Forms.DockStyle.Top;
             this._elements.FlowDirection = System.Windows.Forms.FlowDirection.LeftToRight;
-            this._elements.Icons = false;
             this._elements.Location = new System.Drawing.Point(0, 573);
             this._elements.Margin = new System.Windows.Forms.Padding(0);
             this._elements.Name = "_elements";
@@ -83,7 +82,6 @@ partial class MysticQuestRandomizerControl
             this._equipment.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this._equipment.Dock = System.Windows.Forms.DockStyle.Left;
             this._equipment.FlowDirection = System.Windows.Forms.FlowDirection.LeftToRight;
-            this._equipment.Icons = false;
             this._equipment.Location = new System.Drawing.Point(0, 0);
             this._equipment.Name = "_equipment";
             this._equipment.Size = new System.Drawing.Size(346, 160);
@@ -98,7 +96,6 @@ partial class MysticQuestRandomizerControl
             this._statistics.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this._statistics.Dock = System.Windows.Forms.DockStyle.Bottom;
             this._statistics.FlowDirection = System.Windows.Forms.FlowDirection.LeftToRight;
-            this._statistics.Icons = false;
             this._statistics.Location = new System.Drawing.Point(0, 0);
             this._statistics.Name = "_statistics";
             this._statistics.Size = new System.Drawing.Size(346, 160);

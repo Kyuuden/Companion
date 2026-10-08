@@ -1,7 +1,6 @@
 ﻿using BizHawk.Client.Common;
 using BizHawk.Emulation.Common;
 using FF.Rando.Companion.Settings;
-using System;
 using BizHawk.Common.BufferExtensions;
 using FF.Rando.Companion.Games.WorldsCollide.RomData;
 using FF.Rando.Companion.Timing;

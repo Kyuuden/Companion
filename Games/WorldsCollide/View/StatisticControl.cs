@@ -1,25 +1,33 @@
-﻿using FF.Rando.Companion.Extensions;
-using FF.Rando.Companion.Games.WorldsCollide.Enums;
+﻿using FF.Rando.Companion.Games.WorldsCollide.Enums;
 using FF.Rando.Companion.Settings;
 using FF.Rando.Companion.View;
 using KGySoft.Drawing.Imaging;
 using System.ComponentModel;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace FF.Rando.Companion.Games.WorldsCollide.View;
 
-public abstract class StatisticControl<T> : StatisticControl<T, Seed> where T : struct
+internal class StatisticControl : StatisticControl<int, Seed>
 {
+    private readonly ToolTip _toolTip;
     public Statistic Statistic { get; }
 
-    protected abstract string GetStatText();
+    protected override int GetStat() => Game.State.GetStatistic(Statistic);
 
-    internal StatisticControl(Seed seed, PanelSettings settings, Statistic statistic)
-        : base(seed, settings, new Size(36, 24))
+    protected override string PropertyName => Statistic.ToString();
+
+    internal StatisticControl(Seed seed, IPanelSettings settings, Statistic statistic)
+        : base(seed, settings, new Size(40, 40))
     {
         BackColor = Color.Transparent;
         Statistic = statistic;
-        UpdateImage();
+        BackgroundImageLayout = ImageLayout.Zoom;
+        UpdateBaseImage();
+        UpdateStat();
+        seed.State.PropertyChanged += Seed_PropertyChanged;
+        _toolTip = new ToolTip { ShowAlways = true };
+        _toolTip.SetToolTip(this, statistic.GetDescription());
     }
 
     protected override void Seed_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -28,30 +36,32 @@ public abstract class StatisticControl<T> : StatisticControl<T, Seed> where T : 
         switch (e.PropertyName)
         {
             case nameof(Seed.SpriteSet):
+                UpdateBaseImage();
+                break;
             case nameof(Seed.PrimaryFontColor):
                 UpdateImage();
                 break;
         }
     }
 
+    protected override void UpdateImage()
+    {
+        Image?.Dispose();
+        Image = null;
+        Image = Render();
+    }
+
+    private void UpdateBaseImage()
+    {
+        BackgroundImage = Game.SpriteSet?.Get(Statistic)?.Render();
+    }
+
     protected override Image Render()
     {
-        var icon = Game.SpriteSet.Get(Statistic)!.RenderData();
-        var text = Game.Font.RenderText(GetStatText(), TextMode.Normal);
-        var combined = PaletteExtensions.Combine(icon.Palette!, text.Palette!);
-        var data = BitmapDataFactory.CreateBitmapData(MinimumSize, KnownPixelFormat.Format8bppIndexed, combined);
-
-        var destinationRect = new Rectangle(
-            0, (MinimumSize.Height - icon.Height) / 2,
-            icon.Width, icon.Height);
-
-        icon.DrawInto(data, destinationRect, KGySoft.Drawing.ScalingMode.NearestNeighbor);
-
-        destinationRect = new Rectangle(
-            MinimumSize.Width - text.Width, (MinimumSize.Height - text.Height) / 2,
-            text.Width, text.Height);
-
-        text.DrawInto(data, destinationRect, KGySoft.Drawing.ScalingMode.NearestNeighbor);
+        var text = Game.Font.RenderText($"{Stat}", TextMode.Normal);
+        var data = BitmapDataFactory.CreateBitmapData(OriginalSize);
+        var dest = new Point(OriginalSize.Width - text.Width, (OriginalSize.Height - text.Height) / 2);
+        text.DrawInto(data, dest);
         return data.ToBitmap();
     }
 }

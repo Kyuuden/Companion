@@ -10,16 +10,9 @@ public enum TileSet
     WeaponShopSign,
     GhostTrain,
     NarsheCobble,
-    FanaticsTowerFloor,
-    FanaticsTowerWall,
-    FanaticsTowerStairs,
-    DarylsTomb,
     CafeTable,
     CafeChair,
-    //CafeRug,
     Toilet,
     Sink,
-    Tree,
-    Waterfall,
-    WaterfallIsland,
+    Tree
 }

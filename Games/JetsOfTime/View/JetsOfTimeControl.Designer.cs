@@ -94,7 +94,6 @@ partial class JetsOfTimeControl
         this._statistics.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
         this._statistics.Dock = System.Windows.Forms.DockStyle.Top;
         this._statistics.FlowDirection = System.Windows.Forms.FlowDirection.LeftToRight;
-        this._statistics.Icons = false;
         this._statistics.Location = new System.Drawing.Point(0, 0);
         this._statistics.Name = "_statistics";
         this._statistics.Size = new System.Drawing.Size(346, 160);
@@ -109,7 +108,6 @@ partial class JetsOfTimeControl
         this._bosses.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
         this._bosses.Dock = System.Windows.Forms.DockStyle.Top;
         this._bosses.FlowDirection = System.Windows.Forms.FlowDirection.LeftToRight;
-        this._bosses.Icons = false;
         this._bosses.Location = new System.Drawing.Point(0, 0);
         this._bosses.Name = "_bosses";
         this._bosses.Size = new System.Drawing.Size(346, 160);
@@ -124,7 +122,6 @@ partial class JetsOfTimeControl
         this._keyItems.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
         this._keyItems.Dock = System.Windows.Forms.DockStyle.Top;
         this._keyItems.FlowDirection = System.Windows.Forms.FlowDirection.LeftToRight;
-        this._keyItems.Icons = false;
         this._keyItems.Location = new System.Drawing.Point(0, 0);
         this._keyItems.Name = "_keyItems";
         this._keyItems.Size = new System.Drawing.Size(346, 160);
@@ -139,7 +136,6 @@ partial class JetsOfTimeControl
         this._characters.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
         this._characters.Dock = System.Windows.Forms.DockStyle.Left;
         this._characters.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-        this._characters.Icons = false;
         this._characters.Location = new System.Drawing.Point(0, 0);
         this._characters.Name = "_characters";
         this._characters.Size = new System.Drawing.Size(346, 160);

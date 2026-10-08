@@ -23,6 +23,19 @@ public static class PaletteExtensions
         return DecodePalette(paletteData.AsReadOnlySpan(), colorZero, maxColors);
     }
 
+    public static Palette DecodeMultiPalette(this byte[] paletteData, int paletteSize)
+    {
+        List<Color32> colors = [];
+        foreach (var color in MemoryMarshal.Cast<byte, ushort>(paletteData))
+        {
+            if (colors.Count % paletteSize == 0)
+                colors.Add(new Color32());
+            else
+                colors.Add(color.ToColor());
+        }
+        return new Palette(colors);
+    }
+
     public static Palette DecodePalette(this ReadOnlySpan<byte> paletteData, Color32? colorZero = null, int maxColors = 256)
     {
         bool first = true;

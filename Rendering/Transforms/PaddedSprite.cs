@@ -42,3 +42,17 @@ internal class PaddedSprite(ISprite source, Size size, HorizontalAlignment horiz
     }
 }
 
+internal class ManualPaddedSprite(ISprite source, int left, int top, int width, int height) : Sprite(source.Palette!), ITemporarySprite
+{
+    public override Size Size { get; } = new Size(width, height);
+
+    protected override IReadableBitmapData RenderColorData()
+    {
+        var sourceData = source.RenderData();
+        var data = BitmapDataFactory.CreateBitmapData(Size, sourceData.PixelFormat.ToKnownPixelFormat(), sourceData.Palette);
+
+        sourceData.DrawInto(data, new Point(left, top));
+        return data;
+    }
+}
+

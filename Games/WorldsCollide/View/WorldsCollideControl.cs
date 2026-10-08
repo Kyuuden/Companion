@@ -1,48 +1,148 @@
-﻿using FF.Rando.Companion.Settings;
+﻿using FF.Rando.Companion.Games.WorldsCollide.Settings;
+using FF.Rando.Companion.Settings;
 using FF.Rando.Companion.View;
 using KGySoft.CoreLibraries;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 
 namespace FF.Rando.Companion.Games.WorldsCollide.View;
 
-public partial class WorldsCollideControl : UserControl
+internal class WorldsCollideControl : UserControl
 {
-    private Seed? _seed;
-    private List<IScrollablePanel> _scrollables = [];
+    private readonly Seed _seed;
+    private readonly StatsPanel _statistics;
+    private readonly ChecksPanel _checks;
+    private readonly MapsPanel _maps;
+    private readonly Panel _mapAndStatsPanel;
+
+    private readonly List<IScrollablePanel> _scrollables = [];
     private int _scrollIndex = 0;
 
-    public WorldsCollideControl()
+    public WorldsCollideControl(Seed seed)
     {
+        Padding = new(0, 4, 0, 0);
         Dock = DockStyle.Fill;
         Name = "WorldsCollideControl";
-        
-        InitializeComponent();
+        _seed = seed ?? throw new ArgumentNullException(nameof(seed));
+        seed.Container.ButtonPressed += Seed_ButtonPressed;
+        seed.Settings.PropertyChanged += Settings_PropertyChanged;
+
+        SuspendLayout();
+        _mapAndStatsPanel = new Panel() { Dock = DockStyle.Fill };
+        _mapAndStatsPanel.SuspendLayout();
+
+        _maps = new MapsPanel(_seed) { Dock = DockStyle.Fill };
+        _checks = new ChecksPanel(_seed) { Dock = DockStyle.Top };
+        _statistics = new StatsPanel(_seed) { Dock = DockStyle.Right };
+
+        _mapAndStatsPanel.Resize += MapAndStatsPanel_Resize;
+        _mapAndStatsPanel.Controls.Add(_maps);
+        _mapAndStatsPanel.Controls.Add(_statistics);
+
+        Controls.Add(_mapAndStatsPanel);
+        Controls.Add(_checks);
+
+        _mapAndStatsPanel.ResumeLayout(false);
+        ResumeLayout(false);
+
+        _scrollables = Controls.OfType<IScrollablePanel>().Concat(Controls.OfType<Control>().SelectMany(c => c.Controls.OfType<IScrollablePanel>())).ToList();
+        var enable = true;
+        foreach (var item in _scrollables)
+        {
+            if (item.CanScroll)
+            {
+                item.IsEnabledForScrolling = enable;
+                enable = false;
+            }
+            else
+                item.IsEnabledForScrolling = false;
+        }
     }
 
-    public void InitializeDataSources(Seed seed)
+    private void ArrangeControls()
     {
-        _seed = seed ?? throw new ArgumentNullException(nameof(seed));
-        
-        _characters.InitializeDataSources(seed, seed.Settings.Characters);
-        _checks.InitializeDataSources(seed, seed.Settings.Checks);
-        _dragons.InitializeDataSources(seed, seed.Settings.Dragons);
-        _statistics.InitializeDataSources(seed, seed.Settings.Stats);
-        _textChecks.InitializeDataSources(seed, seed.Settings.TextChecks);
+        switch (_seed.Settings.MapPosition)
+        {
+            //case MapPosition.Left:
+            //    _maps.Visible = true;
+            //    _checks.Dock = DockStyle.Right;
+            //    break;
 
-        _seed.PropertyChanged += Seed_PropertyChanged;
-        seed.Settings.Checks.PropertyChanged += Seed_PropertyChanged;
-        seed.Settings.Characters.PropertyChanged += Seed_PropertyChanged;
-        seed.Settings.Dragons.PropertyChanged += Seed_PropertyChanged;
-        seed.Settings.Stats.PropertyChanged += Seed_PropertyChanged;
-        seed.Settings.TextChecks.PropertyChanged += Seed_PropertyChanged;
+            case MapPosition.Top:
+                _maps.Visible = true;
+                _checks.Dock = DockStyle.Bottom;
+                break;
 
-        seed.Container.ButtonPressed += Seed_ButtonPressed;
-        ArrangePanels();
+            //case MapPosition.Right:
+            //    _maps.Visible = true;
+            //    _checks.Dock = DockStyle.Left;
+            //    break;
+
+            case MapPosition.Bottom:
+                _maps.Visible = true;
+                _checks.Dock = DockStyle.Top;
+                break;
+
+            case MapPosition.None:
+                _maps.Visible = false;
+                _checks.Dock = DockStyle.Top;
+                break;
+        }
+
+        MapAndStatsPanel_Resize(_mapAndStatsPanel, new EventArgs());
+        Refresh();
+    }
+
+#if DEBUG
+    protected override void OnResize(EventArgs e)
+    {
+        base.OnResize(e);
+        Debug.WriteLine($"{Size} vs {Parent?.Size}");
+    }
+#endif
+
+    private void Settings_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        switch (e.PropertyName)
+        {
+            case nameof(WorldsCollideSettings.MapPosition):
+                BeginInvoke(() => ArrangeControls());
+                break;
+        }
+    }
+
+    private void MapAndStatsPanel_Resize(object sender, EventArgs e)
+    {
+        if (_mapAndStatsPanel.Height > _mapAndStatsPanel.Width || _seed.Settings.MapPosition == Settings.MapPosition.None)
+        {
+            _statistics.SpacingMode = SpacingMode.Columns;
+            _statistics.FlowDirection = FlowDirection.LeftToRight;
+            _statistics.Dock = DockStyle.Top;
+        }
+        else
+        {
+            _statistics.SpacingMode = SpacingMode.Rows;
+            _statistics.FlowDirection = FlowDirection.TopDown;
+            _statistics.Dock = DockStyle.Right;
+        }
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _seed.Container.ButtonPressed -= Seed_ButtonPressed;
+
+            _checks.Dispose();
+            _statistics.Dispose();
+            _maps.Dispose();
+            _mapAndStatsPanel.Dispose();
+        }
+
+        base.Dispose(disposing);
     }
 
     private void Seed_ButtonPressed(InputAction action)
@@ -72,22 +172,6 @@ public partial class WorldsCollideControl : UserControl
         }
     }
 
-    private void Seed_PropertyChanged(object sender, PropertyChangedEventArgs e)
-    {
-        if (_seed == null) return;
-
-        switch (e.PropertyName)
-        {
-            case nameof(Seed.BackgroundColor):
-                BackColor = _seed.BackgroundColor;
-                break;
-            case nameof(PanelSettings.Priority):
-            case nameof(PanelSettings.Enabled):
-                ArrangePanels();
-                break;
-        }
-    }
-
     private void CanScrollChanged(object sender, System.EventArgs e)
     {
         var enable = true;
@@ -103,67 +187,10 @@ public partial class WorldsCollideControl : UserControl
         }
     }
 
-    private void ArrangePanels()
-    {
-        SuspendLayout();
-
-        List<IPanel> panels = [_characters, _checks, _dragons, _textChecks, _statistics];
-        panels.Sort((x, y) => x.Priority > y.Priority ? 1 : -1);
-
-        while (Controls.Count > 0)
-            Controls.RemoveAt(0);
-
-        bool filled = false;
-
-        bool willBeFilled = panels.Where(p => p.IsEnabled).Any(p => p.CanHaveFillDockStyle);
-
-        foreach (var panel in panels.Where(p => p.IsEnabled).Reverse())
-        {
-            if (panel is not Control control)
-                continue;
-
-            if (!filled && panel.CanHaveFillDockStyle && control.Visible)
-            {
-                control.Dock = DockStyle.Fill;
-                filled = true;
-            }
-            else
-            {
-                control.Dock = panel.DefaultDockStyle switch
-                {
-                    DockStyle.Top when willBeFilled && !filled => DockStyle.Bottom,
-                    DockStyle.Bottom when willBeFilled && !filled => DockStyle.Top,
-                    _ => panel.DefaultDockStyle,
-                };
-            }
-
-            Controls.Add(panel as Control);
-        }
-
-        if (filled && Controls[0] is IPanel { CanHaveFillDockStyle: false })
-        {
-            Controls[0].SendToBack();
-        }
-
-        _scrollables = panels.OrderBy(p => p.Priority).Where(p => p.IsEnabled).OfType<IScrollablePanel>().ToList();
-        var enable = true;
-        foreach (var item in _scrollables)
-        {
-            if (item.CanScroll)
-            {
-                item.IsEnabledForScrolling = enable;
-                enable = false;
-            }
-            else
-                item.IsEnabledForScrolling = false;
-        }
-
-        ResumeLayout();
-    }
-
     protected override void OnLoad(EventArgs e)
     {
         base.OnLoad(e);
-        BackColor = _seed?.BackgroundColor ?? Color.FromArgb(0, 0, 99);
+        BackColor = _seed.BackgroundColor;
+        ArrangeControls();
     }
 }

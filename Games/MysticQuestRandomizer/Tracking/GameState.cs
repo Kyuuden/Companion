@@ -36,13 +36,14 @@ public class GameState
     {
         if (_state == null || !found.SequenceEqual(_state))
         {
+#if DEBUG
             if (_state != null)
             {
                 foreach (var i in _unknownFlags)
                     if (found.Read<bool>(i) != _state.Read<bool>(i))
                         Debug.WriteLine($"Uknown Flag # {ReversedBitOrderIndex(i)} changed from {_state.Read<bool>(i)} to {found.Read<bool>(i)}");
             }
-
+#endif
             _state = found.ToArray();
 
             return true;

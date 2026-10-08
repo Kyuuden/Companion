@@ -1,6 +1,7 @@
 ﻿using BizHawk.Common;
 using FF.Rando.Companion.Extensions;
 using FF.Rando.Companion.Rendering;
+using FF.Rando.Companion.Rendering.SNES;
 using KGySoft.Drawing.Imaging;
 using System;
 using System.Buffers.Binary;
@@ -147,8 +148,8 @@ internal class SpriteCollection : IDisposable
                 var tile2 = BinaryPrimitives.ReadUInt16LittleEndian(data[2..]);
                 data = data[4..];
 
-                block.Tiles.Add(new TileInfo(tile & 0x3FF, (tile & 0x4000) != 0, (tile & 0x8000) != 0));
-                block.Tiles.Add(new TileInfo(tile2 & 0x3FF, (tile2 & 0x4000) != 0, (tile2 & 0x8000) != 0));
+                block.Tiles.Add(new MapTile(tile));
+                block.Tiles.Add(new MapTile(tile2));
                 group.Blocks.Add(block);
             }
 
@@ -158,8 +159,8 @@ internal class SpriteCollection : IDisposable
                 var tile2 = BinaryPrimitives.ReadUInt16LittleEndian(data[2..]);
                 data = data[4..];
 
-                group.Blocks[blockNum].Tiles.Add(new TileInfo(tile & 0x3FF, (tile & 0x4000) != 0, (tile & 0x8000) != 0));
-                group.Blocks[blockNum].Tiles.Add(new TileInfo(tile2 & 0x3FF, (tile2 & 0x4000) != 0, (tile2 & 0x8000) != 0));
+                group.Blocks[blockNum].Tiles.Add(new MapTile(tile));
+                group.Blocks[blockNum].Tiles.Add(new MapTile(tile2));
             }
 
             frame.Groups.Add(group);
@@ -186,12 +187,10 @@ internal class SpriteCollection : IDisposable
         return frame.Normalize(_emptyTiles) ? frame : null;
     }
 
-    private record TileInfo(int Index, bool FlipHoriztonal, bool FlipVertical);
-
     private class BlockInfo
     {
         public override string ToString() => $"X={X}, Y={Y}, Height=16, Width=16";
-        public List<TileInfo> Tiles { get; } = [];
+        public List<MapTile> Tiles { get; } = [];
         public int X { get; set; }
         public int Y { get; set; }
     }
